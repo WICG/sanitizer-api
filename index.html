@@ -1212,7 +1212,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version 807fa228f70b24dc6f3ebea36719f85c4b567bb8" name="generator">
-  <meta content="654e8d724e7f776a8e1a5c3850a9b34eda1d7dca" name="document-revision">
+  <meta content="a966bcf8a5ace2b2c4459089ee408586aab0886f" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1551,14 +1551,14 @@ s<span class="p">.</span>sanitize<span class="p">(</span><span class="s2">"&amp;
 </pre>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
    <p>Blah, blah, blah.</p>
-<pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-sanitizerconfig"><code>SanitizerConfig</code><a class="self-link" href="#dictdef-sanitizerconfig"></a></dfn> {
+<pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-sanitizerconfig"><code>SanitizerConfig</code></dfn> {
   <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><span class="kt">DOMString</span></a>> <dfn class="nv idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export="" data-type="sequence<DOMString> " id="dom-sanitizerconfig-tags"><code>tags</code><a class="self-link" href="#dom-sanitizerconfig-tags"></a></dfn>;
   <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><span class="kt">DOMString</span></a>> <dfn class="nv idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export="" data-type="sequence<DOMString> " id="dom-sanitizerconfig-attributes"><code>attributes</code><a class="self-link" href="#dom-sanitizerconfig-attributes"></a></dfn>;
   // ...
   // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
 };
 
-[Constructor(SanitizerConfig), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
+[<dfn class="nv idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export="" data-lt="Sanitizer(config)|Sanitizer()" id="dom-sanitizer-sanitizer"><code>Constructor</code><a class="self-link" href="#dom-sanitizer-sanitizer"></a></dfn>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig">SanitizerConfig</a> <dfn class="nv idl-code" data-dfn-for="Sanitizer/Sanitizer(config)" data-dfn-type="argument" data-export="" id="dom-sanitizer-sanitizer-config-config"><code>config</code><a class="self-link" href="#dom-sanitizer-sanitizer-config-config"></a></dfn>), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
 <span class="kt">interface</span> <dfn class="nv idl-code" data-dfn-type="interface" data-export="" id="sanitizer"><code>Sanitizer</code><a class="self-link" href="#sanitizer"></a></dfn> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><span class="kt">DOMString</span></a> <dfn class="nv idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export="" data-lt="sanitize(input)" id="dom-sanitizer-sanitize"><code>sanitize</code><a class="self-link" href="#dom-sanitizer-sanitize"></a></dfn>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><span class="kt">DOMString</span></a> <dfn class="nv idl-code" data-dfn-for="Sanitizer/sanitize(input)" data-dfn-type="argument" data-export="" id="dom-sanitizer-sanitize-input-input"><code>input</code><a class="self-link" href="#dom-sanitizer-sanitize-input-input"></a></dfn>);
 };
@@ -1702,6 +1702,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#dom-sanitizerconfig-attributes">attributes</a><span>, in §2</span>
    <li><a href="#dom-sanitizer-sanitize">sanitize(input)</a><span>, in §2</span>
    <li><a href="#sanitizer">Sanitizer</a><span>, in §2</span>
+   <li><a href="#dom-sanitizer-sanitizer">Sanitizer()</a><span>, in §2</span>
+   <li><a href="#dom-sanitizer-sanitizer">Sanitizer(config)</a><span>, in §2</span>
    <li><a href="#dictdef-sanitizerconfig">SanitizerConfig</a><span>, in §2</span>
    <li><a href="#dom-sanitizerconfig-tags">tags</a><span>, in §2</span>
   </ul>
@@ -1771,12 +1773,18 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
 };
 
-[Constructor(SanitizerConfig), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
+[<a class="nv" href="#dom-sanitizer-sanitizer"><code>Constructor</code></a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①">SanitizerConfig</a> <a class="nv" href="#dom-sanitizer-sanitizer-config-config"><code>config</code></a>), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
 <span class="kt">interface</span> <a class="nv" href="#sanitizer"><code>Sanitizer</code></a> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②①"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-sanitizer-sanitize"><code>sanitize</code></a>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③①"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-sanitizer-sanitize-input-input"><code>input</code></a>);
 };
 
 </pre>
+  <aside class="dfn-panel" data-for="dictdef-sanitizerconfig">
+   <b><a href="#dictdef-sanitizerconfig">#dictdef-sanitizerconfig</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dictdef-sanitizerconfig">2. Framework</a>
+   </ul>
+  </aside>
 <script>/* script-dfn-panel */
 
 document.body.addEventListener("click", function(e) {

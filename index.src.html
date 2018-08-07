@@ -105,7 +105,7 @@ Blah, blah, blah.
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
   };
 
-  [Constructor(SanitizerConfig), Exposed=(Window,Worker)]
+  [Constructor(optional SanitizerConfig config), Exposed=(Window,Worker)]
   interface Sanitizer {
     DOMString sanitize(DOMString input);
   };
