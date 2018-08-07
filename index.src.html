@@ -41,14 +41,6 @@ text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us
   }
 }
 </pre>
-<style>
-  ul.toc ul ul ul {
-    margin: 0 0 0 2em;
-  }
-  ul.toc ul ul ul span.secno {
-    margin-left: -9em;
-  }
-</style>
 
 Introduction {#intro}
 =====================
@@ -91,43 +83,33 @@ Goals {#goals}
 Examples {#examples}
 --------------------
 
-<pre>
-  Sanitizer.sanitizeString("&lt;img src=x onerror=alert(1)//&gt;") // returns `<img src="x">`
-  
-  Sanitizer.sanitizeNode(node); // returns sanitized DOM node
-  
-  Sanitizer.sanitizeDocument(doc); // returns sanitized document
-</pre>
-
-<pre>
-  Sanitizer.sanitizeString("&lt;img src=x onerror=alert(1)//&gt;", configuration)
-  
-  Sanitizer.sanitizeNode(node, configuration);
-  
-  Sanitizer.sanitizeDocument(doc, configuration);
-</pre>
-
-ISSUE: Is this the API we want? How much do we care about the string itself?
-Could we simply inject the string into the DOM and have the sanitization,
-neutering, etc. done transparently as part of the injection? That is,
-`element.totallySafeInnerHTML = badString;` rather than `element.innerHTML =
-document.sanitize(badString)`?
-
-ISSUE: More broadly, do we only care about injections, or should we attempt to
-move in the direction lcamtuf@ proposed a million years ago by attaching
-policies to specific pieces of the DOM (e.g.
-`<div policy='no-script no-whatever'>...</div>`), which might obviate the need
-to sanitize in the first place?
-
-ISSUE: Should the sanitizer methods essentially be promises? This way we could for 
-example also handle erroneous HTML, invalid nodes or any thing else that has the 
-parser stumble (which might be especially interesting for XML and XML-nodes / 
--documents) more elegantly.
+```js
+let s = new Sanitizer({
+  tags: ['a', 'b', ...],
+  attributes: ['c', 'd', 'e', ...],
+  ...
+});
+s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
+```
 
 Framework {#framework}
 ======================
 
 Blah, blah, blah.
+
+<pre class="idl">
+  dictionary SanitizerConfig {
+    sequence&lt;DOMString> tags;
+    sequence&lt;DOMString> attributes;
+    // ...
+    // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
+  };
+
+  [Constructor(SanitizerConfig), Exposed=(Window,Worker)]
+  interface Sanitizer {
+    DOMString sanitize(DOMString input);
+  };
+</pre>
 
 Acknowledgements {#ack}
 =======================

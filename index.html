@@ -2,7 +2,7 @@
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <title>Sanitize Untrusted HTML</title>
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 <style data-fill-with="stylesheet">/******************************************************************************
  *                   Style sheet for the W3C specifications                   *
  *
@@ -10,8 +10,8 @@
  *
  * Indices
  *   - .toc for the Table of Contents (<ol class="toc">)
- *     -> <span class="secno"> for the section numbers
- *   - #toc for the Table of Contents (<section id="toc">)
+ *     + <span class="secno"> for the section numbers
+ *   - #toc for the Table of Contents (<nav id="toc">)
  *   - ul.index for Indices (<a href="#ref">term</a><span>, in §N.M</span>)
  *   - table.index for Index Tables (e.g. for properties or elements)
  *
@@ -34,6 +34,7 @@
  *   - .note       for informative notes             (div, p, span, aside, details)
  *   - .example    for informative examples          (div, p, pre, span)
  *   - .issue      for issues                        (div, p, span)
+ *   - .assertion  for assertions                    (div, p, span)
  *   - .advisement for loud normative statements     (div, p, strong)
  *   - .annoying-warning for spec obsoletion notices (div, aside, details)
  *
@@ -48,9 +49,9 @@
  *   - ::before styled for CSS-generated issue/example/figure numbers:
  *     -> Documents wishing to use this only need to add
  *        figcaption::before,
- *        .caption::before { content: "Figure "  counter(figure);  }
- *        .example::before { content: "Example " counter(example); }
- *        .issue::before   { content: "Issue "   counter(issue);   }
+ *        .caption::before { content: "Figure "  counter(figure) " ";  }
+ *        .example::before { content: "Example " counter(example) " "; }
+ *        .issue::before   { content: "Issue "   counter(issue) " ";   }
  *
  * Header Stuff (ignore, just don't conflict with these classes)
  *   - .head for the header
@@ -63,8 +64,7 @@
  *     Note that this styling basically doesn't help at all when printing,
  *     since A4 paper isn't much wider than the max-width here.
  *     It's better to design things to fit into a narrower measure if possible.
- *   - back-to-top link:
- *     <p role=navigation id="back-to-top"><a href="#toc"><abbr title="Back to Top">&uarr;</abbr>
+ *   - js-added ToC jump links (see fixup.js)
  *
  ******************************************************************************/
 
@@ -76,10 +76,10 @@
 		counter-reset: example figure issue;
 
 		/* Layout */
-		max-width: 50em;           /* limit line length to 50em for readability   */
-		margin: 0;                 /* start-align text within page                     */
-		padding: 1.6em 1em 2em 58px; /* assume 16px font size for downlevel clients */
-		padding: 1.6em 1em 2em calc(26px + 2em); /* leave space for status flag    */
+		max-width: 50em;               /* limit line length to 50em for readability   */
+		margin: 0 auto;                /* center text within page                     */
+		padding: 1.6em 1.5em 2em 50px; /* assume 16px font size for downlevel clients */
+		padding: 1.6em 1.5em 2em calc(26px + 1.5em); /* leave space for status flag     */
 
 		/* Typography */
 		line-height: 1.5;
@@ -93,19 +93,9 @@
 		/* Colors */
 		color: black;
 		background: white top left fixed no-repeat;
-		background-size: 25px 380px;
+		background-size: 25px auto;
 	}
 
-	.overlarge {
-		width: calc(100vw - 26px - 3em);
-		max-width: none;
-	}
-	div.figure img,    div.sidefigure img,    figure img,
-	div.figure object, div.sidefigure object, figure object,
-	table.data, table.index {
-		max-width: calc(100vw - 26px - 3em);
-		/* See below for sidebar-accommodating override. */
-	}
 
 /******************************************************************************/
 /*                         Front Matter & Navigation                          */
@@ -124,35 +114,36 @@
 
 	div.head h2 { margin-bottom: 1.5em;}
 
-	.head > :first-child {
+/** W3C Logo ******************************************************************/
+
+	.head .logo {
 		float: right;
-		margin: 0;
+		margin: 0.4rem 0 0.2rem .4rem;
 	}
 
-	@media screen {
-		.head > p:first-child > a {
-			display: inline-block;
-			background: url("logos/w3c-white.svg") no-repeat center / contain content-box border-box;
-			padding: .4rem .7rem;
-			border-radius: .4rem;
-			margin: .4rem 0 0 .4rem;
-			background-color: hsl(208, 71%, 35%);
-		}
-
-		.head > p:first-child > a > img {
-			visibility: hidden;
-		}
-
-		.head > p:first-child > a:hover,
-		.head > p:first-child > a:focus {
-			background-color: hsla(208, 71%, 35%,.8);
-		}
-
-		.head > p:first-child > a:active {
-			background-color: #c00;
-		}
+	.head img[src*="logos/W3C"] {
+		display: block;
+		border: solid #1a5e9a;
+		border-width: .65rem .7rem .6rem;
+		border-radius: .4rem;
+		background: #1a5e9a;
+		color: white;
+		font-weight: bold;
 	}
 
+	.head a:hover > img[src*="logos/W3C"],
+	.head a:focus > img[src*="logos/W3C"] {
+		opacity: .8;
+	}
+
+	.head a:active > img[src*="logos/W3C"] {
+		background: #c00;
+		border-color: #c00;
+	}
+
+	/* see also additional rules in Link Styling section */
+
+/** Copyright *****************************************************************/
 
 	p.copyright,
 	p.copyright small { font-size: small }
@@ -160,48 +151,60 @@
 /** Back to Top / ToC Toggle **************************************************/
 
 	@media print {
-		#back-to-top,
-		.toc-toggle {
+		#toc-nav {
 			display: none;
 		}
 	}
 	@media not print {
-		#back-to-top,
-		body > #toc-toggle {
+		#toc-nav {
 			position: fixed;
 			z-index: 2;
 			bottom: 0; left: 0;
 			margin: 0;
-			width: 26px;
-			text-align: center;
-			border-top-right-radius: 26px;
+			min-width: 1.33em;
+			border-top-right-radius: 2rem;
 			box-shadow: 0 0 2px;
-			font: 1em monospace;
-			font: 1rem monospace;
+			font-size: 1.5em;
 			color: black;
 		}
-		#back-to-top a,
-		body > #toc-toggle {
+		#toc-nav > a {
 			display: block;
-			width: 22px;
-			height: 22px;
-			padding: 4px 4px 0 0;
+			white-space: nowrap;
+
+			height: 1.33em;
+			padding: .1em 0.3em;
 			margin: 0;
-			border: none;
-			border-top-right-radius: 26px;
-		}
-		#back-to-top :first-child {
-			display: block;
-			padding-bottom: 22px;
-			margin-bottom: -22px;
-		}
-		#back-to-top > a {
+
 			background: white;
 			box-shadow: 0 0 2px;
+			border: none;
+			border-top-right-radius: 1.33em;
+			background: white;
 		}
-		#back-to-top > a:hover,
-		#back-to-top > a:focus {
+		#toc-nav > #toc-jump {
+			padding-bottom: 2em;
+			margin-bottom: -1.9em;
+		}
+
+		#toc-nav > a:hover,
+		#toc-nav > a:focus {
 			background: #f8f8f8;
+		}
+		#toc-nav > a:not(:hover):not(:focus) {
+			color: #707070;
+		}
+
+		/* statusbar gets in the way on keyboard focus; remove once browsers fix */
+		#toc-nav > a[href="#toc"]:not(:hover):focus:last-child {
+			padding-bottom: 1.5rem;
+		}
+
+		#toc-nav:not(:hover) > a:not(:focus) > span + span {
+			/* Ideally this uses :focus-within on #toc-nav */
+			display: none;
+		}
+		#toc-nav > a > span + span {
+			padding-right: 0.2em;
 		}
 
 		#toc-toggle-inline {
@@ -220,14 +223,8 @@
 			left: -1px;
 		}
 
-		.toc-toggle:active,
-		#back-to-top :active {
+		#toc-nav :active {
 			color: #C00;
-		}
-
-		#back-to-top abbr {
-			border: none;
-			text-decoration: none;
 		}
 	}
 
@@ -240,6 +237,8 @@
 			top: 0; bottom: 0;
 			left: 0;
 			width: 23.5em;
+			max-width: 80%;
+			max-width: calc(100% - 2em - 26px);
 			overflow: auto;
 			padding: 0 1em;
 			padding-left: 42px;
@@ -258,8 +257,18 @@
 			color: gray;
 			color: hsla(203,20%,40%,.7);
 		}
-		body.toc-sidebar #back-to-top :first-child {
-			display: none;
+		body.toc-sidebar #toc-jump:not(:focus) {
+			width: 0;
+			height: 0;
+			padding: 0;
+			position: absolute;
+			overflow: hidden;
+		}
+	}
+	/* Hide main scroller when only the ToC is visible anyway */
+	@media screen and (max-width: 28em) {
+		body.toc-sidebar {
+			overflow: hidden;
 		}
 	}
 
@@ -291,22 +300,20 @@
 
 		body:not(.toc-inline) {
 			padding-left: 29em;
-			padding-right: 1.5em;
 		}
-		body:not(.toc-inline) .overlarge,
-		body:not(.toc-inline) div.figure img,
-		body:not(.toc-inline) div.sidefigure img,
-		body:not(.toc-inline) figure img,
-		body:not(.toc-inline) div.figure object,
-		body:not(.toc-inline) div.sidefigure object,
-		body:not(.toc-inline) figure object,
-		body:not(.toc-inline) table.data,
-		body:not(.toc-inline) table.index {
-			max-width: calc(100vw - 30.5em);
-		}
+		/* See also Overflow section at the bottom */
 
-		body:not(.toc-inline) #back-to-top :first-child {
-			display: none;
+		body:not(.toc-inline) #toc-jump:not(:focus) {
+			width: 0;
+			height: 0;
+			padding: 0;
+			position: absolute;
+			overflow: hidden;
+		}
+	}
+	@media screen and (min-width: 90em) {
+		body:not(.toc-inline) {
+			margin: 0 4em;
 		}
 	}
 
@@ -322,6 +329,7 @@
 		font: 100% sans-serif;   /* Reset all font styling to clear out UA styles */
 		font-family: inherit;    /* Inherit the font family. */
 		line-height: 1.2;        /* Keep wrapped headings compact */
+		hyphens: manual;         /* Hyphenated headings look weird */
 	}
 
 	h2, h3, h4, h5, h6 {
@@ -393,27 +401,39 @@
 	}
 
 	dl dd {
-		margin: 0 0 1em 2em;
+		margin: 0 0 .5em 2em;
 	}
 
-	.head dd + dt {
-		margin-top: .5em;
-	}
-
-	.head dd { /* undo for header */
-		margin-bottom: 0;
+	.head dd + dd { /* compact for header */
+		margin-top: -.5em;
 	}
 
 	/* Style for algorithms */
-	ol.algorithm ol:not(.algorithm) {
+	ol.algorithm ol:not(.algorithm),
+	.algorithm > ol ol:not(.algorithm) {
 	 border-left: 0.5em solid #DEF;
 	}
 
+	/* Put nice boxes around each algorithm. */
+	[data-algorithm]:not(.heading) {
+	  padding: .5em;
+	  border: thin solid #ddd; border-radius: .5em;
+	  margin: .5em calc(-0.5em - 1px);
+	}
+	[data-algorithm]:not(.heading) > :first-child {
+	  margin-top: 0;
+	}
+	[data-algorithm]:not(.heading) > :last-child {
+	  margin-bottom: 0;
+	}
+
 	/* Style for switch/case <dl>s */
-	dl.switch > dd > ol.only {
+	dl.switch > dd > ol.only,
+	dl.switch > dd > .only > ol {
 	 margin-left: 0;
 	}
-	dl.switch > dd > ol.algorithm {
+	dl.switch > dd > ol.algorithm,
+	dl.switch > dd > .algorithm > ol {
 	 margin-left: -2em;
 	}
 	dl.switch {
@@ -450,7 +470,7 @@
 		font-style: normal;
 	}
 	dt dfn code, code.idl {
-		font-size: inherit;
+		font-size: medium;
 	}
 	dfn var {
 		font-style: normal;
@@ -479,6 +499,7 @@
 		font-size: .9em;
 		page-break-inside: avoid;
 		hyphens: none;
+		text-transform: none;
 	}
 	pre code,
 	code code {
@@ -503,17 +524,16 @@
 
 	/* We hyperlink a lot, so make it less intrusive */
 	a[href] {
-		color: inherit;
+		color: #034575;
 		text-decoration: none;
-		border-bottom: 2px solid #949494;
-		margin: 0 -0.1em 0;
+		border-bottom: 1px solid #707070;
+		/* Need a bit of extending for it to look okay */
+		padding: 0 1px 0;
+		margin: 0 -1px 0;
 	}
 	a:visited {
-		border-bottom-color: silver;
+		border-bottom-color: #BBB;
 	}
-	/* Consider making the border thinner, if not everywhere, then at least
-	   in .head and .index
-	   ... or only make it 2px in p/li/dd/dt/tr/div/pre (running text)  */
 
 	/* Use distinguishing colors when user is interacting with the link */
 	a[href]:focus,
@@ -521,7 +541,7 @@
 		background: #f8f8f8;
 		background: rgba(75%, 75%, 75%, .25);
 		border-bottom-width: 3px;
-		margin-bottom: -1px;
+		margin-bottom: -2px;
 	}
 	a[href]:active {
 		color: #C00;
@@ -529,9 +549,11 @@
 	}
 
 	/* Backout above styling for W3C logo */
-	.head > p:first-child > a {
+	.head .logo,
+	.head .logo a {
 		border: none;
 		text-decoration: none;
+		background: transparent;
 	}
 
 /******************************************************************************/
@@ -546,16 +568,17 @@
 	   .caption::before, figcaption::before { content: "Figure " counter(figure) ". "; }
 	*/
 
-	figure, div.figure, div.sidefigure {
+	figure, .figure, .sidefigure {
 		page-break-inside: avoid;
-		text-align: center;
-	}
-
-	div.figure, p.figure, div.sidefigure, figure {
 		text-align: center;
 		margin: 2.5em 0;
 	}
-	div.figure pre, div.sidefigure pre, figure pre {
+	.figure img,    .sidefigure img,    figure img,
+	.figure object, .sidefigure object, figure object {
+		max-width: 100%;
+		margin: auto;
+	}
+	.figure pre, .sidefigure pre, figure pre {
 		text-align: left;
 		display: table;
 		margin: 1em auto;
@@ -563,30 +586,32 @@
 	.figure table, figure table {
 		margin: auto;
 	}
-	div.sidefigure, figure.sidefigure {
-		float: right;
-		width: 50%;
-		margin: 0 0 0.5em 0.5em
+	@media screen and (min-width: 20em) {
+		.sidefigure {
+			float: right;
+			width: 50%;
+			margin: 0 0 0.5em 0.5em
+		}
 	}
-	p.caption, figcaption, caption {
+	.caption, figcaption, caption {
 		font-style: italic;
 		font-size: 90%;
 	}
-	p.caption::before, figcaption::before, figcaption > .marker {
+	.caption::before, figcaption::before, figcaption > .marker {
 		font-weight: bold;
 	}
-	p.caption, figcaption {
+	.caption, figcaption {
 		counter-increment: figure;
 	}
 
 	/* DL list is indented 2em, but figure inside it is not */
-	dd > div.figure, dd > figure { margin-left: -2em }
+	dd > .figure, dd > figure { margin-left: -2em }
 
 /******************************************************************************/
 /*                             Colored Boxes                                  */
 /******************************************************************************/
 
-	.issue, .note, .example, .advisement, blockquote {
+	.issue, .note, .example, .assertion, .advisement, blockquote {
 		padding: .5em;
 		border: .5em;
 		border-left-style: solid;
@@ -597,14 +622,11 @@
 		border-right-style: solid;
 	}
 
-	div.issue,
-	div.note,
-	details.note,
-	aside.note,
-	div.example,
-	div.advisement,
-	p.advisement,
-	strong.advisement,
+	.issue,
+	.note,
+	.example,
+	.advisement,
+	.assertion,
 	blockquote {
 		margin: 1em auto;
 	}
@@ -637,7 +659,7 @@
 		padding-right: 1em;
 		text-transform: uppercase;
 	}
-	/* Add .issue::before { content: "Issue " counter(issue); } for autogen numbers,
+	/* Add .issue::before { content: "Issue " counter(issue) " "; } for autogen numbers,
 	   or use class="marker" to mark up the issue number in source. */
 
 /** Example *******************************************************************/
@@ -655,7 +677,7 @@
 		min-width: 7.5em;
 		display: block;
 	}
-	/* Add .example::before { content: "Example " counter(example); } for autogen numbers,
+	/* Add .example::before { content: "Example " counter(example) " "; } for autogen numbers,
 	   or use class="marker" to mark up the example number in source. */
 
 /** Non-normative Note ********************************************************/
@@ -682,6 +704,14 @@
 	}
 	details.note[open] > summary {
 		border-bottom: 1px silver solid;
+	}
+
+/** Assertion Box *************************************************************/
+	/*  for assertions in algorithms */
+
+	.assertion {
+		border-color: #AAA;
+		background: #EEE;
 	}
 
 /** Advisement Box ************************************************************/
@@ -781,6 +811,7 @@
 		font-style: italic;
 		font-weight: normal;
 		padding-left: 1em;
+		width: 3em;
 	}
 
 	/* For when values are extra-complex and need formatting for readability */
@@ -814,6 +845,8 @@
 	*/
 
 	table {
+		word-wrap: normal;
+		overflow-wrap: normal;
 		hyphens: manual;
 	}
 
@@ -821,15 +854,13 @@
 	table.index {
 		margin: 1em auto;
 		border-collapse: collapse;
-		width: 100%;
 		border: hidden;
-	}
-	table.data {
-		width: auto;
+		width: 100%;
 	}
 	table.data caption,
 	table.index caption {
-		width: 100%;
+		max-width: 50em;
+		margin: 0 auto 1em;
 	}
 
 	table.data td,  table.data th,
@@ -843,11 +874,6 @@
 	table.data thead td:empty {
 		padding: 0;
 		border: 0;
-	}
-
-	table.data  thead th[scope="row"],
-	table.index thead th[scope="row"] {
-		text-align: right;
 	}
 
 	table.data  thead,
@@ -864,15 +890,20 @@
 
 	table.data  tbody th:first-child,
 	table.index tbody th:first-child  {
-		text-align: right;
 		border-right: 2px solid;
 		border-top: 1px solid silver;
 		padding-right: 1em;
 	}
 
+	table.data th[colspan],
+	table.data td[colspan] {
+		text-align: center;
+	}
+
 	table.complex.data th,
 	table.complex.data td {
 		border: 1px solid silver;
+		text-align: center;
 	}
 
 	table.data.longlastcol td:last-child,
@@ -887,10 +918,7 @@
 
 
 /*
-	a.property {
-		font-weight: bold;
-		color: hsla(203, 90%, 30%,.8);
-	}
+Alternate table alignment rules
 
 	table.data,
 	table.index {
@@ -906,6 +934,8 @@
 	table.index tbody th:first-child  {
 		text-align: right;
 	}
+
+Possible extra rowspan handling
 
 	table.data  tbody th[rowspan]:not([rowspan='1']),
 	table.index tbody th[rowspan]:not([rowspan='1']),
@@ -930,70 +960,131 @@
 
 /** Table of Contents *********************************************************/
 
-	.toc, .toc ol, .toc ul, .toc li {
-		list-style: none; /* Numbers must be inlined into source */
-		/* because generated content isn't search/selectable and markers can't do multilevel yet */
-		margin:  0;
-		padding: 0;
-		line-height: 1.2rem; /* consistent spacing */
-	}
-
-	/* ToC not indented until third level, but font style & margins show hierarchy */
-	.toc > li             { margin: 1.2em 0;   font-weight: bold;   }
-	.toc > li li          { margin: 0;         font-weight: normal; }
-	.toc > li li li       { margin-left:  2em; font-style:  italic; }
-	.toc > li li li li    { margin-left:    0; font-style:  normal; }
-	.toc > li li li li li { margin-left: 1rem; font-style:  italic; font-size: 85%; }
-
 	.toc a {
 		/* More spacing; use padding to make it part of the click target. */
-		padding-top: 0.1em;
+		padding-top: 0.1rem;
 		/* Larger, more consistently-sized click target */
 		display: block;
-		/* Consistent layout across link hover effects */
-		border-bottom-style: solid;
-		border-bottom-width: 3px;
-		margin-bottom: -1px;
+		/* Reverse color scheme */
+		color: black;
+		border-color: #3980B5;
+		border-bottom-width: 3px !important;
+		margin-bottom: 0px !important;
+	}
+	.toc a:visited {
+		border-color: #054572;
 	}
 	.toc a:not(:focus):not(:hover) {
 		/* Allow colors to cascade through from link styling */
 		border-bottom-color: transparent;
 	}
 
-	/* Section numbers in a column of their own */
-	:not(li) > .toc {
-		margin-left: 4em;
+	.toc, .toc ol, .toc ul, .toc li {
+		list-style: none; /* Numbers must be inlined into source */
+		/* because generated content isn't search/selectable and markers can't do multilevel yet */
+		margin:  0;
+		padding: 0;
+		line-height: 1.1rem; /* consistent spacing */
 	}
 
-	.toc .secno {
-		float: left;
-		width: 4em;
-		margin-left: -4em;
-	}
+	/* ToC not indented until third level, but font style & margins show hierarchy */
+	.toc > li             { font-weight: bold;   }
+	.toc > li li          { font-weight: normal; }
+	.toc > li li li       { font-size:   95%;    }
+	.toc > li li li li    { font-size:   90%;    }
+	.toc > li li li li .secno { font-size: 85%; }
+	.toc > li li li li li { font-size:   85%;    }
+	.toc > li li li li li .secno { font-size: 100%; }
 
-	.toc > li li li .secno {
-		margin-left: -6em;
-	}
-	.toc > li li li li .secno {
-		font-size: 85%;
-		margin-left: -7.06em;
-		margin-left: -6rem;
-	}
-	.toc > li li li li li .secno {
-		margin-left: -8.24em;
-		margin-left: -7rem;
-		font-size: 100%;
-	}
+	/* @supports not (display:grid) { */
+		.toc > li             { margin: 1.5rem 0;    }
+		.toc > li li          { margin: 0.3rem 0;    }
+		.toc > li li li       { margin-left: 2rem;   }
 
-	.toc li {
-		clear: both;
+		/* Section numbers in a column of their own */
+		.toc .secno {
+			float: left;
+			width: 4rem;
+			white-space: nowrap;
+		}
+
+		.toc li {
+			clear: both;
+		}
+
+		:not(li) > .toc              { margin-left:  5rem; }
+		.toc .secno                  { margin-left: -5rem; }
+		.toc > li li li .secno       { margin-left: -7rem; }
+		.toc > li li li li .secno    { margin-left: -9rem; }
+		.toc > li li li li li .secno { margin-left: -11rem; }
+
+		/* Tighten up indentation in narrow ToCs */
+		@media (max-width: 30em) {
+			:not(li) > .toc              { margin-left:  4rem; }
+			.toc .secno                  { margin-left: -4rem; }
+			.toc > li li li              { margin-left:  1rem; }
+			.toc > li li li .secno       { margin-left: -5rem; }
+			.toc > li li li li .secno    { margin-left: -6rem; }
+			.toc > li li li li li .secno { margin-left: -7rem; }
+		}
+	/* } */
+
+	@supports (display:grid) {
+		/* Use #toc over .toc to override non-@supports rules. */
+		#toc {
+			display: grid;
+			align-content: start;
+			grid-template-columns: auto 1fr;
+			grid-column-gap: 1rem;
+			column-gap: 1rem;
+			grid-row-gap: .6rem;
+			row-gap: .6rem;
+		}
+		#toc h2 {
+			grid-column: 1 / -1;
+			margin-bottom: 0;
+		}
+		#toc ol,
+		#toc li,
+		#toc a {
+			display: contents;
+			/* Switch <a> to subgrid when supported */
+		}
+		#toc span {
+			margin: 0;
+		}
+		#toc > .toc > li > a > span {
+			/* The spans of the top-level list,
+			   comprising the first items of each top-level section. */
+			margin-top: 1.1rem;
+		}
+		#toc .secno {
+			grid-column: 1;
+			width: auto;
+		}
+		#toc .content {
+			grid-column: 2;
+			width: auto;
+			margin-right: 1rem;
+		}
+		#toc .content:hover {
+			background: rgba(75%, 75%, 75%, .25);
+			border-bottom: 3px solid #054572;
+			margin-bottom: -3px;
+		}
+		#toc li li li .content {
+			margin-left: 1rem;
+		}
+		#toc li li li li .content {
+			margin-left: 2rem;
+		}
 	}
 
 
 /** Index *********************************************************************/
 
 	/* Index Lists: Layout */
-	ul.index       { margin-left: 0; columns: 15em; -webkit-columns: 15em; -moz-columns: 15em; text-indent: 1em hanging; }
+	ul.index       { margin-left: 0; columns: 15em; text-indent: 1em hanging; }
 	ul.index li    { margin-left: 0; list-style: none; break-inside: avoid; }
 	ul.index li li { margin-left: 1em }
 	ul.index dl    { margin-top: 0; }
@@ -1008,7 +1099,7 @@
 			color: transparent; }
 		ul.index li a:hover + span,
 		ul.index li a:focus + span {
-			color: gray;
+			color: #707070;
 		}
 	}
 
@@ -1057,256 +1148,318 @@
 	}
 
 /******************************************************************************/
-/*                                  Bikeshed                                  */
+/*                                    Legacy                                  */
 /******************************************************************************/
 
-	/* Style for paragraphs I know are in MD-genned lists */
-	[data-md] > :first-child {
-		margin-top: 0;
-	}
-	[data-md] > :last-child {
-		margin-bottom: 0;
-	}
+	/* This rule is inherited from past style sheets. No idea what it's for. */
+	.hide { display: none }
 
-	/* This is mostly to make the list inside the CR exit criteria more compact. */
 
-	ol.inline, ol.inline li {
-		display: inline;
-		padding: 0; margin: 0;
-	}
-	ol.inline {
-		counter-reset: list-item;
-	}
-	ol.inline li {
-		counter-increment: list-item;
-	}
-	ol.inline li::before {
-		content: "(" counter(list-item) ") ";
-		font-weight: bold;
-	}
-
-/** Syntax-Highlighted Code ***************************************************/
-
-	.example pre[class*="language-"],
-	.example [class*="language-"] pre,
-	.example pre[class*="lang-"],
-	.example [class*="lang-"] pre {
-		background: transparent; /* Prism applies a gray background that doesn't work well in the template. */
-	}
-
-/** Example Code **************************************************************/
-
-	div.html, div.xml,
-	pre.html, pre.xml {
-		padding: 0.5em;
-		margin: 1em 0;
-		position: relative;
-		clear: both;
-		color: #600;
-	}
-	pre.example,
-	pre.html,
-	pre.xml {
-		padding-top: 1.5em;
-	}
-
-	pre.illegal, .illegal pre
-	pre.deprecated, .deprecated pre {
-		color: red;
-	}
-
-/** Inline CSS fragments ******************************************************/
-
-	.css.css, .property.property, .descriptor.descriptor {
-		color: #005a9c;
-		font-size: inherit;
-		font-family: inherit;
-	}
-	.css::before, .property::before, .descriptor::before {
-		content: "‘";
-	}
-	.css::after, .property::after, .descriptor::after {
-		content: "’";
-	}
-	.property, .descriptor {
-		/* Don't wrap property and descriptor names */
-		white-space: nowrap;
-	}
-	.type { /* CSS value <type> */
-		font-style: italic;
-	}
-	pre .property::before, pre .property::after {
-		content: "";
-	}
-
-/** Inline markup fragments ***************************************************/
-
-	code.html, code.xml {
-		color: #660000;
-	}
-
-/** Autolinks produced using Bikeshed *****************************************/
-
-	[data-link-type="property"]::before,
-	[data-link-type="propdesc"]::before,
-	[data-link-type="descriptor"]::before,
-	[data-link-type="value"]::before,
-	[data-link-type="function"]::before,
-	[data-link-type="at-rule"]::before,
-	[data-link-type="selector"]::before,
-	[data-link-type="maybe"]::before {
-		content: "‘";
-	}
-	[data-link-type="property"]::after,
-	[data-link-type="propdesc"]::after,
-	[data-link-type="descriptor"]::after,
-	[data-link-type="value"]::after,
-	[data-link-type="function"]::after,
-	[data-link-type="at-rule"]::after,
-	[data-link-type="selector"]::after,
-	[data-link-type="maybe"]::after {
-		content: "’";
-	}
-
-	[data-link-type].production::before,
-	[data-link-type].production::after,
-	.prod [data-link-type]::before,
-	.prod [data-link-type]::after {
-		content: "";
-	}
-
-	[data-link-type=element],
-	[data-link-type=element-attr] {
-		font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
-		font-size: .9em;
-	}
-	[data-link-type=element]::before { content: "<" }
-	[data-link-type=element]::after  { content: ">" }
-
-	[data-link-type=biblio] {
-		white-space: pre;
-	}
-
-/** Self-Links ****************************************************************/
-	/* Auto-generated links from an element to its own anchor, for usability */
-
-	.heading, .issue, .note, .example, li, dt {
-		position: relative;
-	}
-	a.self-link {
-		position: absolute;
-		top: 0;
-		left: -2.5em;
-		width: 2em;
-		height: 2em;
-		text-align: center;
-		border: none;
-		transition: opacity .2s;
-		opacity: .5;
-	}
-	a.self-link:hover {
-		opacity: 1;
-	}
-	.heading > a.self-link {
-		font-size: 83%;
-	}
-	li > a.self-link {
-		left: -3.5em;
-	}
-	dfn > a.self-link {
-		top: auto;
-		left: auto;
-		opacity: 0;
-		width: 1.5em;
-		height: 1.5em;
-		background: gray;
-		color: white;
-		font-style: normal;
-		transition: opacity .2s, background-color .2s, color .2s;
-	}
-	dfn:hover > a.self-link {
-		opacity: 1;
-	}
-	dfn > a.self-link:hover {
-		color: black;
-	}
-
-	a.self-link::before            { content: "¶"; }
-	.heading > a.self-link::before { content: "§"; }
-	dfn > a.self-link::before      { content: "#"; }
 
 /******************************************************************************/
-/*                                    Images                                  */
+/*                             Overflow Control                               */
 /******************************************************************************/
 
-	pre.ascii-art {
-		display: table; /* shrinkwrap */
-		margin: 1em auto;
+	.figure .caption, .sidefigure .caption, figcaption {
+		/* in case figure is overlarge, limit caption to 50em */
+		max-width: 50rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.overlarge > table {
+		/* limit preferred width of table */
+		max-width: 50em;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
-	/* Displaying the output of text layout, particularly when
-		 line-breaking is being invoked, and thus having a
-		 visible width is good. */
-	pre.output {
-		margin: 1em;
-		border: solid thin silver;
-		padding: 0.25em;
-		display: table;
+	@media (min-width: 55em) {
+		.overlarge {
+			margin-left: calc(13px + 26.5rem - 50vw);
+			margin-right: calc(13px + 26.5rem - 50vw);
+			max-width: none;
+		}
+	}
+	@media screen and (min-width: 78em) {
+		body:not(.toc-inline) .overlarge {
+			/* 30.5em body padding 50em content area */
+			margin-left: calc(40em - 50vw) !important;
+			margin-right: calc(40em - 50vw) !important;
+		}
+	}
+	@media screen and (min-width: 90em) {
+		body:not(.toc-inline) .overlarge {
+			/* 4em html margin 30.5em body padding 50em content area */
+			margin-left: 0 !important;
+			margin-right: calc(84.5em - 100vw) !important;
+		}
 	}
 
-/******************************************************************************/
-/*                                  Counters                                  */
-/******************************************************************************/
-
-	.issue:not(.no-marker)::before {
-		content: "Issue " counter(issue);
+	@media not print {
+		.overlarge {
+			overflow-x: auto;
+			/* See Lea Verou's explanation background-attachment:
+			 * http://lea.verou.me/2012/04/background-attachment-local/
+			 *
+			background: top left  / 4em 100% linear-gradient(to right,  #ffffff, rgba(255, 255, 255, 0)) local,
+			            top right / 4em 100% linear-gradient(to left, #ffffff, rgba(255, 255, 255, 0)) local,
+			            top left  / 1em 100% linear-gradient(to right,  #c3c3c5, rgba(195, 195, 197, 0)) scroll,
+			            top right / 1em 100% linear-gradient(to left, #c3c3c5, rgba(195, 195, 197, 0)) scroll,
+			            white;
+			background-repeat: no-repeat;
+			*/
+		}
 	}
-
-	.example:not(.no-marker)::before {
-		content: "Example";
-		content: "Example " counter(exampleno);
-	}
-	.invalid.example:not(.no-marker)::before,
-	.illegal.example:not(.no-marker)::before {
-		content: "Invalid Example";
-		content: "Invalid Example" counter(exampleno);
-	}
-
-
-/** At-risk List **************************************************************/
-	/* Style for At Risk features (intended as editorial aid, not intended for publishing) */
-
-	.atrisk::before {
-	 float: right;
-	 margin-top: -0.25em;
-	 padding: 0.5em 1em 0.5em 0;
-	 text-indent: -0.9em;
-	 border: 1px solid;
-	 content: '\25C0    Not yet widely implemented';
-	 white-space: pre;
-	 font-size: small;
-	 background-color: white;
-	 color: gray;
-	 text-align: center;
-	}
-
-	.toc .atrisk::before { content:none }
 </style>
-  <meta content="Bikeshed 1.0.0" name="generator">
-<style>
-  ul.toc ul ul ul {
-    margin: 0 0 0 2em;
-  }
-  ul.toc ul ul ul span.secno {
-    margin-left: -9em;
-  }
+  <meta content="Bikeshed version 807fa228f70b24dc6f3ebea36719f85c4b567bb8" name="generator">
+  <meta content="654e8d724e7f776a8e1a5c3850a9b34eda1d7dca" name="document-revision">
+<style>/* style-md-lists */
+
+/* This is a weird hack for me not yet following the commonmark spec
+   regarding paragraph and lists. */
+[data-md] > :first-child {
+    margin-top: 0;
+}
+[data-md] > :last-child {
+    margin-bottom: 0;
+}</style>
+<style>/* style-selflinks */
+
+.heading, .issue, .note, .example, li, dt {
+    position: relative;
+}
+a.self-link {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (3.5rem - 26px));
+    width: calc(3.5rem - 26px);
+    height: 2em;
+    text-align: center;
+    border: none;
+    transition: opacity .2s;
+    opacity: .5;
+}
+a.self-link:hover {
+    opacity: 1;
+}
+.heading > a.self-link {
+    font-size: 83%;
+}
+li > a.self-link {
+    left: calc(-1 * (3.5rem - 26px) - 2em);
+}
+dfn > a.self-link {
+    top: auto;
+    left: auto;
+    opacity: 0;
+    width: 1.5em;
+    height: 1.5em;
+    background: gray;
+    color: white;
+    font-style: normal;
+    transition: opacity .2s, background-color .2s, color .2s;
+}
+dfn:hover > a.self-link {
+    opacity: 1;
+}
+dfn > a.self-link:hover {
+    color: black;
+}
+
+a.self-link::before            { content: "¶"; }
+.heading > a.self-link::before { content: "§"; }
+dfn > a.self-link::before      { content: "#"; }</style>
+<style>/* style-counters */
+
+body {
+    counter-reset: example figure issue;
+}
+.issue {
+    counter-increment: issue;
+}
+.issue:not(.no-marker)::before {
+    content: "Issue " counter(issue);
+}
+
+.example {
+    counter-increment: example;
+}
+.example:not(.no-marker)::before {
+    content: "Example " counter(example);
+}
+.invalid.example:not(.no-marker)::before,
+.illegal.example:not(.no-marker)::before {
+    content: "Invalid Example" counter(example);
+}
+
+figcaption {
+    counter-increment: figure;
+}
+figcaption:not(.no-marker)::before {
+    content: "Figure " counter(figure) " ";
+}</style>
+<style>/* style-autolinks */
+
+.css.css, .property.property, .descriptor.descriptor {
+    color: #005a9c;
+    font-size: inherit;
+    font-family: inherit;
+}
+.css::before, .property::before, .descriptor::before {
+    content: "‘";
+}
+.css::after, .property::after, .descriptor::after {
+    content: "’";
+}
+.property, .descriptor {
+    /* Don't wrap property and descriptor names */
+    white-space: nowrap;
+}
+.type { /* CSS value <type> */
+    font-style: italic;
+}
+pre .property::before, pre .property::after {
+    content: "";
+}
+[data-link-type="property"]::before,
+[data-link-type="propdesc"]::before,
+[data-link-type="descriptor"]::before,
+[data-link-type="value"]::before,
+[data-link-type="function"]::before,
+[data-link-type="at-rule"]::before,
+[data-link-type="selector"]::before,
+[data-link-type="maybe"]::before {
+    content: "‘";
+}
+[data-link-type="property"]::after,
+[data-link-type="propdesc"]::after,
+[data-link-type="descriptor"]::after,
+[data-link-type="value"]::after,
+[data-link-type="function"]::after,
+[data-link-type="at-rule"]::after,
+[data-link-type="selector"]::after,
+[data-link-type="maybe"]::after {
+    content: "’";
+}
+
+[data-link-type].production::before,
+[data-link-type].production::after,
+.prod [data-link-type]::before,
+.prod [data-link-type]::after {
+    content: "";
+}
+
+[data-link-type=element],
+[data-link-type=element-attr] {
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: .9em;
+}
+[data-link-type=element]::before { content: "<" }
+[data-link-type=element]::after  { content: ">" }
+
+[data-link-type=biblio] {
+    white-space: pre;
+}</style>
+<style>/* style-dfn-panel */
+
+.dfn-panel {
+    position: absolute;
+    z-index: 35;
+    height: auto;
+    width: -webkit-fit-content;
+    width: fit-content;
+    max-width: 300px;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.75em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: #DDDDDD;
+    color: black;
+    border: outset 0.2em;
+}
+.dfn-panel:not(.on) { display: none; }
+.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
+.dfn-panel > b { display: block; }
+.dfn-panel a { color: black; }
+.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel > b + b { margin-top: 0.25em; }
+.dfn-panel ul { padding: 0; }
+.dfn-panel li { list-style: inside; }
+.dfn-panel.activated {
+    display: inline-block;
+    position: fixed;
+    left: .5em;
+    bottom: 2em;
+    margin: 0 auto;
+    max-width: calc(100vw - 1.5em - .4em - .5em);
+    max-height: 30vh;
+}
+
+.dfn-paneled { cursor: pointer; }
 </style>
- </head>
+<style>/* style-syntax-highlighting */
+pre.idl.highlight { color: #708090; }
+.highlight:not(.idl) { background: hsl(24, 20%, 95%); }
+code.highlight { padding: .1em; border-radius: .3em; }
+pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
+.highlight .c { color: #708090 } /* Comment */
+.highlight .k { color: #990055 } /* Keyword */
+.highlight .l { color: #000000 } /* Literal */
+.highlight .n { color: #0077aa } /* Name */
+.highlight .o { color: #999999 } /* Operator */
+.highlight .p { color: #999999 } /* Punctuation */
+.highlight .cm { color: #708090 } /* Comment.Multiline */
+.highlight .cp { color: #708090 } /* Comment.Preproc */
+.highlight .c1 { color: #708090 } /* Comment.Single */
+.highlight .cs { color: #708090 } /* Comment.Special */
+.highlight .kc { color: #990055 } /* Keyword.Constant */
+.highlight .kd { color: #990055 } /* Keyword.Declaration */
+.highlight .kn { color: #990055 } /* Keyword.Namespace */
+.highlight .kp { color: #990055 } /* Keyword.Pseudo */
+.highlight .kr { color: #990055 } /* Keyword.Reserved */
+.highlight .kt { color: #990055 } /* Keyword.Type */
+.highlight .ld { color: #000000 } /* Literal.Date */
+.highlight .m { color: #000000 } /* Literal.Number */
+.highlight .s { color: #a67f59 } /* Literal.String */
+.highlight .na { color: #0077aa } /* Name.Attribute */
+.highlight .nc { color: #0077aa } /* Name.Class */
+.highlight .no { color: #0077aa } /* Name.Constant */
+.highlight .nd { color: #0077aa } /* Name.Decorator */
+.highlight .ni { color: #0077aa } /* Name.Entity */
+.highlight .ne { color: #0077aa } /* Name.Exception */
+.highlight .nf { color: #0077aa } /* Name.Function */
+.highlight .nl { color: #0077aa } /* Name.Label */
+.highlight .nn { color: #0077aa } /* Name.Namespace */
+.highlight .py { color: #0077aa } /* Name.Property */
+.highlight .nt { color: #669900 } /* Name.Tag */
+.highlight .nv { color: #222222 } /* Name.Variable */
+.highlight .ow { color: #999999 } /* Operator.Word */
+.highlight .mb { color: #000000 } /* Literal.Number.Bin */
+.highlight .mf { color: #000000 } /* Literal.Number.Float */
+.highlight .mh { color: #000000 } /* Literal.Number.Hex */
+.highlight .mi { color: #000000 } /* Literal.Number.Integer */
+.highlight .mo { color: #000000 } /* Literal.Number.Oct */
+.highlight .sb { color: #a67f59 } /* Literal.String.Backtick */
+.highlight .sc { color: #a67f59 } /* Literal.String.Char */
+.highlight .sd { color: #a67f59 } /* Literal.String.Doc */
+.highlight .s2 { color: #a67f59 } /* Literal.String.Double */
+.highlight .se { color: #a67f59 } /* Literal.String.Escape */
+.highlight .sh { color: #a67f59 } /* Literal.String.Heredoc */
+.highlight .si { color: #a67f59 } /* Literal.String.Interpol */
+.highlight .sx { color: #a67f59 } /* Literal.String.Other */
+.highlight .sr { color: #a67f59 } /* Literal.String.Regex */
+.highlight .s1 { color: #a67f59 } /* Literal.String.Single */
+.highlight .ss { color: #a67f59 } /* Literal.String.Symbol */
+.highlight .vc { color: #0077aa } /* Name.Variable.Class */
+.highlight .vg { color: #0077aa } /* Name.Variable.Global */
+.highlight .vi { color: #0077aa } /* Name.Variable.Instance */
+.highlight .il { color: #000000 } /* Literal.Number.Integer.Long */
+</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Sanitize Untrusted HTML</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2016-01-15">15 January 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">A Collection of Interesting Ideas, <time class="dt-updated" datetime="2018-08-07">7 August 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt class="editor">Editor:
@@ -1316,14 +1469,14 @@
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 15 January 2016,
+In addition, as of 7 August 2018,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
    <hr title="Separator for header">
   </div>
-  <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
   <div class="p-summary" data-fill-with="abstract">
+   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
    <p>This document specifies a set of APIs which allow developers to take untrusted
 
 strings of HTML, and sanitize them for safe insertion into a document’s DOM.</p>
@@ -1340,10 +1493,10 @@ strings of HTML, and sanitize them for safe insertion into a document’s DOM.</
      </ol>
     <li><a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
     <li><a href="#ack"><span class="secno">3</span> <span class="content">Acknowledgements</span></a>
-    <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
      <ol class="toc">
+      <li><a href="#index-defined-here"><span class="secno"></span> <span class="content">Terms defined by this specification</span></a>
       <li><a href="#index-defined-elsewhere"><span class="secno"></span> <span class="content">Terms defined by reference</span></a>
      </ol>
     <li>
@@ -1352,7 +1505,7 @@ strings of HTML, and sanitize them for safe insertion into a document’s DOM.</
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
       <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
      </ol>
-    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
+    <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
    </ol>
   </nav>
   <main>
@@ -1362,7 +1515,7 @@ strings of HTML, and sanitize them for safe insertion into a document’s DOM.</
 perhaps as part of a client-side templating solution, perhaps as part of
 rendering user generated content, etc. It is difficult to do so in a safe way,
 however; the naive approach of joining strings together and stuffing them into
-an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/DOM-Parsing/#widl-Element-innerHTML">innerHTML</a></code> is fraught with risk, as that can and
+an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/DOM-Parsing/#widl-Element-innerHTML" id="ref-for-widl-Element-innerHTML">innerHTML</a></code> is fraught with risk, as that can and
 will cause JavaScript execution in a number of unexpected ways.</p>
    <p>Libraries like <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> attempt to manage this problem by carefully
 parsing and sanitizing strings before insertion by constructing a DOM and
@@ -1389,94 +1542,294 @@ API which aims to do just that.</p>
   and before additional processing in the DOM.</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="examples"><span class="secno">1.2. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
-<pre>Sanitizer.sanitizeString("&lt;img src=x onerror=alert(1)//>") // returns <code>&lt;img src="x"></code>
-  
-Sanitizer.sanitizeNode(node); // returns sanitized DOM node
-  
-Sanitizer.sanitizeDocument(doc); // returns sanitized document
+<pre class="language-js highlight"><span class="kd">let</span> s <span class="o">=</span> <span class="k">new</span> Sanitizer<span class="p">({</span>
+  tags<span class="o">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="p">...],</span>
+  attributes<span class="o">:</span> <span class="p">[</span><span class="s1">'c'</span><span class="p">,</span> <span class="s1">'d'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span> <span class="p">...],</span>
+  <span class="p">...</span>
+<span class="p">});</span>
+s<span class="p">.</span>sanitize<span class="p">(</span><span class="s2">"&amp;lt;img src=x onerror=alert(1)//&amp;gt;"</span><span class="p">);</span> <span class="c1">// returns &lt;code data-opaque bs-autolink-syntax='`&lt;img src=&amp;quot;x&amp;quot;>`'>&amp;lt;img src="x">&lt;/code></span>
 </pre>
-<pre>Sanitizer.sanitizeString("&lt;img src=x onerror=alert(1)//>", configuration)
-  
-Sanitizer.sanitizeNode(node, configuration);
-  
-Sanitizer.sanitizeDocument(doc, configuration);
-</pre>
-   <p class="issue" id="issue-d6995b63"><a class="self-link" href="#issue-d6995b63"></a> Is this the API we want? How much do we care about the string itself?
-Could we simply inject the string into the DOM and have the sanitization,
-neutering, etc. done transparently as part of the injection? That is, <code>element.totallySafeInnerHTML = badString;</code> rather than <code>element.innerHTML =
-document.sanitize(badString)</code>?</p>
-   <p class="issue" id="issue-ab303dcd"><a class="self-link" href="#issue-ab303dcd"></a> More broadly, do we only care about injections, or should we attempt to
-move in the direction lcamtuf@ proposed a million years ago by attaching
-policies to specific pieces of the DOM (e.g. <code>&lt;div policy='no-script no-whatever'>...&lt;/div></code>), which might obviate the need
-to sanitize in the first place?</p>
-   <p class="issue" id="issue-3ac7c7f2"><a class="self-link" href="#issue-3ac7c7f2"></a> Should the sanitizer methods essentially be promises? This way we could for
-example also handle erroneous HTML, invalid nodes or any thing else that has the 
-parser stumble (which might be especially interesting for XML and XML-nodes / 
--documents) more elegantly.</p>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
    <p>Blah, blah, blah.</p>
+<pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-sanitizerconfig"><code>SanitizerConfig</code><a class="self-link" href="#dictdef-sanitizerconfig"></a></dfn> {
+  <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><span class="kt">DOMString</span></a>> <dfn class="nv idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export="" data-type="sequence<DOMString> " id="dom-sanitizerconfig-tags"><code>tags</code><a class="self-link" href="#dom-sanitizerconfig-tags"></a></dfn>;
+  <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><span class="kt">DOMString</span></a>> <dfn class="nv idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export="" data-type="sequence<DOMString> " id="dom-sanitizerconfig-attributes"><code>attributes</code><a class="self-link" href="#dom-sanitizerconfig-attributes"></a></dfn>;
+  // ...
+  // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
+};
+
+[Constructor(SanitizerConfig), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
+<span class="kt">interface</span> <dfn class="nv idl-code" data-dfn-type="interface" data-export="" id="sanitizer"><code>Sanitizer</code><a class="self-link" href="#sanitizer"></a></dfn> {
+  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><span class="kt">DOMString</span></a> <dfn class="nv idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export="" data-lt="sanitize(input)" id="dom-sanitizer-sanitize"><code>sanitize</code><a class="self-link" href="#dom-sanitizer-sanitize"></a></dfn>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><span class="kt">DOMString</span></a> <dfn class="nv idl-code" data-dfn-for="Sanitizer/sanitize(input)" data-dfn-type="argument" data-export="" id="dom-sanitizer-sanitize-input-input"><code>input</code><a class="self-link" href="#dom-sanitizer-sanitize-input-input"></a></dfn>);
+};
+</pre>
    <h2 class="heading settled" data-level="3" id="ack"><span class="secno">3. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
    <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
-describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
+describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
   </main>
-  <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
-  <p> Conformance requirements are expressed with a combination of descriptive assertions and RFC 2119 terminology.
-        The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
-        in the normative parts of this document
-        are to be interpreted as described in RFC 2119.
-        However, for readability,
-        these words do not appear in all uppercase letters in this specification. </p>
-  <p> All of the text of this specification is normative
-        except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
-  <p> Examples in this specification are introduced with the words “for example”
-        or are set apart from the normative text with <code>class="example"</code>, like this: </p>
-  <div class="example" id="example-ae2b6bc0"><a class="self-link" href="#example-ae2b6bc0"></a> This is an example of an informative example. </div>
-  <p> Informative notes begin with the word “Note”
-        and are set apart from the normative text with <code>class="note"</code>, like this: </p>
-  <p class="note" role="note"> Note, this is an informative note. </p>
-  <h2 class="no-num heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
-  <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+<script>
+(function() {
+  "use strict";
+  var collapseSidebarText = '<span aria-hidden="true">←</span> '
+                          + '<span>Collapse Sidebar</span>';
+  var expandSidebarText   = '<span aria-hidden="true">→</span> '
+                          + '<span>Pop Out Sidebar</span>';
+  var tocJumpText         = '<span aria-hidden="true">↑</span> '
+                          + '<span>Jump to Table of Contents</span>';
+
+  var sidebarMedia = window.matchMedia('screen and (min-width: 78em)');
+  var autoToggle   = function(e){ toggleSidebar(e.matches) };
+  if(sidebarMedia.addListener) {
+    sidebarMedia.addListener(autoToggle);
+  }
+
+  function toggleSidebar(on) {
+    if (on == undefined) {
+      on = !document.body.classList.contains('toc-sidebar');
+    }
+
+    /* Don’t scroll to compensate for the ToC if we’re above it already. */
+    var headY = 0;
+    var head = document.querySelector('.head');
+    if (head) {
+      // terrible approx of "top of ToC"
+      headY += head.offsetTop + head.offsetHeight;
+    }
+    var skipScroll = window.scrollY < headY;
+
+    var toggle = document.getElementById('toc-toggle');
+    var tocNav = document.getElementById('toc');
+    if (on) {
+      var tocHeight = tocNav.offsetHeight;
+      document.body.classList.add('toc-sidebar');
+      document.body.classList.remove('toc-inline');
+      toggle.innerHTML = collapseSidebarText;
+      if (!skipScroll) {
+        window.scrollBy(0, 0 - tocHeight);
+      }
+      tocNav.focus();
+      sidebarMedia.addListener(autoToggle); // auto-collapse when out of room
+    }
+    else {
+      document.body.classList.add('toc-inline');
+      document.body.classList.remove('toc-sidebar');
+      toggle.innerHTML = expandSidebarText;
+      if (!skipScroll) {
+        window.scrollBy(0, tocNav.offsetHeight);
+      }
+      if (toggle.matches(':hover')) {
+        /* Unfocus button when not using keyboard navigation,
+           because I don’t know where else to send the focus. */
+        toggle.blur();
+      }
+    }
+  }
+
+  function createSidebarToggle() {
+    /* Create the sidebar toggle in JS; it shouldn’t exist when JS is off. */
+    var toggle = document.createElement('a');
+      /* This should probably be a button, but appearance isn’t standards-track.*/
+    toggle.id = 'toc-toggle';
+    toggle.class = 'toc-toggle';
+    toggle.href = '#toc';
+    toggle.innerHTML = collapseSidebarText;
+
+    sidebarMedia.addListener(autoToggle);
+    var toggler = function(e) {
+      e.preventDefault();
+      sidebarMedia.removeListener(autoToggle); // persist explicit off states
+      toggleSidebar();
+      return false;
+    }
+    toggle.addEventListener('click', toggler, false);
+
+
+    /* Get <nav id=toc-nav>, or make it if we don’t have one. */
+    var tocNav = document.getElementById('toc-nav');
+    if (!tocNav) {
+      tocNav = document.createElement('p');
+      tocNav.id = 'toc-nav';
+      /* Prepend for better keyboard navigation */
+      document.body.insertBefore(tocNav, document.body.firstChild);
+    }
+    /* While we’re at it, make sure we have a Jump to Toc link. */
+    var tocJump = document.getElementById('toc-jump');
+    if (!tocJump) {
+      tocJump = document.createElement('a');
+      tocJump.id = 'toc-jump';
+      tocJump.href = '#toc';
+      tocJump.innerHTML = tocJumpText;
+      tocNav.appendChild(tocJump);
+    }
+
+    tocNav.appendChild(toggle);
+  }
+
+  var toc = document.getElementById('toc');
+  if (toc) {
+    createSidebarToggle();
+    toggleSidebar(sidebarMedia.matches);
+
+    /* If the sidebar has been manually opened and is currently overlaying the text
+       (window too small for the MQ to add the margin to body),
+       then auto-close the sidebar once you click on something in there. */
+    toc.addEventListener('click', function(e) {
+      if(e.target.tagName.toLowerCase() == "a" && document.body.classList.contains('toc-sidebar') && !sidebarMedia.matches) {
+        toggleSidebar(false);
+      }
+    }, false);
+  }
+  else {
+    console.warn("Can’t find Table of Contents. Please use <nav id='toc'> around the ToC.");
+  }
+
+  /* Wrap tables in case they overflow */
+  var tables = document.querySelectorAll(':not(.overlarge) > table.data, :not(.overlarge) > table.index');
+  var numTables = tables.length;
+  for (var i = 0; i < numTables; i++) {
+    var table = tables[i];
+    var wrapper = document.createElement('div');
+    wrapper.className = 'overlarge';
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  }
+
+})();
+</script>
+  <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
+  <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
+  <ul class="index">
+   <li><a href="#dom-sanitizerconfig-attributes">attributes</a><span>, in §2</span>
+   <li><a href="#dom-sanitizer-sanitize">sanitize(input)</a><span>, in §2</span>
+   <li><a href="#sanitizer">Sanitizer</a><span>, in §2</span>
+   <li><a href="#dictdef-sanitizerconfig">SanitizerConfig</a><span>, in §2</span>
+   <li><a href="#dom-sanitizerconfig-tags">tags</a><span>, in §2</span>
+  </ul>
+  <aside class="dfn-panel" data-for="term-for-element">
+   <a href="https://dom.spec.whatwg.org/#element">https://dom.spec.whatwg.org/#element</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-element">1. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-widl-Element-innerHTML">
+   <a href="https://w3c.github.io/DOM-Parsing/#widl-Element-innerHTML">https://w3c.github.io/DOM-Parsing/#widl-Element-innerHTML</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-widl-Element-innerHTML">1. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-DOMString">
+   <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-DOMString">2. Framework</a> <a href="#ref-for-idl-DOMString①">(2)</a> <a href="#ref-for-idl-DOMString②">(3)</a> <a href="#ref-for-idl-DOMString③">(4)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-Exposed">
+   <a href="https://heycam.github.io/webidl/#Exposed">https://heycam.github.io/webidl/#Exposed</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-Exposed">2. Framework</a>
+   </ul>
+  </aside>
+  <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
-    <a data-link-type="biblio" href="#biblio-dom-parsing">[DOM-Parsing]</a> defines the following terms:
+    <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/DOM-Parsing/#widl-Element-innerHTML">innerHTML</a>
+     <li><span class="dfn-paneled" id="term-for-element" style="color:initial">Element</span>
     </ul>
    <li>
-    <a data-link-type="biblio" href="#biblio-dom-ls">[dom-ls]</a> defines the following terms:
+    <a data-link-type="biblio">[DOM-Parsing]</a> defines the following terms:
     <ul>
-     <li><a href="https://dom.spec.whatwg.org/#element">Element</a>
+     <li><span class="dfn-paneled" id="term-for-widl-Element-innerHTML" style="color:initial">innerHTML</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-idl-DOMString" style="color:initial">DOMString</span>
+     <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
     </ul>
   </ul>
-  <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
-  <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
+  <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
+  <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
-   <dt id="biblio-dom-parsing"><a class="self-link" href="#biblio-dom-parsing"></a>[DOM-Parsing]
-   <dd>Travis Leithead. <a href="http://www.w3.org/TR/DOM-Parsing/">DOM Parsing and Serialization</a>. 17 June 2014. CR. URL: <a href="http://www.w3.org/TR/DOM-Parsing/">http://www.w3.org/TR/DOM-Parsing/</a>
-   <dt id="biblio-dom-ls"><a class="self-link" href="#biblio-dom-ls"></a>[DOM-LS]
-   <dd>Document Object Model URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
-   <dt id="biblio-rfc2119"><a class="self-link" href="#biblio-rfc2119"></a>[RFC2119]
-   <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+   <dt id="biblio-dom">[DOM]
+   <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
+   <dt id="biblio-dom-parsing">[DOM-Parsing]
+   <dd>Travis Leithead. <a href="https://www.w3.org/TR/DOM-Parsing/">DOM Parsing and Serialization</a>. 17 May 2016. WD. URL: <a href="https://www.w3.org/TR/DOM-Parsing/">https://www.w3.org/TR/DOM-Parsing/</a>
+   <dt id="biblio-webidl">[WebIDL]
+   <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. <a href="https://heycam.github.io/webidl/">Web IDL</a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
   </dl>
-  <h3 class="no-num heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
-   <dt id="biblio-dompurify"><a class="self-link" href="#biblio-dompurify"></a>[DOMPURIFY]
+   <dt id="biblio-dompurify">[DOMPURIFY]
    <dd><a href="https://github.com/cure53/DOMPurify">DOMPurify</a>. URL: <a href="https://github.com/cure53/DOMPurify">https://github.com/cure53/DOMPurify</a>
   </dl>
-  <h2 class="no-num heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
-  <div style="counter-reset:issue">
-   <div class="issue"> Is this the API we want? How much do we care about the string itself?
-Could we simply inject the string into the DOM and have the sanitization,
-neutering, etc. done transparently as part of the injection? That is, <code>element.totallySafeInnerHTML = badString;</code> rather than <code>element.innerHTML =
-document.sanitize(badString)</code>?<a href="#issue-d6995b63"> ↵ </a></div>
-   <div class="issue"> More broadly, do we only care about injections, or should we attempt to
-move in the direction lcamtuf@ proposed a million years ago by attaching
-policies to specific pieces of the DOM (e.g. <code>&lt;div policy='no-script no-whatever'>...&lt;/div></code>), which might obviate the need
-to sanitize in the first place?<a href="#issue-ab303dcd"> ↵ </a></div>
-   <div class="issue"> Should the sanitizer methods essentially be promises? This way we could for
-example also handle erroneous HTML, invalid nodes or any thing else that has the 
-parser stumble (which might be especially interesting for XML and XML-nodes / 
--documents) more elegantly.<a href="#issue-3ac7c7f2"> ↵ </a></div>
-  </div>
- </body>
-</html>
+  <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
+<pre class="idl highlight def"><span class="kt">dictionary</span> <a class="nv" href="#dictdef-sanitizerconfig"><code>SanitizerConfig</code></a> {
+  <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④"><span class="kt">DOMString</span></a>> <a class="nv" data-type="sequence<DOMString> " href="#dom-sanitizerconfig-tags"><code>tags</code></a>;
+  <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①①"><span class="kt">DOMString</span></a>> <a class="nv" data-type="sequence<DOMString> " href="#dom-sanitizerconfig-attributes"><code>attributes</code></a>;
+  // ...
+  // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
+};
+
+[Constructor(SanitizerConfig), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
+<span class="kt">interface</span> <a class="nv" href="#sanitizer"><code>Sanitizer</code></a> {
+  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②①"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-sanitizer-sanitize"><code>sanitize</code></a>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③①"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-sanitizer-sanitize-input-input"><code>input</code></a>);
+};
+
+</pre>
+<script>/* script-dfn-panel */
+
+document.body.addEventListener("click", function(e) {
+    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+    // Find the dfn element or panel, if any, that was clicked on.
+    var el = e.target;
+    var target;
+    var hitALink = false;
+    while(el.parentElement) {
+        if(el.tagName == "A") {
+            // Clicking on a link in a <dfn> shouldn't summon the panel
+            hitALink = true;
+        }
+        if(el.classList.contains("dfn-paneled")) {
+            target = "dfn";
+            break;
+        }
+        if(el.classList.contains("dfn-panel")) {
+            target = "dfn-panel";
+            break;
+        }
+        el = el.parentElement;
+    }
+    if(target != "dfn-panel") {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
+            el.classList.remove("on");
+            el.classList.remove("activated");
+        });
+    }
+    if(target == "dfn" && !hitALink) {
+        // open the panel
+        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
+        if(dfnPanel) {
+            dfnPanel.classList.add("on");
+            var rect = el.getBoundingClientRect();
+            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
+            dfnPanel.style.top = window.scrollY + rect.top + "px";
+            var panelRect = dfnPanel.getBoundingClientRect();
+            var panelWidth = panelRect.right - panelRect.left;
+            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
+                // Reposition, because the panel is overflowing
+                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+            }
+        } else {
+            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
+        }
+    } else if(target == "dfn-panel") {
+        // Switch it to "activated" state, which pins it.
+        el.classList.add("activated");
+        el.style.left = null;
+        el.style.top = null;
+    }
+
+});
+</script>
