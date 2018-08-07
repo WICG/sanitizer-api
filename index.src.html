@@ -12,21 +12,6 @@ Boilerplate: omit conformance, omit feedback-header
 Markup Shorthands: css off, markdown on
 </pre>
 <pre class="anchors">
-spec: URL; urlPrefix: https://url.spec.whatwg.org/
-  type: dfn
-    text: URL parser; url: concept-url-parser
-    text: URL serializer; url: concept-url-serializer
-  type: attribute
-    text: host; for: URL; url: concept-url-host
-    text: port; for: URL; url: concept-url-port
-    text: path; for: URL; url: concept-url-path
-    text: origin; for: URL; url: concept-url-origin
-    text: scheme; for: URL; url: concept-url-scheme
-  type: interface;
-    text: URL
-spec: HTML; urlPrefix: https://html.spec.whatwg.org/
-  type: interface
-    text: Document; url: document
 spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
   type: attribute
     text: innerHTML; for: Element; url: #widl-Element-innerHTML
@@ -89,7 +74,8 @@ let s = new Sanitizer({
   attributes: ['c', 'd', 'e', ...],
   ...
 });
-s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
+s.toString("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
+s.toFragment("&lt;img src=x onerror=alert(1)//&gt;"); // returns a `DocumentFragment`
 ```
 
 Framework {#framework}
@@ -105,9 +91,10 @@ Blah, blah, blah.
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
   };
 
-  [Constructor(optional SanitizerConfig config), Exposed=(Window,Worker)]
+  [Constructor(optional SanitizerConfig config), Exposed=(Window)]
   interface Sanitizer {
-    DOMString sanitize(DOMString input);
+    DOMString toString(DOMString input);
+    DocumentFragment toFragment(DOMString input);
   };
 </pre>
 
