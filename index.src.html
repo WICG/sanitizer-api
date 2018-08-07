@@ -95,6 +95,10 @@ Blah, blah, blah.
   interface Sanitizer {
     DOMString toString(DOMString input);
     DocumentFragment toFragment(DOMString input);
+
+    // And maybe?
+    static DOMString sanitizeToString(DOMString input, optional SanitizerConfig config);
+    static DocumentFragment sanitizeToFragment(DOMString input, optional SanitizerConfig config);
   };
 </pre>
 
