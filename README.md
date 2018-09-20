@@ -2,15 +2,15 @@
 
 ## The Problem
 
-Various web applications often need to work with strings of HTML on the client-side. This might take place, for instance, as part of a client-side templating solution or perhaps come to play through the process of rendering user-generated content. The key problem is that it remains difficult to perform these tasks in a safe way. This is specifically the case because the naive approach of joining strings together and stuffing them into an Element's innerHTML is fraught with risks. A very common negative implication concerns the JavaScript execution, which can occur in a number of unexpected ways.
+Various web applications often need to work with strings of HTML on the client-side. This might take place, for instance, as part of a client-side templating solution or perhaps come to play through the process of rendering user-generated content. The key problem is that it remains difficult to perform these tasks in a safe way. This is specifically the case because the naive approach of joining strings together and stuffing them into an [Element](https://dom.spec.whatwg.org/#element)'s [innerHTML](https://w3c.github.io/DOM-Parsing/#widl-Element-innerHTML) is fraught with risks. A very common negative implication concerns the JavaScript execution, which can occur in a number of unexpected ways.
 
-To address the problem, libraries like DOMPurify attempt to carefully manage the inputs and alleviate risks. This is usually accomplished through parsing and sanitizing strings before insertion and takes advantage of a white-list for constructing a DOM and handling its components. This is considerably safer than doing the same on the server-side, yet much untapped potential can still be observed when it comes the client-side sanitization.
+To address the problem, libraries like [DOMPurify](https://github.com/cure53/DOMPurify) attempt to carefully manage the inputs and alleviate risks. This is usually accomplished through parsing and sanitizing strings before insertion and takes advantage of a white-list for constructing a DOM and handling its components. This is considerably safer than doing the same on the server-side, yet much untapped potential can still be observed when it comes the client-side sanitization.
 
 As it stands, every browser has a fairly good idea of when and how it is going to execute code. Capitalizing on this, it is possible to improve the user-space libraries by teaching the browser how to render HTML from an arbitrary string in a safe manner. In other words, we seek to make sure that this happens in a way that is much more likely to be maintained and updated along with the browsers’ ever-changing parser implementations.
 
 ## The Proposal
 
-Broadly speaking, the sanitizers already exist as third-party libraries (e.g. DOMPurify, see also the paper) or in browser-specific and proprietary APIs (e.g. toStaticHTML). The browser-agnostic libraries achieve the goal by relying on the HTML parsing found in-browser, as exposed through createHTMLDocument or DOMParser. Conversely, they still have to work around browser-specific quirks. An API that is built into the browser should be seen as being at the very best place for guaranteeing a properly sanitized markup. 
+Broadly speaking, the sanitizers already exist as third-party libraries (e.g. DOMPurify, see also the [paper](https://www.researchgate.net/publication/319071617_DOMPurify_Client-Side_Protection_Against_XSS_and_Markup_Injection)) or in browser-specific and proprietary APIs (e.g. toStaticHTML). The browser-agnostic libraries achieve the goal by relying on the HTML parsing found in-browser, as exposed through [`createHTMLDocument`](https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createHTMLDocument) or [`DOMParser`](https://developer.mozilla.org/en-US/docs/DOM/DOMParser). Conversely, they still have to work around browser-specific quirks. An API that is built into the browser should be seen as being at the very best place for guaranteeing a properly sanitized markup. 
 
 ### Two approaches for achieving the desired functionality
 
@@ -73,10 +73,10 @@ What is more, the existing JavaScript libraries, such as DOMPurify, also ship we
 * As a golden rule, sanitization should happen where the sanitized result is used, so that the above noted knowledge gaps can be mitigated and various risks might be averted.
 
 ### What are the key advantages of Sanitizing in the browser?
-* Minimalistic Approach: Various libraries, such as DOMPurify, currently need to work around browser-specific quirks. This would no longer matter had the implementations become directly embedded in the browser. 
-* Bandwidth: Sanitizer libraries are “heavy” and by reducing the need to pull them from a server by embedding them in the browser instead, bandwidth can be saved.
-* Performance: Sanitizing markup in C/C++ is faster than doing the same in JavaScript.
-* Reusability: Once the browser exposes a sanitizer in the DOM, it can be reused for potentially upcoming SafeHTML implementations, Trusted Types, secure elements and, if configurable, even be repurposed for other changes in the user-controlled HTML, for instance in connection with URL rewriting, removal of annoying UI elements and CSS sanitization.
+* *Minimalistic Approach:* Various libraries, such as DOMPurify, currently need to work around browser-specific quirks. This would no longer matter had the implementations become directly embedded in the browser. 
+* *Bandwidth:* Sanitizer libraries are “heavy” and by reducing the need to pull them from a server by embedding them in the browser instead, bandwidth can be saved.
+* *Performance:* Sanitizing markup in C/C++ is faster than doing the same in JavaScript.
+* *Reusability:* Once the browser exposes a sanitizer in the DOM, it can be reused for potentially upcoming [SafeHTML](https://lists.w3.org/Archives/Public/public-webappsec/2016Jan/0113.html) implementations, [Trusted Types](https://github.com/WICG/trusted-types), secure elements and, if configurable, even be repurposed for other changes in the user-controlled HTML, for instance in connection with URL rewriting, removal of annoying UI elements and CSS sanitization.
 
 ### What if someone wants to customize the sanitization rules?
 * It should be trivial to implement basic configuration options that allow customization of the default whitelist and enable developers to remove, add or completely rewrite the whitelisted elements and/or attributes. 
