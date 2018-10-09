@@ -4,8 +4,12 @@ python:
   - "2.7"
 install:
   - git clone https://github.com/tabatkins/bikeshed.git
-  - pip install --editable bikeshed
+  - pip install --editable $PWD/bikeshed
   - bikeshed update
 script:
-  # Invoke bikeshed here, at your own leisure. E.g.:
-  - bikeshed spec
+  - bash ./deploy.sh
+
+env:
+  global:
+  - ENCRYPTION_LABEL: "58fa5526451a"
+  - COMMIT_AUTHOR_EMAIL: "authors@sanitizer.spec.invalid"
