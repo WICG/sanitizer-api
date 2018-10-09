@@ -1,6 +1,6 @@
 <pre class="metadata">
 Title: HTML Sanitizer API
-Status: ED
+Status: DREAM
 Shortname: sanitizer
 Level: 1
 Editor: Frederik Braun 68466, Mozilla, fbraun@mozilla.com, https://frederik-braun.com
@@ -19,7 +19,6 @@ spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
   type: attribute
     text: innerHTML; for: Element; url: #widl-Element-innerHTML
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
-text: script gadgets; url: https://github.com/google/security-research-pocs/tree/master/script-gadgets
 </pre>
 <pre class="biblio">
 {
@@ -70,7 +69,8 @@ Goals {#goals}
     account its current understanding of HTML.
 
 *   Allow developers to override the defaults set of elements and attributes.
-    Adding certain elements and attributes can prevent {{script gadget}
+    Adding certain elements and attributes can prevent
+    <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a>
     attacks.
 
 Examples {#examples}
