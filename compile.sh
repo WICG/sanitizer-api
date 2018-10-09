@@ -12,6 +12,5 @@ bikeshed --print=plain -f spec
 # The out directory should contain everything needed to produce the
 # HTML version of the spec.  Copy things there if the directory exists.
 
-if [ -d out ]; then
-    cp index.html out
-fi
+mkdir -p out
+cp index.html out
