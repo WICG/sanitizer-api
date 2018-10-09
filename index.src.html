@@ -1,13 +1,16 @@
 <pre class="metadata">
-Title: Sanitize Untrusted HTML
-Status: DREAM
-Shortname: SANITIZE
+Title: HTML Sanitizer API
+Status: ED
+Shortname: sanitizer
 Level: 1
+Editor: Frederik Braun 68466, Mozilla, fbraun@mozilla.com, https://frederik-braun.com
+Editor: Mario Heiderich, Cure53, mario@cure53.de, https://cure53.de
 Editor: Mike West 56384, Google Inc., mkwst@google.com
 Abstract:
   This document specifies a set of APIs which allow developers to take untrusted
   strings of HTML, and sanitize them for safe insertion into a document's DOM.
 Indent: 2
+Work Status: exploring
 Boilerplate: omit conformance, omit feedback-header
 Markup Shorthands: css off, markdown on
 </pre>
@@ -16,6 +19,7 @@ spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
   type: attribute
     text: innerHTML; for: Element; url: #widl-Element-innerHTML
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
+text: script gadgets; url: https://github.com/google/security-research-pocs/tree/master/script-gadgets
 </pre>
 <pre class="biblio">
 {
@@ -62,8 +66,12 @@ Goals {#goals}
     developers with mechanisms for handling user-controlled HTML which prevent
     direct script execution upon injection.
 
-*   Enable browser-based crypto software to sanitize rich-text after decryption
-    and before additional processing in the DOM.
+*   Make HTML output safe for use within the current user agent, taking into
+    account its current understanding of HTML.
+
+*   Allow developers to override the defaults set of elements and attributes.
+    Adding certain elements and attributes can prevent {{script gadget}
+    attacks.
 
 Examples {#examples}
 --------------------
@@ -88,7 +96,7 @@ Blah, blah, blah.
     sequence&lt;DOMString> tags;
     sequence&lt;DOMString> attributes;
     // ...
-    // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224 
+    // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
 
   [Constructor(optional SanitizerConfig config), Exposed=(Window)]
