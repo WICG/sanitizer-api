@@ -22,7 +22,7 @@ While the final syntax of the API has not yet been decided on, we suggest two po
 
 ```javascript
 let dirty = user_controlled_html;
-someElement.innerHTML = sanitize(dirty);
+someElement.appendChild(sanitize(dirty));
 ```
 
 In this example, the developer would simply pass a string of dirty HTML into the sanitizer and receive the sanitized result as another string. After that, the received string can be safely written into the DOM. The browser would make use of a whitelist by default. This approach is inspired by Microsoft’s toStaticHTML.
@@ -33,11 +33,7 @@ In this example, the developer would simply pass a string of dirty HTML into the
 let sanitizer = new Sanitizer(options);
 let dirty = user_controlled_html;
 let someElement = document.getElementById(...);
-let someOtherElement = document.getElementById(...);
-clean = sanitizer.sanitizeToString(dirty);
-someElement.innerHTML = clean;
-// some place else
-someOtherElement.appendChild(sanitizer.sanitizeToDocumentFragment(dirty));
+someElement.appendChild(sanitizer.sanitize(dirty));
 ```
 
 In this approach, the developer creates an object for the sanitizer and this can be used multiple times with the same developer-provided configuration. It can be approached literally or with a simple use of the browser’s default config. Neither of the two suggestions poses compatibility risks, meaning that they both interoperate nicely with the existing DOM APIs as long as the whitelist is shared among all implementing browsers.
