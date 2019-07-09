@@ -71,7 +71,8 @@ What is more, the existing JavaScript libraries, such as DOMPurify, also ship we
 * As a golden rule, sanitization should happen where the sanitized result is used, so that the above noted knowledge gaps can be mitigated and various risks might be averted.
 
 ### What are the key advantages of Sanitizing in the browser?
-* *Minimalistic Approach:* Various libraries, such as DOMPurify, currently need to work around browser-specific quirks. This would no longer matter had the implementations become directly embedded in the browser. 
+* *Minimalistic Approach:* Various libraries, such as DOMPurify, currently need to work around browser-specific quirks. This would no longer matter had the implementations become directly embedded in the browser.
+* *Simplicity:* This approach does not aim to create any additional complexity, introduce new data types, labels or flags, it simply aims to provide an API that allows developers to take an untrusted string, remove anything that can lead to script execution or comparable and retuirn the sanitized result, again as a string (see also #4).
 * *Bandwidth:* Sanitizer libraries are “heavy” and by reducing the need to pull them from a server by embedding them in the browser instead, bandwidth can be saved.
 * *Performance:* Sanitizing markup in C/C++ is faster than doing the same in JavaScript.
 * *Reusability:* Once the browser exposes a sanitizer in the DOM, it can be reused for potentially upcoming [SafeHTML](https://lists.w3.org/Archives/Public/public-webappsec/2016Jan/0113.html) implementations, [Trusted Types](https://github.com/WICG/trusted-types), secure elements and, if configurable, even be repurposed for other changes in the user-controlled HTML, for instance in connection with URL rewriting, removal of annoying UI elements and CSS sanitization.
