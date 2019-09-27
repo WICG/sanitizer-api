@@ -1,4 +1,5 @@
  {
     "group":      ["80485"]
-,   "contacts":   ["yoavweiss"]
+,   "contacts":   ["yoavweiss"],
+    "repo-type":  "cg-report"
 }
