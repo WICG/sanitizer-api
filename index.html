@@ -1175,7 +1175,7 @@ Possible extra rowspan handling
 		   1. When table < content column, centers table in column.
 		   2. When content < table < available, left-aligns.
 		   3. When table > available, fills available + scroll bar.
-		*/ 
+		*/
 		display: grid;
 		grid-template-columns: minmax(0, 50em);
 	}
@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 4be3a54e, updated Mon May 4 06:47:10 2020 -0700" name="generator">
+  <meta content="Bikeshed version 1e76df81, updated Fri Jun 5 09:11:11 2020 -0700" name="generator">
   <link href="https://wicg.github.io/purification/" rel="canonical">
-  <meta content="ee795e66f6a91e9ca1abc373e3f1d11462131c0b" name="document-revision">
+  <meta content="c599ee08f93c1338cc2ab9f11268f1752ea1f520" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1471,7 +1471,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-05-11">11 May 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-05">5 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1516,7 +1516,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#goals"><span class="secno">1.1</span> <span class="content">Goals</span></a>
       <li><a href="#examples"><span class="secno">1.2</span> <span class="content">Examples</span></a>
      </ol>
-    <li><a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
+    <li>
+     <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
+     <ol class="toc">
+      <li><a href="#sanitizer-api"><span class="secno">2.1</span> <span class="content">Sanitizer API {#sanitizer-api}</span></a>
+      <li><a href="#algorithms"><span class="secno">2.2</span> <span class="content">Algorithms {#algorithms}</span></a>
+     </ol>
     <li><a href="#ack"><span class="secno">3</span> <span class="content">Acknowledgements</span></a>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -1579,7 +1584,7 @@ s<c- p>.</c->toString<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&amp
 s<c- p>.</c->toFragment<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&amp;gt;"</c-><c- p>);</c-> <c- c1>// returns a &lt;code data-opaque bs-autolink-syntax='`DocumentFragment`'>DocumentFragment&lt;/code></c->
 </pre>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
-   <p>Blah, blah, blah.</p>
+   <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API {#sanitizer-api}</span><a class="self-link" href="#sanitizer-api"></a></h3>
 <pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-sanitizerconfig"><code><c- g>SanitizerConfig</c-></code></dfn> {
   <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-tags"><code><c- g>tags</c-></code><a class="self-link" href="#dom-sanitizerconfig-tags"></a></dfn>;
   <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-attributes"><code><c- g>attributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-attributes"></a></dfn>;
@@ -1597,9 +1602,38 @@ s<c- p>.</c->toFragment<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&a
   <c- b>static</c-> <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment①"><c- n>DocumentFragment</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export data-lt="sanitizeToFragment(input, config)|sanitizeToFragment(input)" id="dom-sanitizer-sanitizetofragment"><code><c- g>sanitizeToFragment</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetofragment"></a></dfn>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeToFragment(input, config), Sanitizer/sanitizeToFragment(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizetofragment-input-config-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetofragment-input-config-input"></a></dfn>, <c- b>optional</c-> <a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig②"><c- n>SanitizerConfig</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeToFragment(input, config), Sanitizer/sanitizeToFragment(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizetofragment-input-config-config"><code><c- g>config</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetofragment-input-config-config"></a></dfn>);
 };
 </pre>
-   <h2 class="heading settled" data-level="3" id="ack"><span class="secno">3. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
-   <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
+   <h3 class="heading settled" data-level="2.2" id="algorithms"><span class="secno">2.2. </span><span class="content">Algorithms {#algorithms}</span><a class="self-link" href="#algorithms"></a></h3>
+   <p>To <dfn data-dfn-type="dfn" data-export id="sanitize-document-fragment">sanitize a document fragment<a class="self-link" href="#sanitize-document-fragment"></a></dfn> named <var>fragment</var> run these steps: </p>
+   <ol>
+    <li>
+     <p>Initialize <var>node</var> to be the <var>fragment</var>’s root. </p>
+    <li>
+     <p>while true </p>
+     <ol>
+      <li>initialize <em>elementRemoved</em> to false. 
+      <li>set <var>allowedElements</var> to the list of allowed elements for the node’s <code>namespaceURI</code>. 
+      <li>set <var>allowedAttributes</var> to the list of allowed attributes for the node’s <code>namespaceURI</code> 
+      <li>
+       if the <var>node</var>’s local name is not in <var>allowedElements</var>: 
+       <ol>
+        <li>Remove <var>node</var> and all of its ancestors from the tree and set <var>elementRemoved</var> to true 
+       </ol>
+      <li>if <var>elementRemoved</var> is true, continue to next iteration. 
+      <li>
+       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>attribute</var> of <var>node</var>’s list of attributes </p>
+       <ol>
+        <li>
+         if <var>attribute</var> is not in <var>allowedAttributes</var> 
+         <ol>
+          <li>Remove <var>attribute</var> from <var>node</var>’s attributes. 
+         </ol>
+       </ol>
+      <li>Return <var>fragment</var>. 
+     </ol>
+     <h2 class="heading settled" data-level="3" id="ack"><span class="secno">3. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
+     <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
 describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
+   </ol>
   </main>
 <script>
 (function() {
@@ -1733,21 +1767,22 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#dom-sanitizerconfig-attributes">attributes</a><span>, in §2</span>
-   <li><a href="#sanitizer">Sanitizer</a><span>, in §2</span>
-   <li><a href="#dictdef-sanitizerconfig">SanitizerConfig</a><span>, in §2</span>
-   <li><a href="#dom-sanitizer-sanitizetofragment">sanitizeToFragment(input)</a><span>, in §2</span>
-   <li><a href="#dom-sanitizer-sanitizetofragment">sanitizeToFragment(input, config)</a><span>, in §2</span>
-   <li><a href="#dom-sanitizer-sanitizetostring">sanitizeToString(input)</a><span>, in §2</span>
-   <li><a href="#dom-sanitizer-sanitizetostring">sanitizeToString(input, config)</a><span>, in §2</span>
-   <li><a href="#dom-sanitizerconfig-tags">tags</a><span>, in §2</span>
-   <li><a href="#dom-sanitizer-tofragment">toFragment(input)</a><span>, in §2</span>
-   <li><a href="#dom-sanitizer-tostring">toString(input)</a><span>, in §2</span>
+   <li><a href="#dom-sanitizerconfig-attributes">attributes</a><span>, in §2.1</span>
+   <li><a href="#sanitize-document-fragment">sanitize a document fragment</a><span>, in §2.2</span>
+   <li><a href="#sanitizer">Sanitizer</a><span>, in §2.1</span>
+   <li><a href="#dictdef-sanitizerconfig">SanitizerConfig</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizetofragment">sanitizeToFragment(input)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizetofragment">sanitizeToFragment(input, config)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizetostring">sanitizeToString(input)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizetostring">sanitizeToString(input, config)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizerconfig-tags">tags</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-tofragment">toFragment(input)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-tostring">toString(input)</a><span>, in §2.1</span>
   </ul>
   <aside class="dfn-panel" data-for="term-for-documentfragment">
    <a href="https://dom.spec.whatwg.org/#documentfragment">https://dom.spec.whatwg.org/#documentfragment</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-documentfragment">2. Framework</a> <a href="#ref-for-documentfragment①">(2)</a>
+    <li><a href="#ref-for-documentfragment">2.1. Sanitizer API {#sanitizer-api}</a> <a href="#ref-for-documentfragment①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-element">
@@ -1762,16 +1797,22 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-widl-Element-innerHTML">1. Introduction</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-map-iterate">
+   <a href="https://infra.spec.whatwg.org/#map-iterate">https://infra.spec.whatwg.org/#map-iterate</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-map-iterate">2.2. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
    <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMString">2. Framework</a> <a href="#ref-for-idl-DOMString①">(2)</a> <a href="#ref-for-idl-DOMString②">(3)</a> <a href="#ref-for-idl-DOMString③">(4)</a> <a href="#ref-for-idl-DOMString④">(5)</a> <a href="#ref-for-idl-DOMString⑤">(6)</a> <a href="#ref-for-idl-DOMString⑥">(7)</a> <a href="#ref-for-idl-DOMString⑦">(8)</a>
+    <li><a href="#ref-for-idl-DOMString">2.1. Sanitizer API {#sanitizer-api}</a> <a href="#ref-for-idl-DOMString①">(2)</a> <a href="#ref-for-idl-DOMString②">(3)</a> <a href="#ref-for-idl-DOMString③">(4)</a> <a href="#ref-for-idl-DOMString④">(5)</a> <a href="#ref-for-idl-DOMString⑤">(6)</a> <a href="#ref-for-idl-DOMString⑥">(7)</a> <a href="#ref-for-idl-DOMString⑦">(8)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-Exposed">
    <a href="https://heycam.github.io/webidl/#Exposed">https://heycam.github.io/webidl/#Exposed</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-Exposed">2. Framework</a>
+    <li><a href="#ref-for-Exposed">2.1. Sanitizer API {#sanitizer-api}</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -1788,6 +1829,11 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="term-for-widl-Element-innerHTML" style="color:initial">innerHTML</span>
     </ul>
    <li>
+    <a data-link-type="biblio">[INFRA]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-map-iterate" style="color:initial">for each</span>
+    </ul>
+   <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-idl-DOMString" style="color:initial">DOMString</span>
@@ -1801,6 +1847,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-dom-parsing">[DOM-Parsing]
    <dd>Travis Leithead. <a href="https://www.w3.org/TR/DOM-Parsing/">DOM Parsing and Serialization</a>. 17 May 2016. WD. URL: <a href="https://www.w3.org/TR/DOM-Parsing/">https://www.w3.org/TR/DOM-Parsing/</a>
+   <dt id="biblio-infra">[INFRA]
+   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-webidl">[WebIDL]
    <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/">Web IDL</a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
   </dl>
@@ -1831,7 +1879,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <aside class="dfn-panel" data-for="dictdef-sanitizerconfig">
    <b><a href="#dictdef-sanitizerconfig">#dictdef-sanitizerconfig</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-sanitizerconfig">2. Framework</a> <a href="#ref-for-dictdef-sanitizerconfig①">(2)</a> <a href="#ref-for-dictdef-sanitizerconfig②">(3)</a>
+    <li><a href="#ref-for-dictdef-sanitizerconfig">2.1. Sanitizer API {#sanitizer-api}</a> <a href="#ref-for-dictdef-sanitizerconfig①">(2)</a> <a href="#ref-for-dictdef-sanitizerconfig②">(3)</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */
