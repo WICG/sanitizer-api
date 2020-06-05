@@ -29,6 +29,21 @@ text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us
     "href": "https://github.com/cure53/DOMPurify",
     "title": "DOMPurify",
     "publisher": "Cure53"
+  },
+  "HTML":{
+    "authors": [
+      "Anne van Kesteren",
+      "Domenic Denicola",
+      "Ian Hickson",
+      "Philip Jägenstedt",
+      "Simon Pieters"
+    ],
+    "href": "https://html.spec.whatwg.org/multipage/",
+    "title": "HTML Standard",
+    "status": "Living Standard",
+    "publisher": "WHATWG",
+    "repository": "https://github.com/whatwg/html",
+  "id": "HTML"
   }
 }
 </pre>
@@ -92,7 +107,7 @@ s.toFragment("&lt;img src=x onerror=alert(1)//&gt;"); // returns a `DocumentFrag
 Framework {#framework}
 ======================
 
-Blah, blah, blah.
+## Sanitizer API {#sanitizer-api}
 
 <pre class="idl">
   dictionary SanitizerConfig {
@@ -112,6 +127,41 @@ Blah, blah, blah.
     static DocumentFragment sanitizeToFragment(DOMString input, optional SanitizerConfig config);
   };
 </pre>
+
+## Algorithms {#algorithms}
+
+<p>To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn> named <var>fragment</var> run these steps:
+
+<!-- Do we need to explicitly create a copy of the fragment? -->
+<ol>
+  <li><p>Initialize <var>node</var> to be the <var>fragment</var>'s root.
+  <li>
+    <p>while true
+    <ol>
+      <li>initialize *elementRemoved* to false.
+
+      <li>set <var>allowedElements</var> to the list of allowed elements for the node's `namespaceURI`.
+
+      <li>set <var>allowedAttributes</var> to the list of allowed attributes for the node's `namespaceURI`
+
+      <li>if the <var>node</var>'s local name is not in <var>allowedElements</var>:
+        <ol>
+        <li>Remove <var>node</var> and all of its ancestors from the tree and set <var>elementRemoved</var> to true
+        </ol>
+
+      <li>if <var>elementRemoved</var> is true, continue to next iteration.
+
+      <!-- node's local name is in the list of allowed element names -->
+      <li><p><a for=map>For each</a> <var>attribute</var> of <var>node</var>'s list of attributes
+        <ol>
+        <li>if <var>attribute</var> is not in <var>allowedAttributes</var>
+          <ol>
+            <li>Remove <var>attribute</var> from <var>node</var>'s attributes.
+          </ol>
+    </ol>
+  <li>Return <var>fragment</var>.
+</ol>
+
 
 Acknowledgements {#ack}
 =======================
