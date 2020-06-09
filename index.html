@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 1e76df81, updated Fri Jun 5 09:11:11 2020 -0700" name="generator">
+  <meta content="Bikeshed version 792aee41, updated Fri Jun 5 17:22:42 2020 -0700" name="generator">
   <link href="https://wicg.github.io/purification/" rel="canonical">
-  <meta content="c599ee08f93c1338cc2ab9f11268f1752ea1f520" name="document-revision">
+  <meta content="9b144743d23d13041e21409eb71c825d3b575927" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1471,7 +1471,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-05">5 June 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-09">9 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1592,8 +1592,9 @@ s<c- p>.</c->toFragment<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&a
   // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
 };
 
-[<c- g>Constructor</c->(<c- b>optional</c-> <a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <c- g>config</c->), <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->)]
+[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->)]
 <c- b>interface</c-> <dfn class="idl-code" data-dfn-type="interface" data-export id="sanitizer"><code><c- g>Sanitizer</c-></code><a class="self-link" href="#sanitizer"></a></dfn> {
+  <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(config)|constructor(config)" id="dom-sanitizer-sanitizer"><code><c- g>constructor</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer"></a></dfn>(<a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a>? <dfn class="idl-code" data-dfn-for="Sanitizer/Sanitizer(config), Sanitizer/constructor(config)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer-config-config"></a></dfn>);
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export data-lt="toString(input)" id="dom-sanitizer-tostring"><code><c- g>toString</c-></code><a class="self-link" href="#dom-sanitizer-tostring"></a></dfn>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/toString(input)" data-dfn-type="argument" data-export id="dom-sanitizer-tostring-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-tostring-input-input"></a></dfn>);
   <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment"><c- n>DocumentFragment</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export data-lt="toFragment(input)" id="dom-sanitizer-tofragment"><code><c- g>toFragment</c-></code><a class="self-link" href="#dom-sanitizer-tofragment"></a></dfn>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/toFragment(input)" data-dfn-type="argument" data-export id="dom-sanitizer-tofragment-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-tofragment-input-input"></a></dfn>);
 
@@ -1628,12 +1629,12 @@ s<c- p>.</c->toFragment<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&a
           <li>Remove <var>attribute</var> from <var>node</var>’s attributes. 
          </ol>
        </ol>
-      <li>Return <var>fragment</var>. 
      </ol>
-     <h2 class="heading settled" data-level="3" id="ack"><span class="secno">3. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
-     <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
-describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
+    <li>Return <var>fragment</var>. 
    </ol>
+   <h2 class="heading settled" data-level="3" id="ack"><span class="secno">3. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
+   <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
+describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
   </main>
 <script>
 (function() {
@@ -1768,8 +1769,10 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#dom-sanitizerconfig-attributes">attributes</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizer">constructor(config)</a><span>, in §2.1</span>
    <li><a href="#sanitize-document-fragment">sanitize a document fragment</a><span>, in §2.2</span>
    <li><a href="#sanitizer">Sanitizer</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizer">Sanitizer(config)</a><span>, in §2.1</span>
    <li><a href="#dictdef-sanitizerconfig">SanitizerConfig</a><span>, in §2.1</span>
    <li><a href="#dom-sanitizer-sanitizetofragment">sanitizeToFragment(input)</a><span>, in §2.1</span>
    <li><a href="#dom-sanitizer-sanitizetofragment">sanitizeToFragment(input, config)</a><span>, in §2.1</span>
@@ -1865,8 +1868,9 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
 };
 
-[<c- g>Constructor</c->(<c- b>optional</c-> <a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <c- g>config</c->), <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->)]
+[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->)]
 <c- b>interface</c-> <a href="#sanitizer"><code><c- g>Sanitizer</c-></code></a> {
+  <a href="#dom-sanitizer-sanitizer"><code><c- g>constructor</c-></code></a>(<a class="n" data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a>? <a href="#dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code></a>);
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-tostring"><code><c- g>toString</c-></code></a>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-tostring-input-input"><code><c- g>input</c-></code></a>);
   <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <a href="#dom-sanitizer-tofragment"><code><c- g>toFragment</c-></code></a>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-tofragment-input-input"><code><c- g>input</c-></code></a>);
 
