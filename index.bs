@@ -117,8 +117,9 @@ Framework {#framework}
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
 
-  [Constructor(optional SanitizerConfig config), Exposed=(Window)]
+  [Exposed=(Window)]
   interface Sanitizer {
+    constructor(SanitizerConfig? config);
     DOMString toString(DOMString input);
     DocumentFragment toFragment(DOMString input);
 
@@ -158,6 +159,7 @@ Framework {#framework}
           <ol>
             <li>Remove <var>attribute</var> from <var>node</var>'s attributes.
           </ol>
+        </ol>
     </ol>
   <li>Return <var>fragment</var>.
 </ol>
