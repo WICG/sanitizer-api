@@ -10,39 +10,128 @@ To address the problem, libraries like [DOMPurify](https://github.com/cure53/DOM
 
 As it stands, every browser has a fairly good idea of when and how it is going to execute code. Capitalizing on this, it is possible to improve the user-space libraries by teaching the browser how to render HTML from an arbitrary string in a safe manner. In other words, we seek to make sure that this happens in a way that is much more likely to be maintained and updated along with the browsers’ ever-changing parser implementations.
 
-## The Proposal
 
-Broadly speaking, the sanitizers already exist as third-party libraries (e.g. DOMPurify, see also the [paper](https://www.researchgate.net/publication/319071617_DOMPurify_Client-Side_Protection_Against_XSS_and_Markup_Injection)) or in browser-specific and proprietary APIs (e.g. toStaticHTML). The browser-agnostic libraries achieve the goal by relying on the HTML parsing found in-browser, as exposed through [`createHTMLDocument`](https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createHTMLDocument) or [`DOMParser`](https://developer.mozilla.org/en-US/docs/DOM/DOMParser). Conversely, they still have to work around browser-specific quirks. An API that is built into the browser should be seen as being at the very best place for guaranteeing a properly sanitized markup. 
+## Goals
 
-### Two approaches for achieving the desired functionality
+Provide a **browser-maintained** "ever-green", **safe**, and **easy-to-use**
+library for **user input sanitization** as part of the general **web platform**.
 
-While the final syntax of the API has not yet been decided on, we suggest two possible approaches for the developers willing to use the browser-embedded sanitizer.
+* **user input sanitization**: The basic functionality is to take a string,
+  and turn it into strings that are safe to use and will not cause inadvertent
+  execution of JavaScript.
 
-*Option 1. A simple, no-config approach to sanitizing into a secure default quickly and easily.*
+* **browser-maintained**, "**ever-green**" / as part of the general
+  **web platform**: The library is shipped with the browser, and will be
+  updated alongside it as bugs or new attack vectors are found.
 
-```javascript
-let dirty = user_controlled_html;
-someElement.appendChild(sanitize(dirty));
+* **Safe** and **easy-to-use**: The API surface should be small, and the
+  defaults should make sense across a wide range of use cases.
+
+### Secondary Goals
+
+* Cover **existing browser functionality**, especially the [sanitization of
+  clipboard](https://www.w3.org/TR/clipboard-apis/#pasting-html) data.
+
+* **Easy things should be easy.** This requires easy-to-use and safe defaults,
+  and a small API surface for the common case.
+
+* Cover a **reasonably wide range of base requirements**, but be open to more
+  advanced use cases or future enhancements. This probably requires some sort
+  of configuration or options, ideally in a way that both the developer and a
+  security reviewer should be able to reason about them.
+
+* Should be **integratable into other security mechanisms**, both browser
+  built-ins and others.
+
+* Be **poly-fillable**, although the polyfill would presumably have different
+  security and performance properties.
+
+### Non-goals
+
+Force the use of this library, or any other enforcement mechanism. Some
+applications will have sanitization requirements that are not easily met by
+a general purpose library. These should continue to be able to use whichever
+library or mechanism they prefer. However, the library should play well with
+other enforcement mechanisms.
+
+
+
+## Proposal
+
+Note: The proposal is being developed [here](https://wicg.github.io/purification/).
+
+
+We want to develop an API that learns from the
+[DOMPurify](https://github.com/cure53/DOMPurify) library. In particular:
+
+* The core API should be a single String-to-String method, plus a
+  String-to-Fragment method. I.e., one method per supported output type.
+
+  * `toString(DOMString value)` => `DOMString`
+
+  * `toFragment(DOMString value)` => `DocumentFragment`
+
+* To support different use cases and to keep the API extensible, the
+  sanitization should be configurable via an options dictionary.
+
+* To make it easy to review and reason about sanitizer configs, there should
+  be sanitizer instances for a given configuration.
+
+  * DOMPurify supports per-call and a global "default" config. Global
+    configuration state can be awkward to use when different dependencies
+    have different ideas about what the global state should be. Likewise,
+    per-call configs can be error prone and hard to reason about, since every
+    call site might be a little different.
+
+* There seem to be a handful of common use cases. There should be sensible
+  default options for each of these.
+
+### Proposed API
+
+The basic API would be two calls: `.toString(value)` to produce a string,
+and `.toFragment(value)` to produce a DocumentFragment. Sanitizers can
+be constructed with a dictionary of options.
+
+```
+interface Sanitizer {
+  constructor(SanitizerConfig? config);
+  DOMString toString(DOMString input);
+  DocumentFragment toFragment(DOMString input);
+
+  readonly SanitizerConfig creation_options;
+}
 ```
 
-In this example, the developer would simply pass a string of dirty HTML into the sanitizer and receive the sanitized result as another string. After that, the received string can be safely written into the DOM. The browser would make use of a whitelist by default. This approach is inspired by Microsoft’s toStaticHTML.
+Additionally, there should be pre-configured Sanitizers available
+for common cases, so that web authors can simply use sanitizers for cases
+where they do not have special requirements.
 
-*Option 2. A re-usable sanitizer that implements configurable behaviors.*
-
-```javascript
-let sanitizer = new Sanitizer(options);
-let dirty = user_controlled_html;
-let someElement = document.getElementById(...);
-someElement.appendChild(sanitizer.sanitize(dirty));
+```
+interface DefaultSanitizers {
+  readonly Sanitizer string_only;  // string, without any elements
+  readonly Sanitizer simple;  // HTML element content with known-good elements allowed
+}
 ```
 
-In this approach, the developer creates an object for the sanitizer and this can be used multiple times with the same developer-provided configuration. It can be approached literally or with a simple use of the browser’s default config. Neither of the two suggestions poses compatibility risks, meaning that they both interoperate nicely with the existing DOM APIs as long as the whitelist is shared among all implementing browsers.
+### Example usage
 
-### Browser-Whitelists
+A simple web app wishes to take a string (say: a name) and display it on
+the page:
 
-To achieve the goal of a secure sanitization result, the browser needs to use a thoroughly battle-tested whitelist. This doesn’t reinvent the wheel as any given browser already knows the concept of a whitelist in the context of eliminating XSS, for example in, clipboard sanitization, sanitization of Chrome’s context views and similar. The general approach can simply be reused. 
+```
+document.getElementById("...").textContent = sanitizers.html.toString(user_supplied_value);
+```
 
-What is more, the existing JavaScript libraries, such as DOMPurify, also ship well-tested and proven whitelists of elements and attributes that can be allowed by default.
+The default sanitizers should probably be accessible via the document, or
+somesuch. For this example we'll just pretend they're in the global namespace,
+which... they wouldn't be.
+
+```
+string_only.toString("a simple example") => "a simple example"
+string_only.toString("<b>bold</b> text") => "bold text"
+simple.toString("<b>bold</b> text") => "<b>bold</b> text"
+simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> text"
+```
 
 ### Roadmap
 
