@@ -137,7 +137,7 @@ Framework {#framework}
 <ol>
   <li><p>Initialize <var>node</var> to be the <var>fragment</var>'s root.
   <li>
-    <p>while true
+    <p>while node is not null:
     <ol>
       <li>initialize *elementRemoved* to false.
 
@@ -147,10 +147,8 @@ Framework {#framework}
 
       <li>if the <var>node</var>'s local name is not in <var>allowedElements</var>:
         <ol>
-        <li>Remove <var>node</var> and all of its ancestors from the tree and set <var>elementRemoved</var> to true
+        <li>set <var>elementRemoved</var> to true
         </ol>
-
-      <li>if <var>elementRemoved</var> is true, continue to next iteration.
 
       <!-- node's local name is in the list of allowed element names -->
       <li><p><a for=map>For each</a> <var>attribute</var> of <var>node</var>'s list of attributes
@@ -160,6 +158,20 @@ Framework {#framework}
             <li>Remove <var>attribute</var> from <var>node</var>'s attributes.
           </ol>
         </ol>
+
+      <li>initialize <var>current</var> to node;
+      <li>initialize <var>next</var> to null;
+      <li>if elementRemoved is false, set next to current.firstChild;
+      <li>while <var>next is null and <var>current</var> is not null:
+        <ol>
+          <li>set <var>next</var> to *current.nextSibling*
+          <li>set <var>current</var> to *current.parentNode*
+        </ol>
+      <li>if <var>elementRemoved</var> is true:
+        <ol>
+          <li>Remove <var>node</var> and all of its descendents from the tree
+        </ol>
+      <li>set node to next;
     </ol>
   <li>Return <var>fragment</var>.
 </ol>
