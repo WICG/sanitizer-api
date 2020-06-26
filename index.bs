@@ -134,47 +134,29 @@ Framework {#framework}
 <p>To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn> named <var>fragment</var> run these steps:
 
 <!-- Do we need to explicitly create a copy of the fragment? -->
-<ol>
-  <li><p>Initialize <var>node</var> to be the <var>fragment</var>'s root.
-  <li>
-    <p>while node is not null:
-    <ol>
-      <li>initialize *elementRemoved* to false.
+1. Initialize |node| to be the |fragment|'s root.
+1. While |node| is not null:
+  1. Initialize |elementShouldBeRemoved| to false.
+  1. Set |allowedElements| to the list of allowed elements for the node's `namespaceURI`.
+  1. Set |allowedAttributes| to the list of allowed attributes for the node's `namespaceURI`.
+  1. If the |node|'s local name is not in <var>allowedElements</var>:
+    1. Set |elementShouldBeRemoved| to true.
 
-      <li>set <var>allowedElements</var> to the list of allowed elements for the node's `namespaceURI`.
+  <!-- node's local name is in the list of allowed element names -->
+  1. [=map/For each=] |attribute| of |node|'s list of attributes:
+    1. If |attribute| is not in |allowedAttributes|.
+      1. Remove |attribute| from |node|'s attributes.
 
-      <li>set <var>allowedAttributes</var> to the list of allowed attributes for the node's `namespaceURI`
-
-      <li>if the <var>node</var>'s local name is not in <var>allowedElements</var>:
-        <ol>
-        <li>set <var>elementRemoved</var> to true
-        </ol>
-
-      <!-- node's local name is in the list of allowed element names -->
-      <li><p><a for=map>For each</a> <var>attribute</var> of <var>node</var>'s list of attributes
-        <ol>
-        <li>if <var>attribute</var> is not in <var>allowedAttributes</var>
-          <ol>
-            <li>Remove <var>attribute</var> from <var>node</var>'s attributes.
-          </ol>
-        </ol>
-
-      <li>initialize <var>current</var> to node;
-      <li>initialize <var>next</var> to null;
-      <li>if elementRemoved is false, set next to current.firstChild;
-      <li>while <var>next is null and <var>current</var> is not null:
-        <ol>
-          <li>set <var>next</var> to *current.nextSibling*
-          <li>set <var>current</var> to *current.parentNode*
-        </ol>
-      <li>if <var>elementRemoved</var> is true:
-        <ol>
-          <li>Remove <var>node</var> and all of its descendents from the tree
-        </ol>
-      <li>set node to next;
-    </ol>
-  <li>Return <var>fragment</var>.
-</ol>
+  1. Initialize |current| to node.
+  1. Initialize |next| to null.
+  1. If |elementShouldBeRemoved| is false, set |next| to |next|'s [=tree/first child=].
+  1. While |next| is null and |current| is not null:
+    1. Set |next| to |next|'s [=tree/next sibling=]
+    1. Set |current| to *current.parentNode*.
+  1. If |elementShouldBeRemoved| is true:
+    1. [=/Remove=] |node| and all of its descendents from the tree.
+  1. Set |node| to |next|.
+1. Return |fragment|.
 
 
 Acknowledgements {#ack}
