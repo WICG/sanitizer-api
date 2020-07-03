@@ -1222,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 76c0936a, updated Fri Jun 12 19:44:53 2020 -0700" name="generator">
+  <meta content="Bikeshed version 04c91f0f, updated Mon Jun 29 08:51:04 2020 +0200" name="generator">
   <link href="https://wicg.github.io/purification/" rel="canonical">
-  <meta content="97b6f46162b660231c06dbd56d4e42efedb7da48" name="document-revision">
+  <meta content="3c33b270621d0bae2068cb3584ca1331bd43f858" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1471,7 +1471,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-23">23 June 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-07-03">3 July 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1549,7 +1549,7 @@ an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#
 will cause JavaScript execution in a number of unexpected ways.</p>
    <p>Libraries like <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> attempt to manage this problem by carefully
 parsing and sanitizing strings before insertion by constructing a DOM and
-walking its members through a white-list. This has proven to be a fragile
+walking its members through an allowlist. This has proven to be a fragile
 approach, as the parsing APIs exposed to the web don’t always map in
 reasonable ways to the browser’s behavior when actually rendering a string as
 HTML in the "real" DOM. Moreover, the libraries need to keep on top of
