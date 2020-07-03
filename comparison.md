@@ -1,9 +1,10 @@
 # A Feature Comparison of Existing Sanitzer APIs
 
+This document lists the features of similarly spirited sanitizers.
 
 ## [DOMPurify][dompurify]
 
-General API differences:
+General API notes:
 
 * DOMPurify has a built-in, modifiable default config. The sanitize call
   also accepts an options dictionary on every call. This proposal instead
@@ -14,7 +15,7 @@ General API differences:
   depending on the options set. Here, we instead have different methods for
   different return types.
 
-* This has a more limited set of options.
+* DOMPurify has a lot more options then the current Sanitzer API proposal.
 
 * There is presently no equivalent to [hooks][dompurify-hooks].
 
@@ -55,7 +56,7 @@ List of DOMPurify options: (options collected [here][dompurify-options-1] and
    * `KEEP_CONTENT`
    * `IN_PLACE`
 
-DOMPurify hooks: (without equivalent in this proposal)
+DOMPurify hooks: (without equivalent in the current proposal)
 * `beforeSanitizeElements`
 * `uponSanitizeElement  // No 's' - called for every element`
 * `afterSanitizeElements`
