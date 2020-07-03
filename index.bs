@@ -62,7 +62,7 @@ will cause JavaScript execution in a number of unexpected ways.
 
 Libraries like [[DOMPURIFY]] attempt to manage this problem by carefully
 parsing and sanitizing strings before insertion by constructing a DOM and
-walking its members through a allowlist. This has proven to be a fragile
+walking its members through an allowlist. This has proven to be a fragile
 approach, as the parsing APIs exposed to the web don't always map in
 reasonable ways to the browser's behavior when actually rendering a string as
 HTML in the "real" DOM. Moreover, the libraries need to keep on top of
