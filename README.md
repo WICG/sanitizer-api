@@ -78,7 +78,7 @@ What is more, the existing JavaScript libraries, such as DOMPurify, also ship we
 * *Reusability:* Once the browser exposes a sanitizer in the DOM, it can be reused for potentially upcoming [SafeHTML](https://lists.w3.org/Archives/Public/public-webappsec/2016Jan/0113.html) implementations, [Trusted Types](https://github.com/WICG/trusted-types), secure elements and, if configurable, even be repurposed for other changes in the user-controlled HTML, for instance in connection with URL rewriting, removal of annoying UI elements and CSS sanitization.
 
 ### What if someone wants to customize the sanitization rules?
-* It should be trivial to implement basic configuration options that allow customization of the default allowlist and enable developers to remove, add or completely rewrite the alowed elements and/or attributes.
+* It should be trivial to implement basic configuration options that allow customization of the default allowlist and enable developers to remove, add or completely rewrite the allowed elements and/or attributes.
 * The already mentioned browser's clipboard sanitizer already ships an allowlist, so the only task would be to make it configurable.
 
 ### Isn’t building a sanitizer in the browser risky and difficult?
