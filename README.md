@@ -119,7 +119,7 @@ A simple web app wishes to take a string (say: a name) and display it on
 the page:
 
 ```
-document.getElementById("...").textContent = sanitizers.html.toString(user_supplied_value);
+document.getElementById("...").innerHTML = sanitizers.html.toString(user_supplied_value);
 ```
 
 The default sanitizers should probably be accessible via the document, or
