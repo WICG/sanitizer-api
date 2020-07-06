@@ -137,7 +137,7 @@ simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> tex
 
 * Sanitizer Specification 1.0
   * Supports config-less sanitization;
-  * Supports customization of whitelists for elements and attributes;
+  * Supports customization of allowlists for elements and attributes;
   * The core goal is the sanitization of any markup that can cause XSS.
 
 * Sanitizer Specification 2.0
@@ -167,8 +167,8 @@ simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> tex
 * *Reusability:* Once the browser exposes a sanitizer in the DOM, it can be reused for potentially upcoming [SafeHTML](https://lists.w3.org/Archives/Public/public-webappsec/2016Jan/0113.html) implementations, [Trusted Types](https://github.com/WICG/trusted-types), secure elements and, if configurable, even be repurposed for other changes in the user-controlled HTML, for instance in connection with URL rewriting, removal of annoying UI elements and CSS sanitization.
 
 ### What if someone wants to customize the sanitization rules?
-* It should be trivial to implement basic configuration options that allow customization of the default whitelist and enable developers to remove, add or completely rewrite the whitelisted elements and/or attributes. 
-* The already mentioned browser's clipboard sanitizer already ships a whitelist, so the only task would be to make it configurable.
+* It should be trivial to implement basic configuration options that allow customization of the default allowlist and enable developers to remove, add or completely rewrite the allowed elements and/or attributes.
+* The already mentioned browser's clipboard sanitizer already ships an allowlist, so the only task would be to make it configurable.
 
 ### Isn’t building a sanitizer in the browser risky and difficult?
 * No, it may appear so but, in fact, the browsers already feature at least one sanitizer, for instance the one handling HTML clipboard content that is copied and pasted across origins. The existing puzzle pieces only need to be put correctly together in a slightly different way before they are then exposed in the DOM.
