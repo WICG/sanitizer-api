@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/WICG/purification.svg?branch=master)](https://travis-ci.org/WICG/purification)
+[![Build Status](https://travis-ci.org/WICG/sanitizer-api.svg?branch=master)](https://travis-ci.org/WICG/sanitizer-api)
 
 # Sanitization Explainer
 
