@@ -2,9 +2,9 @@
 Title: HTML Sanitizer API
 Status: CG-DRAFT
 Group: WICG
-URL: https://wicg.github.io/purification/
-Repository: WICG/purification
-Shortname: purification
+URL: https://wicg.github.io/sanitizer-api/
+Repository: WICG/sanitizer-api
+Shortname: sanitizer-api
 Level: 1
 Editor: Frederik Braun 68466, Mozilla, fbraun@mozilla.com, https://frederik-braun.com
 Editor: Mario Heiderich, Cure53, mario@cure53.de, https://cure53.de
