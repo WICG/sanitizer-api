@@ -121,6 +121,7 @@ Framework {#framework}
   interface Sanitizer {
     constructor(SanitizerConfig? config);
     DocumentFragment sanitize(HTMLString input);
+    DOMString sanitizeToString(DOMString input);
     HTMLString sanitizeToHTML(DOMString input);
 
     // And maybe?
