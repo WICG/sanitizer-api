@@ -116,13 +116,15 @@ Framework {#framework}
     // ...
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
+  typedef [StringContext=TrustedHTML] DOMString HTMLString;
+  typedef (DOMString or HTMLString or DocumentFragment or Document) SanitizerInput;
 
   [Exposed=(Window)]
   interface Sanitizer {
     constructor(SanitizerConfig? config);
-    DocumentFragment sanitize(HTMLString input);
-    DOMString sanitizeToString(DOMString input);
-    HTMLString sanitizeToHTML(DOMString input);
+    DocumentFragment sanitize(optional SanitizerInput input);
+    DOMString sanitizeToString(optional SanitizerInput input);
+    HTMLString sanitizeToHTML(optional SanitizerInput input);
 
     // And maybe?
     static DOMString sanitizeToString(DOMString input, optional SanitizerConfig config);
