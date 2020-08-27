@@ -120,7 +120,7 @@ Framework {#framework}
   [Exposed=(Window)]
   interface Sanitizer {
     constructor(SanitizerConfig? config);
-    [CEReactions] DocumentFragment sanitize(HTMLString input);
+    DocumentFragment sanitize(HTMLString input);
     HTMLString sanitizeToHTML(DOMString input);
 
     // And maybe?
