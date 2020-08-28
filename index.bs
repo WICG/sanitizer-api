@@ -100,7 +100,8 @@ let s = new Sanitizer({
   attributes: ['c', 'd', 'e', ...],
   ...
 });
-s.sanitizeToHTML("&lt;img src=x onerror=alert(1)//&gt;"); // returns '<img src="x">'
+s.sanitizeToString("&lt;img src=x onerror=alert(1)//&gt;"); // returns '<img src="x">'
+s.sanitizeToTrustedHTML("&lt;img src=x onerror=alert(1)//&gt;"); // returns 'TrustedHTML'
 s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns a 'DocumentFragment'
 ```
 
@@ -117,14 +118,14 @@ Framework {#framework}
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
   typedef [StringContext=TrustedHTML] DOMString HTMLString;
-  typedef (DOMString or HTMLString or DocumentFragment or Document) SanitizerInput;
+  typedef (HTMLString or DocumentFragment or Document) SanitizerInput;
 
   [Exposed=(Window)]
   interface Sanitizer {
     constructor(SanitizerConfig? config);
     DocumentFragment sanitize(optional SanitizerInput input);
     DOMString sanitizeToString(optional SanitizerInput input);
-    HTMLString sanitizeToHTML(optional SanitizerInput input);
+    TrustedHTML sanitizeToTrustedHTML(optional SanitizerInput input);
 
     // And maybe?
     static DOMString sanitizeToString(DOMString input, optional SanitizerConfig config);
