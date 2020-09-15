@@ -123,7 +123,7 @@ Framework {#framework}
 
   [Exposed=(Window)]
   interface Sanitizer {
-    constructor(SanitizerConfig? config);
+    constructor(optional SanitizerConfig config = {});
     DOMString sanitizeToString(DOMString input);
     DocumentFragment sanitize(DOMString input);
 

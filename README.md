@@ -96,9 +96,9 @@ be constructed with a dictionary of options.
 [
   Exposed=Window
 ] interface Sanitizer {
-  [RaisesException] constructor(SanitizerConfig? config);
-  [RaisesException] DOMString sanitizeToString(DOMString input);
-  [RaisesException] DocumentFragment sanitize(DOMString input);
+  constructor(optional SanitizerConfig config = {});
+  DOMString sanitizeToString(DOMString input);
+  DocumentFragment sanitize(DOMString input);
 
   readonly attribute SanitizerConfig creationOptions;
 }
