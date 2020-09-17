@@ -121,8 +121,10 @@ Framework {#framework}
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
 
-  [Exposed=(Window)]
-  interface Sanitizer {
+  [
+    Exposed=(Window),
+    SecureContext
+  ] interface Sanitizer {
     constructor(optional SanitizerConfig config = {});
     DOMString sanitizeToString(DOMString input);
     DocumentFragment sanitize(DOMString input);

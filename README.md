@@ -94,7 +94,8 @@ be constructed with a dictionary of options.
 
 ```
 [
-  Exposed=Window
+  Exposed=Window,
+  SecureContext
 ] interface Sanitizer {
   constructor(optional SanitizerConfig config = {});
   DOMString sanitizeToString(DOMString input);
