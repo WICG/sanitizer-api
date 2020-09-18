@@ -96,12 +96,12 @@ Examples {#examples}
 
 ```js
 let s = new Sanitizer({
-  tags: ['a', 'b', ...],
-  attributes: ['c', 'd', 'e', ...],
+  allowElements: ['a', 'b', ...],
+  allowAttributes: ['c', 'd', 'e', ...],
   ...
 });
-s.toString("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
-s.toFragment("&lt;img src=x onerror=alert(1)//&gt;"); // returns a `DocumentFragment`
+s.sanitizeToString("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
+s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns a `DocumentFragment`
 ```
 
 Framework {#framework}
@@ -111,17 +111,25 @@ Framework {#framework}
 
 <pre class="idl">
   dictionary SanitizerConfig {
-    sequence&lt;DOMString> tags;
-    sequence&lt;DOMString> attributes;
+    sequence&lt;DOMString> allowElements;
+    sequence&lt;DOMString> blockElements;
+    sequence&lt;DOMString> dropElements;
+    sequence&lt;DOMString> allowAttributes;
+    sequence&lt;DOMString> blockAttributes;
+    sequence&lt;DOMString> dropAttributes;
     // ...
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
 
-  [Exposed=(Window)]
-  interface Sanitizer {
-    constructor(SanitizerConfig? config);
-    DOMString toString(DOMString input);
-    DocumentFragment toFragment(DOMString input);
+  [
+    Exposed=(Window),
+    SecureContext
+  ] interface Sanitizer {
+    constructor(optional SanitizerConfig config = {});
+    DOMString sanitizeToString(DOMString input);
+    DocumentFragment sanitize(DOMString input);
+
+    readonly attribute SanitizerConfig creationOptions;
 
     // And maybe?
     static DOMString sanitizeToString(DOMString input, optional SanitizerConfig config);

@@ -67,9 +67,9 @@ We want to develop an API that learns from the
 * The core API should be a single String-to-String method, plus a
   String-to-Fragment method. I.e., one method per supported output type.
 
-  * `toString(DOMString value)` => `DOMString`
+  * `sanitizeToString(DOMString value)` => `DOMString`
 
-  * `toFragment(DOMString value)` => `DocumentFragment`
+  * `sanitize(DOMString value)` => `DocumentFragment`
 
 * To support different use cases and to keep the API extensible, the
   sanitization should be configurable via an options dictionary.
@@ -88,17 +88,20 @@ We want to develop an API that learns from the
 
 ### Proposed API
 
-The basic API would be two calls: `.toString(value)` to produce a string,
-and `.toFragment(value)` to produce a DocumentFragment. Sanitizers can
+The basic API would be two calls: `.sanitizeToString(value)` to produce a string,
+and `.sanitize(value)` to produce a DocumentFragment. Sanitizers can
 be constructed with a dictionary of options.
 
 ```
-interface Sanitizer {
-  constructor(SanitizerConfig? config);
-  DOMString toString(DOMString input);
-  DocumentFragment toFragment(DOMString input);
+[
+  Exposed=Window,
+  SecureContext
+] interface Sanitizer {
+  constructor(optional SanitizerConfig config = {});
+  DOMString sanitizeToString(DOMString input);
+  DocumentFragment sanitize(DOMString input);
 
-  readonly SanitizerConfig creation_options;
+  readonly attribute SanitizerConfig creationOptions;
 }
 ```
 
@@ -119,7 +122,7 @@ A simple web app wishes to take a string (say: a name) and display it on
 the page:
 
 ```
-document.getElementById("...").innerHTML = sanitizers.html.toString(user_supplied_value);
+document.getElementById("...").innerHTML = sanitizers.html.sanitizeToString(user_supplied_value);
 ```
 
 The default sanitizers should probably be accessible via the document, or
@@ -127,10 +130,10 @@ somesuch. For this example we'll just pretend they're in the global namespace,
 which... they wouldn't be.
 
 ```
-string_only.toString("a simple example") => "a simple example"
-string_only.toString("<b>bold</b> text") => "bold text"
-simple.toString("<b>bold</b> text") => "<b>bold</b> text"
-simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> text"
+string_only.sanitizeToString("a simple example") => "a simple example"
+string_only.sanitizeToString("<b>bold</b> text") => "bold text"
+simple.sanitizeToString("<b>bold</b> text") => "<b>bold</b> text"
+simple.sanitizeToString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> text"
 ```
 
 ### Roadmap
@@ -147,7 +150,7 @@ simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> tex
 ## FAQ
 
 ### Who would use this and why?
-* Web application developers who want to allow some - but not all - HTML. This could mean developers handling Wiki pages, message boards, crypto messengers, web mailers, etc. 
+* Web application developers who want to allow some - but not all - HTML. This could mean developers handling Wiki pages, message boards, crypto messengers, web mailers, etc.
 * Developers of browser extensions who want to secure their applications against malicious user-controlled, or even site-controlled, HTML.
 * Application developers who create Electron applications and comparable tools which interpret and display HTML and JavaScript.
 
@@ -156,7 +159,7 @@ simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> tex
 * Besides web applications, sanitizer libraries are also used in Electron applications, browser extensions and other applications making use of a browser engine.
 
 ### But this can be done on the server, can’t it? Like in the “olden days”.
-* While this is correct, server-side sanitizers have a terrible track record for being bypassed. Using them is conducive to a Denial of Service on the server and one simply cannot know about the browser’s quirks without being highly knowledgeable in this particular realm. 
+* While this is correct, server-side sanitizers have a terrible track record for being bypassed. Using them is conducive to a Denial of Service on the server and one simply cannot know about the browser’s quirks without being highly knowledgeable in this particular realm.
 * As a golden rule, sanitization should happen where the sanitized result is used, so that the above noted knowledge gaps can be mitigated and various risks might be averted.
 
 ### What are the key advantages of Sanitizing in the browser?
@@ -175,6 +178,6 @@ simple.toString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> tex
 * If there are any risks connected to the new process, then they are not new but rather already concern the handling of the user-generated HTML presently processed by the in-browser sanitizers. Aside for configuration parsing, which should be a trivial problem to solve, no added risks can be envisioned.
 
 ### Wait, what does secure even mean in this context?
-* Calling the process secure means that a developer can expect that XSS attacks caused by user-controlled HTML, SVG, and MathML are eradicated. 
+* Calling the process secure means that a developer can expect that XSS attacks caused by user-controlled HTML, SVG, and MathML are eradicated.
 * The sanitizer would remove all elements that cause script execution from the string it receives and returns.
 
