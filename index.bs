@@ -100,7 +100,6 @@ let s = new Sanitizer({
   allowAttributes: ['c', 'd', 'e', ...],
   ...
 });
-
 s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns a 'DocumentFragment'
 s.sanitizeToString("&lt;img src=x onerror=alert(1)//&gt;"); // returns '<img src="x">'
 s.sanitizeToTrustedHTML("&lt;img src=x onerror=alert(1)//&gt;"); // returns 'TrustedHTML'
