@@ -96,10 +96,11 @@ Examples {#examples}
 
 ```js
 let s = new Sanitizer({
-  tags: ['a', 'b', ...],
-  attributes: ['c', 'd', 'e', ...],
+  allowElements: ['a', 'b', ...],
+  allowAttributes: ['c', 'd', 'e', ...],
   ...
 });
+
 s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns a 'DocumentFragment'
 s.sanitizeToString("&lt;img src=x onerror=alert(1)//&gt;"); // returns '<img src="x">'
 s.sanitizeToTrustedHTML("&lt;img src=x onerror=alert(1)//&gt;"); // returns 'TrustedHTML'
@@ -112,20 +113,28 @@ Framework {#framework}
 
 <pre class="idl">
   dictionary SanitizerConfig {
-    sequence&lt;DOMString> tags;
-    sequence&lt;DOMString> attributes;
+    sequence&lt;DOMString> allowElements;
+    sequence&lt;DOMString> blockElements;
+    sequence&lt;DOMString> dropElements;
+    sequence&lt;DOMString> allowAttributes;
+    sequence&lt;DOMString> blockAttributes;
+    sequence&lt;DOMString> dropAttributes;
     // ...
     // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
   typedef [StringContext=TrustedHTML] DOMString HTMLString;
   typedef (HTMLString or DocumentFragment or Document) SanitizerInput;
 
-  [Exposed=(Window)]
-  interface Sanitizer {
-    constructor(SanitizerConfig? config);
+  [
+    Exposed=(Window),
+    SecureContext
+  ] interface Sanitizer {
+    constructor(optional SanitizerConfig config = {});
     DocumentFragment sanitize(optional SanitizerInput input);
     DOMString sanitizeToString(optional SanitizerInput input);
     TrustedHTML sanitizeToTrustedHTML(optional SanitizerInput input);
+
+    readonly attribute SanitizerConfig creationOptions;
 
     // And maybe?
     static DOMString sanitizeToString(DOMString input, optional SanitizerConfig config);
