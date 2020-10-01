@@ -21,7 +21,12 @@ Markup Shorthands: css off, markdown on
 spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
   type: attribute
     text: innerHTML; for: Element; url: #widl-Element-innerHTML
+  type: method
+    text: parseFromString; url: #widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
+text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
+text: Document; type: interface; url: https://dom.spec.whatwg.org/#interface-Document
+text: DocumentFragment; type: interface; url: https://dom.spec.whatwg.org/#documentfragment
 </pre>
 <pre class="biblio">
 {
@@ -122,8 +127,8 @@ handle additional, application-specific use cases.
     SecureContext
   ] interface Sanitizer {
     constructor(optional SanitizerConfig config = {});
-    DOMString sanitizeToString(DOMString input);
-    DocumentFragment sanitize(DOMString input);
+    DocumentFragment sanitize(SanitizerInput input);
+    DOMString sanitizeToString(SanitizerInput input);
   };
 </pre>
 
@@ -137,6 +142,18 @@ Example:
   // Replace an element's content from unsanitized input:
   element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
 ```
+
+## Input Types {#inputs}
+
+The sanitization methods support three input types: `DOMString`, `Document`,
+and `DocumentFragment`. In all cases, the sanitization will work on a
+{{DocumentFragment}} internally, but the work-fragment will be created by
+parsing, cloning, or using the fragment as-is, respectively.
+
+<pre class="idl">
+  typedef (DOMString or DocumentFragment or Document) SanitizerInput;
+</pre>
+
 
 ## The Configuration Dictionary {#config}
 
@@ -192,7 +209,7 @@ Examples:
   new Sanitizer().sanitizeToString(sample);  // Will output sample unmodified.
 
   // Scripts will be blocked: "abc alert(1) def"
-  new Sanitizer().sanitzeToString("abc <script>alert(1)</script> def");
+  new Sanitizer().sanitizeToString("abc <script>alert(1)</script> def");
 ```
 
 ## Algorithms {#algorithms}
@@ -235,8 +252,26 @@ To <dfn>sanitize an attribute</dfn> named |attr|, run these steps:
 6. if |config| has a non-empty [=attribute allow list=] and |name| is not in |config|'s [=attribute allow list=] return 'drop'
 7. return 'keep'
 
+To <dfn>create a document fragment</dfn>
+named |fragment| from a Sanitizer |input|, run these steps:
 
-TODO: To <dfn>create a document fragment</dfn> ...
+1. Switch based on |input|'s type:
+  1. if |input| is of type {{DocumentFragment}}, return |input|.
+  2. if |input| is of type {{Document}}
+    1. let `f` be the result of {{createDocumentFragment}}.
+    2. return the result of `input.cloneNode(input, true)`.
+  3. if |input| is of type `DOMString`, then:
+    1. let `doc` be the result of the {{parseFromString}} algorithm
+        with |input| as first parameter (`string`),
+        and `"text/html"` as second parameter (`type`).
+    2. let `f` be the result of {{createDocumentFragment}}.
+    3. return the result of `f.cloneNode(doc, true)`.
+
+
+Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
+  context for {{parseFromString}}, or if we need to re-work the API to take
+  the insertion context of the created fragment into account.
+
 
 To <dfn>sanitize</dfn> a given |input|, run these steps:
 
@@ -246,8 +281,9 @@ To <dfn>sanitize</dfn> a given |input|, run these steps:
 
 To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
 
-1. run the [=sanitize=] algorithm on |input|,
-2. run the steps of the [=HTML Fragment Serialization Algorithm=] with
+1. run [=create a document fragment=] algorithm on the |input|.
+2. run the [=sanitize=] algorithm on the resulting fragment,
+3. run the steps of the [=HTML Fragment Serialization Algorithm=] with
      the fragment root of step 1 as the |node|, and return the result string.
 
 
