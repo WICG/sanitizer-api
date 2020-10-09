@@ -143,8 +143,8 @@ To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn
 3. [=list/iterate|for each=] |node| in |nodes|:
   1. call [=sanitize a node=] and insert |node| and the result value into |m|
 4. [=list/iterate|for each=] |node| in |nodes|:
-  1. if m[node] is 'drop', remove the node and all children
-  2. if m[node] is 'block', replace the node with its element + text node children.
+  1. if m[node] is 'drop', remove the |node| and all children from |fragment|.
+  2. if m[node] is 'block', replace the |node| with all of its element and text node children from |fragment|.
   3. if m[node] is undefined or 'keep', do nothing.
 
 To <dfn export id="sanitize-node">sanitize a node</dfn> named |node| run these steps:
@@ -156,10 +156,10 @@ To <dfn export id="sanitize-node">sanitize a node</dfn> named |node| run these s
 To <dfn export id="sanitize-element">sanitize an element</dfn> named |element|, run these steps:
 
 1. let |config| be the |sanitizer|'s configuration dictionary.
-2. let |name| be |element|'s constructor name.
+2. let |name| be |element|'s tag name.
 3. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
-4. if |name| is contained in the built-in [=default element block list=] return 'block'.
-5. if |name| is in |config|'s [=element drop list=] return 'drop'.
+4. if |name| is in |config|'s [=element drop list=] return 'drop'.
+5. if |name| is contained in the built-in [=default element block list=] return 'block'.
 6. if |name| is in |config|'s [=element block list=] return 'block'.
 7. in |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
 8. return 'keep'
@@ -168,7 +168,7 @@ To <dfn export id="sanitize-attribute">sanitize an attribute</dfn> named |attr|,
 
 1. let |config| be the |sanitizer|'s configuration dictionary.
 2. let |element| be |attr|'s parent element.
-3. let |name| be |element|'s constructor name, followed by ''.'', followed by |attr|'s name.
+3. let |name| be |element|'s tag name, followed by ''.'', followed by |attr|'s name.
 4. if |name| is contained in the built-in [=default attribute drop list=] return 'drop'.
 5. if |name| is in |config|'s [=attribute drop list=] return 'drop'.
 6. in |config| has a non-empty [=attribute allow list=] and |name| is not in |config|'s [=attribute allow list=] return 'drop'
