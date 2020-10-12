@@ -95,13 +95,21 @@ Examples {#examples}
 --------------------
 
 ```js
+let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
+
+// Create a DocumentFragment from unsanitized input:
+let s = new Sanitizer();
+let sanitizedFragment = s.sanitize(userControlledInput);
+
+// Replace an element's content from unsanitized input:
+element.innerText = "";
+element.appendChild(s.sanitize(userControlledInput));
+
+// Use the sanitizer to handle additional input that might be undesired for
+// a specific application, for example hyperlinks or plugins.
 let s = new Sanitizer({
-  allowElements: ['a', 'b', ...],
-  allowAttributes: ['c', 'd', 'e', ...],
-  ...
+  blockElements: ['a', 'object', ...],
 });
-s.sanitizeToString("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
-s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns a `DocumentFragment`
 ```
 
 Framework {#framework}
