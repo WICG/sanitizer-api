@@ -64,15 +64,22 @@ Note: The proposal is being developed [here](https://wicg.github.io/sanitizer-ap
 We want to develop an API that learns from the
 [DOMPurify](https://github.com/cure53/DOMPurify) library. In particular:
 
-* The core API should be a single String-to-String method, plus a
-  String-to-Fragment method. I.e., one method per supported output type.
-
-  * `sanitizeToString(DOMString value)` => `DOMString`
+* The core API would be a single method which sanitizes a String and returns
+  a DocumentFragment.
 
   * `sanitize(DOMString value)` => `DocumentFragment`
 
+  * Other input types  (e.g. Document or DocumentFragment) can also be
+    supported.
+
+  * Other result types (e.g. String-to-String) can also be supported with
+    different methods. I.e., one method per supported output type.
+
 * To support different use cases and to keep the API extensible, the
   sanitization should be configurable via an options dictionary.
+
+  * The default (without configuration) should provide safety against script
+    execution.
 
 * To make it easy to review and reason about sanitizer configs, there should
   be sanitizer instances for a given configuration.
@@ -88,9 +95,8 @@ We want to develop an API that learns from the
 
 ### Proposed API
 
-The basic API would be two calls: `.sanitizeToString(value)` to produce a string,
-and `.sanitize(value)` to produce a DocumentFragment. Sanitizers can
-be constructed with a dictionary of options.
+The basic API would be`.sanitize(value)` to produce a DocumentFragment.
+Sanitizers can be constructed with a dictionary of options.
 
 ```
 [
@@ -98,21 +104,10 @@ be constructed with a dictionary of options.
   SecureContext
 ] interface Sanitizer {
   constructor(optional SanitizerConfig config = {});
-  DOMString sanitizeToString(DOMString input);
   DocumentFragment sanitize(DOMString input);
 
+  DOMString sanitizeToString(DOMString input);
   readonly attribute SanitizerConfig creationOptions;
-}
-```
-
-Additionally, there should be pre-configured Sanitizers available
-for common cases, so that web authors can simply use sanitizers for cases
-where they do not have special requirements.
-
-```
-interface DefaultSanitizers {
-  readonly Sanitizer string_only;  // string, without any elements
-  readonly Sanitizer simple;  // HTML element content with known-good elements allowed
 }
 ```
 
@@ -122,19 +117,13 @@ A simple web app wishes to take a string (say: a name) and display it on
 the page:
 
 ```
-document.getElementById("...").innerHTML = sanitizers.html.sanitizeToString(user_supplied_value);
+const s = new Sanitizer();
+const node = document.getElementById("...");
+
+node.innerText = "";
+node.appendChild(s.sanitize(user_supplied_value));
 ```
 
-The default sanitizers should probably be accessible via the document, or
-somesuch. For this example we'll just pretend they're in the global namespace,
-which... they wouldn't be.
-
-```
-string_only.sanitizeToString("a simple example") => "a simple example"
-string_only.sanitizeToString("<b>bold</b> text") => "bold text"
-simple.sanitizeToString("<b>bold</b> text") => "<b>bold</b> text"
-simple.sanitizeToString("<b>bold</b><script>alert(4)</script> text") => "<b>bold</b> text"
-```
 
 ### Roadmap
 
