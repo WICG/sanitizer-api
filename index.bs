@@ -8,7 +8,7 @@ Shortname: sanitizer-api
 Level: 1
 Editor: Frederik Braun 68466, Mozilla, fbraun@mozilla.com, https://frederik-braun.com
 Editor: Mario Heiderich, Cure53, mario@cure53.de, https://cure53.de
-Editor: Mike West 56384, Google Inc., mkwst@google.com
+Editor: Daniel Vogelheim, Google Inc., vogelheim@google.com
 Abstract:
   This document specifies a set of APIs which allow developers to take untrusted
   strings of HTML, and sanitize them for safe insertion into a document's DOM.
