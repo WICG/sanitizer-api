@@ -1322,9 +1322,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version adf8655b, updated Thu Oct 29 16:15:09 2020 -0700" name="generator">
+  <meta content="Bikeshed version e3b7dea8, updated Fri Nov 6 12:09:18 2020 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="4571090d762ecd8c978be6cff12f5579feef4866" name="document-revision">
+  <meta content="e67cab2d144813c161dde0b759d39cb3745f198c" name="document-revision">
 <style>/* darkmode */
 
             @media (prefers-color-scheme: dark) {
@@ -1883,7 +1883,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-10-30">30 October 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-11-09">9 November 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1987,13 +1987,14 @@ API which aims to do just that.</p>
   Adding certain elements and attributes can prevent <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a> attacks.</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="examples"><span class="secno">1.2. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
-<pre class="language-js highlight"><c- a>let</c-> s <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>({</c->
-  allowElements<c- o>:</c-> <c- p>[</c-><c- t>'a'</c-><c- p>,</c-> <c- t>'b'</c-><c- p>,</c-> <c- p>...],</c->
-  allowAttributes<c- o>:</c-> <c- p>[</c-><c- t>'c'</c-><c- p>,</c-> <c- t>'d'</c-><c- p>,</c-> <c- t>'e'</c-><c- p>,</c-> <c- p>...],</c->
-  <c- p>...</c->
-<c- p>});</c->
-s<c- p>.</c->sanitizeToString<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&amp;gt;"</c-><c- p>);</c-> <c- c1>// returns &lt;code data-opaque bs-autolink-syntax='`&lt;img src=&amp;quot;x&amp;quot;>`'>&amp;lt;img src="x">&lt;/code></c->
-s<c- p>.</c->sanitize<c- p>(</c-><c- u>"&amp;lt;img src=x onerror=alert(1)//&amp;gt;"</c-><c- p>);</c-> <c- c1>// returns a &lt;code data-opaque bs-autolink-syntax='`DocumentFragment`'>DocumentFragment&lt;/code></c->
+<pre class="language-js highlight"><c- a>let</c-> userControlledInput <c- o>=</c-> <c- u>"&amp;lt;img src=x onerror=alert(1)//&amp;gt;"</c-><c- p>;</c->
+
+<c- c1>// Create a DocumentFragment from unsanitized input:</c->
+<c- a>let</c-> s <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>();</c->
+<c- a>let</c-> sanitizedFragment <c- o>=</c-> s<c- p>.</c->sanitize<c- p>(</c->userControlledInput<c- p>);</c->
+
+<c- c1>// Replace an element’s content from unsanitized input:</c->
+element<c- p>.</c->replaceChildren<c- p>(</c->s<c- p>.</c->sanitize<c- p>(</c->userControlledInput<c- p>));</c->
 </pre>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
    <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API {#sanitizer-api}</span><a class="self-link" href="#sanitizer-api"></a></h3>
