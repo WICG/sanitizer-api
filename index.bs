@@ -95,13 +95,14 @@ Examples {#examples}
 --------------------
 
 ```js
-let s = new Sanitizer({
-  allowElements: ['a', 'b', ...],
-  allowAttributes: ['c', 'd', 'e', ...],
-  ...
-});
-s.sanitizeToString("&lt;img src=x onerror=alert(1)//&gt;"); // returns `<img src="x">`
-s.sanitize("&lt;img src=x onerror=alert(1)//&gt;"); // returns a `DocumentFragment`
+let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
+
+// Create a DocumentFragment from unsanitized input:
+let s = new Sanitizer();
+let sanitizedFragment = s.sanitize(userControlledInput);
+
+// Replace an element's content from unsanitized input:
+element.replaceChildren(s.sanitize(userControlledInput));
 ```
 
 Framework {#framework}
