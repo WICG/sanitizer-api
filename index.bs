@@ -129,12 +129,6 @@ Framework {#framework}
     constructor(optional SanitizerConfig config = {});
     DOMString sanitizeToString(DOMString input);
     DocumentFragment sanitize(DOMString input);
-
-    readonly attribute SanitizerConfig creationOptions;
-
-    // And maybe?
-    static DOMString sanitizeToString(DOMString input, optional SanitizerConfig config);
-    static DocumentFragment sanitizeToFragment(DOMString input, optional SanitizerConfig config);
   };
 </pre>
 
