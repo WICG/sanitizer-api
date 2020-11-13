@@ -116,10 +116,7 @@ Framework {#framework}
     sequence&lt;DOMString> blockElements;
     sequence&lt;DOMString> dropElements;
     sequence&lt;DOMString> allowAttributes;
-    sequence&lt;DOMString> blockAttributes;
     sequence&lt;DOMString> dropAttributes;
-    // ...
-    // More things from https://github.com/cure53/DOMPurify/blob/master/src/purify.js#L224
   };
 
   [
@@ -134,38 +131,44 @@ Framework {#framework}
 
 ## Algorithms {#algorithms}
 
-<p>To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn> named <var>fragment</var> run these steps:
+To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn> named |fragment| run these steps:
 
-<!-- Do we need to explicitly create a copy of the fragment? -->
-<ol>
-  <li><p>Initialize <var>node</var> to be the <var>fragment</var>'s root.
-  <li>
-    <p>while true
-    <ol>
-      <li>initialize *elementRemoved* to false.
+1. let |m| be a map that maps nodes to {'keep', 'block', 'drop'}.
+2. let |nodes| be a list containing the [=inclusive descendants=] of |fragment|, in [=tree order=].
+3. [=list/iterate|for each=] |node| in |nodes|:
+  1. call [=sanitize a node=] and insert |node| and the result value into |m|
+4. [=list/iterate|for each=] |node| in |nodes|:
+  1. if m[node] is 'drop', remove the |node| and all children from |fragment|.
+  2. if m[node] is 'block', replace the |node| with all of its element and text node children from |fragment|.
+  3. if m[node] is undefined or 'keep', do nothing.
 
-      <li>set <var>allowedElements</var> to the list of allowed elements for the node's `namespaceURI`.
+To <dfn export id="sanitize-node">sanitize a node</dfn> named |node| run these steps:
 
-      <li>set <var>allowedAttributes</var> to the list of allowed attributes for the node's `namespaceURI`
+1. if |node| is an element node, call [=sanitize an element=] and return its result.
+2. if |node| is an attribute node, call [=sanitize an attribute=] and return its result.
+3. return 'keep'
 
-      <li>if the <var>node</var>'s local name is not in <var>allowedElements</var>:
-        <ol>
-        <li>Remove <var>node</var> and all of its ancestors from the tree and set <var>elementRemoved</var> to true
-        </ol>
+To <dfn export id="sanitize-element">sanitize an element</dfn> named |element|, run these steps:
 
-      <li>if <var>elementRemoved</var> is true, continue to next iteration.
+1. let |config| be the |sanitizer|'s configuration dictionary.
+2. let |name| be |element|'s tag name.
+3. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
+4. if |name| is in |config|'s [=element drop list=] return 'drop'.
+5. if |name| is contained in the built-in [=default element block list=] return 'block'.
+6. if |name| is in |config|'s [=element block list=] return 'block'.
+7. in |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
+8. return 'keep'
 
-      <!-- node's local name is in the list of allowed element names -->
-      <li><p><a for=map>For each</a> <var>attribute</var> of <var>node</var>'s list of attributes
-        <ol>
-        <li>if <var>attribute</var> is not in <var>allowedAttributes</var>
-          <ol>
-            <li>Remove <var>attribute</var> from <var>node</var>'s attributes.
-          </ol>
-        </ol>
-    </ol>
-  <li>Return <var>fragment</var>.
-</ol>
+To <dfn export id="sanitize-attribute">sanitize an attribute</dfn> named |attr|, run these steps:
+
+1. let |config| be the |sanitizer|'s configuration dictionary.
+2. let |element| be |attr|'s parent element.
+3. let |name| be |element|'s tag name, followed by ''.'', followed by |attr|'s name.
+4. if |name| is contained in the built-in [=default attribute drop list=] return 'drop'.
+5. if |name| is in |config|'s [=attribute drop list=] return 'drop'.
+6. in |config| has a non-empty [=attribute allow list=] and |name| is not in |config|'s [=attribute allow list=] return 'drop'
+7. return 'keep'
+
 
 
 Acknowledgements {#ack}
