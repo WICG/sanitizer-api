@@ -110,15 +110,13 @@ Framework {#framework}
 
 ## Sanitizer API {#sanitizer-api}
 
-<pre class="idl">
-  dictionary SanitizerConfig {
-    sequence&lt;DOMString> allowElements;
-    sequence&lt;DOMString> blockElements;
-    sequence&lt;DOMString> dropElements;
-    sequence&lt;DOMString> allowAttributes;
-    sequence&lt;DOMString> dropAttributes;
-  };
+The core API is the `Sanitizer` object. These can be created using a
+`SanitizerConfig` dictionary for options. The most common use-case -
+preventing XSS - is handled by the built-in default lists, so that creating
+a Sanitizer with a custom config is necessary only to handle
+application-specific use cases.
 
+<pre class="idl">
   [
     Exposed=(Window),
     SecureContext
@@ -129,9 +127,61 @@ Framework {#framework}
   };
 </pre>
 
+* The constructor creates a Sanitizer and retains a copy of |config| as its
+  [=configuration=] object.
+* To `sanitize` an |input|,
+  * run [=create a document fragment=] algorithm on the |input|.
+  * run the [=sanitize document fragment=] algorithm on the resulting fragment,
+  * and return its result.
+* To sanitizeToString an |input|,
+  1. run the steps of 'sanitize',
+  2. run the steps of the [=HTML Fragment Serialization Algorithm=] with
+     the fragment root of step 1 as the |node|, and return the result string.
+
+Example:
+```js
+// Replace an element's content from unsanitized input:
+element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
+
+```
+
+## The Configuration Dictionary {#config}
+
+The <dfn lt="configuration">sanitizer's configuration object</dfn> is a dictionary, which
+describes modifications to the sanitze operation.
+
+<pre class="idl">
+  dictionary SanitizerConfig {
+    sequence&lt;DOMString> allowElements;
+    sequence&lt;DOMString> blockElements;
+    sequence&lt;DOMString> dropElements;
+    sequence&lt;DOMString> allowAttributes;
+    sequence&lt;DOMString> dropAttributes;
+  };
+</pre>
+
+: allowElements
+:: The <dfn>element allow list</dfn> list is a sequence of strings with
+    elements that the sanitizer retains.
+: blockElements
+:: The <dfn>element block list</dfn> is a sequence of strings with elements
+   where the sanitizer should remove the elements, but retain their children.
+: dropElements
+:: The <dfn>element drop list</dfn> is a sequence of strings with elements
+   that the sanitizer should remove from the input, including its children.
+: allowAttributes
+:: TODO: <dfn>attribute allow list</dfn>
+: dropAttributes
+:: TODO: <dfn>attribute drop list</dfn>
+
+Note: `allowElements` creates a sanitizer that defaults to dropping elements,
+  while `blockElements` and `dropElements` defaults to keeping unknown
+  elements. Using both types is possible, but is probably of little practical
+  use. The same applied to `allowAttributes` and `dropAttributes`.
+
 ## Algorithms {#algorithms}
 
-To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn> named |fragment| run these steps:
+To <dfn lt="sanitize document fragment">sanitize a document fragment</dfn> named |fragment| using |sanitizer| run these steps:
 
 1. let |m| be a map that maps nodes to {'keep', 'block', 'drop'}.
 2. let |nodes| be a list containing the [=inclusive descendants=] of |fragment|, in [=tree order=].
@@ -142,15 +192,15 @@ To <dfn export id="sanitize-document-fragment">sanitize a document fragment</dfn
   2. if m[node] is 'block', replace the |node| with all of its element and text node children from |fragment|.
   3. if m[node] is undefined or 'keep', do nothing.
 
-To <dfn export id="sanitize-node">sanitize a node</dfn> named |node| run these steps:
+To <dfn>sanitize a node</dfn> named |node| run these steps:
 
 1. if |node| is an element node, call [=sanitize an element=] and return its result.
 2. if |node| is an attribute node, call [=sanitize an attribute=] and return its result.
 3. return 'keep'
 
-To <dfn export id="sanitize-element">sanitize an element</dfn> named |element|, run these steps:
+To <dfn>sanitize an element</dfn> named |element|, run these steps:
 
-1. let |config| be the |sanitizer|'s configuration dictionary.
+1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
 2. let |name| be |element|'s tag name.
 3. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
 4. if |name| is in |config|'s [=element drop list=] return 'drop'.
@@ -159,9 +209,9 @@ To <dfn export id="sanitize-element">sanitize an element</dfn> named |element|, 
 7. in |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
 8. return 'keep'
 
-To <dfn export id="sanitize-attribute">sanitize an attribute</dfn> named |attr|, run these steps:
+To <dfn>sanitize an attribute</dfn> named |attr|, run these steps:
 
-1. let |config| be the |sanitizer|'s configuration dictionary.
+1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
 2. let |element| be |attr|'s parent element.
 3. let |name| be |element|'s tag name, followed by ''.'', followed by |attr|'s name.
 4. if |name| is contained in the built-in [=default attribute drop list=] return 'drop'.
@@ -169,6 +219,41 @@ To <dfn export id="sanitize-attribute">sanitize an attribute</dfn> named |attr|,
 6. in |config| has a non-empty [=attribute allow list=] and |name| is not in |config|'s [=attribute allow list=] return 'drop'
 7. return 'keep'
 
+
+TODO: To <dfn>create a document fragment</dfn> ...
+
+## Default Configuration {#defaults}
+
+Issue: The sanitizer defaults need to be carefully vetted, and are still
+    under discussion. The values below are for illustrative purposes only.
+
+The sanitizer has a built-in default configuration, which aims to eliminate
+any script-injection possibility. Note that the [=sanitize document fragment=]
+algorithm
+is defined so that these defaults are handled first and cannot be overriden
+by a custom configuration.
+
+
+: Default Drop Elements
+
+:: The <dfn>default element drop list</dfn> has the following value:
+   ```
+ [ "script", "this is just a placeholder" ]
+   ```
+
+: Default Block Elements
+
+:: The <dfn>default element block list</dfn> has the following value:<br>
+   ```
+[ "noscript", "this is just a placeholder" ]
+   ```
+
+: Default Drop Attributes
+
+:: The <dfn>default attribute drop list</dfn> has the following value:
+   ```
+{}
+   ```
 
 
 Acknowledgements {#ack}
