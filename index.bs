@@ -127,16 +127,10 @@ application-specific use cases.
   };
 </pre>
 
-* The constructor creates a Sanitizer and retains a copy of |config| as its
-  [=configuration=] object.
-* To `sanitize` an |input|,
-  * run [=create a document fragment=] algorithm on the |input|.
-  * run the [=sanitize document fragment=] algorithm on the resulting fragment,
-  * and return its result.
-* To sanitizeToString an |input|,
-  1. run the steps of 'sanitize',
-  2. run the steps of the [=HTML Fragment Serialization Algorithm=] with
-     the fragment root of step 1 as the |node|, and return the result string.
+* The constructor creates a Sanitizer instance.
+  It retains a copy of |config| as its [=configuration=] object.
+* The `sanitize` method runs the [=sanitize=] algorithm on |input|,
+* The `sanitize` method runs the [=sanitizeToString=] algorithm on |input|.
 
 Example:
 ```js
@@ -221,6 +215,19 @@ To <dfn>sanitize an attribute</dfn> named |attr|, run these steps:
 
 
 TODO: To <dfn>create a document fragment</dfn> ...
+
+To <dfn>sanitize</dfn> a given |input|, run these steps:
+
+1, run [=create a document fragment=] algorithm on the |input|.
+2, run the [=sanitize document fragment=] algorithm on the resulting fragment,
+3, and return its result.
+
+To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
+
+1. run the [=sanitize=] algorithm on |input|,
+2. run the steps of the [=HTML Fragment Serialization Algorithm=] with
+     the fragment root of step 1 as the |node|, and return the result string.
+
 
 ## Default Configuration {#defaults}
 
