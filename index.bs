@@ -110,11 +110,11 @@ Framework {#framework}
 
 ## Sanitizer API {#sanitizer-api}
 
-The core API is the `Sanitizer` object. These can be created using a
-`SanitizerConfig` dictionary for options. The most common use-case -
-preventing XSS - is handled by the built-in default lists, so that creating
-a Sanitizer with a custom config is necessary only to handle
-application-specific use cases.
+The core API is the `Sanitizer` object and the sanitize method. Sanitizers can
+be instanited using an optional `SanitizerConfig` dictionary for options.
+The most common use-case - preventing XSS - is handled by the built-in default
+lists, so that creating a Sanitizer with a custom config is necessary only to
+handle additional, application-specific use cases.
 
 <pre class="idl">
   [
@@ -130,13 +130,12 @@ application-specific use cases.
 * The constructor creates a Sanitizer instance.
   It retains a copy of |config| as its [=configuration=] object.
 * The `sanitize` method runs the [=sanitize=] algorithm on |input|,
-* The `sanitize` method runs the [=sanitizeToString=] algorithm on |input|.
+* The `sanitizeToString` method runs the [=sanitizeToString=] algorithm on |input|.
 
 Example:
 ```js
-// Replace an element's content from unsanitized input:
-element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
-
+  // Replace an element's content from unsanitized input:
+  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
 ```
 
 ## The Configuration Dictionary {#config}
@@ -155,11 +154,12 @@ dictionary which describes modifications to the sanitze operation.
 </pre>
 
 : allowElements
-:: The <dfn>element allow list</dfn> list is a sequence of strings with
-    elements that the sanitizer retains.
+:: The <dfn>element allow list</dfn> is a sequence of strings with
+    elements that the sanitizer should retain in the input.
 : blockElements
 :: The <dfn>element block list</dfn> is a sequence of strings with elements
-   where the sanitizer should remove the elements, but retain their children.
+   where the sanitizer should remove the elements from the input, but retain
+   their children.
 : dropElements
 :: The <dfn>element drop list</dfn> is a sequence of strings with elements
    that the sanitizer should remove from the input, including its children.
@@ -171,7 +171,29 @@ dictionary which describes modifications to the sanitze operation.
 Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   while `blockElements` and `dropElements` defaults to keeping unknown
   elements. Using both types is possible, but is probably of little practical
-  use. The same applied to `allowAttributes` and `dropAttributes`.
+  use. The same applies to `allowAttributes` and `dropAttributes`.
+
+Examples:
+```js
+  const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
+
+  // "Some text <b>with</b> text tags."
+  new Sanitizer({allowElements: { "b" }).sanitizeToString(sample);
+
+  // "Some text <i>with</i> <blink>tags</blink>."
+  new Sanitizer({blockElements: { "b" }).sanitizeToString(sample);
+
+  // "Some text <blink>tags</blink>."
+  new Sanitizer({dropElements: { "b" }).sanitizeToString(sample);
+
+  // Note: The default configuration handles XSS-relevant input:
+
+  // Non-scripting input will be passed through:
+  new Sanitizer().sanitizeToString(sample);  // Will output sample unmodified.
+
+  // Scripts will be blocked: "abc alert(1) def"
+  new Sanitizer().sanitzerToString("abc <script>alert(1)</script> def");
+```
 
 ## Algorithms {#algorithms}
 
