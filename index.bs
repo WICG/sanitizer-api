@@ -178,13 +178,13 @@ Examples:
   const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
 
   // "Some text <b>with</b> text tags."
-  new Sanitizer({allowElements: { "b" }).sanitizeToString(sample);
+  new Sanitizer({allowElements: [ "b" ]).sanitizeToString(sample);
 
   // "Some text <i>with</i> <blink>tags</blink>."
-  new Sanitizer({blockElements: { "b" }).sanitizeToString(sample);
+  new Sanitizer({blockElements: [ "b" ]).sanitizeToString(sample);
 
   // "Some text <blink>tags</blink>."
-  new Sanitizer({dropElements: { "b" }).sanitizeToString(sample);
+  new Sanitizer({dropElements: [ "b" ]).sanitizeToString(sample);
 
   // Note: The default configuration handles XSS-relevant input:
 
@@ -192,7 +192,7 @@ Examples:
   new Sanitizer().sanitizeToString(sample);  // Will output sample unmodified.
 
   // Scripts will be blocked: "abc alert(1) def"
-  new Sanitizer().sanitzerToString("abc <script>alert(1)</script> def");
+  new Sanitizer().sanitzeToString("abc <script>alert(1)</script> def");
 ```
 
 ## Algorithms {#algorithms}
