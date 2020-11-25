@@ -240,9 +240,9 @@ TODO: To <dfn>create a document fragment</dfn> ...
 
 To <dfn>sanitize</dfn> a given |input|, run these steps:
 
-1, run [=create a document fragment=] algorithm on the |input|.
-2, run the [=sanitize document fragment=] algorithm on the resulting fragment,
-3, and return its result.
+1. run [=create a document fragment=] algorithm on the |input|.
+2. run the [=sanitize document fragment=] algorithm on the resulting fragment,
+3. and return its result.
 
 To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
 
