@@ -296,80 +296,28 @@ describes, as is Internet Explorer's {{window.toStaticHTML()}}.
 
 Issue(WICG/sanitizer-api#20): The best way to integrate Trusted Types is still under discussion.
 
-Issue: The two methods below
-  (<a href="#trustedtypes-sanitize-to">`sanitizeToTrustedHTML`</a> and
-   <a href="#trustedtypes-createHTML">createHTML</a>)
-  are redundant. It is unclear whether both are needed.
-
 [Trusted Types](https://w3c.github.io/webappsec-trusted-types/dist/spec/) is
 a proposed feature to allow locking down the DOM to prevent cross-site
 scripting attacks. Trusted Types is complementary to the mechanisms proposed
 here. User Agents that support both, this Sanitizer API and Trusted Types,
-require integration between these features.
-
-## `Sanitizer.sanitize` sink. {#trustedtypes-sink}
-
-In Trusted Types parlance, the Sanitizer.sanitize method is an HTML sink, and
-thus needs to be guarded by the usual Trusted Types mechanisms.
-
-<pre>
-  typedef (DOMString or DocumentFragment or Document) SanitizerInput;
-  <ins>typedef ([StringContext=HTML]DOMString or TrustedHTML or DocumentFragment or Document) TrustedTypeSanitizerInput;</ins>
-
-  // In interface Sanitizer:
-  DocumentFragment sanitize(<ins>TrustedTypes</ins>SanitizerInput input);
-</pre>
-
-## `Sanitizer.sanitizeToTrustedHTML`. {#trustedtypes-sanitize-to}
+benefit from integration between these features.
 
 To allow easy combination of Sanitizer and Trusted Types, the `Sanitizer`
 interface gets a new method to create a Trusted Type directly:
 
 <pre>
   // In interface Sanitizer:
-  <ins>TrustedHTML sanitizeToTrustedHTML(TrustedTypesSanitizerInput input);</ins>
+  <ins>TrustedHTML sanitizeToTrustedHTML(SanitizerInput input);</ins>
 </pre>
 
-Since this is - naturally - a new sink, it requires a Trusted Types check.
-But it clearly makes the sense to use this as a way to create Trusted Types
-from untrusted input. To facilitate this, the
-<a href="https://w3c.github.io/webappsec-trusted-types/dist/spec/#trusted-types-csp-directive">`trusted-types` CSP directive</a>
-gets a new keyword `'sanitizer-api'`. If set, the `sanitizeToTrustedHTML` method
-will accept any DOMString input. That is, it will skip the Trusted Types check
-and will generate sanitized TrustedHTML instances directly.
+To `sanitizeToTrustedHTML` a given |input|, run these steps:
 
-<pre>
-  // In <a href="https://w3c.github.io/webappsec-trusted-types/dist/spec/#trusted-types-csp-directive">trusted-types directive</a>:
-  <b>tt-keyword</b> = "'allow-duplicates'" / <ins>"'sanitizer-api'" /</ins> "'none'"
-</pre>
+1. Run the [=sanitizeToString=] algorithm on |input|.
+2. Return a new `TrustedHTML` instance, with its `[[Data]]` internal slot value
+  set to the result of the previous step.
 
-## `TrustedTypesPolicy.createHTML`. {#trustedtypes-createHTML}
+Issue(WICG/sanitizer-api#20): An additional proposal is to allow a
+  TrustedTypePolicy (or TrustedTypePolicy.createHTML) to be created directly
+  from a SanitizerConfig, thus making the creation of a Sanitizer implicit.
+  It's unclear to what extend this would be helpful.
 
-In order to use a sanitizer from within a Trusted Types policy, the
-`createHTML` property of the TrustedTypePolicyOptions is extended to also allow
-a `SanitizerConfig` to be used.
-
-<pre>
-  // In <a href="https://w3c.github.io/webappsec-trusted-types/dist/spec/#typedef-trustedtypepolicyoptions">dictionary TrustedTypePolicyOptions</a>:
-  // <ins>(</ins>CreateHTMLCallback? <ins>or SanitizerConfig)</ins> createHTML;
-</pre>
-
-This will be used in
-<a href="https://w3c.github.io/webappsec-trusted-types/dist/spec/#create-a-trusted-type-algorithm">Create a TrustedType</a>
-algorithm as follows:
-
-<del>
-  3. Let function be the value of the property in options named functionName.
-  4. If function is null, throw a TypeError.
-  5. Let policyValue be the result of invoking function with value as a first argument, items of arguments as subsequent arguments, and callback **this** value set to null.
-</del>
-<ins>
-  3. Let `fun-value` be the value of the property in `options` named `functionName`, and switch on its value:
-    1. If `fun-value` is `null`, throw a `TypeError`.
-    2. If `fun-value` is callable, then Let `policyValue` be the result of invoking `fun-value`
-       with `value` as a first argument, items of arguments as subsequent arguments, and
-       callback **this** value set to null.
-    3. If `fun-value` is a `SanitizerConfig`, then let `policyValue` be the result of
-       <pre type="js">new Sanitizer(fun-value).sanitizeToString(value);</pre>
-       (An implementation would likely not re-create a `Sanitizer` instance on every call. The difference should not be observable.)
-</ins>
