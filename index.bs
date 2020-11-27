@@ -28,6 +28,9 @@ text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#do
 text: Document; type: interface; url: https://dom.spec.whatwg.org/#interface-Document
 text: DocumentFragment; type: interface; url: https://dom.spec.whatwg.org/#documentfragment
 </pre>
+<pre class="link-defaults">
+spec:dom; type:dfn; text:append
+</pre>
 <pre class="biblio">
 {
   "DOMPURIFY": {
@@ -264,8 +267,11 @@ named |fragment| from a Sanitizer |input|, run these steps:
     1. let |node| be the result of the {{parseFromString}} algorithm
         with |input| as first parameter (`string`),
         and `"text/html"` as second parameter (`type`).
-2. let `f` be the result of {{createDocumentFragment}}.
-3. return the result of `f.cloneNode(node, true)`.
+2. Let |clone| be the result of running [=clone a node=] on |input| with the
+   `clone children flag` set to `true`.
+3. Let `f` be the result of {{createDocumentFragment}}.
+4. [=Append=] the node |clone| to the parent |f|.
+5. Return |f|.
 
 
 Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
