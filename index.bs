@@ -267,7 +267,7 @@ named |fragment| from a Sanitizer |input|, run these steps:
     1. let |node| be the result of the {{parseFromString}} algorithm
         with |input| as first parameter (`string`),
         and `"text/html"` as second parameter (`type`).
-2. Let |clone| be the result of running [=clone a node=] on |input| with the
+2. Let |clone| be the result of running [=clone a node=] on |node| with the
    `clone children flag` set to `true`.
 3. Let `f` be the result of {{createDocumentFragment}}.
 4. [=Append=] the node |clone| to the parent |f|.
