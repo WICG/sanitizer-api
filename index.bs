@@ -256,16 +256,16 @@ To <dfn>create a document fragment</dfn>
 named |fragment| from a Sanitizer |input|, run these steps:
 
 1. Switch based on |input|'s type:
-  1. if |input| is of type {{DocumentFragment}}, then:
-    1. let |node| refer to |input|.
-  2. if |input| is of type {{Document}}, then:
-    1. let |node| refer to |input|'s `documentElement`.
+  1. if |input| is of type {{DocumentFragment}}, return |input|.
+  2. if |input| is of type {{Document}}
+    1. let `f` be the result of {{createDocumentFragment}}.
+    2. return the result of `input.cloneNode(input, true)`.
   3. if |input| is of type `DOMString`, then:
-    1. let |node| be the result of the {{parseFromString}} algorithm
+    1. let `doc` be the result of the {{parseFromString}} algorithm
         with |input| as first parameter (`string`),
         and `"text/html"` as second parameter (`type`).
-2. let `f` be the result of {{createDocumentFragment}}.
-3. return the result of `f.cloneNode(node, true)`.
+    2. let `f` be the result of {{createDocumentFragment}}.
+    3. return the result of `f.cloneNode(doc, true)`.
 
 
 Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
