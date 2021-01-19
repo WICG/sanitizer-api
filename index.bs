@@ -170,6 +170,7 @@ dictionary which describes modifications to the sanitze operation.
     sequence&lt;DOMString> dropElements;
     sequence&lt;DOMString> allowAttributes;
     sequence&lt;DOMString> dropAttributes;
+    boolean allowCustomElements;
   };
 </pre>
 
@@ -187,6 +188,11 @@ dictionary which describes modifications to the sanitze operation.
 :: TODO: <dfn>attribute allow list</dfn>
 : dropAttributes
 :: TODO: <dfn>attribute drop list</dfn>
+: allowCustomElements
+:: <dfn>allow custom elements option</dfn> determines whether
+   [=custom elements=] are to be considered. The default is to drop them.
+   If this option is true, custom elements will still be checked against all
+   other built-in or configured configured checks.
 
 Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   while `blockElements` and `dropElements` defaults to keeping unknown
@@ -238,12 +244,18 @@ To <dfn>sanitize an element</dfn> named |element|, run these steps:
 
 1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
 2. let |name| be |element|'s tag name.
-3. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
-4. if |name| is in |config|'s [=element drop list=] return 'drop'.
-5. if |name| is contained in the built-in [=default element block list=] return 'block'.
-6. if |name| is in |config|'s [=element block list=] return 'block'.
-7. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
-8. return 'keep'
+3. if |name| is a [=valid custom element name=] and if |config|'s
+   [=allow custom elements option=] is unset or set to anything other than `true`, return 'drop'.
+4. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
+5. if |name| is in |config|'s [=element drop list=] return 'drop'.
+6. if |name| is contained in the built-in [=default element block list=] return 'block'.
+7. if |name| is in |config|'s [=element block list=] return 'block'.
+8. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
+9. return 'keep'
+
+Issue: This presently ignores all namespace info, making it impossible to
+    support different actions for like-named elements from different
+    namespaces.
 
 To <dfn>sanitize an attribute</dfn> named |attr|, run these steps:
 
