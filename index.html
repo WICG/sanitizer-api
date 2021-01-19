@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 3886cea8, updated Wed Dec 2 15:53:33 2020 -0800" name="generator">
+  <meta content="Bikeshed version eec6446e, updated Fri Jan 15 17:20:28 2021 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="174926dd2710b1ba84c2645f4380c4a9d6b2aa89" name="document-revision">
+  <meta content="803314a5511d959b1adb3ab7105da999e212e384" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -567,7 +567,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-12-04">4 December 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-01-19">19 January 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -582,7 +582,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2020 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2021 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -729,6 +729,7 @@ dictionary which describes modifications to the sanitze operation.</p>
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence②"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-dropelements"><code><c- g>dropElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropelements"></a></dfn>;
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑤"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowattributes"></a></dfn>;
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence④"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropattributes"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcustomelements"></a></dfn>;
 };
 </pre>
    <dl>
@@ -751,13 +752,18 @@ dictionary which describes modifications to the sanitze operation.</p>
     <dt data-md>dropAttributes
     <dd data-md>
      <p>TODO: <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-drop-list">attribute drop list</dfn></p>
+    <dt data-md>allowCustomElements
+    <dd data-md>
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="allow-custom-elements-option">allow custom elements option</dfn> determines whether <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element" id="ref-for-custom-element">custom elements</a> are to be considered. The default is to drop them.
+ If this option is true, custom elements will still be checked against all
+ other built-in or configured configured checks.</p>
    </dl>
    <p class="note" role="note"><span>Note:</span> <code>allowElements</code> creates a sanitizer that defaults to dropping elements,
   while <code>blockElements</code> and <code>dropElements</code> defaults to keeping unknown
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to <code>allowAttributes</code> and <code>dropAttributes</code>.</p>
    <p>Examples:</p>
-<pre class="language-js highlight">  <c- kr>const</c-> sample <c- o>=</c-> <c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>;</c->
+<pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>;</c->
 
   <c- c1>// "Some text &lt;b>with&lt;/b> text tags."</c->
   <c- k>new</c-> Sanitizer<c- p>({</c->allowElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
@@ -816,6 +822,8 @@ dictionary which describes modifications to the sanitze operation.</p>
     <li data-md>
      <p>let <var>name</var> be <var>element</var>’s tag name.</p>
     <li data-md>
+     <p>if <var>name</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" id="ref-for-valid-custom-element-name">valid custom element name</a> and if <var>config</var>’s <a data-link-type="dfn" href="#allow-custom-elements-option" id="ref-for-allow-custom-elements-option">allow custom elements option</a> is unset or set to anything other than <code>true</code>, return 'drop'.</p>
+    <li data-md>
      <p>if <var>name</var> is contained in the built-in <a data-link-type="dfn" href="#default-element-drop-list" id="ref-for-default-element-drop-list">default element drop list</a> return 'drop'.</p>
     <li data-md>
      <p>if <var>name</var> is in <var>config</var>’s <a data-link-type="dfn" href="#element-drop-list" id="ref-for-element-drop-list">element drop list</a> return 'drop'.</p>
@@ -828,6 +836,9 @@ dictionary which describes modifications to the sanitze operation.</p>
     <li data-md>
      <p>return 'keep'</p>
    </ol>
+   <p class="issue" id="issue-1cf1de87"><a class="self-link" href="#issue-1cf1de87"></a> This presently ignores all namespace info, making it impossible to
+    support different actions for like-named elements from different
+    namespaces.</p>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-an-attribute">sanitize an attribute</dfn> named <var>attr</var>, run these steps:</p>
    <ol>
     <li data-md>
@@ -935,6 +946,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#dom-sanitizerconfig-allowattributes">allowAttributes</a><span>, in §2.3</span>
+   <li><a href="#dom-sanitizerconfig-allowcustomelements">allowCustomElements</a><span>, in §2.3</span>
+   <li><a href="#allow-custom-elements-option">allow custom elements option</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizerconfig-allowelements">allowElements</a><span>, in §2.3</span>
    <li><a href="#attribute-allow-list">attribute allow list</a><span>, in §2.3</span>
    <li><a href="#attribute-drop-list">attribute drop list</a><span>, in §2.3</span>
@@ -1007,10 +1020,22 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type①">(2)</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-custom-element">
+   <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element">https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-custom-element">2.3. The Configuration Dictionary {#config}</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-html-fragment-serialisation-algorithm">
    <a href="https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm">https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-html-fragment-serialisation-algorithm">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-valid-custom-element-name">
+   <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name">https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-valid-custom-element-name">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-list-iterate">
@@ -1039,6 +1064,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-SecureContext">2.1. Sanitizer API {#sanitizer-api}</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-boolean">
+   <a href="https://heycam.github.io/webidl/#idl-boolean">https://heycam.github.io/webidl/#idl-boolean</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary {#config}</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-sequence">
    <a href="https://heycam.github.io/webidl/#idl-sequence">https://heycam.github.io/webidl/#idl-sequence</a><b>Referenced in:</b>
    <ul>
@@ -1065,7 +1096,9 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-custom-element">custom element</span>
      <li><span class="dfn-paneled" id="term-for-html-fragment-serialisation-algorithm">html fragment serialization algorithm</span>
+     <li><span class="dfn-paneled" id="term-for-valid-custom-element-name">valid custom element name</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
@@ -1078,6 +1111,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
      <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
      <li><span class="dfn-paneled" id="term-for-SecureContext">SecureContext</span>
+     <li><span class="dfn-paneled" id="term-for-idl-boolean">boolean</span>
      <li><span class="dfn-paneled" id="term-for-idl-sequence">sequence</span>
     </ul>
   </ul>
@@ -1118,11 +1152,15 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-dropelements"><code><c- g>dropElements</c-></code></a>;
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code></a>;
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code></a>;
 };
 
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
+   <div class="issue"> This presently ignores all namespace info, making it impossible to
+    support different actions for like-named elements from different
+    namespaces.<a href="#issue-1cf1de87"> ↵ </a></div>
    <div class="issue"> It’s unclear whether we can assume a generic
   context for <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">parseFromString</a></code>, or if we need to re-work the API to take
   the insertion context of the created fragment into account. <a href="https://github.com/WICG/sanitizer-api/issues/42">&lt;https://github.com/WICG/sanitizer-api/issues/42></a><a href="#issue-8301a077"> ↵ </a></div>
@@ -1176,6 +1214,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <b><a href="#attribute-drop-list">#attribute-drop-list</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-attribute-drop-list">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="allow-custom-elements-option">
+   <b><a href="#allow-custom-elements-option">#allow-custom-elements-option</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-allow-custom-elements-option">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize-document-fragment">
