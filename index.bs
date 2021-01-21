@@ -157,6 +157,14 @@ parsing, cloning, or using the fragment as-is, respectively.
   typedef (DOMString or DocumentFragment or Document) SanitizerInput;
 </pre>
 
+Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
+    which will perform some degree of normalization. So even
+    if no sanitization steps are taken on a particular input, it cannot be
+    guaranteed that the output of `sanitizeToString` will be
+    character-for-character identical to the input.
+    Examples would be character regularization (`"&szlig;"` to `"ß"`),
+    or light processing for some elements (`"<image>"` to `"<img>"`);
+
 
 ## The Configuration Dictionary {#config}
 
