@@ -255,11 +255,6 @@ Examples for attributes and attribute match lists:
   new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitizeToString(sample);
 ```
 
-Note: `allowElements` creates a sanitizer that defaults to dropping elements,
-  while `blockElements` and `dropElements` defaults to keeping unknown
-  elements. Using both types is possible, but is probably of little practical
-  use. The same applies to `allowAttributes` and `dropAttributes`.
-
 ## Algorithms {#algorithms}
 
 To <dfn lt="sanitize document fragment">sanitize a document fragment</dfn> named |fragment| using |sanitizer| run these steps:
