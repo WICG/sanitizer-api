@@ -132,6 +132,7 @@ handle additional, application-specific use cases.
     constructor(optional SanitizerConfig config = {});
     DocumentFragment sanitize(SanitizerInput input);
     DOMString sanitizeToString(SanitizerInput input);
+    StringSanitizerCallback bound();
   };
 </pre>
 
@@ -145,6 +146,7 @@ Example:
   // Replace an element's content from unsanitized input:
   element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
 ```
+
 
 ## Input Types {#inputs}
 
@@ -261,6 +263,25 @@ Examples for attributes and attribute match lists:
 
   // Block id, everywhere: "<span class='theclass' style='font-weight: bold'>...</span>";
   new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitizeToString(sample);
+```
+
+## Other Functions {#other}
+
+### Bound String Sanitizer {#stringcallback}
+
+The `bound` function returns a callable that is bound
+to the sanitizer instance and calls `sanitizeToString` on it.
+
+<pre class="idl">
+  callback StringSanitizerCallback = DOMString ( SanitizerInput input );
+</pre>
+
+```js
+  // Polyfill for Sanitizer.bound.
+  function bound() {
+    const sanitizer = this;
+    return sanitizer.sanitizeToString.bind(sanitizer);
+  }
 ```
 
 ## Algorithms {#algorithms}
@@ -396,3 +417,81 @@ Acknowledgements {#ack}
 
 Cure53's [[DOMPURIFY]] is a clear inspiration for the API this document
 describes, as is Internet Explorer's {{window.toStaticHTML()}}.
+
+
+
+Interactions between Sanitizer And Trusted Types {#tt}
+======================================================
+
+<em>This section is not normative.</em>
+
+[=Trusted Types=] can interact in helpful ways with the Sanitizer API. How to
+best do so will likely depend on the intended use of both. Because the
+Sanitizer API is meant to remove all scripting content, the default is to not
+consider the Sanitizer Trusted Types sensitive.
+
+The predominant use case would be to sanitize strings and use the resulting
+fragments directly, just as without Trusted Types:
+
+```js
+const untrusted_input = "....";
+some_node.AppendChildren(sanitizer.santize(untrusted_input));
+```
+
+For cases where handling of a string is desired, a sanitizing policy can easily
+be created using the `bound` method.
+
+```js
+const my_config = { ... };
+const sanitizing_policy = trustedTypes.createPolicy("apolicyname", {
+  createHTML: new Sanitizer(my_config).bound() });
+
+const untrusted_input = "....";
+some_node.innerHTML = sanitizing_policy.createHTML(untrusted_input);
+```
+
+If a sanitizing policy is installed as the default policy, this would
+auto-sanitize any HTML assignments.
+
+```js
+trustedTypes.createPolicy("default", { createHTML: new Sanitizer().bound() });
+
+const untrusted_input = "<em>Bobby <script>console.log(1);</script> Tables</em>";
+some_node.innerHTML = untrusted_input;  // Assigns "<em>Bobby  Tables</em>".
+```
+
+Note: Using a default policy - since it applies to the entire document and
+all dependencies - needs to be carefully considered. It is oftentimes best
+used as a transition tool, used only until an application has been made fully
+Trusted Types compliant.
+
+However, it may not always be in the developers interest to allow direct
+creation of HTML from any Sanitizer instance, especially if the Trusted Type
+policies intended for use with the document are meant to block content beyond
+direct script applications. To accomodate this case, Trusted Types' CSP
+directive is extended to allow requiring Trusted Types for the Sanitizer API
+as well. If `requires-trusted-types-for` includes the `'sanitizer'` keyword
+then the `sanitize` method will perform a Trusted Types check, as if it had
+been specified like this:
+
+```
+  typedef ([StringContext=HTML]DOMString or TrustedHTML or
+           DocumentFragment or Document) StringContextSanitizerInput;
+
+  // In interface Sanitizer:
+  DocumentFragment sanitize(StringContextSanitizerInput input);
+```
+
+Example: Given the following Content Security Policy directive, the `sanitizer`
+method would throw on DOMString parameters:
+
+Directive:
+```
+  require-trusted-types-for 'script' 'sanitizer'
+```
+
+Example code.
+```js
+new Sanitizer().sanitize("Hello World!");  // Throws TypeError.
+new Sanitizer().sanitize(policy.createHTML("Hello World!"));  // Succeeds.
+```
