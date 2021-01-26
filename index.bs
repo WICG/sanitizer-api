@@ -51,7 +51,12 @@ spec:dom; type:dfn; text:append
     "status": "Living Standard",
     "publisher": "WHATWG",
     "repository": "https://github.com/whatwg/html",
-  "id": "HTML"
+    "id": "HTML"
+  },
+  "TrustedTypes": {
+    "href": "https://w3c.github.io/webappsec-trusted-types/dist/spec/",
+    "title": "Trusted Types",
+    "repository": "https://github.com/webappsec-trusted-types/"
   }
 }
 </pre>
@@ -420,12 +425,12 @@ describes, as is Internet Explorer's {{window.toStaticHTML()}}.
 
 
 
-Interactions between Sanitizer And Trusted Types {#tt}
+Appendix A: Interactions between Sanitizer And Trusted Types {#tt}
 ======================================================
 
 <em>This section is not normative.</em>
 
-[=Trusted Types=] can interact in helpful ways with the Sanitizer API. How to
+[[TrustedTypes]] can interact in helpful ways with the Sanitizer API. How to
 best do so will likely depend on the intended use of both. Because the
 Sanitizer API is meant to remove all scripting content, the default is to not
 consider the Sanitizer Trusted Types sensitive.
