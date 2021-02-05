@@ -440,21 +440,46 @@ Appendix A: Interactions between Sanitizer And Trusted Types {#tt}
 
 <em>This section is not normative.</em>
 
+Note: Arguably, this section does not belong in this spec at all, and should
+probably be moved into the [[TrustedTypes]] proposal.
+
+
 [[TrustedTypes]] can interact in helpful ways with the Sanitizer API. How to
-best do so will likely depend on the intended use of both. Because the
-Sanitizer API is meant to remove all scripting content, the default is to not
-consider the Sanitizer Trusted Types sensitive.
+best do so will likely depend on the intended use of both. Because the Sanitzer
+API will not allow any script-ish content by default, and because this is not
+over-ridable by the user, a useful and safe default behaviour would be to let
+any Sanitizer instance produce `TrustedHTML` instances directly by utilizing
+the [=sanitizeToTrustedHTML=] method. However, this might not be desireable for
+all sites, so a new keyword `'sanitizer'` for the `trusted-types` CSP
+directive controls this behaviour.
 
-The predominant use case would be to sanitize strings and use the resulting
-fragments directly, just as without Trusted Types:
+- If Trusted Types are enforced,
+- and if the `'sanitzer'` keyword is present in in the
+    Content Security Policy `trusted-types` directive,
+  - then calling the [=sanitize=] or [=sanitizeToTrustedHTML=] will work
+    as described above.
+  - otherwise calling `Sanitzer.sanitize` or `Sanitizer.sanitzeToTrustedHTML`
+    is considered a Trusted Type violation. In this case, the bevahiour
+    is modified to throw a [=TypeError=], and to dispatch a violation report.
 
-```js
-const untrusted_input = "....";
-some_node.AppendChildren(sanitizer.santize(untrusted_input));
+Essentially, allowing `'sanitizer'` or not allows a Trusted Type deployment
+to pick between allowing any XSS-safe contentor explicitly blessing one or
+more sanitizer configurations by wrapping them in Trusted Type polices.
+
+Issue: Formalize the description.
+
+
+Examples:
+```
+  // Trusted Types are enforced, sanitze or sanitizeToTrustedTypes will succeed.
+  require-trusted-types-for 'script'; trusted-types 'sanitizer'
+
+  // Trusted Types are enforced, sanitze or sanitizeToTrustedTypes will throw.
+  require-trusted-types-for 'script'; trusted-types 'none'
 ```
 
-For cases where handling of a string is desired, a sanitizing policy can easily
-be created using the `bound` method.
+A convenient use - available in all cases - is to call a Sanitizer from
+within a policy. For example:
 
 ```js
 const my_config = { ... };
@@ -462,7 +487,8 @@ const sanitizing_policy = trustedTypes.createPolicy("apolicyname", {
   createHTML: new Sanitizer(my_config).bound() });
 
 const untrusted_input = "....";
-some_node.innerHTML = sanitizing_policy.createHTML(untrusted_input);
+some_node.innerhtml = sanitizing_policy.createHTML(untrusted_input);
+
 ```
 
 If a sanitizing policy is installed as the default policy, this would
@@ -475,39 +501,3 @@ const untrusted_input = "<em>Bobby <script>console.log(1);</script> Tables</em>"
 some_node.innerHTML = untrusted_input;  // Assigns "<em>Bobby  Tables</em>".
 ```
 
-Note: Using a default policy - since it applies to the entire document and
-all dependencies - needs to be carefully considered. It is oftentimes best
-used as a transition tool, used only until an application has been made fully
-Trusted Types compliant.
-
-However, it may not always be in the developers interest to allow direct
-creation of HTML from any Sanitizer instance, especially if the Trusted Type
-policies intended for use with the document are meant to block content beyond
-direct script applications. To accomodate this case, Trusted Types' CSP
-directive is extended to allow requiring Trusted Types for the Sanitizer API
-as well. If `requires-trusted-types-for` includes the `'sanitizer'` keyword
-then the `sanitize` method will perform a Trusted Types check, as if it had
-been specified like this:
-
-```
-  typedef ([StringContext=HTML]DOMString or TrustedHTML or
-           DocumentFragment or Document) StringContextSanitizerInput;
-
-  // In interface Sanitizer:
-  DocumentFragment sanitize(StringContextSanitizerInput input);
-  TrustedHTML sanitizeToTrustedHTML(StringContextSanitizerInput input);
-```
-
-Example: Given the following Content Security Policy directive, the `sanitizer`
-method would throw on DOMString parameters:
-
-Directive:
-```
-  require-trusted-types-for 'script' 'sanitizer'
-```
-
-Example code.
-```js
-new Sanitizer().sanitize("Hello World!");  // Throws TypeError.
-new Sanitizer().sanitize(policy.createHTML("Hello World!"));  // Succeeds.
-```
