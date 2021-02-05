@@ -137,6 +137,7 @@ handle additional, application-specific use cases.
     constructor(optional SanitizerConfig config = {});
     DocumentFragment sanitize(SanitizerInput input);
     DOMString sanitizeToString(SanitizerInput input);
+    TrustedHTML sanitizeToTrustedHTML(SanitizerInput input);
     StringSanitizerCallback bound();
   };
 </pre>
@@ -145,6 +146,9 @@ handle additional, application-specific use cases.
   It retains a copy of |config| as its [=configuration=] object.
 * The `sanitize` method runs the [=sanitize=] algorithm on |input|,
 * The `sanitizeToString` method runs the [=sanitizeToString=] algorithm on |input|.
+* The `sanitizeToTrustedHTML` method runs the [=sanitizeToTrustedHTML=]
+  algorithm on |input|. Note that this method will only exist if the browser
+  supports [[TrustedTypes]].
 
 Example:
 ```js
@@ -382,6 +386,12 @@ To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
 3. run the steps of the [=HTML Fragment Serialization Algorithm=] with
      the fragment root of step 1 as the |node|, and return the result string.
 
+To <dfn>sanitizeToTrustedHTML</dfn> a given |input|, run these steps:
+
+1. run the [=sanitizeToString=] algorithm on |input|.
+2. create a [=TrustedHTML=] instance with the internal `[[Data]]` slot
+   set to the result of the previous step.
+3. return the result of the previous step.i
 
 ## Default Configuration {#defaults}
 
@@ -485,6 +495,7 @@ been specified like this:
 
   // In interface Sanitizer:
   DocumentFragment sanitize(StringContextSanitizerInput input);
+  TrustedHTML sanitizeToTrustedHTML(StringContextSanitizerInput input);
 ```
 
 Example: Given the following Content Security Policy directive, the `sanitizer`
