@@ -120,8 +120,8 @@ Framework {#framework}
 
 The core API is the `Sanitizer` object and the sanitize method. Sanitizers can
 be instantiated using an optional `SanitizerConfig` dictionary for options.
-The most common use-case - preventing XSS - is handled by the built-in default
-lists, so that creating a Sanitizer with a custom config is necessary only to
+The most common use-case - preventing XSS - is handled by default, so that
+creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.
 
 <pre class="idl">
@@ -169,15 +169,21 @@ Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
 ## The Configuration Dictionary {#config}
 
 The <dfn lt="configuration">sanitizer's configuration object</dfn> is a
-dictionary which describes modifications to the sanitize operation.
+dictionary which describes modifications to the sanitize operation. If a
+Sanitizer has not received an explicit configuration, for example when being
+constructed without any parameters, then the [=default configuration=] value
+is used as the configuration object.
 
 <pre class="idl">
   dictionary SanitizerConfig {
     sequence&lt;DOMString> allowElements;
+    sequence&lt;DOMString> allowContentElements;
     sequence&lt;DOMString> blockElements;
     sequence&lt;DOMString> dropElements;
     AttributeMatchList allowAttributes;
     AttributeMatchList dropAttributes;
+    boolean allowUnknownElements;
+    boolean allowUnknownAttributes;
     boolean allowCustomElements;
   };
 </pre>
@@ -185,6 +191,10 @@ dictionary which describes modifications to the sanitize operation.
 : allowElements
 :: The <dfn>element allow list</dfn> is a sequence of strings with
     elements that the sanitizer should retain in the input.
+: allowContentElements
+:: The <dfn>element content allow list</dfn> is a sequence of string with
+    elements where the sanitizer should discard the element, but retain the
+    elements' children.
 : blockElements
 :: The <dfn>element block list</dfn> is a sequence of strings with elements
    where the sanitizer should remove the elements from the input, but retain
@@ -198,6 +208,14 @@ dictionary which describes modifications to the sanitize operation.
 : dropAttributes
 :: The <dfn>attribute drop list</dfn>  is an [=attribute match list=], which
    determines whether an attribute (on a given element) should be dropped.
+: allowUnknownElements
+:: The <dfn>allow unknown elements option</dfn> determines whether elements
+   that are not defined by the user agent are allowed or not.
+   (Example: The `<blablabla>` element). The default is to drop them.
+: allowUnknownAttributes
+:: The <dfn>allow unknown attributes option</dfn> determines whether attributes
+   that are not defined by the user agent are allowed or not. The default is
+   to drop them.
 : allowCustomElements
 :: <dfn>allow custom elements option</dfn> determines whether
    [=custom elements=] are to be considered. The default is to drop them.
@@ -213,15 +231,6 @@ Examples:
 ```js
   const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
 
-  // "Some text <b>with</b> text tags."
-  new Sanitizer({allowElements: [ "b" ]).sanitizeToString(sample);
-
-  // "Some text <i>with</i> <blink>tags</blink>."
-  new Sanitizer({blockElements: [ "b" ]).sanitizeToString(sample);
-
-  // "Some text <blink>tags</blink>."
-  new Sanitizer({dropElements: [ "b" ]).sanitizeToString(sample);
-
   // Note: The default configuration handles XSS-relevant input:
 
   // Non-scripting input will be passed through:
@@ -229,6 +238,29 @@ Examples:
 
   // Scripts will be blocked: "abc alert(1) def"
   new Sanitizer().sanitizeToString("abc <script>alert(1)</script> def");
+
+  // The filtering can be customized:
+
+  // "Some text <b>with</b> text tags."
+  new Sanitizer({allowElements: [ "b" ]).sanitizeToString(sample);
+
+  // "Some text tags."
+  new Sanitizer({allowContentElements: [ "blink" ]).sanitizeToString(sample);
+
+  // "Some text <i>with</i> <blink>tags</blink>."
+  new Sanitizer({blockElements: [ "b" ]).sanitizeToString(sample);
+
+  // "Some text <blink>tags</blink>."
+  new Sanitizer({dropElements: [ "b" ]).sanitizeToString(sample);
+
+  // In addition to element/attribute list, we have some generic options:
+
+  let sample_unknown = "some <blabla>made-up element</blabla> my app likes to use.";
+
+  // "some my  app likes to use."
+  new Sanitizer().sanitizeToString(sample_unknown);
+  // "some <blabla>made-up element</blabla> my app likes to use."
+  new Sanitizer({allowUnknownElements: true}).sanitizeToString(sample_unknown);
 ```
 
 ### Attribute Match Lists {#attr-match-list}
@@ -285,18 +317,27 @@ To <dfn>sanitize an element</dfn> named |element|, run these steps:
 
 1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
 2. let |name| be |element|'s tag name.
-3. if |name| is a [=valid custom element name=] and if |config|'s
-   [=allow custom elements option=] is unset or set to anything other than `true`, return 'drop'.
-4. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
-5. if |name| is in |config|'s [=element drop list=] return 'drop'.
-6. if |name| is contained in the built-in [=default element block list=] return 'block'.
+3. if |name| is contained in the [=built-in element drop list=] return 'drop'
+4. if |name| is a [=valid custom element name=] and if |config|'s
+   [=allow custom elements option=] is unset or set to anything other than `true`,
+   return 'drop'.
+5. if |name| denotes an unknown element &mdash; that is, if the [=element interface=]
+   the [[HTML]] specification assigns to it would be {{HTMLUnknownElement}} &mdash;
+   and if  |config|'s [=allow unknown elements option=] is unset or set to anything
+   other than `true`, then return 'drop'.
+
+   Note: The sanitizer should not actually assign any interfaces to the elements
+       it processes. We're just using the HTML concept to define whether an
+       element in unknown.
+6. if |name| is in |config|'s [=element drop list=] return 'drop'.
 7. if |name| is in |config|'s [=element block list=] return 'block'.
 8. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
-9. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
+9. if |config| has a non-empty [=element content allow list=] and |name| is not in |config|'s [=element content allow list=] return 'drop'
+10. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
   1. call [=sanitize an attribute=] with |attr|'s name and |element|'s local name.
   2. if the result is different from 'keep', remove |attr| from |element|.
-10. run the steps of [=handle funky elements=] algorithm on |element|.
-11. return 'keep'
+11. run the steps of [=handle funky elements=] algorithm on |element|.
+12. return 'keep'
 
 Issue: This presently ignores all namespace info, making it impossible to
     support different actions for like-named elements from different
@@ -305,10 +346,14 @@ Issue: This presently ignores all namespace info, making it impossible to
 To <dfn>sanitize an attribute</dfn> named |attr| belonging to |element|, run these steps:
 
 1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
-2. if |attr| and |element| [=attribute-match=] the built-in [=default attribute drop list=] return 'drop'.
-3. if |attr| and |element| [=attribute-match=] the |config|'s [=attribute drop list=] return 'drop'.
-4. if |config| has a non-empty [=attribute allow list=] and |attr| and |element| do not [=attribute-match=] the |config|'s [=attribute allow list=] return 'drop'.
-5. return 'keep'.
+2. if |attr| and |element| [=attribute-match=] the [=built-in attribute drop list=] return 'drop'.
+3. if |attr| is an unknown attribute &mdash; that is, if the [[HTML]] specification
+   does not describe or name this attribute &mdash; and if |config|'s
+   [=allow unknown attributes option=] is unset or set to anything other than
+   'true', then return 'drop'.
+4. if |attr| and |element| [=attribute-match=] the |config|'s [=attribute drop list=] return 'drop'.
+5. if |config| has a non-empty [=attribute allow list=] and |attr| and |element| do not [=attribute-match=] the |config|'s [=attribute allow list=] return 'drop'.
+6. return 'keep'.
 
 To determine whether an |attribute| and |element| <dfn>attribute-match</dfn> an [=attribute match list=] |list|, run these steps:
 
@@ -381,8 +426,9 @@ To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
 
 ## Default Configuration {#defaults}
 
-Issue: The sanitizer defaults need to be carefully vetted, and are still
-    under discussion. The values below are for illustrative purposes only.
+Issue(WICG/sanitizer-api#38): The sanitizer defaults need to be carefully
+    vetted, and are still under discussion. The values below are for
+    illustrative purposes only.
 
 The sanitizer has a built-in default configuration, which aims to eliminate
 any script-injection possibility. Note that the [=sanitize document fragment=]
@@ -390,27 +436,389 @@ algorithm
 is defined so that these defaults are handled first and cannot be overridden
 by a custom configuration.
 
+Note: The default lists are expected to change when user agents support new
+    elements or attributes, with regard to only those new elements or attributes,
+    without an explicit re-release of this specification.
 
-: Default Drop Elements
+: Builtin Drop Elements
 
-:: The <dfn>default element drop list</dfn> has the following value:
-   ```
- [ "script", "this is just a placeholder" ]
-   ```
+:: The <dfn>built-in element drop list</dfn> has the following value:
+    ```[ "script" ]```
 
-: Default Block Elements
+: Builtin Drop Attributes
 
-:: The <dfn>default element block list</dfn> has the following value:<br>
-   ```
-[ "noscript", "this is just a placeholder" ]
-   ```
+:: The <dfn>built-in attribute drop list</dfn> has the following value:
+    ```
+    {
+      "onabort": ["*"],
+      "onafterprint": ["*"],
+      "onanimationstart": ["*"],
+      "onanimationiteration": ["*"],
+      "onanimationend": ["*"],
+      "onauxclick": ["*"],
+      "onbeforecopy": ["*"],
+      "onbeforecut": ["*"],
+      "onbeforepaste": ["*"],
+      "onbeforeprint": ["*"],
+      "onbeforeunload": ["*"],
+      "onblur": ["*"],
+      "oncancel": ["*"],
+      "oncanplay": ["*"],
+      "oncanplaythrough": ["*"],
+      "onchange": ["*"],
+      "onclick": ["*"],
+      "onclose": ["*"],
+      "oncontextmenu": ["*"],
+      "oncopy": ["*"],
+      "oncuechange": ["*"],
+      "oncut": ["*"],
+      "ondblclick": ["*"],
+      "ondrag": ["*"],
+      "ondragend": ["*"],
+      "ondragenter": ["*"],
+      "ondragleave": ["*"],
+      "ondragover": ["*"],
+      "ondragstart": ["*"],
+      "ondrop": ["*"],
+      "ondurationchange": ["*"],
+      "onemptied": ["*"],
+      "onended": ["*"],
+      "onerror": ["*"],
+      "onfocus": ["*"],
+      "onfocusin": ["*"],
+      "onfocusout": ["*"],
+      "onformdata": ["*"],
+      "ongotpointercapture": ["*"],
+      "onhashchange": ["*"],
+      "oninput": ["*"],
+      "oninvalid": ["*"],
+      "onkeydown": ["*"],
+      "onkeypress": ["*"],
+      "onkeyup": ["*"],
+      "onlanguagechange": ["*"],
+      "onload": ["*"],
+      "onloadeddata": ["*"],
+      "onloadedmetadata": ["*"],
+      "onloadstart": ["*"],
+      "onlostpointercapture": ["*"],
+      "onmessage": ["*"],
+      "onmessageerror": ["*"],
+      "onmousedown": ["*"],
+      "onmouseenter": ["*"],
+      "onmouseleave": ["*"],
+      "onmousemove": ["*"],
+      "onmouseout": ["*"],
+      "onmouseover": ["*"],
+      "onmouseup": ["*"],
+      "onmousewheel": ["*"],
+      "ononline": ["*"],
+      "onoffline": ["*"],
+      "onorientationchange": ["*"],
+      "onoverscroll": ["*"],
+      "onpagehide": ["*"],
+      "onpageshow": ["*"],
+      "onpaste": ["*"],
+      "onpause": ["*"],
+      "onplay": ["*"],
+      "onplaying": ["*"],
+      "onpointercancel": ["*"],
+      "onpointerdown": ["*"],
+      "onpointerenter": ["*"],
+      "onpointerleave": ["*"],
+      "onpointermove": ["*"],
+      "onpointerout": ["*"],
+      "onpointerover": ["*"],
+      "onpointerrawupdate": ["*"],
+      "onpointerup": ["*"],
+      "onpopstate": ["*"],
+      "onportalactivate": ["*"],
+      "onprogress": ["*"],
+      "onratechange": ["*"],
+      "onreset": ["*"],
+      "onresize": ["*"],
+      "onscroll": ["*"],
+      "onscrollend": ["*"],
+      "onsearch": ["*"],
+      "onseeked": ["*"],
+      "onseeking": ["*"],
+      "onselect": ["*"],
+      "onselectstart": ["*"],
+      "onselectionchange": ["*"],
+      "onshow": ["*"],
+      "onstalled": ["*"],
+      "onstorage": ["*"],
+      "onsuspend": ["*"],
+      "onsubmit": ["*"],
+      "ontimeupdate": ["*"],
+      "ontimezonechange": ["*"],
+      "ontoggle": ["*"],
+      "ontouchstart": ["*"],
+      "ontouchmove": ["*"],
+      "ontouchend": ["*"],
+      "ontouchcancel": ["*"],
+      "ontransitionend": ["*"],
+      "onunload": ["*"],
+      "onvolumechange": ["*"],
+      "onwaiting": ["*"],
+      "onwebkitanimationstart": ["*"],
+      "onwebkitanimationiteration": ["*"],
+      "onwebkitanimationend": ["*"],
+      "onwebkitfullscreenchange": ["*"],
+      "onwebkitfullscreenerror": ["*"],
+      "onwebkittransitionend": ["*"],
+      "onwheel": ["*"]
+    }
+    ```
 
-: Default Drop Attributes
+: Default Configuration
 
-:: The <dfn>default attribute drop list</dfn> has the following value:
-   ```
-{}
-   ```
+:: The <dfn>default configuration</dfn> has the following value:
+    ```
+    {
+      "allowUnknownElements": false
+      "allowUnknownAttributes": false,
+      "allowCustomElements": false,
+      "allowElements": [
+          "a", "abbr", "acronym", "address", "area", "article", "aside", "audio",
+          "b", "bdi", "bdo", "big", "blockquote", "body", "br", "button",
+          "canvas", "caption", "center", "cite", "code", "col", "colgroup",
+          "datalist", "dd", "del", "details", "dialog", "dfn", "dir", "div", "dl", "dt",
+          "em",
+          "fieldset", "figcaption", "figure", "font", "footer", "form",
+          "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html",
+          "i", "img", "input", "ins",
+          "kbd", "keygen",
+          "label", "legend", "li", "link", "listing",
+          "map", "mark", "menu", "meta", "meter",
+          "nav", "nobr", "noscript",
+          "ol", "optgroup", "option", "output",
+          "p", "picture", "pre", "progress",
+          "q",
+          "rb", "rp", "rt", "rtc", "ruby",
+          "s", "samp", "section", "select", "slot", "small", "source", "span",
+              "strike", "strong", "sub", "summary", "sup", "style",
+          "table", "tbody", "td", "textarea", "tfoot", "th", "thead", "time", "tr",
+          "track", "tt",
+          "u", "ul",
+          "var", "video",
+          "wbr"
+      ],
+      "allowAttributes": {
+          "abbr": ["*"],
+          "accept-charset": ["*"],
+          "accept": ["*"],
+          "accesskey": ["*"],
+          "action": ["*"],
+          "align": ["*"],
+          "alink": ["*"],
+          "allow": ["*"],
+          "allowfullscreen": ["*"],
+          "allowpaymentrequest": ["*"],
+          "alt": ["*"],
+          "archive": ["*"],
+          "as": ["*"],
+          "async": ["*"],
+          "autocapitalize": ["*"],
+          "autocomplete": ["*"],
+          "autocorrect": ["*"],
+          "autofocus": ["*"],
+          "autoplay": ["*"],
+          "autopictureinpicture": ["*"],
+          "axis": ["*"],
+          "background": ["*"],
+          "behavior": ["*"],
+          "bgcolor": ["*"],
+          "border": ["*"],
+          "bordercolor": ["*"],
+          "capture": ["*"],
+          "cellpadding": ["*"],
+          "cellspacing": ["*"],
+          "char": ["*"],
+          "challenge": ["*"],
+          "charoff": ["*"],
+          "charset": ["*"],
+          "checked": ["*"],
+          "cite": ["*"],
+          "class": ["*"],
+          "classid": ["*"],
+          "clear": ["*"],
+          "code": ["*"],
+          "codebase": ["*"],
+          "codetype": ["*"],
+          "color": ["*"],
+          "cols": ["*"],
+          "colspan": ["*"],
+          "compact": ["*"],
+          "content": ["*"],
+          "contenteditable": ["*"],
+          "controls": ["*"],
+          "controlslist": ["*"],
+          "conversiondestination": ["*"],
+          "coords": ["*"],
+          "crossorigin": ["*"],
+          "csp": ["*"],
+          "data": ["*"],
+          "datetime": ["*"],
+          "declare": ["*"],
+          "decoding": ["*"],
+          "default": ["*"],
+          "defer": ["*"],
+          "dir": ["*"],
+          "direction": ["*"],
+          "dirname": ["*"],
+          "disabled": ["*"],
+          "disablepictureinpicture": ["*"],
+          "disableremoteplayback": ["*"],
+          "disallowdocumentaccess": ["*"],
+          "download": ["*"],
+          "draggable": ["*"],
+          "elementtiming": ["*"],
+          "enctype": ["*"],
+          "end": ["*"],
+          "enterkeyhint": ["*"],
+          "event": ["*"],
+          "exportparts": ["*"],
+          "face": ["*"],
+          "for": ["*"],
+          "form": ["*"],
+          "formaction": ["*"],
+          "formenctype": ["*"],
+          "formmethod": ["*"],
+          "formnovalidate": ["*"],
+          "formtarget": ["*"],
+          "frame": ["*"],
+          "frameborder": ["*"],
+          "headers": ["*"],
+          "height": ["*"],
+          "hidden": ["*"],
+          "high": ["*"],
+          "href": ["*"],
+          "hreflang": ["*"],
+          "hreftranslate": ["*"],
+          "hspace": ["*"],
+          "http-equiv": ["*"],
+          "id": ["*"],
+          "imagesizes": ["*"],
+          "imagesrcset": ["*"],
+          "importance": ["*"],
+          "impressiondata": ["*"],
+          "impressionexpiry": ["*"],
+          "incremental": ["*"],
+          "inert": ["*"],
+          "inputmode": ["*"],
+          "integrity": ["*"],
+          "is": ["*"],
+          "ismap": ["*"],
+          "keytype": ["*"],
+          "kind": ["*"],
+          "invisible": ["*"],
+          "label": ["*"],
+          "lang": ["*"],
+          "language": ["*"],
+          "latencyhint": ["*"],
+          "leftmargin": ["*"],
+          "link": ["*"],
+          "list": ["*"],
+          "loading": ["*"],
+          "longdesc": ["*"],
+          "loop": ["*"],
+          "low": ["*"],
+          "lowsrc": ["*"],
+          "manifest": ["*"],
+          "marginheight": ["*"],
+          "marginwidth": ["*"],
+          "max": ["*"],
+          "maxlength": ["*"],
+          "mayscript": ["*"],
+          "media": ["*"],
+          "method": ["*"],
+          "min": ["*"],
+          "minlength": ["*"],
+          "multiple": ["*"],
+          "muted": ["*"],
+          "name": ["*"],
+          "nohref": ["*"],
+          "nomodule": ["*"],
+          "nonce": ["*"],
+          "noresize": ["*"],
+          "noshade": ["*"],
+          "novalidate": ["*"],
+          "nowrap": ["*"],
+          "object": ["*"],
+          "open": ["*"],
+          "optimum": ["*"],
+          "part": ["*"],
+          "pattern": ["*"],
+          "placeholder": ["*"],
+          "playsinline": ["*"],
+          "ping": ["*"],
+          "policy": ["*"],
+          "poster": ["*"],
+          "preload": ["*"],
+          "pseudo": ["*"],
+          "readonly": ["*"],
+          "referrerpolicy": ["*"],
+          "rel": ["*"],
+          "reportingorigin": ["*"],
+          "required": ["*"],
+          "resources": ["*"],
+          "rev": ["*"],
+          "reversed": ["*"],
+          "role": ["*"],
+          "rows": ["*"],
+          "rowspan": ["*"],
+          "rules": ["*"],
+          "sandbox": ["*"],
+          "scheme": ["*"],
+          "scope": ["*"],
+          "scrollamount": ["*"],
+          "scrolldelay": ["*"],
+          "scrolling": ["*"],
+          "select": ["*"],
+          "selected": ["*"],
+          "shadowroot": ["*"],
+          "shadowrootdelegatesfocus": ["*"],
+          "shape": ["*"],
+          "size": ["*"],
+          "sizes": ["*"],
+          "slot": ["*"],
+          "span": ["*"],
+          "spellcheck": ["*"],
+          "src": ["*"],
+          "srcset": ["*"],
+          "srcdoc": ["*"],
+          "srclang": ["*"],
+          "standby": ["*"],
+          "start": ["*"],
+          "step": ["*"],
+          "style": ["*"],
+          "summary": ["*"],
+          "tabindex": ["*"],
+          "target": ["*"],
+          "text": ["*"],
+          "title": ["*"],
+          "topmargin": ["*"],
+          "translate": ["*"],
+          "truespeed": ["*"],
+          "trusttoken": ["*"],
+          "type": ["*"],
+          "usemap": ["*"],
+          "valign": ["*"],
+          "value": ["*"],
+          "valuetype": ["*"],
+          "version": ["*"],
+          "vlink": ["*"],
+          "vspace": ["*"],
+          "virtualkeyboardpolicy": ["*"],
+          "webkitdirectory": ["*"],
+          "width": ["*"],
+          "wrap": ["*"]
+      }
+    }
+```
+
+Issue: What about `<image>`, `<portal>`?
+
 
 # Security Considerations {#security-considerations}
 
