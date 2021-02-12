@@ -73,7 +73,7 @@ Note: When we refer to "direct" script execution, we mean all markup that will
   [script gadgets](https://dl.acm.org/doi/abs/10.1145/3133956.3134091). Script
   gadgets are application dependent and cannot be sanitized in a generic API.
   But you can likely use custom Sanitizer configurations adapted to your
-  applications needs.
+  application's needs.
 
 
 ## When should I use `.sanitize` vs `.sanitizeToString`?
@@ -97,7 +97,7 @@ several consequences:
 
 The Sanitizer API spec editors recommend to prefer `.sanitize`, and to use
 `.sanitizeToString` in cases where existing code structure or
-other constraints make it difficult to use a type different from string.
+other constraints make it difficult to use a type other than string.
 
 ## Can I use the Sanitizer API together with Trusted Types?
 
