@@ -106,6 +106,39 @@ same problem. They are separate, but should work well together.
 
 Details of Santizer API/Trusted Types integration are still being worked out.
 
+## What if I want to customize a Sanitizer beyond what the configuration object offers? How can I have value-dependent actions?
+
+The Sanitizer configuration object offers a small number of hopefully
+universally useful options. Thankfully, the DOM API offers developers a rich
+set of primites to build more advanced functionality with. The key here is to
+use `.sanitize` to build a fragment, which can then be manipulated using
+regular DOM API calls.
+
+For example, let's say we wish to retain class attributes, provided they belong
+to a set of pre-defined class names that are safe to use in our application.
+We could do this as follows:
+
+```js
+// Example: Sanitize, then additionally remove attribute values not listed in a
+// reference set.
+class MySanitizer {
+  constructor() {
+    this.sanitizer = new Sanitizer();
+    this.attr = "class";
+    this.values_i_like = new Set(["nice", "rice", "spice"]);
+  }
+  sanitize(input) {
+    let fragment = this.sanitizer.sanitize(input);
+    for (let node of fragment.querySelectorAll(`[${this.attr}]`))
+      if (!this.values_i_like.has(node.getAttribute(this.attr)))
+        node.removeAttribute(this.attr);
+    return fragment;
+  }
+}
+
+// Outputs: <p class="nice">Hello</p><p>World</p>
+new MySanitizer().sanitize('<p class="nice">Hello</p><p class="naughty">World</p>');
+```
 
 ## Can I sanitize myself rich?
 
