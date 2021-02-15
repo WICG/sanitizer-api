@@ -295,7 +295,8 @@ To <dfn>sanitize an element</dfn> named |element|, run these steps:
 9. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
   1. call [=sanitize an attribute=] with |attr|'s name and |element|'s local name.
   2. if the result is different from 'keep', remove |attr| from |element|.
-10. return 'keep'
+10. run the steps of [=handle funky elements=] algorithm on |element|.
+11. return 'keep'
 
 Issue: This presently ignores all namespace info, making it impossible to
     support different actions for like-named elements from different
@@ -318,6 +319,17 @@ To determine whether an |attribute| and |element| <dfn>attribute-match</dfn> an 
 3. if |matches| contains the string |elem-name|, return true.
 4. if |matches| contains the string "*", return true.
 5. return false.
+
+Some HTML elements require special treatment in a way that can't be easily
+expressed in terms of configuration options or other algorithms. The following
+algorithm collects these in one place. To <dfn>handle funky elements</dfn>,
+run these steps:
+
+1. if |element|'s name is `template`:
+  1. run the sanitizer on the `content` attribute as if `sanitizeToString`
+     were called on its value using the current Sanitizer, and replace the
+     value with the result.
+
 
 To <dfn>create a document fragment</dfn>
 named |fragment| from a Sanitizer |input|, run these steps:
