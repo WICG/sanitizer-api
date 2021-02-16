@@ -326,9 +326,11 @@ algorithm collects these in one place. To <dfn>handle funky elements</dfn>,
 run these steps:
 
 1. if |element|'s name is `template`:
-  1. run the sanitizer on the `content` attribute as if `sanitizeToString`
-     were called on its value using the current Sanitizer, and replace the
-     value with the result.
+  1. Let |content| be value of the `content` attribute of |element|,
+     treated as a {{HTMLTemplateElement}}.
+  2. Run the steps of the [=sanitize document fragment=] algorithm on
+     |content|, and replace |element|'s |content| attribute with the result.
+  3. Drop all child nodes of |element|.
 
 
 To <dfn>create a document fragment</dfn>
