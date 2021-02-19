@@ -159,9 +159,6 @@
       "csp" : [
          "*"
       ],
-      "data" : [
-         "*"
-      ],
       "datetime" : [
          "*"
       ],
@@ -531,9 +528,6 @@
       "sizes" : [
          "*"
       ],
-      "slot" : [
-         "*"
-      ],
       "span" : [
          "*"
       ],
@@ -718,7 +712,6 @@
       "samp",
       "section",
       "select",
-      "slot",
       "small",
       "source",
       "span",
