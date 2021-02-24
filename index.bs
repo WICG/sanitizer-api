@@ -70,7 +70,7 @@ will cause JavaScript execution in a number of unexpected ways.
 
 Libraries like [[DOMPURIFY]] attempt to manage this problem by carefully
 parsing and sanitizing strings before insertion by constructing a DOM and
-walking its members through an allowlist. This has proven to be a fragile
+walking its members through an allow-list. This has proven to be a fragile
 approach, as the parsing APIs exposed to the web don't always map in
 reasonable ways to the browser's behavior when actually rendering a string as
 HTML in the "real" DOM. Moreover, the libraries need to keep on top of
@@ -78,7 +78,7 @@ browsers' changing behavior over time; things that once were safe may turn
 into time-bombs based on new platform-level features.
 
 The browser, on the other, has an fairly good idea of when it is going to
-execute code. We can improve upon the userspace libraries by teaching the
+execute code. We can improve upon the user-space libraries by teaching the
 browser how to render HTML from an arbitrary string in a safe manner, and do
 so in a way that is much more likely to be maintained and updated along with
 the browser's own changing parser implementation. This document outlines an
@@ -119,7 +119,7 @@ Framework {#framework}
 ## Sanitizer API {#sanitizer-api}
 
 The core API is the `Sanitizer` object and the sanitize method. Sanitizers can
-be instanited using an optional `SanitizerConfig` dictionary for options.
+be instantiated using an optional `SanitizerConfig` dictionary for options.
 The most common use-case - preventing XSS - is handled by the built-in default
 lists, so that creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.
@@ -169,7 +169,7 @@ Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
 ## The Configuration Dictionary {#config}
 
 The <dfn lt="configuration">sanitizer's configuration object</dfn> is a
-dictionary which describes modifications to the sanitze operation.
+dictionary which describes modifications to the sanitize operation.
 
 <pre class="idl">
   dictionary SanitizerConfig {
@@ -365,7 +365,7 @@ Issue: The sanitizer defaults need to be carefully vetted, and are still
 The sanitizer has a built-in default configuration, which aims to eliminate
 any script-injection possibility. Note that the [=sanitize document fragment=]
 algorithm
-is defined so that these defaults are handled first and cannot be overriden
+is defined so that these defaults are handled first and cannot be overridden
 by a custom configuration.
 
 
@@ -452,9 +452,9 @@ change of parsing behavior for foreign content or misnested tags.
 
 The Sanitizer API does not protect against mutated XSS, however we encourage
 authors to use the `sanitize()` function of the API which returns a
-DocumentFragment and avoides risks that come with serialization and additional
+DocumentFragment and avoids risks that come with serialization and additional
 parsing. Directly operating on a fragment after sanitization also comes with a
-performance benefit, as the cost of additonal serialization and parsing is
+performance benefit, as the cost of additional serialization and parsing is
 avoided.
 
 Acknowledgements {#ack}
