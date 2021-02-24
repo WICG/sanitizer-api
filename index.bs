@@ -393,7 +393,7 @@ by a custom configuration.
 # Security Considerations {#security-considerations}
 
 The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
-by traversing a DocumentFragment and removing elements and attributes
+by traversing a supplied HTML content and removing elements and attributes
 according to a configuration. The specified API must not support
 the construction of a Sanitizer object that leaves script-capable markup in
 and doing so would be a bug in the threat model.
@@ -420,24 +420,22 @@ properties like `children` of an HTML element in the DOM are overshadowed by
 the malicious content.
 
 The Sanitizer API does not protect DOM clobbering attacks in its
-default state, but can be configured to remove `id` and `name` attributes
-through a configuration.
+default state, but can be configured to remove `id` and `name` attributes.
 
 ## XSS with Script gadgets {#script-gadgets}
 
 <em>This section is not normative.</em>
 
-Script gadgets is a technique, in which an attacker uses existing application
+Script gadgets is a technique in which an attacker uses existing application
 code from popular JavaScript libraries to cause their own code to execute.
-This is often done by injecting innocent-looking code that is only parsed and
-interpreted by a framework which then performes the execution of JavaScript
-based on that input.
+This is often done by injecting innocent-looking code or seemingly inert
+DOM nodes that is only parsed and interpreted by a framework which then
+performs the execution of JavaScript based on that input.
 
-The Sanitizer API does not try to prevent all of these attacks, but requires
-page authors to explicitly allow attributes and elements that are unknown to
-HTML and markup that is known to be widely used for templating and
-framework-specific code, like `data-` and `slot` attributes and elements like
-`<slot>` and `<template>`.
+The Sanitizer API can not prevent these attacks, but requires page authors to
+explicitly allow attributes and elements that are unknown to HTML and markup
+that is known to be widely used for templating and framework-specific code,
+like `data-` and `slot` attributes and elements like `<slot>` and `<template>`.
 We believe that these restrictions are not exhaustive and encourage page
 authors to examine their third party libraries for this behavior.
 
