@@ -368,7 +368,9 @@ A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
 
 A Sanitizer's [=effective configuration=] is merged from the
 [=baseline effective configuration=] and the effective configuration derived
-from the Sanitizer's [=configuration object=]. To merge two (or more)
+from the Sanitizer's [=configuration object=]. If no configuration object has
+been provided, the built-in [=default configuration=] is used instead.
+To merge two (or more)
 [=effective configurations=], map any given |element| or a pair of |element|
 and |attribute| to the [=stricter action=] of its constituent configurations.
 To determine the <dfn>stricter action</dfn> of two [=sanitize actions=], pick
@@ -430,14 +432,30 @@ The <dfn>baseline effective configuration</dfn> is defined as follows:
   2. otherwise, return `keep`.
 
 
-The sanitizer has a [=built-in default configuration=], which is stricter than
-the baseline and aims to eliminate any script-injection possibility.
+The sanitizer has a built-in [=default configuration=], which is stricter than
+the baseline and aims to eliminate any script-injection possibility, as well
+as legacy or unusual constructs.
 
-Baseline and values:
+The built-in <dfn>baseline element allow list</dfn> has the following value:
 
-- <dfn>baseline element allow list</dfn>
-- <dfn>baseline attribute allow list</dfn>
-- <dfn>built-in default configuration</dfm>
+<pre class=include-code>
+path: resources/baseline-element-allow-list.json
+highlight: js
+</pre>
+
+The <dfn>baseline attribute allow list</dfn> has the following value:
+
+<pre class=include-code>
+path: resources/baseline-attribute-allow-list.json
+highlight: js
+</pre>
+
+The built-in <dfn>default configuration</dfn> has the following value:
+
+<pre class=include-code>
+path: resources/default-configuration.json
+highlight: js
+</pre>
 
 # Security Considerations {#security-considerations}
 
