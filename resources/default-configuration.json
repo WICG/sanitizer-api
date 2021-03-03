@@ -5,14 +5,11 @@
     "abbr",
     "acronym",
     "address",
-    "applet",
     "area",
     "article",
     "aside",
     "audio",
     "b",
-    "base",
-    "basefont",
     "bdi",
     "bdo",
     "bgsound",
@@ -28,8 +25,6 @@
     "code",
     "col",
     "colgroup",
-    "command",
-    "data",
     "datalist",
     "dd",
     "del",
@@ -41,15 +36,12 @@
     "dl",
     "dt",
     "em",
-    "embed",
     "fieldset",
     "figcaption",
     "figure",
     "font",
     "footer",
     "form",
-    "frame",
-    "frameset",
     "h1",
     "h2",
     "h3",
@@ -62,8 +54,6 @@
     "hr",
     "html",
     "i",
-    "iframe",
-    "image",
     "img",
     "input",
     "ins",
@@ -84,21 +74,14 @@
     "meter",
     "nav",
     "nobr",
-    "noembed",
-    "noframes",
-    "nolayer",
     "noscript",
-    "object",
     "ol",
     "optgroup",
     "option",
     "output",
     "p",
-    "param",
     "picture",
-    "plaintext",
     "popup",
-    "portal",
     "pre",
     "progress",
     "q",
@@ -109,11 +92,9 @@
     "ruby",
     "s",
     "samp",
-    "script",
     "section",
     "select",
     "selectmenu",
-    "slot",
     "small",
     "source",
     "span",
@@ -126,7 +107,6 @@
     "table",
     "tbody",
     "td",
-    "template",
     "textarea",
     "tfoot",
     "th",
@@ -140,8 +120,7 @@
     "ul",
     "var",
     "video",
-    "wbr",
-    "xmp"
+    "wbr"
   ],
   "allowAttributes": {
     "abbr": [
@@ -169,9 +148,6 @@
       "*"
     ],
     "allowfullscreen": [
-      "*"
-    ],
-    "allowpaymentrequest": [
       "*"
     ],
     "alt": [
@@ -568,357 +544,6 @@
       "*"
     ],
     "object": [
-      "*"
-    ],
-    "onabort": [
-      "*"
-    ],
-    "onafterprint": [
-      "*"
-    ],
-    "onanimationend": [
-      "*"
-    ],
-    "onanimationiteration": [
-      "*"
-    ],
-    "onanimationstart": [
-      "*"
-    ],
-    "onauxclick": [
-      "*"
-    ],
-    "onbeforecopy": [
-      "*"
-    ],
-    "onbeforecut": [
-      "*"
-    ],
-    "onbeforepaste": [
-      "*"
-    ],
-    "onbeforeprint": [
-      "*"
-    ],
-    "onbeforeunload": [
-      "*"
-    ],
-    "onblur": [
-      "*"
-    ],
-    "oncancel": [
-      "*"
-    ],
-    "oncanplay": [
-      "*"
-    ],
-    "oncanplaythrough": [
-      "*"
-    ],
-    "onchange": [
-      "*"
-    ],
-    "onclick": [
-      "*"
-    ],
-    "onclose": [
-      "*"
-    ],
-    "oncontextmenu": [
-      "*"
-    ],
-    "oncopy": [
-      "*"
-    ],
-    "oncuechange": [
-      "*"
-    ],
-    "oncut": [
-      "*"
-    ],
-    "ondblclick": [
-      "*"
-    ],
-    "ondrag": [
-      "*"
-    ],
-    "ondragend": [
-      "*"
-    ],
-    "ondragenter": [
-      "*"
-    ],
-    "ondragleave": [
-      "*"
-    ],
-    "ondragover": [
-      "*"
-    ],
-    "ondragstart": [
-      "*"
-    ],
-    "ondrop": [
-      "*"
-    ],
-    "ondurationchange": [
-      "*"
-    ],
-    "onemptied": [
-      "*"
-    ],
-    "onended": [
-      "*"
-    ],
-    "onerror": [
-      "*"
-    ],
-    "onfocus": [
-      "*"
-    ],
-    "onfocusin": [
-      "*"
-    ],
-    "onfocusout": [
-      "*"
-    ],
-    "onformdata": [
-      "*"
-    ],
-    "ongotpointercapture": [
-      "*"
-    ],
-    "onhashchange": [
-      "*"
-    ],
-    "oninput": [
-      "*"
-    ],
-    "oninvalid": [
-      "*"
-    ],
-    "onkeydown": [
-      "*"
-    ],
-    "onkeypress": [
-      "*"
-    ],
-    "onkeyup": [
-      "*"
-    ],
-    "onlanguagechange": [
-      "*"
-    ],
-    "onload": [
-      "*"
-    ],
-    "onloadeddata": [
-      "*"
-    ],
-    "onloadedmetadata": [
-      "*"
-    ],
-    "onloadstart": [
-      "*"
-    ],
-    "onlostpointercapture": [
-      "*"
-    ],
-    "onmessage": [
-      "*"
-    ],
-    "onmessageerror": [
-      "*"
-    ],
-    "onmousedown": [
-      "*"
-    ],
-    "onmouseenter": [
-      "*"
-    ],
-    "onmouseleave": [
-      "*"
-    ],
-    "onmousemove": [
-      "*"
-    ],
-    "onmouseout": [
-      "*"
-    ],
-    "onmouseover": [
-      "*"
-    ],
-    "onmouseup": [
-      "*"
-    ],
-    "onmousewheel": [
-      "*"
-    ],
-    "onoffline": [
-      "*"
-    ],
-    "ononline": [
-      "*"
-    ],
-    "onorientationchange": [
-      "*"
-    ],
-    "onoverscroll": [
-      "*"
-    ],
-    "onpagehide": [
-      "*"
-    ],
-    "onpageshow": [
-      "*"
-    ],
-    "onpaste": [
-      "*"
-    ],
-    "onpause": [
-      "*"
-    ],
-    "onplay": [
-      "*"
-    ],
-    "onplaying": [
-      "*"
-    ],
-    "onpointercancel": [
-      "*"
-    ],
-    "onpointerdown": [
-      "*"
-    ],
-    "onpointerenter": [
-      "*"
-    ],
-    "onpointerleave": [
-      "*"
-    ],
-    "onpointermove": [
-      "*"
-    ],
-    "onpointerout": [
-      "*"
-    ],
-    "onpointerover": [
-      "*"
-    ],
-    "onpointerrawupdate": [
-      "*"
-    ],
-    "onpointerup": [
-      "*"
-    ],
-    "onpopstate": [
-      "*"
-    ],
-    "onportalactivate": [
-      "*"
-    ],
-    "onprogress": [
-      "*"
-    ],
-    "onratechange": [
-      "*"
-    ],
-    "onreset": [
-      "*"
-    ],
-    "onresize": [
-      "*"
-    ],
-    "onscroll": [
-      "*"
-    ],
-    "onscrollend": [
-      "*"
-    ],
-    "onsearch": [
-      "*"
-    ],
-    "onseeked": [
-      "*"
-    ],
-    "onseeking": [
-      "*"
-    ],
-    "onselect": [
-      "*"
-    ],
-    "onselectionchange": [
-      "*"
-    ],
-    "onselectstart": [
-      "*"
-    ],
-    "onshow": [
-      "*"
-    ],
-    "onstalled": [
-      "*"
-    ],
-    "onstorage": [
-      "*"
-    ],
-    "onsubmit": [
-      "*"
-    ],
-    "onsuspend": [
-      "*"
-    ],
-    "ontimeupdate": [
-      "*"
-    ],
-    "ontimezonechange": [
-      "*"
-    ],
-    "ontoggle": [
-      "*"
-    ],
-    "ontouchcancel": [
-      "*"
-    ],
-    "ontouchend": [
-      "*"
-    ],
-    "ontouchmove": [
-      "*"
-    ],
-    "ontouchstart": [
-      "*"
-    ],
-    "ontransitionend": [
-      "*"
-    ],
-    "onunload": [
-      "*"
-    ],
-    "onvolumechange": [
-      "*"
-    ],
-    "onwaiting": [
-      "*"
-    ],
-    "onwebkitanimationend": [
-      "*"
-    ],
-    "onwebkitanimationiteration": [
-      "*"
-    ],
-    "onwebkitanimationstart": [
-      "*"
-    ],
-    "onwebkitfullscreenchange": [
-      "*"
-    ],
-    "onwebkitfullscreenerror": [
-      "*"
-    ],
-    "onwebkittransitionend": [
-      "*"
-    ],
-    "onwheel": [
       "*"
     ],
     "open": [
