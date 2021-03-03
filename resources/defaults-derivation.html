@@ -95,14 +95,10 @@ const known_attributes = [
 class Helper {
   constructor(values) { this.values = values; }
   get val() { return this.values; }
-  get attrs() {
-    let value = {};
-    for (let attr of this.values) { value[attr] = ["*"]; }
-    return value;
-  }
+  get attrs() { return Object.fromEntries(this.values.map(a => [a, ["*"]])); }
   without(arg) {
     let fn = (arg instanceof Function) ? arg : (name => arg.includes(name));
-    this.values.filter(name => !fn(name));
+    this.values = this.values.filter(name => !fn(name));
     return this;
   }
 }
