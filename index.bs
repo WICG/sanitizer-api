@@ -77,11 +77,7 @@ HTML in the "real" DOM. Moreover, the libraries need to keep on top of
 browsers' changing behavior over time; things that once were safe may turn
 into time-bombs based on new platform-level features.
 
-<<<<<<< HEAD
-The browser, on the other, has an fairly good idea of when it is going to
-=======
 The browser has a fairly good idea of when it is going to
->>>>>>> ea722f1 (New New Defaults)
 execute code. We can improve upon the user-space libraries by teaching the
 browser how to render HTML from an arbitrary string in a safe manner, and do
 so in a way that is much more likely to be maintained and updated along with
@@ -370,7 +366,7 @@ A Sanitizer's [=effective configuration=] is merged from the
 [=baseline effective configuration=] and the effective configuration derived
 from the Sanitizer's [=configuration object=]. If no configuration object has
 been provided, the built-in [=default configuration=] is used instead.
-To merge two (or more)
+To merge two
 [=effective configurations=], map any given |element| or a pair of |element|
 and |attribute| to the [=stricter action=] of its constituent configurations.
 To determine the <dfn>stricter action</dfn> of two [=sanitize actions=], pick
