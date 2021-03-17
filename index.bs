@@ -393,6 +393,9 @@ or `unknown`. Let |kind| be:
    |attribute|'s name.
 - `regular`, otherwise.
 
+Issue: The spec currently treats MathML and SVG asn `unknown` content, and
+therefore blocked by default. This needs to be fixed.
+
 The [=effective configuration=] for a [=configuration object=] named |config|
 for a given |element| is determined by running these steps:
 
@@ -401,14 +404,16 @@ for a given |element| is determined by running these steps:
 2. let |name| be |element|'s tag name.
 3. if |name| is in |config|'s [=element drop list=] return 'drop'.
 4. if |name| is in |config|'s [=element block list=] return 'block'.
-5. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
-6. return 'keep'
+5. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'.
+6. if |config| does not have a non-empty [=element allow list=] and |name| is not it the [=default configuration=]'s [=element allow list=] return 'block'.
+7. return 'keep'.
 
 And for a given pair of |element| and |attribute|:
 
 1. if |config|'s [=attribute drop list=] contains |attribute|'s local name as key, and the associated value contains either |element|'s tag name or the string `"*"`, then return `drop`.
 2. if |config| has a non-empty [=attribute allow list=] and it does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
-3. return 'keep'.
+3. if |config| does not have a non-empty [=attribute allow list=] and [=default configuration=]'s [=attribute allow list=] does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
+4. return 'keep'.
 
 ### Baseline and Defaults {#defaults}
 
