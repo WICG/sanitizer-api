@@ -336,7 +336,8 @@ run these steps:
 3. if |element|'s [=element interface=] is {{HTMLFormElement}}:
   1. if |element|'s `action` attribute is a [[URL]] with `javascript:`
      protocol, remove the `action` attribute.
-4. if |element|'s [=element interface=] is {{HTMLInputElement}}:
+4. if |element|'s [=element interface=] is {{HTMLInputElement}}
+    or {{HTMLButtonElement}}:
   1. if |element|'s `formaction` attribute is a [[URL]] with `javascript:`
      protocol, remove the `formaction` attribute.
 
