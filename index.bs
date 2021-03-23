@@ -77,7 +77,7 @@ HTML in the "real" DOM. Moreover, the libraries need to keep on top of
 browsers' changing behavior over time; things that once were safe may turn
 into time-bombs based on new platform-level features.
 
-The browser, on the other, has an fairly good idea of when it is going to
+The browser has a fairly good idea of when it is going to
 execute code. We can improve upon the user-space libraries by teaching the
 browser how to render HTML from an arbitrary string in a safe manner, and do
 so in a way that is much more likely to be maintained and updated along with
@@ -120,8 +120,8 @@ Framework {#framework}
 
 The core API is the `Sanitizer` object and the sanitize method. Sanitizers can
 be instantiated using an optional `SanitizerConfig` dictionary for options.
-The most common use-case - preventing XSS - is handled by the built-in default
-lists, so that creating a Sanitizer with a custom config is necessary only to
+The most common use-case - preventing XSS - is handled by default,
+so that creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.
 
 <pre class="idl">
@@ -136,7 +136,7 @@ handle additional, application-specific use cases.
 </pre>
 
 * The constructor creates a Sanitizer instance.
-  It retains a copy of |config| as its [=configuration=] object.
+  It retains a copy of |config| as its [=configuration object=].
 * The `sanitize` method runs the [=sanitize=] algorithm on |input|,
 * The `sanitizeToString` method runs the [=sanitizeToString=] algorithm on |input|.
 
@@ -169,7 +169,10 @@ Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
 ## The Configuration Dictionary {#config}
 
 The <dfn lt="configuration">sanitizer's configuration object</dfn> is a
-dictionary which describes modifications to the sanitize operation.
+dictionary which describes modifications to the sanitize operation. If a
+Sanitizer has not received an explicit configuration, for example when being
+constructed without any parameters, then the [=default configuration=] value
+is used as the configuration object.
 
 <pre class="idl">
   dictionary SanitizerConfig {
@@ -265,60 +268,65 @@ Examples for attributes and attribute match lists:
 
 ## Algorithms {#algorithms}
 
-To <dfn lt="sanitize document fragment">sanitize a document fragment</dfn> named |fragment| using |sanitizer| run these steps:
+To <dfn>sanitize</dfn> a given |input|, run these steps:
 
-1. let |m| be a map that maps nodes to {'keep', 'block', 'drop'}.
+1. run [=create a document fragment=] algorithm on the |input|.
+2. run the [=sanitize a document fragment=] algorithm on the resulting fragment,
+3. and return its result.
+
+To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
+
+1. run [=create a document fragment=] algorithm on the |input|.
+2. run the [=sanitize=] algorithm on the resulting fragment,
+3. run the steps of the [=HTML Fragment Serialization Algorithm=] with
+     the fragment root of step 1 as the |node|, and return the result string.
+
+To <dfn>create a document fragment</dfn>
+named |fragment| from a Sanitizer |input|, run these steps:
+
+1. Switch based on |input|'s type:
+  1. if |input| is of type {{DocumentFragment}}, then:
+    1. let |node| refer to |input|.
+  2. if |input| is of type {{Document}}, then:
+    1. let |node| refer to |input|'s `documentElement`.
+  3. if |input| is of type `DOMString`, then:
+    1. let |node| be the result of the {{parseFromString}} algorithm
+        with |input| as first parameter (`string`),
+        and `"text/html"` as second parameter (`type`).
+2. Let |clone| be the result of running [=clone a node=] on |node| with the
+   `clone children flag` set to `true`.
+3. Let `f` be the result of {{createDocumentFragment}}.
+4. [=Append=] the node |clone| to the parent |f|.
+5. Return |f|.
+
+Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
+  context for {{parseFromString}}, or if we need to re-work the API to take
+  the insertion context of the created fragment into account.
+
+To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
+
+1. let |m| be a map that maps nodes to a [=sanitize action=]
 2. let |nodes| be a list containing the [=inclusive descendants=] of |fragment|, in [=tree order=].
 3. [=list/iterate|for each=] |node| in |nodes|:
   1. call [=sanitize a node=] and insert |node| and the result value into |m|
 4. [=list/iterate|for each=] |node| in |nodes|:
-  1. if m[node] is 'drop', remove the |node| and all children from |fragment|.
-  2. if m[node] is 'block', replace the |node| with all of its element and text node children from |fragment|.
-  3. if m[node] is undefined or 'keep', do nothing.
+  1. if m[node] is `drop`, remove the |node| and all children from |fragment|.
+  2. if m[node] is `block`, replace the |node| with all of its element and text node children from |fragment|.
+  3. if m[node] is `keep`, do nothing.
 
 To <dfn>sanitize a node</dfn> named |node| run these steps:
 
-1. if |node| is an element node, call [=sanitize an element=] and return its result.
-2. return 'keep'
+1. let |config| be the Sanitizer's [=effective configuration=].
+2. if |node| is an element node:
+  1. let |element| be |node|'s element.
+  2. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
+    1. determine the [=sanitize action=] that |config| assigns to the |element| and |attr| pair.
+    2. if the result is different from `keep`, remove |attr| from |element|.
+  3. run the steps to [=handle funky elements=] on |element|.
+  4. return the [=sanitize action=] that |config| assigns to |element|.
+3. otherwise, return 'keep'
 
-To <dfn>sanitize an element</dfn> named |element|, run these steps:
-
-1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
-2. let |name| be |element|'s tag name.
-3. if |name| is a [=valid custom element name=] and if |config|'s
-   [=allow custom elements option=] is unset or set to anything other than `true`, return 'drop'.
-4. if |name| is contained in the built-in [=default element drop list=] return 'drop'.
-5. if |name| is in |config|'s [=element drop list=] return 'drop'.
-6. if |name| is contained in the built-in [=default element block list=] return 'block'.
-7. if |name| is in |config|'s [=element block list=] return 'block'.
-8. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'
-9. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
-  1. call [=sanitize an attribute=] with |attr|'s name and |element|'s local name.
-  2. if the result is different from 'keep', remove |attr| from |element|.
-10. run the steps of [=handle funky elements=] algorithm on |element|.
-11. return 'keep'
-
-Issue: This presently ignores all namespace info, making it impossible to
-    support different actions for like-named elements from different
-    namespaces.
-
-To <dfn>sanitize an attribute</dfn> named |attr| belonging to |element|, run these steps:
-
-1. let |config| be the |sanitizer|'s [=configuration=] dictionary.
-2. if |attr| and |element| [=attribute-match=] the built-in [=default attribute drop list=] return 'drop'.
-3. if |attr| and |element| [=attribute-match=] the |config|'s [=attribute drop list=] return 'drop'.
-4. if |config| has a non-empty [=attribute allow list=] and |attr| and |element| do not [=attribute-match=] the |config|'s [=attribute allow list=] return 'drop'.
-5. return 'keep'.
-
-To determine whether an |attribute| and |element| <dfn>attribute-match</dfn> an [=attribute match list=] |list|, run these steps:
-
-1. let |attr-name| be |attribute|'s local name.
-2. let |elem-name| be |element|'s local name.
-3. if |list| does not contain a key |attr-name|, return false.
-4. let |matches| be the value of |list|[|attr-name|].
-3. if |matches| contains the string |elem-name|, return true.
-4. if |matches| contains the string "*", return true.
-5. return false.
+Issue: What about comment nodes, CDATA, etc. ?
 
 Some HTML elements require special treatment in a way that can't be easily
 expressed in terms of configuration options or other algorithms. The following
@@ -341,76 +349,113 @@ run these steps:
   1. if |element|'s `formaction` attribute is a [[URL]] with `javascript:`
      protocol, remove the `formaction` attribute.
 
-To <dfn>create a document fragment</dfn>
-named |fragment| from a Sanitizer |input|, run these steps:
+### The Effective Configuration {#configuration}
 
-1. Switch based on |input|'s type:
-  1. if |input| is of type {{DocumentFragment}}, then:
-    1. let |node| refer to |input|.
-  2. if |input| is of type {{Document}}, then:
-    1. let |node| refer to |input|'s `documentElement`.
-  3. if |input| is of type `DOMString`, then:
-    1. let |node| be the result of the {{parseFromString}} algorithm
-        with |input| as first parameter (`string`),
-        and `"text/html"` as second parameter (`type`).
-2. Let |clone| be the result of running [=clone a node=] on |node| with the
-   `clone children flag` set to `true`.
-3. Let `f` be the result of {{createDocumentFragment}}.
-4. [=Append=] the node |clone| to the parent |f|.
-5. Return |f|.
+A Sanitizer is potentially complex, so we will define a helper
+construct, the *effective configuration*. This is mostly a specification
+convenience and allows us to explain a Sanitizer's operation in two steps:
+One, how to derive the effective configuration, and two, define the
+Sanitzer's operation based on it.
+
+An <dfn>effective configuration</dfn> maps a given |element| or a given pair of
+|element| and |attribute| to a [=sanitize action=].
+A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
+
+A Sanitizer's [=effective configuration=] is merged from the
+[=baseline effective configuration=] and the effective configuration derived
+from the Sanitizer's [=configuration object=]. If no configuration object has
+been provided, the built-in [=default configuration=] is used instead.
+To merge two
+[=effective configurations=], map any given |element| or a pair of |element|
+and |attribute| to the [=stricter action=] of its constituent configurations.
+To determine the <dfn>stricter action</dfn> of two [=sanitize actions=], pick
+the 'larger' of the two actions assuming a transitively defined order with
+`drop` &gt; `block`, and `block` &gt; `keep`.
+
+Note: This definition of stricter actions ensures that the built-in baseline
+      configuration cannot be overriden, and therefor forms a hard guarantee
+      for all Sanitizer instances.
+
+Before describing how an effective configuration is derived, we need a
+helper definition:  The <dfn>element kind</dfn> of an |element| is one of
+`regular`, `unknown`, or `custom`. Let |kind| be:
+- `custom`, if |element|'s tag name is a [=valid custom element name=],
+- `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
+   tag name denotes an unknown element &mdash; that is, if the
+   [=element interface=] the [[HTML]] specification assigns to it would
+   be {{HTMLUnknownElement}},
+- `regular`, otherwise.
+
+Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
+or `unknown`. Let |kind| be:
+- `unknown`, if the [[HTML]] specifcation does not assign any meaning to
+   |attribute|'s name.
+- `regular`, otherwise.
+
+Issue(WICG/sanitizer-api#72): The spec currently treats MathML and SVG as
+    `unknown` content and therefore blocked by default. This needs to be fixed.
+
+The [=effective configuration=] for a [=configuration object=] named |config|
+for a given |element| is determined by running these steps:
+
+1. if |element|'s [=element kind=] is `custom` and if |config|'s
+   [=allow custom elements option=] is unset or set to anything other than `true`, return 'drop'.
+2. let |name| be |element|'s tag name.
+3. if |name| is in |config|'s [=element drop list=] return 'drop'.
+4. if |name| is in |config|'s [=element block list=] return 'block'.
+5. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'.
+6. if |config| does not have a non-empty [=element allow list=] and |name| is not it the [=default configuration=]'s [=element allow list=] return 'block'.
+8. return 'keep'.
+
+And for a given pair of |element| and |attribute|:
+
+1. if |config|'s [=attribute drop list=] contains |attribute|'s local name as key, and the associated value contains either |element|'s tag name or the string `"*"`, then return `drop`.
+2. if |config| has a non-empty [=attribute allow list=] and it does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
+3. if |config| does not have a non-empty [=attribute allow list=] and [=default configuration=]'s [=attribute allow list=] does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
+4. return 'keep'.
+
+### Baseline and Defaults {#defaults}
+
+Issue: The sanitizer baseline and defaults need to be carefully vetted, and
+    are still under discussion. The values below are for illustrative
+    purposes only.
+
+The <dfn>baseline effective configuration</dfn> is defined as follows:
+
+- For an |element|:
+  1. if |element|'s [=element kind=] is `regular` and if |element|'s tag name
+     is not in the [=baseline element allow list=], return `drop`.
+  2. otherwise, return `keep`.
+- For an |element| and |attribute| pair:
+  1. if |attribute|'s [=attribute kind=] is `regular` and if |attribute|'s
+     name is not in the [=baseline attribute allow list=] return `drop`
+  2. otherwise, return `keep`.
 
 
-Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
-  context for {{parseFromString}}, or if we need to re-work the API to take
-  the insertion context of the created fragment into account.
+The sanitizer has a built-in [=default configuration=], which is stricter than
+the baseline and aims to eliminate any script-injection possibility, as well
+as legacy or unusual constructs.
 
+The built-in <dfn>baseline element allow list</dfn> has the following value:
 
-To <dfn>sanitize</dfn> a given |input|, run these steps:
+<pre class=include-code>
+path: resources/baseline-element-allow-list.json
+highlight: js
+</pre>
 
-1. run [=create a document fragment=] algorithm on the |input|.
-2. run the [=sanitize document fragment=] algorithm on the resulting fragment,
-3. and return its result.
+The <dfn>baseline attribute allow list</dfn> has the following value:
 
-To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
+<pre class=include-code>
+path: resources/baseline-attribute-allow-list.json
+highlight: js
+</pre>
 
-1. run [=create a document fragment=] algorithm on the |input|.
-2. run the [=sanitize=] algorithm on the resulting fragment,
-3. run the steps of the [=HTML Fragment Serialization Algorithm=] with
-     the fragment root of step 1 as the |node|, and return the result string.
+The built-in <dfn>default configuration</dfn> has the following value:
 
-
-## Default Configuration {#defaults}
-
-Issue: The sanitizer defaults need to be carefully vetted, and are still
-    under discussion. The values below are for illustrative purposes only.
-
-The sanitizer has a built-in default configuration, which aims to eliminate
-any script-injection possibility. Note that the [=sanitize document fragment=]
-algorithm
-is defined so that these defaults are handled first and cannot be overridden
-by a custom configuration.
-
-
-: Default Drop Elements
-
-:: The <dfn>default element drop list</dfn> has the following value:
-   ```
- [ "script", "this is just a placeholder" ]
-   ```
-
-: Default Block Elements
-
-:: The <dfn>default element block list</dfn> has the following value:<br>
-   ```
-[ "noscript", "this is just a placeholder" ]
-   ```
-
-: Default Drop Attributes
-
-:: The <dfn>default attribute drop list</dfn> has the following value:
-   ```
-{}
-   ```
+<pre class=include-code>
+path: resources/default-configuration.json
+highlight: js
+</pre>
 
 # Security Considerations {#security-considerations}
 
