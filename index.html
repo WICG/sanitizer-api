@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 66fe8a0b9, updated Mon Mar 22 11:51:39 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="51122f405efed892e3424af0fdaf886eb1a8e191" name="document-revision">
+  <meta content="3be8e05f4094b345fc236f1a45f3f9d027e94854" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -623,8 +623,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
        <ol class="toc">
         <li><a href="#attr-match-list"><span class="secno">2.3.1</span> <span class="content">Attribute Match Lists {#attr-match-list}</span></a>
        </ol>
-      <li><a href="#algorithms"><span class="secno">2.4</span> <span class="content">Algorithms {#algorithms}</span></a>
-      <li><a href="#defaults"><span class="secno">2.5</span> <span class="content">Default Configuration {#defaults}</span></a>
+      <li>
+       <a href="#algorithms"><span class="secno">2.4</span> <span class="content">Algorithms {#algorithms}</span></a>
+       <ol class="toc">
+        <li><a href="#configuration①"><span class="secno">2.4.1</span> <span class="content">The Effective Configuration {#configuration}</span></a>
+        <li><a href="#defaults"><span class="secno">2.4.2</span> <span class="content">Baseline and Defaults {#defaults}</span></a>
+       </ol>
      </ol>
     <li>
      <a href="#security-considerations"><span class="secno">3</span> <span class="content">Security Considerations {#security-considerations}</span></a>
@@ -668,7 +672,7 @@ reasonable ways to the browser’s behavior when actually rendering a string as
 HTML in the "real" DOM. Moreover, the libraries need to keep on top of
 browsers' changing behavior over time; things that once were safe may turn
 into time-bombs based on new platform-level features.</p>
-   <p>The browser, on the other, has an fairly good idea of when it is going to
+   <p>The browser has a fairly good idea of when it is going to
 execute code. We can improve upon the user-space libraries by teaching the
 browser how to render HTML from an arbitrary string in a safe manner, and do
 so in a way that is much more likely to be maintained and updated along with
@@ -701,8 +705,8 @@ element<c- p>.</c->replaceChildren<c- p>(</c->s<c- p>.</c->sanitize<c- p>(</c->u
    <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API {#sanitizer-api}</span><a class="self-link" href="#sanitizer-api"></a></h3>
    <p>The core API is the <code>Sanitizer</code> object and the sanitize method. Sanitizers can
 be instantiated using an optional <code>SanitizerConfig</code> dictionary for options.
-The most common use-case - preventing XSS - is handled by the built-in default
-lists, so that creating a Sanitizer with a custom config is necessary only to
+The most common use-case - preventing XSS - is handled by default,
+so that creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.</p>
 <pre class="idl highlight def">[
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
@@ -716,7 +720,7 @@ handle additional, application-specific use cases.</p>
    <ul>
     <li data-md>
      <p>The constructor creates a Sanitizer instance.
-It retains a copy of <var>config</var> as its <a data-link-type="dfn" href="#configuration" id="ref-for-configuration">configuration</a> object.</p>
+It retains a copy of <var>config</var> as its <a data-link-type="dfn">configuration object</a>.</p>
     <li data-md>
      <p>The <code>sanitize</code> method runs the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> algorithm on <var>input</var>,</p>
     <li data-md>
@@ -740,8 +744,11 @@ parsing, cloning, or using the fragment as-is, respectively.</p>
     Examples would be character regularization (<code>"&amp;szlig;"</code> to <code>"ß"</code>),
     or light processing for some elements (<code>"&lt;image>"</code> to <code>"&lt;img>"</code>);</p>
    <h3 class="heading settled" data-level="2.3" id="config"><span class="secno">2.3. </span><span class="content">The Configuration Dictionary {#config}</span><a class="self-link" href="#config"></a></h3>
-   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="configuration" data-noexport id="configuration">sanitizer’s configuration object</dfn> is a
-dictionary which describes modifications to the sanitize operation.</p>
+   <p>The <dfn data-dfn-type="dfn" data-lt="configuration" data-noexport id="configuration">sanitizer’s configuration object<a class="self-link" href="#configuration"></a></dfn> is a
+dictionary which describes modifications to the sanitize operation. If a
+Sanitizer has not received an explicit configuration, for example when being
+constructed without any parameters, then the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration">default configuration</a> value
+is used as the configuration object.</p>
 <pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-sanitizerconfig"><code><c- g>SanitizerConfig</c-></code></dfn> {
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-allowelements"><code><c- g>allowElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowelements"></a></dfn>;
   <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence①"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-blockelements"><code><c- g>blockElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-blockelements"></a></dfn>;
@@ -829,131 +836,24 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
   <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
 </pre>
    <h3 class="heading settled" data-level="2.4" id="algorithms"><span class="secno">2.4. </span><span class="content">Algorithms {#algorithms}</span><a class="self-link" href="#algorithms"></a></h3>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="sanitize document fragment" data-noexport id="sanitize-document-fragment">sanitize a document fragment</dfn> named <var>fragment</var> using <var>sanitizer</var> run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> a given <var>input</var>, run these steps:</p>
    <ol>
     <li data-md>
-     <p>let <var>m</var> be a map that maps nodes to {'keep', 'block', 'drop'}.</p>
+     <p>run <a data-link-type="dfn" href="#create-a-document-fragment" id="ref-for-create-a-document-fragment">create a document fragment</a> algorithm on the <var>input</var>.</p>
     <li data-md>
-     <p>let <var>nodes</var> be a list containing the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant" id="ref-for-concept-tree-inclusive-descendant">inclusive descendants</a> of <var>fragment</var>, in <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-order" id="ref-for-concept-tree-order">tree order</a>.</p>
+     <p>run the <a data-link-type="dfn" href="#sanitize-a-document-fragment" id="ref-for-sanitize-a-document-fragment">sanitize a document fragment</a> algorithm on the resulting fragment,</p>
     <li data-md>
-     <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate">for each</a> <var>node</var> in <var>nodes</var>:</p>
-     <ol>
-      <li data-md>
-       <p>call <a data-link-type="dfn" href="#sanitize-a-node" id="ref-for-sanitize-a-node">sanitize a node</a> and insert <var>node</var> and the result value into <var>m</var></p>
-     </ol>
-    <li data-md>
-     <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">for each</a> <var>node</var> in <var>nodes</var>:</p>
-     <ol>
-      <li data-md>
-       <p>if m[node] is 'drop', remove the <var>node</var> and all children from <var>fragment</var>.</p>
-      <li data-md>
-       <p>if m[node] is 'block', replace the <var>node</var> with all of its element and text node children from <var>fragment</var>.</p>
-      <li data-md>
-       <p>if m[node] is undefined or 'keep', do nothing.</p>
-     </ol>
+     <p>and return its result.</p>
    </ol>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-a-node">sanitize a node</dfn> named <var>node</var> run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitizetostring">sanitizeToString</dfn> a given <var>input</var>, run these steps:</p>
    <ol>
     <li data-md>
-     <p>if <var>node</var> is an element node, call <a data-link-type="dfn" href="#sanitize-an-element" id="ref-for-sanitize-an-element">sanitize an element</a> and return its result.</p>
+     <p>run <a data-link-type="dfn" href="#create-a-document-fragment" id="ref-for-create-a-document-fragment①">create a document fragment</a> algorithm on the <var>input</var>.</p>
     <li data-md>
-     <p>return 'keep'</p>
-   </ol>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-an-element">sanitize an element</dfn> named <var>element</var>, run these steps:</p>
-   <ol>
+     <p>run the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize①">sanitize</a> algorithm on the resulting fragment,</p>
     <li data-md>
-     <p>let <var>config</var> be the <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration" id="ref-for-configuration①">configuration</a> dictionary.</p>
-    <li data-md>
-     <p>let <var>name</var> be <var>element</var>’s tag name.</p>
-    <li data-md>
-     <p>if <var>name</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" id="ref-for-valid-custom-element-name">valid custom element name</a> and if <var>config</var>’s <a data-link-type="dfn" href="#allow-custom-elements-option" id="ref-for-allow-custom-elements-option">allow custom elements option</a> is unset or set to anything other than <code>true</code>, return 'drop'.</p>
-    <li data-md>
-     <p>if <var>name</var> is contained in the built-in <a data-link-type="dfn" href="#default-element-drop-list" id="ref-for-default-element-drop-list">default element drop list</a> return 'drop'.</p>
-    <li data-md>
-     <p>if <var>name</var> is in <var>config</var>’s <a data-link-type="dfn" href="#element-drop-list" id="ref-for-element-drop-list">element drop list</a> return 'drop'.</p>
-    <li data-md>
-     <p>if <var>name</var> is contained in the built-in <a data-link-type="dfn" href="#default-element-block-list" id="ref-for-default-element-block-list">default element block list</a> return 'block'.</p>
-    <li data-md>
-     <p>if <var>name</var> is in <var>config</var>’s <a data-link-type="dfn" href="#element-block-list" id="ref-for-element-block-list">element block list</a> return 'block'.</p>
-    <li data-md>
-     <p>if <var>config</var> has a non-empty <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list">element allow list</a> and <var>name</var> is not in <var>config</var>’s <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list①">element allow list</a> return 'block'</p>
-    <li data-md>
-     <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">for each</a> <var>attr</var> in <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attribute" id="ref-for-concept-element-attribute">attribute list</a>:</p>
-     <ol>
-      <li data-md>
-       <p>call <a data-link-type="dfn" href="#sanitize-an-attribute" id="ref-for-sanitize-an-attribute">sanitize an attribute</a> with <var>attr</var>’s name and <var>element</var>’s local name.</p>
-      <li data-md>
-       <p>if the result is different from 'keep', remove <var>attr</var> from <var>element</var>.</p>
-     </ol>
-    <li data-md>
-     <p>run the steps of <a data-link-type="dfn" href="#handle-funky-elements" id="ref-for-handle-funky-elements">handle funky elements</a> algorithm on <var>element</var>.</p>
-    <li data-md>
-     <p>return 'keep'</p>
-   </ol>
-   <p class="issue" id="issue-1cf1de87"><a class="self-link" href="#issue-1cf1de87"></a> This presently ignores all namespace info, making it impossible to
-    support different actions for like-named elements from different
-    namespaces.</p>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-an-attribute">sanitize an attribute</dfn> named <var>attr</var> belonging to <var>element</var>, run these steps:</p>
-   <ol>
-    <li data-md>
-     <p>let <var>config</var> be the <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration" id="ref-for-configuration②">configuration</a> dictionary.</p>
-    <li data-md>
-     <p>if <var>attr</var> and <var>element</var> <a data-link-type="dfn" href="#attribute-match" id="ref-for-attribute-match">attribute-match</a> the built-in <a data-link-type="dfn" href="#default-attribute-drop-list" id="ref-for-default-attribute-drop-list">default attribute drop list</a> return 'drop'.</p>
-    <li data-md>
-     <p>if <var>attr</var> and <var>element</var> <a data-link-type="dfn" href="#attribute-match" id="ref-for-attribute-match①">attribute-match</a> the <var>config</var>’s <a data-link-type="dfn" href="#attribute-drop-list" id="ref-for-attribute-drop-list">attribute drop list</a> return 'drop'.</p>
-    <li data-md>
-     <p>if <var>config</var> has a non-empty <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list">attribute allow list</a> and <var>attr</var> and <var>element</var> do not <a data-link-type="dfn" href="#attribute-match" id="ref-for-attribute-match②">attribute-match</a> the <var>config</var>’s <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list①">attribute allow list</a> return 'drop'.</p>
-    <li data-md>
-     <p>return 'keep'.</p>
-   </ol>
-   <p>To determine whether an <var>attribute</var> and <var>element</var> <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-match">attribute-match</dfn> an <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list③">attribute match list</a> <var>list</var>, run these steps:</p>
-   <ol>
-    <li data-md>
-     <p>let <var>attr-name</var> be <var>attribute</var>’s local name.</p>
-    <li data-md>
-     <p>let <var>elem-name</var> be <var>element</var>’s local name.</p>
-    <li data-md>
-     <p>if <var>list</var> does not contain a key <var>attr-name</var>, return false.</p>
-    <li data-md>
-     <p>let <var>matches</var> be the value of <var>list</var>[<var>attr-name</var>].</p>
-    <li data-md>
-     <p>if <var>matches</var> contains the string <var>elem-name</var>, return true.</p>
-    <li data-md>
-     <p>if <var>matches</var> contains the string "*", return true.</p>
-    <li data-md>
-     <p>return false.</p>
-   </ol>
-   <p>Some HTML elements require special treatment in a way that can’t be easily
-expressed in terms of configuration options or other algorithms. The following
-algorithm collects these in one place. To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="handle-funky-elements">handle funky elements</dfn>,
-run these steps:</p>
-   <ol>
-    <li data-md>
-     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement">HTMLTemplateElement</a></code>:</p>
-     <ol start="2">
-      <li data-md>
-       <p>Run the steps of the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment">sanitize document fragment</a> algorithm on <var>element</var>’s <var>content</var> attribute, and replace <var>element</var>’s <var>content</var> attribute with the result.</p>
-      <li data-md>
-       <p>Drop all child nodes of <var>element</var>.</p>
-     </ol>
-    <li data-md>
-     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface①">element interface</a> has a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils" id="ref-for-htmlhyperlinkelementutils">HTMLHyperlinkElementUtils</a></code> mixin:</p>
-     <ol>
-      <li data-md>
-       <p>if <var>element</var>’s <code>protocol</code> property is "javascript:", then remove the <code>href</code> attribute from <var>element</var>.</p>
-     </ol>
-    <li data-md>
-     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface②">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement">HTMLFormElement</a></code>:</p>
-     <ol>
-      <li data-md>
-       <p>if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>action</code> attribute.</p>
-     </ol>
-    <li data-md>
-     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface③">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/input.html#htmlinputelement" id="ref-for-htmlinputelement">HTMLInputElement</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement" id="ref-for-htmlbuttonelement">HTMLButtonElement</a></code>:</p>
-     <ol>
-      <li data-md>
-       <p>if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>formaction</code> attribute.</p>
-     </ol>
+     <p>run the steps of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm" id="ref-for-html-fragment-serialisation-algorithm">HTML Fragment Serialization Algorithm</a> with
+   the fragment root of step 1 as the <var>node</var>, and return the result string.</p>
    </ol>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="create-a-document-fragment">create a document fragment</dfn> named <var>fragment</var> from a Sanitizer <var>input</var>, run these steps:</p>
    <ol>
@@ -993,49 +893,1287 @@ run these steps:</p>
    <p class="issue" id="issue-8301a077"><a class="self-link" href="#issue-8301a077"></a> It’s unclear whether we can assume a generic
   context for <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type" id="ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type①">parseFromString</a></code>, or if we need to re-work the API to take
   the insertion context of the created fragment into account. <a href="https://github.com/WICG/sanitizer-api/issues/42">&lt;https://github.com/WICG/sanitizer-api/issues/42></a></p>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> a given <var>input</var>, run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-a-document-fragment">sanitize a document fragment</dfn> named <var>fragment</var> run these steps:</p>
    <ol>
     <li data-md>
-     <p>run <a data-link-type="dfn" href="#create-a-document-fragment" id="ref-for-create-a-document-fragment">create a document fragment</a> algorithm on the <var>input</var>.</p>
+     <p>let <var>m</var> be a map that maps nodes to a <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action">sanitize action</a></p>
     <li data-md>
-     <p>run the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment①">sanitize document fragment</a> algorithm on the resulting fragment,</p>
+     <p>let <var>nodes</var> be a list containing the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant" id="ref-for-concept-tree-inclusive-descendant">inclusive descendants</a> of <var>fragment</var>, in <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-order" id="ref-for-concept-tree-order">tree order</a>.</p>
     <li data-md>
-     <p>and return its result.</p>
+     <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate">for each</a> <var>node</var> in <var>nodes</var>:</p>
+     <ol>
+      <li data-md>
+       <p>call <a data-link-type="dfn" href="#sanitize-a-node" id="ref-for-sanitize-a-node">sanitize a node</a> and insert <var>node</var> and the result value into <var>m</var></p>
+     </ol>
+    <li data-md>
+     <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">for each</a> <var>node</var> in <var>nodes</var>:</p>
+     <ol>
+      <li data-md>
+       <p>if m[node] is <code>drop</code>, remove the <var>node</var> and all children from <var>fragment</var>.</p>
+      <li data-md>
+       <p>if m[node] is <code>block</code>, replace the <var>node</var> with all of its element and text node children from <var>fragment</var>.</p>
+      <li data-md>
+       <p>if m[node] is <code>keep</code>, do nothing.</p>
+     </ol>
    </ol>
-   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitizetostring">sanitizeToString</dfn> a given <var>input</var>, run these steps:</p>
+   <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-a-node">sanitize a node</dfn> named <var>node</var> run these steps:</p>
    <ol>
     <li data-md>
-     <p>run <a data-link-type="dfn" href="#create-a-document-fragment" id="ref-for-create-a-document-fragment①">create a document fragment</a> algorithm on the <var>input</var>.</p>
+     <p>let <var>config</var> be the Sanitizer’s <a data-link-type="dfn" href="#effective-configuration" id="ref-for-effective-configuration">effective configuration</a>.</p>
     <li data-md>
-     <p>run the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize①">sanitize</a> algorithm on the resulting fragment,</p>
+     <p>if <var>node</var> is an element node:</p>
+     <ol>
+      <li data-md>
+       <p>let <var>element</var> be <var>node</var>’s element.</p>
+      <li data-md>
+       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">for each</a> <var>attr</var> in <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attribute" id="ref-for-concept-element-attribute">attribute list</a>:</p>
+       <ol>
+        <li data-md>
+         <p>determine the <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action①">sanitize action</a> that <var>config</var> assigns to the <var>element</var> and <var>attr</var> pair.</p>
+        <li data-md>
+         <p>if the result is different from <code>keep</code>, remove <var>attr</var> from <var>element</var>.</p>
+       </ol>
+      <li data-md>
+       <p>run the steps to <a data-link-type="dfn" href="#handle-funky-elements" id="ref-for-handle-funky-elements">handle funky elements</a> on <var>element</var>.</p>
+      <li data-md>
+       <p>return the <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action②">sanitize action</a> that <var>config</var> assigns to <var>element</var>.</p>
+     </ol>
     <li data-md>
-     <p>run the steps of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm" id="ref-for-html-fragment-serialisation-algorithm">HTML Fragment Serialization Algorithm</a> with
-   the fragment root of step 1 as the <var>node</var>, and return the result string.</p>
+     <p>otherwise, return 'keep'</p>
    </ol>
-   <h3 class="heading settled" data-level="2.5" id="defaults"><span class="secno">2.5. </span><span class="content">Default Configuration {#defaults}</span><a class="self-link" href="#defaults"></a></h3>
-   <p class="issue" id="issue-af977c5a"><a class="self-link" href="#issue-af977c5a"></a> The sanitizer defaults need to be carefully vetted, and are still
-    under discussion. The values below are for illustrative purposes only.</p>
-   <p>The sanitizer has a built-in default configuration, which aims to eliminate
-any script-injection possibility. Note that the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment②">sanitize document fragment</a> algorithm
-is defined so that these defaults are handled first and cannot be overridden
-by a custom configuration.</p>
-   <dl>
-    <dt data-md>Default Drop Elements
-    <dd data-md>
-     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="default-element-drop-list">default element drop list</dfn> has the following value:</p>
-<pre> [ "script", "this is just a placeholder" ]
+   <p class="issue" id="issue-0e5b0c6b"><a class="self-link" href="#issue-0e5b0c6b"></a> What about comment nodes, CDATA, etc. ?</p>
+   <p>Some HTML elements require special treatment in a way that can’t be easily
+expressed in terms of configuration options or other algorithms. The following
+algorithm collects these in one place. To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="handle-funky-elements">handle funky elements</dfn>,
+run these steps:</p>
+   <ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement">HTMLTemplateElement</a></code>:</p>
+     <ol start="2">
+      <li data-md>
+       <p>Run the steps of the <a data-link-type="dfn">sanitize document fragment</a> algorithm on <var>element</var>’s <var>content</var> attribute, and replace <var>element</var>’s <var>content</var> attribute with the result.</p>
+      <li data-md>
+       <p>Drop all child nodes of <var>element</var>.</p>
+     </ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface①">element interface</a> has a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils" id="ref-for-htmlhyperlinkelementutils">HTMLHyperlinkElementUtils</a></code> mixin:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <code>protocol</code> property is "javascript:", then remove the <code>href</code> attribute from <var>element</var>.</p>
+     </ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface②">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement">HTMLFormElement</a></code>:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>action</code> attribute.</p>
+     </ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface③">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/input.html#htmlinputelement" id="ref-for-htmlinputelement">HTMLInputElement</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement" id="ref-for-htmlbuttonelement">HTMLButtonElement</a></code>:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>formaction</code> attribute.</p>
+     </ol>
+   </ol>
+   <h4 class="heading settled" data-level="2.4.1" id="configuration①"><span class="secno">2.4.1. </span><span class="content">The Effective Configuration {#configuration}</span><a class="self-link" href="#configuration①"></a></h4>
+   <p>A Sanitizer is potentially complex, so we will define a helper
+construct, the <em>effective configuration</em>. This is mostly a specification
+convenience and allows us to explain a Sanitizer’s operation in two steps:
+One, how to derive the effective configuration, and two, define the
+Sanitzer’s operation based on it.</p>
+   <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="effective-configuration">effective configuration</dfn> maps a given <var>element</var> or a given pair of <var>element</var> and <var>attribute</var> to a <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action③">sanitize action</a>.
+A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-action">sanitize action</dfn> can have the values <code>keep</code>, <code>drop</code>, or <code>block</code>.</p>
+   <p>A Sanitizer’s <a data-link-type="dfn" href="#effective-configuration" id="ref-for-effective-configuration①">effective configuration</a> is merged from the <a data-link-type="dfn" href="#baseline-effective-configuration" id="ref-for-baseline-effective-configuration">baseline effective configuration</a> and the effective configuration derived
+from the Sanitizer’s <a data-link-type="dfn">configuration object</a>. If no configuration object has
+been provided, the built-in <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration①">default configuration</a> is used instead.
+To merge two <a data-link-type="dfn" href="#effective-configuration" id="ref-for-effective-configuration②">effective configurations</a>, map any given <var>element</var> or a pair of <var>element</var> and <var>attribute</var> to the <a data-link-type="dfn" href="#stricter-action" id="ref-for-stricter-action">stricter action</a> of its constituent configurations.
+To determine the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="stricter-action">stricter action</dfn> of two <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action④">sanitize actions</a>, pick
+the 'larger' of the two actions assuming a transitively defined order with <code>drop</code> > <code>block</code>, and <code>block</code> > <code>keep</code>.</p>
+   <p class="note" role="note"><span>Note:</span> This definition of stricter actions ensures that the built-in baseline
+      configuration cannot be overriden, and therefor forms a hard guarantee
+      for all Sanitizer instances.</p>
+   <p>Before describing how an effective configuration is derived, we need a
+helper definition:  The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="element-kind">element kind</dfn> of an <var>element</var> is one of <code>regular</code>, <code>unknown</code>, or <code>custom</code>. Let <var>kind</var> be:</p>
+   <ul>
+    <li data-md>
+     <p><code>custom</code>, if <var>element</var>’s tag name is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" id="ref-for-valid-custom-element-name">valid custom element name</a>,</p>
+    <li data-md>
+     <p><code>unknown</code>, if <var>element</var> is not in the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> namespace or if <var>element</var>’s
+ tag name denotes an unknown element — that is, if the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface④">element interface</a> the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification assigns to it would
+ be <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement" id="ref-for-htmlunknownelement">HTMLUnknownElement</a></code>,</p>
+    <li data-md>
+     <p><code>regular</code>, otherwise.</p>
+   </ul>
+   <p>Similarly, the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-kind">attribute kind</dfn> of an <var>attribute</var> is one of <code>regular</code> or <code>unknown</code>. Let <var>kind</var> be:</p>
+   <ul>
+    <li data-md>
+     <p><code>unknown</code>, if the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specifcation does not assign any meaning to <var>attribute</var>’s name.</p>
+    <li data-md>
+     <p><code>regular</code>, otherwise.</p>
+   </ul>
+   <p class="issue" id="issue-40748180"><a class="self-link" href="#issue-40748180"></a> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a></p>
+   <p>The <a data-link-type="dfn" href="#effective-configuration" id="ref-for-effective-configuration③">effective configuration</a> for a <a data-link-type="dfn">configuration object</a> named <var>config</var> for a given <var>element</var> is determined by running these steps:</p>
+   <ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="#element-kind" id="ref-for-element-kind">element kind</a> is <code>custom</code> and if <var>config</var>’s <a data-link-type="dfn" href="#allow-custom-elements-option" id="ref-for-allow-custom-elements-option">allow custom elements option</a> is unset or set to anything other than <code>true</code>, return 'drop'.</p>
+    <li data-md>
+     <p>let <var>name</var> be <var>element</var>’s tag name.</p>
+    <li data-md>
+     <p>if <var>name</var> is in <var>config</var>’s <a data-link-type="dfn" href="#element-drop-list" id="ref-for-element-drop-list">element drop list</a> return 'drop'.</p>
+    <li data-md>
+     <p>if <var>name</var> is in <var>config</var>’s <a data-link-type="dfn" href="#element-block-list" id="ref-for-element-block-list">element block list</a> return 'block'.</p>
+    <li data-md>
+     <p>if <var>config</var> has a non-empty <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list">element allow list</a> and <var>name</var> is not in <var>config</var>’s <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list①">element allow list</a> return 'block'.</p>
+    <li data-md>
+     <p>if <var>config</var> does not have a non-empty <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list②">element allow list</a> and <var>name</var> is not it the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration②">default configuration</a>'s <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list③">element allow list</a> return 'block'.</p>
+    <li data-md>
+     <p>return 'keep'.</p>
+   </ol>
+   <p>And for a given pair of <var>element</var> and <var>attribute</var>:</p>
+   <ol>
+    <li data-md>
+     <p>if <var>config</var>’s <a data-link-type="dfn" href="#attribute-drop-list" id="ref-for-attribute-drop-list">attribute drop list</a> contains <var>attribute</var>’s local name as key, and the associated value contains either <var>element</var>’s tag name or the string <code>"*"</code>, then return <code>drop</code>.</p>
+    <li data-md>
+     <p>if <var>config</var> has a non-empty <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list">attribute allow list</a> and it does not contain <var>attribute</var>’s local name, or <var>attribute</var>’s associated value contains neither <var>element</var>’s tag name nor the string <code>"*"</code>, then return <code>drop</code>.</p>
+    <li data-md>
+     <p>if <var>config</var> does not have a non-empty <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list①">attribute allow list</a> and <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration③">default configuration</a>'s <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list②">attribute allow list</a> does not contain <var>attribute</var>’s local name, or <var>attribute</var>’s associated value contains neither <var>element</var>’s tag name nor the string <code>"*"</code>, then return <code>drop</code>.</p>
+    <li data-md>
+     <p>return 'keep'.</p>
+   </ol>
+   <h4 class="heading settled" data-level="2.4.2" id="defaults"><span class="secno">2.4.2. </span><span class="content">Baseline and Defaults {#defaults}</span><a class="self-link" href="#defaults"></a></h4>
+   <p class="issue" id="issue-53c87d03"><a class="self-link" href="#issue-53c87d03"></a> The sanitizer baseline and defaults need to be carefully vetted, and
+    are still under discussion. The values below are for illustrative
+    purposes only.</p>
+   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-effective-configuration">baseline effective configuration</dfn> is defined as follows:</p>
+   <ul>
+    <li data-md>
+     <p>For an <var>element</var>:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <a data-link-type="dfn" href="#element-kind" id="ref-for-element-kind①">element kind</a> is <code>regular</code> and if <var>element</var>’s tag name
+ is not in the <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list">baseline element allow list</a>, return <code>drop</code>.</p>
+      <li data-md>
+       <p>otherwise, return <code>keep</code>.</p>
+     </ol>
+    <li data-md>
+     <p>For an <var>element</var> and <var>attribute</var> pair:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>attribute</var>’s <a data-link-type="dfn" href="#attribute-kind" id="ref-for-attribute-kind">attribute kind</a> is <code>regular</code> and if <var>attribute</var>’s
+ name is not in the <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list">baseline attribute allow list</a> return <code>drop</code></p>
+      <li data-md>
+       <p>otherwise, return <code>keep</code>.</p>
+     </ol>
+   </ul>
+   <p>The sanitizer has a built-in <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration④">default configuration</a>, which is stricter than
+the baseline and aims to eliminate any script-injection possibility, as well
+as legacy or unusual constructs.</p>
+   <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-element-allow-list">baseline element allow list</dfn> has the following value:</p>
+<pre class="include-code highlight" path="resources/baseline-element-allow-list.json"><c- p>[</c->
+  <c- u>"a"</c-><c- p>,</c->
+  <c- u>"abbr"</c-><c- p>,</c->
+  <c- u>"acronym"</c-><c- p>,</c->
+  <c- u>"address"</c-><c- p>,</c->
+  <c- u>"area"</c-><c- p>,</c->
+  <c- u>"article"</c-><c- p>,</c->
+  <c- u>"aside"</c-><c- p>,</c->
+  <c- u>"audio"</c-><c- p>,</c->
+  <c- u>"b"</c-><c- p>,</c->
+  <c- u>"basefont"</c-><c- p>,</c->
+  <c- u>"bdi"</c-><c- p>,</c->
+  <c- u>"bdo"</c-><c- p>,</c->
+  <c- u>"bgsound"</c-><c- p>,</c->
+  <c- u>"big"</c-><c- p>,</c->
+  <c- u>"blockquote"</c-><c- p>,</c->
+  <c- u>"body"</c-><c- p>,</c->
+  <c- u>"br"</c-><c- p>,</c->
+  <c- u>"button"</c-><c- p>,</c->
+  <c- u>"canvas"</c-><c- p>,</c->
+  <c- u>"caption"</c-><c- p>,</c->
+  <c- u>"center"</c-><c- p>,</c->
+  <c- u>"cite"</c-><c- p>,</c->
+  <c- u>"code"</c-><c- p>,</c->
+  <c- u>"col"</c-><c- p>,</c->
+  <c- u>"colgroup"</c-><c- p>,</c->
+  <c- u>"command"</c-><c- p>,</c->
+  <c- u>"data"</c-><c- p>,</c->
+  <c- u>"datalist"</c-><c- p>,</c->
+  <c- u>"dd"</c-><c- p>,</c->
+  <c- u>"del"</c-><c- p>,</c->
+  <c- u>"details"</c-><c- p>,</c->
+  <c- u>"dfn"</c-><c- p>,</c->
+  <c- u>"dialog"</c-><c- p>,</c->
+  <c- u>"dir"</c-><c- p>,</c->
+  <c- u>"div"</c-><c- p>,</c->
+  <c- u>"dl"</c-><c- p>,</c->
+  <c- u>"dt"</c-><c- p>,</c->
+  <c- u>"em"</c-><c- p>,</c->
+  <c- u>"fieldset"</c-><c- p>,</c->
+  <c- u>"figcaption"</c-><c- p>,</c->
+  <c- u>"figure"</c-><c- p>,</c->
+  <c- u>"font"</c-><c- p>,</c->
+  <c- u>"footer"</c-><c- p>,</c->
+  <c- u>"form"</c-><c- p>,</c->
+  <c- u>"h1"</c-><c- p>,</c->
+  <c- u>"h2"</c-><c- p>,</c->
+  <c- u>"h3"</c-><c- p>,</c->
+  <c- u>"h4"</c-><c- p>,</c->
+  <c- u>"h5"</c-><c- p>,</c->
+  <c- u>"h6"</c-><c- p>,</c->
+  <c- u>"head"</c-><c- p>,</c->
+  <c- u>"header"</c-><c- p>,</c->
+  <c- u>"hgroup"</c-><c- p>,</c->
+  <c- u>"hr"</c-><c- p>,</c->
+  <c- u>"html"</c-><c- p>,</c->
+  <c- u>"i"</c-><c- p>,</c->
+  <c- u>"image"</c-><c- p>,</c->
+  <c- u>"img"</c-><c- p>,</c->
+  <c- u>"input"</c-><c- p>,</c->
+  <c- u>"ins"</c-><c- p>,</c->
+  <c- u>"kbd"</c-><c- p>,</c->
+  <c- u>"keygen"</c-><c- p>,</c->
+  <c- u>"label"</c-><c- p>,</c->
+  <c- u>"layer"</c-><c- p>,</c->
+  <c- u>"legend"</c-><c- p>,</c->
+  <c- u>"li"</c-><c- p>,</c->
+  <c- u>"link"</c-><c- p>,</c->
+  <c- u>"listing"</c-><c- p>,</c->
+  <c- u>"main"</c-><c- p>,</c->
+  <c- u>"map"</c-><c- p>,</c->
+  <c- u>"mark"</c-><c- p>,</c->
+  <c- u>"marquee"</c-><c- p>,</c->
+  <c- u>"menu"</c-><c- p>,</c->
+  <c- u>"meta"</c-><c- p>,</c->
+  <c- u>"meter"</c-><c- p>,</c->
+  <c- u>"nav"</c-><c- p>,</c->
+  <c- u>"nobr"</c-><c- p>,</c->
+  <c- u>"noscript"</c-><c- p>,</c->
+  <c- u>"ol"</c-><c- p>,</c->
+  <c- u>"optgroup"</c-><c- p>,</c->
+  <c- u>"option"</c-><c- p>,</c->
+  <c- u>"output"</c-><c- p>,</c->
+  <c- u>"p"</c-><c- p>,</c->
+  <c- u>"picture"</c-><c- p>,</c->
+  <c- u>"plaintext"</c-><c- p>,</c->
+  <c- u>"popup"</c-><c- p>,</c->
+  <c- u>"portal"</c-><c- p>,</c->
+  <c- u>"pre"</c-><c- p>,</c->
+  <c- u>"progress"</c-><c- p>,</c->
+  <c- u>"q"</c-><c- p>,</c->
+  <c- u>"rb"</c-><c- p>,</c->
+  <c- u>"rp"</c-><c- p>,</c->
+  <c- u>"rt"</c-><c- p>,</c->
+  <c- u>"rtc"</c-><c- p>,</c->
+  <c- u>"ruby"</c-><c- p>,</c->
+  <c- u>"s"</c-><c- p>,</c->
+  <c- u>"samp"</c-><c- p>,</c->
+  <c- u>"section"</c-><c- p>,</c->
+  <c- u>"select"</c-><c- p>,</c->
+  <c- u>"selectmenu"</c-><c- p>,</c->
+  <c- u>"slot"</c-><c- p>,</c->
+  <c- u>"small"</c-><c- p>,</c->
+  <c- u>"source"</c-><c- p>,</c->
+  <c- u>"span"</c-><c- p>,</c->
+  <c- u>"strike"</c-><c- p>,</c->
+  <c- u>"strong"</c-><c- p>,</c->
+  <c- u>"style"</c-><c- p>,</c->
+  <c- u>"sub"</c-><c- p>,</c->
+  <c- u>"summary"</c-><c- p>,</c->
+  <c- u>"sup"</c-><c- p>,</c->
+  <c- u>"table"</c-><c- p>,</c->
+  <c- u>"tbody"</c-><c- p>,</c->
+  <c- u>"td"</c-><c- p>,</c->
+  <c- u>"template"</c-><c- p>,</c->
+  <c- u>"textarea"</c-><c- p>,</c->
+  <c- u>"tfoot"</c-><c- p>,</c->
+  <c- u>"th"</c-><c- p>,</c->
+  <c- u>"thead"</c-><c- p>,</c->
+  <c- u>"time"</c-><c- p>,</c->
+  <c- u>"title"</c-><c- p>,</c->
+  <c- u>"tr"</c-><c- p>,</c->
+  <c- u>"track"</c-><c- p>,</c->
+  <c- u>"tt"</c-><c- p>,</c->
+  <c- u>"u"</c-><c- p>,</c->
+  <c- u>"ul"</c-><c- p>,</c->
+  <c- u>"var"</c-><c- p>,</c->
+  <c- u>"video"</c-><c- p>,</c->
+  <c- u>"wbr"</c-><c- p>,</c->
+  <c- u>"xmp"</c->
+<c- p>]</c->
 </pre>
-    <dt data-md>Default Block Elements
-    <dd data-md>
-     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="default-element-block-list">default element block list</dfn> has the following value:<br></p>
-<pre>[ "noscript", "this is just a placeholder" ]
+   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-attribute-allow-list">baseline attribute allow list</dfn> has the following value:</p>
+<pre class="include-code highlight" path="resources/baseline-attribute-allow-list.json"><c- p>[</c->
+  <c- u>"abbr"</c-><c- p>,</c->
+  <c- u>"accept"</c-><c- p>,</c->
+  <c- u>"accept-charset"</c-><c- p>,</c->
+  <c- u>"accesskey"</c-><c- p>,</c->
+  <c- u>"action"</c-><c- p>,</c->
+  <c- u>"align"</c-><c- p>,</c->
+  <c- u>"alink"</c-><c- p>,</c->
+  <c- u>"allow"</c-><c- p>,</c->
+  <c- u>"allowfullscreen"</c-><c- p>,</c->
+  <c- u>"allowpaymentrequest"</c-><c- p>,</c->
+  <c- u>"alt"</c-><c- p>,</c->
+  <c- u>"anchor"</c-><c- p>,</c->
+  <c- u>"archive"</c-><c- p>,</c->
+  <c- u>"as"</c-><c- p>,</c->
+  <c- u>"async"</c-><c- p>,</c->
+  <c- u>"autocapitalize"</c-><c- p>,</c->
+  <c- u>"autocomplete"</c-><c- p>,</c->
+  <c- u>"autocorrect"</c-><c- p>,</c->
+  <c- u>"autofocus"</c-><c- p>,</c->
+  <c- u>"autopictureinpicture"</c-><c- p>,</c->
+  <c- u>"autoplay"</c-><c- p>,</c->
+  <c- u>"axis"</c-><c- p>,</c->
+  <c- u>"background"</c-><c- p>,</c->
+  <c- u>"behavior"</c-><c- p>,</c->
+  <c- u>"bgcolor"</c-><c- p>,</c->
+  <c- u>"border"</c-><c- p>,</c->
+  <c- u>"bordercolor"</c-><c- p>,</c->
+  <c- u>"capture"</c-><c- p>,</c->
+  <c- u>"cellpadding"</c-><c- p>,</c->
+  <c- u>"cellspacing"</c-><c- p>,</c->
+  <c- u>"challenge"</c-><c- p>,</c->
+  <c- u>"char"</c-><c- p>,</c->
+  <c- u>"charoff"</c-><c- p>,</c->
+  <c- u>"charset"</c-><c- p>,</c->
+  <c- u>"checked"</c-><c- p>,</c->
+  <c- u>"cite"</c-><c- p>,</c->
+  <c- u>"class"</c-><c- p>,</c->
+  <c- u>"classid"</c-><c- p>,</c->
+  <c- u>"clear"</c-><c- p>,</c->
+  <c- u>"code"</c-><c- p>,</c->
+  <c- u>"codebase"</c-><c- p>,</c->
+  <c- u>"codetype"</c-><c- p>,</c->
+  <c- u>"color"</c-><c- p>,</c->
+  <c- u>"cols"</c-><c- p>,</c->
+  <c- u>"colspan"</c-><c- p>,</c->
+  <c- u>"compact"</c-><c- p>,</c->
+  <c- u>"content"</c-><c- p>,</c->
+  <c- u>"contenteditable"</c-><c- p>,</c->
+  <c- u>"controls"</c-><c- p>,</c->
+  <c- u>"controlslist"</c-><c- p>,</c->
+  <c- u>"conversiondestination"</c-><c- p>,</c->
+  <c- u>"coords"</c-><c- p>,</c->
+  <c- u>"crossorigin"</c-><c- p>,</c->
+  <c- u>"csp"</c-><c- p>,</c->
+  <c- u>"data"</c-><c- p>,</c->
+  <c- u>"datetime"</c-><c- p>,</c->
+  <c- u>"declare"</c-><c- p>,</c->
+  <c- u>"decoding"</c-><c- p>,</c->
+  <c- u>"default"</c-><c- p>,</c->
+  <c- u>"defer"</c-><c- p>,</c->
+  <c- u>"dir"</c-><c- p>,</c->
+  <c- u>"direction"</c-><c- p>,</c->
+  <c- u>"dirname"</c-><c- p>,</c->
+  <c- u>"disabled"</c-><c- p>,</c->
+  <c- u>"disablepictureinpicture"</c-><c- p>,</c->
+  <c- u>"disableremoteplayback"</c-><c- p>,</c->
+  <c- u>"disallowdocumentaccess"</c-><c- p>,</c->
+  <c- u>"download"</c-><c- p>,</c->
+  <c- u>"draggable"</c-><c- p>,</c->
+  <c- u>"elementtiming"</c-><c- p>,</c->
+  <c- u>"enctype"</c-><c- p>,</c->
+  <c- u>"end"</c-><c- p>,</c->
+  <c- u>"enterkeyhint"</c-><c- p>,</c->
+  <c- u>"event"</c-><c- p>,</c->
+  <c- u>"exportparts"</c-><c- p>,</c->
+  <c- u>"face"</c-><c- p>,</c->
+  <c- u>"for"</c-><c- p>,</c->
+  <c- u>"form"</c-><c- p>,</c->
+  <c- u>"formaction"</c-><c- p>,</c->
+  <c- u>"formenctype"</c-><c- p>,</c->
+  <c- u>"formmethod"</c-><c- p>,</c->
+  <c- u>"formnovalidate"</c-><c- p>,</c->
+  <c- u>"formtarget"</c-><c- p>,</c->
+  <c- u>"frame"</c-><c- p>,</c->
+  <c- u>"frameborder"</c-><c- p>,</c->
+  <c- u>"headers"</c-><c- p>,</c->
+  <c- u>"height"</c-><c- p>,</c->
+  <c- u>"hidden"</c-><c- p>,</c->
+  <c- u>"high"</c-><c- p>,</c->
+  <c- u>"href"</c-><c- p>,</c->
+  <c- u>"hreflang"</c-><c- p>,</c->
+  <c- u>"hreftranslate"</c-><c- p>,</c->
+  <c- u>"hspace"</c-><c- p>,</c->
+  <c- u>"http-equiv"</c-><c- p>,</c->
+  <c- u>"id"</c-><c- p>,</c->
+  <c- u>"imagesizes"</c-><c- p>,</c->
+  <c- u>"imagesrcset"</c-><c- p>,</c->
+  <c- u>"importance"</c-><c- p>,</c->
+  <c- u>"impressiondata"</c-><c- p>,</c->
+  <c- u>"impressionexpiry"</c-><c- p>,</c->
+  <c- u>"incremental"</c-><c- p>,</c->
+  <c- u>"inert"</c-><c- p>,</c->
+  <c- u>"inputmode"</c-><c- p>,</c->
+  <c- u>"integrity"</c-><c- p>,</c->
+  <c- u>"invisible"</c-><c- p>,</c->
+  <c- u>"is"</c-><c- p>,</c->
+  <c- u>"ismap"</c-><c- p>,</c->
+  <c- u>"keytype"</c-><c- p>,</c->
+  <c- u>"kind"</c-><c- p>,</c->
+  <c- u>"label"</c-><c- p>,</c->
+  <c- u>"lang"</c-><c- p>,</c->
+  <c- u>"language"</c-><c- p>,</c->
+  <c- u>"latencyhint"</c-><c- p>,</c->
+  <c- u>"leftmargin"</c-><c- p>,</c->
+  <c- u>"link"</c-><c- p>,</c->
+  <c- u>"list"</c-><c- p>,</c->
+  <c- u>"loading"</c-><c- p>,</c->
+  <c- u>"longdesc"</c-><c- p>,</c->
+  <c- u>"loop"</c-><c- p>,</c->
+  <c- u>"low"</c-><c- p>,</c->
+  <c- u>"lowsrc"</c-><c- p>,</c->
+  <c- u>"manifest"</c-><c- p>,</c->
+  <c- u>"marginheight"</c-><c- p>,</c->
+  <c- u>"marginwidth"</c-><c- p>,</c->
+  <c- u>"max"</c-><c- p>,</c->
+  <c- u>"maxlength"</c-><c- p>,</c->
+  <c- u>"mayscript"</c-><c- p>,</c->
+  <c- u>"media"</c-><c- p>,</c->
+  <c- u>"method"</c-><c- p>,</c->
+  <c- u>"min"</c-><c- p>,</c->
+  <c- u>"minlength"</c-><c- p>,</c->
+  <c- u>"multiple"</c-><c- p>,</c->
+  <c- u>"muted"</c-><c- p>,</c->
+  <c- u>"name"</c-><c- p>,</c->
+  <c- u>"nohref"</c-><c- p>,</c->
+  <c- u>"nomodule"</c-><c- p>,</c->
+  <c- u>"nonce"</c-><c- p>,</c->
+  <c- u>"noresize"</c-><c- p>,</c->
+  <c- u>"noshade"</c-><c- p>,</c->
+  <c- u>"novalidate"</c-><c- p>,</c->
+  <c- u>"nowrap"</c-><c- p>,</c->
+  <c- u>"object"</c-><c- p>,</c->
+  <c- u>"open"</c-><c- p>,</c->
+  <c- u>"optimum"</c-><c- p>,</c->
+  <c- u>"part"</c-><c- p>,</c->
+  <c- u>"pattern"</c-><c- p>,</c->
+  <c- u>"ping"</c-><c- p>,</c->
+  <c- u>"placeholder"</c-><c- p>,</c->
+  <c- u>"playsinline"</c-><c- p>,</c->
+  <c- u>"policy"</c-><c- p>,</c->
+  <c- u>"poster"</c-><c- p>,</c->
+  <c- u>"preload"</c-><c- p>,</c->
+  <c- u>"pseudo"</c-><c- p>,</c->
+  <c- u>"readonly"</c-><c- p>,</c->
+  <c- u>"referrerpolicy"</c-><c- p>,</c->
+  <c- u>"rel"</c-><c- p>,</c->
+  <c- u>"reportingorigin"</c-><c- p>,</c->
+  <c- u>"required"</c-><c- p>,</c->
+  <c- u>"resources"</c-><c- p>,</c->
+  <c- u>"rev"</c-><c- p>,</c->
+  <c- u>"reversed"</c-><c- p>,</c->
+  <c- u>"role"</c-><c- p>,</c->
+  <c- u>"rows"</c-><c- p>,</c->
+  <c- u>"rowspan"</c-><c- p>,</c->
+  <c- u>"rules"</c-><c- p>,</c->
+  <c- u>"sandbox"</c-><c- p>,</c->
+  <c- u>"scheme"</c-><c- p>,</c->
+  <c- u>"scope"</c-><c- p>,</c->
+  <c- u>"scopes"</c-><c- p>,</c->
+  <c- u>"scrollamount"</c-><c- p>,</c->
+  <c- u>"scrolldelay"</c-><c- p>,</c->
+  <c- u>"scrolling"</c-><c- p>,</c->
+  <c- u>"select"</c-><c- p>,</c->
+  <c- u>"selected"</c-><c- p>,</c->
+  <c- u>"shadowroot"</c-><c- p>,</c->
+  <c- u>"shadowrootdelegatesfocus"</c-><c- p>,</c->
+  <c- u>"shape"</c-><c- p>,</c->
+  <c- u>"size"</c-><c- p>,</c->
+  <c- u>"sizes"</c-><c- p>,</c->
+  <c- u>"slot"</c-><c- p>,</c->
+  <c- u>"span"</c-><c- p>,</c->
+  <c- u>"spellcheck"</c-><c- p>,</c->
+  <c- u>"src"</c-><c- p>,</c->
+  <c- u>"srcdoc"</c-><c- p>,</c->
+  <c- u>"srclang"</c-><c- p>,</c->
+  <c- u>"srcset"</c-><c- p>,</c->
+  <c- u>"standby"</c-><c- p>,</c->
+  <c- u>"start"</c-><c- p>,</c->
+  <c- u>"step"</c-><c- p>,</c->
+  <c- u>"style"</c-><c- p>,</c->
+  <c- u>"summary"</c-><c- p>,</c->
+  <c- u>"tabindex"</c-><c- p>,</c->
+  <c- u>"target"</c-><c- p>,</c->
+  <c- u>"text"</c-><c- p>,</c->
+  <c- u>"title"</c-><c- p>,</c->
+  <c- u>"topmargin"</c-><c- p>,</c->
+  <c- u>"translate"</c-><c- p>,</c->
+  <c- u>"truespeed"</c-><c- p>,</c->
+  <c- u>"trusttoken"</c-><c- p>,</c->
+  <c- u>"type"</c-><c- p>,</c->
+  <c- u>"usemap"</c-><c- p>,</c->
+  <c- u>"valign"</c-><c- p>,</c->
+  <c- u>"value"</c-><c- p>,</c->
+  <c- u>"valuetype"</c-><c- p>,</c->
+  <c- u>"version"</c-><c- p>,</c->
+  <c- u>"virtualkeyboardpolicy"</c-><c- p>,</c->
+  <c- u>"vlink"</c-><c- p>,</c->
+  <c- u>"vspace"</c-><c- p>,</c->
+  <c- u>"webkitdirectory"</c-><c- p>,</c->
+  <c- u>"width"</c-><c- p>,</c->
+  <c- u>"wrap"</c->
+<c- p>]</c->
 </pre>
-    <dt data-md>Default Drop Attributes
-    <dd data-md>
-     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="default-attribute-drop-list">default attribute drop list</dfn> has the following value:</p>
-<pre>{}
+   <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="default-configuration">default configuration</dfn> has the following value:</p>
+<pre class="include-code highlight" path="resources/default-configuration.json"><c- p>{</c->
+  <c- u>"allowCustomElements"</c-><c- o>:</c-> <c- kc>false</c-><c- p>,</c->
+  <c- u>"allowElements"</c-><c- o>:</c-> <c- p>[</c->
+    <c- u>"a"</c-><c- p>,</c->
+    <c- u>"abbr"</c-><c- p>,</c->
+    <c- u>"acronym"</c-><c- p>,</c->
+    <c- u>"address"</c-><c- p>,</c->
+    <c- u>"area"</c-><c- p>,</c->
+    <c- u>"article"</c-><c- p>,</c->
+    <c- u>"aside"</c-><c- p>,</c->
+    <c- u>"audio"</c-><c- p>,</c->
+    <c- u>"b"</c-><c- p>,</c->
+    <c- u>"bdi"</c-><c- p>,</c->
+    <c- u>"bdo"</c-><c- p>,</c->
+    <c- u>"bgsound"</c-><c- p>,</c->
+    <c- u>"big"</c-><c- p>,</c->
+    <c- u>"blockquote"</c-><c- p>,</c->
+    <c- u>"body"</c-><c- p>,</c->
+    <c- u>"br"</c-><c- p>,</c->
+    <c- u>"button"</c-><c- p>,</c->
+    <c- u>"canvas"</c-><c- p>,</c->
+    <c- u>"caption"</c-><c- p>,</c->
+    <c- u>"center"</c-><c- p>,</c->
+    <c- u>"cite"</c-><c- p>,</c->
+    <c- u>"code"</c-><c- p>,</c->
+    <c- u>"col"</c-><c- p>,</c->
+    <c- u>"colgroup"</c-><c- p>,</c->
+    <c- u>"datalist"</c-><c- p>,</c->
+    <c- u>"dd"</c-><c- p>,</c->
+    <c- u>"del"</c-><c- p>,</c->
+    <c- u>"details"</c-><c- p>,</c->
+    <c- u>"dfn"</c-><c- p>,</c->
+    <c- u>"dialog"</c-><c- p>,</c->
+    <c- u>"dir"</c-><c- p>,</c->
+    <c- u>"div"</c-><c- p>,</c->
+    <c- u>"dl"</c-><c- p>,</c->
+    <c- u>"dt"</c-><c- p>,</c->
+    <c- u>"em"</c-><c- p>,</c->
+    <c- u>"fieldset"</c-><c- p>,</c->
+    <c- u>"figcaption"</c-><c- p>,</c->
+    <c- u>"figure"</c-><c- p>,</c->
+    <c- u>"font"</c-><c- p>,</c->
+    <c- u>"footer"</c-><c- p>,</c->
+    <c- u>"form"</c-><c- p>,</c->
+    <c- u>"h1"</c-><c- p>,</c->
+    <c- u>"h2"</c-><c- p>,</c->
+    <c- u>"h3"</c-><c- p>,</c->
+    <c- u>"h4"</c-><c- p>,</c->
+    <c- u>"h5"</c-><c- p>,</c->
+    <c- u>"h6"</c-><c- p>,</c->
+    <c- u>"head"</c-><c- p>,</c->
+    <c- u>"header"</c-><c- p>,</c->
+    <c- u>"hgroup"</c-><c- p>,</c->
+    <c- u>"hr"</c-><c- p>,</c->
+    <c- u>"html"</c-><c- p>,</c->
+    <c- u>"i"</c-><c- p>,</c->
+    <c- u>"img"</c-><c- p>,</c->
+    <c- u>"input"</c-><c- p>,</c->
+    <c- u>"ins"</c-><c- p>,</c->
+    <c- u>"kbd"</c-><c- p>,</c->
+    <c- u>"keygen"</c-><c- p>,</c->
+    <c- u>"label"</c-><c- p>,</c->
+    <c- u>"layer"</c-><c- p>,</c->
+    <c- u>"legend"</c-><c- p>,</c->
+    <c- u>"li"</c-><c- p>,</c->
+    <c- u>"link"</c-><c- p>,</c->
+    <c- u>"listing"</c-><c- p>,</c->
+    <c- u>"main"</c-><c- p>,</c->
+    <c- u>"map"</c-><c- p>,</c->
+    <c- u>"mark"</c-><c- p>,</c->
+    <c- u>"marquee"</c-><c- p>,</c->
+    <c- u>"menu"</c-><c- p>,</c->
+    <c- u>"meta"</c-><c- p>,</c->
+    <c- u>"meter"</c-><c- p>,</c->
+    <c- u>"nav"</c-><c- p>,</c->
+    <c- u>"nobr"</c-><c- p>,</c->
+    <c- u>"noscript"</c-><c- p>,</c->
+    <c- u>"ol"</c-><c- p>,</c->
+    <c- u>"optgroup"</c-><c- p>,</c->
+    <c- u>"option"</c-><c- p>,</c->
+    <c- u>"output"</c-><c- p>,</c->
+    <c- u>"p"</c-><c- p>,</c->
+    <c- u>"picture"</c-><c- p>,</c->
+    <c- u>"popup"</c-><c- p>,</c->
+    <c- u>"pre"</c-><c- p>,</c->
+    <c- u>"progress"</c-><c- p>,</c->
+    <c- u>"q"</c-><c- p>,</c->
+    <c- u>"rb"</c-><c- p>,</c->
+    <c- u>"rp"</c-><c- p>,</c->
+    <c- u>"rt"</c-><c- p>,</c->
+    <c- u>"rtc"</c-><c- p>,</c->
+    <c- u>"ruby"</c-><c- p>,</c->
+    <c- u>"s"</c-><c- p>,</c->
+    <c- u>"samp"</c-><c- p>,</c->
+    <c- u>"section"</c-><c- p>,</c->
+    <c- u>"select"</c-><c- p>,</c->
+    <c- u>"selectmenu"</c-><c- p>,</c->
+    <c- u>"small"</c-><c- p>,</c->
+    <c- u>"source"</c-><c- p>,</c->
+    <c- u>"span"</c-><c- p>,</c->
+    <c- u>"strike"</c-><c- p>,</c->
+    <c- u>"strong"</c-><c- p>,</c->
+    <c- u>"style"</c-><c- p>,</c->
+    <c- u>"sub"</c-><c- p>,</c->
+    <c- u>"summary"</c-><c- p>,</c->
+    <c- u>"sup"</c-><c- p>,</c->
+    <c- u>"table"</c-><c- p>,</c->
+    <c- u>"tbody"</c-><c- p>,</c->
+    <c- u>"td"</c-><c- p>,</c->
+    <c- u>"textarea"</c-><c- p>,</c->
+    <c- u>"tfoot"</c-><c- p>,</c->
+    <c- u>"th"</c-><c- p>,</c->
+    <c- u>"thead"</c-><c- p>,</c->
+    <c- u>"time"</c-><c- p>,</c->
+    <c- u>"title"</c-><c- p>,</c->
+    <c- u>"tr"</c-><c- p>,</c->
+    <c- u>"track"</c-><c- p>,</c->
+    <c- u>"tt"</c-><c- p>,</c->
+    <c- u>"u"</c-><c- p>,</c->
+    <c- u>"ul"</c-><c- p>,</c->
+    <c- u>"var"</c-><c- p>,</c->
+    <c- u>"video"</c-><c- p>,</c->
+    <c- u>"wbr"</c->
+  <c- p>],</c->
+  <c- u>"allowAttributes"</c-><c- o>:</c-> <c- p>{</c->
+    <c- u>"abbr"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"accept"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"accept-charset"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"accesskey"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"action"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"align"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"alink"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"allow"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"allowfullscreen"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"alt"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"anchor"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"archive"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"as"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"async"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"autocapitalize"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"autocomplete"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"autocorrect"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"autofocus"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"autopictureinpicture"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"autoplay"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"axis"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"background"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"behavior"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"bgcolor"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"border"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"bordercolor"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"capture"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"cellpadding"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"cellspacing"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"challenge"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"char"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"charoff"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"charset"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"checked"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"cite"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"class"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"classid"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"clear"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"code"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"codebase"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"codetype"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"color"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"cols"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"colspan"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"compact"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"content"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"contenteditable"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"controls"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"controlslist"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"conversiondestination"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"coords"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"crossorigin"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"csp"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"data"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"datetime"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"declare"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"decoding"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"default"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"defer"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"dir"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"direction"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"dirname"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"disabled"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"disablepictureinpicture"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"disableremoteplayback"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"disallowdocumentaccess"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"download"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"draggable"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"elementtiming"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"enctype"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"end"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"enterkeyhint"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"event"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"exportparts"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"face"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"for"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"form"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"formaction"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"formenctype"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"formmethod"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"formnovalidate"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"formtarget"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"frame"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"frameborder"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"headers"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"height"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"hidden"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"high"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"href"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"hreflang"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"hreftranslate"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"hspace"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"http-equiv"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"id"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"imagesizes"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"imagesrcset"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"importance"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"impressiondata"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"impressionexpiry"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"incremental"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"inert"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"inputmode"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"integrity"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"invisible"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"is"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"ismap"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"keytype"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"kind"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"label"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"lang"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"language"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"latencyhint"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"leftmargin"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"link"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"list"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"loading"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"longdesc"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"loop"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"low"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"lowsrc"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"manifest"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"marginheight"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"marginwidth"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"max"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"maxlength"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"mayscript"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"media"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"method"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"min"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"minlength"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"multiple"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"muted"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"name"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"nohref"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"nomodule"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"nonce"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"noresize"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"noshade"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"novalidate"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"nowrap"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"object"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"open"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"optimum"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"part"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"pattern"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"ping"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"placeholder"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"playsinline"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"policy"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"poster"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"preload"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"pseudo"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"readonly"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"referrerpolicy"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"rel"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"reportingorigin"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"required"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"resources"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"rev"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"reversed"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"role"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"rows"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"rowspan"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"rules"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"sandbox"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"scheme"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"scope"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"scopes"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"scrollamount"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"scrolldelay"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"scrolling"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"select"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"selected"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"shadowroot"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"shadowrootdelegatesfocus"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"shape"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"size"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"sizes"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"slot"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"span"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"spellcheck"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"src"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"srcdoc"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"srclang"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"srcset"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"standby"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"start"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"step"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"style"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"summary"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"tabindex"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"target"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"text"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"title"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"topmargin"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"translate"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"truespeed"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"trusttoken"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"type"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"usemap"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"valign"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"value"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"valuetype"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"version"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"virtualkeyboardpolicy"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"vlink"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"vspace"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"webkitdirectory"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"width"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>],</c->
+    <c- u>"wrap"</c-><c- o>:</c-> <c- p>[</c->
+      <c- u>"*"</c->
+    <c- p>]</c->
+  <c- p>}</c->
+<c- p>}</c->
 </pre>
-   </dl>
    <h2 class="heading settled" data-level="3" id="security-considerations"><span class="secno">3. </span><span class="content">Security Considerations {#security-considerations}</span><a class="self-link" href="#security-considerations"></a></h2>
    <p>The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
 by traversing a supplied HTML content and removing elements and attributes
@@ -1099,28 +2237,30 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#dom-sanitizerconfig-allowelements">allowElements</a><span>, in §2.3</span>
    <li><a href="#attribute-allow-list">attribute allow list</a><span>, in §2.3</span>
    <li><a href="#attribute-drop-list">attribute drop list</a><span>, in §2.3</span>
-   <li><a href="#attribute-match">attribute-match</a><span>, in §2.4</span>
+   <li><a href="#attribute-kind">attribute kind</a><span>, in §2.4.1</span>
    <li><a href="#attribute-match-list">attribute match list</a><span>, in §2.3.1</span>
    <li><a href="#typedefdef-attributematchlist">AttributeMatchList</a><span>, in §2.3.1</span>
+   <li><a href="#baseline-attribute-allow-list">baseline attribute allow list</a><span>, in §2.4.2</span>
+   <li><a href="#baseline-effective-configuration">baseline effective configuration</a><span>, in §2.4.2</span>
+   <li><a href="#baseline-element-allow-list">baseline element allow list</a><span>, in §2.4.2</span>
    <li><a href="#dom-sanitizerconfig-blockelements">blockElements</a><span>, in §2.3</span>
    <li><a href="#configuration">configuration</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizer-sanitizer">constructor()</a><span>, in §2.1</span>
    <li><a href="#dom-sanitizer-sanitizer">constructor(config)</a><span>, in §2.1</span>
    <li><a href="#create-a-document-fragment">create a document fragment</a><span>, in §2.4</span>
-   <li><a href="#default-attribute-drop-list">default attribute drop list</a><span>, in §2.5</span>
-   <li><a href="#default-element-block-list">default element block list</a><span>, in §2.5</span>
-   <li><a href="#default-element-drop-list">default element drop list</a><span>, in §2.5</span>
+   <li><a href="#default-configuration">default configuration</a><span>, in §2.4.2</span>
    <li><a href="#dom-sanitizerconfig-dropattributes">dropAttributes</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizerconfig-dropelements">dropElements</a><span>, in §2.3</span>
+   <li><a href="#effective-configuration">effective configuration</a><span>, in §2.4.1</span>
    <li><a href="#element-allow-list">element allow list</a><span>, in §2.3</span>
    <li><a href="#element-block-list">element block list</a><span>, in §2.3</span>
    <li><a href="#element-drop-list">element drop list</a><span>, in §2.3</span>
+   <li><a href="#element-kind">element kind</a><span>, in §2.4.1</span>
    <li><a href="#handle-funky-elements">handle funky elements</a><span>, in §2.4</span>
    <li><a href="#sanitize">sanitize</a><span>, in §2.4</span>
-   <li><a href="#sanitize-an-attribute">sanitize an attribute</a><span>, in §2.4</span>
-   <li><a href="#sanitize-an-element">sanitize an element</a><span>, in §2.4</span>
+   <li><a href="#sanitize-action">sanitize action</a><span>, in §2.4.1</span>
+   <li><a href="#sanitize-a-document-fragment">sanitize a document fragment</a><span>, in §2.4</span>
    <li><a href="#sanitize-a-node">sanitize a node</a><span>, in §2.4</span>
-   <li><a href="#sanitize-document-fragment">sanitize document fragment</a><span>, in §2.4</span>
    <li><a href="#dom-sanitizer-sanitize">sanitize(input)</a><span>, in §2.1</span>
    <li><a href="#sanitizer">Sanitizer</a><span>, in §2.1</span>
    <li><a href="#dom-sanitizer-sanitizer">Sanitizer()</a><span>, in §2.1</span>
@@ -1129,6 +2269,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#typedefdef-sanitizerinput">SanitizerInput</a><span>, in §2.2</span>
    <li><a href="#sanitizetostring">sanitizeToString</a><span>, in §2.4</span>
    <li><a href="#dom-sanitizer-sanitizetostring">sanitizeToString(input)</a><span>, in §2.1</span>
+   <li><a href="#stricter-action">stricter action</a><span>, in §2.4.1</span>
   </ul>
   <aside class="dfn-panel" data-for="term-for-element">
    <a href="https://dom.spec.whatwg.org/#element">https://dom.spec.whatwg.org/#element</a><b>Referenced in:</b>
@@ -1158,6 +2299,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <a href="https://dom.spec.whatwg.org/#concept-element-interface">https://dom.spec.whatwg.org/#concept-element-interface</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-element-interface">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-concept-element-interface①">(2)</a> <a href="#ref-for-concept-element-interface②">(3)</a> <a href="#ref-for-concept-element-interface③">(4)</a>
+    <li><a href="#ref-for-concept-element-interface④">2.4.1. The Effective Configuration {#configuration}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-inclusive-descendant">
@@ -1214,6 +2356,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-htmltemplateelement">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlunknownelement">
+   <a href="https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement">https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlunknownelement">2.4.1. The Effective Configuration {#configuration}</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-custom-element">
    <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element">https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element</a><b>Referenced in:</b>
    <ul>
@@ -1235,7 +2383,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <aside class="dfn-panel" data-for="term-for-valid-custom-element-name">
    <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name">https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-valid-custom-element-name">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-valid-custom-element-name">2.4.1. The Effective Configuration {#configuration}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-list-iterate">
@@ -1311,6 +2459,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="term-for-htmlhyperlinkelementutils">HTMLHyperlinkElementUtils</span>
      <li><span class="dfn-paneled" id="term-for-htmlinputelement">HTMLInputElement</span>
      <li><span class="dfn-paneled" id="term-for-htmltemplateelement">HTMLTemplateElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlunknownelement">HTMLUnknownElement</span>
      <li><span class="dfn-paneled" id="term-for-custom-element">custom element</span>
      <li><span class="dfn-paneled" id="term-for-html-fragment-serialisation-algorithm">html fragment serialization algorithm</span>
      <li><span class="dfn-paneled" id="term-for-html-parser">html parser</span>
@@ -1379,26 +2528,19 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> This presently ignores all namespace info, making it impossible to
-    support different actions for like-named elements from different
-    namespaces.<a href="#issue-1cf1de87"> ↵ </a></div>
    <div class="issue"> It’s unclear whether we can assume a generic
   context for <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">parseFromString</a></code>, or if we need to re-work the API to take
   the insertion context of the created fragment into account. <a href="https://github.com/WICG/sanitizer-api/issues/42">&lt;https://github.com/WICG/sanitizer-api/issues/42></a><a href="#issue-8301a077"> ↵ </a></div>
-   <div class="issue"> The sanitizer defaults need to be carefully vetted, and are still
-    under discussion. The values below are for illustrative purposes only.<a href="#issue-af977c5a"> ↵ </a></div>
+   <div class="issue"> What about comment nodes, CDATA, etc. ?<a href="#issue-0e5b0c6b"> ↵ </a></div>
+   <div class="issue"> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a><a href="#issue-40748180"> ↵ </a></div>
+   <div class="issue"> The sanitizer baseline and defaults need to be carefully vetted, and
+    are still under discussion. The values below are for illustrative
+    purposes only.<a href="#issue-53c87d03"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="typedefdef-sanitizerinput">
    <b><a href="#typedefdef-sanitizerinput">#typedefdef-sanitizerinput</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-typedefdef-sanitizerinput">2.1. Sanitizer API {#sanitizer-api}</a> <a href="#ref-for-typedefdef-sanitizerinput①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="configuration">
-   <b><a href="#configuration">#configuration</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-configuration">2.1. Sanitizer API {#sanitizer-api}</a>
-    <li><a href="#ref-for-configuration①">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-configuration②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-sanitizerconfig">
@@ -1410,37 +2552,37 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <aside class="dfn-panel" data-for="element-allow-list">
    <b><a href="#element-allow-list">#element-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-allow-list">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-element-allow-list①">(2)</a>
+    <li><a href="#ref-for-element-allow-list">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-element-allow-list①">(2)</a> <a href="#ref-for-element-allow-list②">(3)</a> <a href="#ref-for-element-allow-list③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-block-list">
    <b><a href="#element-block-list">#element-block-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-block-list">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-element-block-list">2.4.1. The Effective Configuration {#configuration}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-drop-list">
    <b><a href="#element-drop-list">#element-drop-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-drop-list">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-element-drop-list">2.4.1. The Effective Configuration {#configuration}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-allow-list">
    <b><a href="#attribute-allow-list">#attribute-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-attribute-allow-list">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-attribute-allow-list①">(2)</a>
+    <li><a href="#ref-for-attribute-allow-list">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-attribute-allow-list①">(2)</a> <a href="#ref-for-attribute-allow-list②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-drop-list">
    <b><a href="#attribute-drop-list">#attribute-drop-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-attribute-drop-list">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-attribute-drop-list">2.4.1. The Effective Configuration {#configuration}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="allow-custom-elements-option">
    <b><a href="#allow-custom-elements-option">#allow-custom-elements-option</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-allow-custom-elements-option">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-allow-custom-elements-option">2.4.1. The Effective Configuration {#configuration}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-match-list">
@@ -1448,56 +2590,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <ul>
     <li><a href="#ref-for-attribute-match-list">2.3. The Configuration Dictionary {#config}</a> <a href="#ref-for-attribute-match-list①">(2)</a>
     <li><a href="#ref-for-attribute-match-list②">2.3.1. Attribute Match Lists {#attr-match-list}</a>
-    <li><a href="#ref-for-attribute-match-list③">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="typedefdef-attributematchlist">
    <b><a href="#typedefdef-attributematchlist">#typedefdef-attributematchlist</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-typedefdef-attributematchlist">2.3. The Configuration Dictionary {#config}</a> <a href="#ref-for-typedefdef-attributematchlist①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-document-fragment">
-   <b><a href="#sanitize-document-fragment">#sanitize-document-fragment</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-document-fragment">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-sanitize-document-fragment①">(2)</a>
-    <li><a href="#ref-for-sanitize-document-fragment②">2.5. Default Configuration {#defaults}</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-a-node">
-   <b><a href="#sanitize-a-node">#sanitize-a-node</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-a-node">2.4. Algorithms {#algorithms}</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-an-element">
-   <b><a href="#sanitize-an-element">#sanitize-an-element</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-an-element">2.4. Algorithms {#algorithms}</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-an-attribute">
-   <b><a href="#sanitize-an-attribute">#sanitize-an-attribute</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-an-attribute">2.4. Algorithms {#algorithms}</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="attribute-match">
-   <b><a href="#attribute-match">#attribute-match</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attribute-match">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-attribute-match①">(2)</a> <a href="#ref-for-attribute-match②">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="handle-funky-elements">
-   <b><a href="#handle-funky-elements">#handle-funky-elements</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-handle-funky-elements">2.4. Algorithms {#algorithms}</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="create-a-document-fragment">
-   <b><a href="#create-a-document-fragment">#create-a-document-fragment</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-create-a-document-fragment">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-create-a-document-fragment①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize">
@@ -1513,22 +2611,87 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-sanitizetostring">2.1. Sanitizer API {#sanitizer-api}</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="default-element-drop-list">
-   <b><a href="#default-element-drop-list">#default-element-drop-list</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="create-a-document-fragment">
+   <b><a href="#create-a-document-fragment">#create-a-document-fragment</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-default-element-drop-list">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-create-a-document-fragment">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-create-a-document-fragment①">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="default-element-block-list">
-   <b><a href="#default-element-block-list">#default-element-block-list</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="sanitize-a-document-fragment">
+   <b><a href="#sanitize-a-document-fragment">#sanitize-a-document-fragment</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-default-element-block-list">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-sanitize-a-document-fragment">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="default-attribute-drop-list">
-   <b><a href="#default-attribute-drop-list">#default-attribute-drop-list</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="sanitize-a-node">
+   <b><a href="#sanitize-a-node">#sanitize-a-node</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-default-attribute-drop-list">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-sanitize-a-node">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="handle-funky-elements">
+   <b><a href="#handle-funky-elements">#handle-funky-elements</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-handle-funky-elements">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="effective-configuration">
+   <b><a href="#effective-configuration">#effective-configuration</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-effective-configuration">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-effective-configuration①">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-effective-configuration②">(2)</a> <a href="#ref-for-effective-configuration③">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="sanitize-action">
+   <b><a href="#sanitize-action">#sanitize-action</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-sanitize-action">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-sanitize-action①">(2)</a> <a href="#ref-for-sanitize-action②">(3)</a>
+    <li><a href="#ref-for-sanitize-action③">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-sanitize-action④">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="stricter-action">
+   <b><a href="#stricter-action">#stricter-action</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-stricter-action">2.4.1. The Effective Configuration {#configuration}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="element-kind">
+   <b><a href="#element-kind">#element-kind</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-element-kind">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-element-kind①">2.4.2. Baseline and Defaults {#defaults}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="attribute-kind">
+   <b><a href="#attribute-kind">#attribute-kind</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attribute-kind">2.4.2. Baseline and Defaults {#defaults}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="baseline-effective-configuration">
+   <b><a href="#baseline-effective-configuration">#baseline-effective-configuration</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-baseline-effective-configuration">2.4.1. The Effective Configuration {#configuration}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="baseline-element-allow-list">
+   <b><a href="#baseline-element-allow-list">#baseline-element-allow-list</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-baseline-element-allow-list">2.4.2. Baseline and Defaults {#defaults}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="baseline-attribute-allow-list">
+   <b><a href="#baseline-attribute-allow-list">#baseline-attribute-allow-list</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-baseline-attribute-allow-list">2.4.2. Baseline and Defaults {#defaults}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="default-configuration">
+   <b><a href="#default-configuration">#default-configuration</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-default-configuration">2.3. The Configuration Dictionary {#config}</a>
+    <li><a href="#ref-for-default-configuration①">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-default-configuration②">(2)</a> <a href="#ref-for-default-configuration③">(3)</a>
+    <li><a href="#ref-for-default-configuration④">2.4.2. Baseline and Defaults {#defaults}</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */
