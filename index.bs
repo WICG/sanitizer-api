@@ -392,8 +392,8 @@ or `unknown`. Let |kind| be:
    |attribute|'s name.
 - `regular`, otherwise.
 
-Issue: The spec currently treats MathML and SVG asn `unknown` content, and
-therefore blocked by default. This needs to be fixed.
+Issue(WICG/sanitizer-api#72): The spec currently treats MathML and SVG as
+    `unknown` content and therefore blocked by default. This needs to be fixed.
 
 The [=effective configuration=] for a [=configuration object=] named |config|
 for a given |element| is determined by running these steps:
