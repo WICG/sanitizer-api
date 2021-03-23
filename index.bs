@@ -295,7 +295,8 @@ To <dfn>sanitize an element</dfn> named |element|, run these steps:
 9. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
   1. call [=sanitize an attribute=] with |attr|'s name and |element|'s local name.
   2. if the result is different from 'keep', remove |attr| from |element|.
-10. return 'keep'
+10. run the steps of [=handle funky elements=] algorithm on |element|.
+11. return 'keep'
 
 Issue: This presently ignores all namespace info, making it impossible to
     support different actions for like-named elements from different
@@ -318,6 +319,27 @@ To determine whether an |attribute| and |element| <dfn>attribute-match</dfn> an 
 3. if |matches| contains the string |elem-name|, return true.
 4. if |matches| contains the string "*", return true.
 5. return false.
+
+Some HTML elements require special treatment in a way that can't be easily
+expressed in terms of configuration options or other algorithms. The following
+algorithm collects these in one place. To <dfn>handle funky elements</dfn>,
+run these steps:
+
+1. if |element|'s [=element interface=] is {{HTMLTemplateElement}}:
+  2. Run the steps of the [=sanitize document fragment=] algorithm on
+     |element|'s |content| attribute, and replace |element|'s |content|
+     attribute with the result.
+  3. Drop all child nodes of |element|.
+2. if |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}} mixin:
+  1. if |element|'s `protocol` property is "javascript:", then remove the
+     `href` attribute from |element|.
+3. if |element|'s [=element interface=] is {{HTMLFormElement}}:
+  1. if |element|'s `action` attribute is a [[URL]] with `javascript:`
+     protocol, remove the `action` attribute.
+4. if |element|'s [=element interface=] is {{HTMLInputElement}}
+    or {{HTMLButtonElement}}:
+  1. if |element|'s `formaction` attribute is a [[URL]] with `javascript:`
+     protocol, remove the `formaction` attribute.
 
 To <dfn>create a document fragment</dfn>
 named |fragment| from a Sanitizer |input|, run these steps:
