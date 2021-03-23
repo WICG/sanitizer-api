@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version b9f8371cc, updated Fri Mar 5 18:35:23 2021 -0800" name="generator">
+  <meta content="Bikeshed version 66fe8a0b9, updated Mon Mar 22 11:51:39 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="6ed0a830b01deba3ebeefa1f440725e5c6aacd59" name="document-revision">
+  <meta content="51122f405efed892e3424af0fdaf886eb1a8e191" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -567,7 +567,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-03-09">9 March 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-03-23">23 March 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -886,6 +886,8 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
        <p>if the result is different from 'keep', remove <var>attr</var> from <var>element</var>.</p>
      </ol>
     <li data-md>
+     <p>run the steps of <a data-link-type="dfn" href="#handle-funky-elements" id="ref-for-handle-funky-elements">handle funky elements</a> algorithm on <var>element</var>.</p>
+    <li data-md>
      <p>return 'keep'</p>
    </ol>
    <p class="issue" id="issue-1cf1de87"><a class="self-link" href="#issue-1cf1de87"></a> This presently ignores all namespace info, making it impossible to
@@ -920,6 +922,38 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
      <p>if <var>matches</var> contains the string "*", return true.</p>
     <li data-md>
      <p>return false.</p>
+   </ol>
+   <p>Some HTML elements require special treatment in a way that can’t be easily
+expressed in terms of configuration options or other algorithms. The following
+algorithm collects these in one place. To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="handle-funky-elements">handle funky elements</dfn>,
+run these steps:</p>
+   <ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement">HTMLTemplateElement</a></code>:</p>
+     <ol start="2">
+      <li data-md>
+       <p>Run the steps of the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment">sanitize document fragment</a> algorithm on <var>element</var>’s <var>content</var> attribute, and replace <var>element</var>’s <var>content</var> attribute with the result.</p>
+      <li data-md>
+       <p>Drop all child nodes of <var>element</var>.</p>
+     </ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface①">element interface</a> has a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils" id="ref-for-htmlhyperlinkelementutils">HTMLHyperlinkElementUtils</a></code> mixin:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <code>protocol</code> property is "javascript:", then remove the <code>href</code> attribute from <var>element</var>.</p>
+     </ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface②">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement">HTMLFormElement</a></code>:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>action</code> attribute.</p>
+     </ol>
+    <li data-md>
+     <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface③">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/input.html#htmlinputelement" id="ref-for-htmlinputelement">HTMLInputElement</a></code> or <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement" id="ref-for-htmlbuttonelement">HTMLButtonElement</a></code>:</p>
+     <ol>
+      <li data-md>
+       <p>if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>formaction</code> attribute.</p>
+     </ol>
    </ol>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="create-a-document-fragment">create a document fragment</dfn> named <var>fragment</var> from a Sanitizer <var>input</var>, run these steps:</p>
    <ol>
@@ -964,7 +998,7 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
     <li data-md>
      <p>run <a data-link-type="dfn" href="#create-a-document-fragment" id="ref-for-create-a-document-fragment">create a document fragment</a> algorithm on the <var>input</var>.</p>
     <li data-md>
-     <p>run the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment">sanitize document fragment</a> algorithm on the resulting fragment,</p>
+     <p>run the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment①">sanitize document fragment</a> algorithm on the resulting fragment,</p>
     <li data-md>
      <p>and return its result.</p>
    </ol>
@@ -982,7 +1016,7 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
    <p class="issue" id="issue-af977c5a"><a class="self-link" href="#issue-af977c5a"></a> The sanitizer defaults need to be carefully vetted, and are still
     under discussion. The values below are for illustrative purposes only.</p>
    <p>The sanitizer has a built-in default configuration, which aims to eliminate
-any script-injection possibility. Note that the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment①">sanitize document fragment</a> algorithm
+any script-injection possibility. Note that the <a data-link-type="dfn" href="#sanitize-document-fragment" id="ref-for-sanitize-document-fragment②">sanitize document fragment</a> algorithm
 is defined so that these defaults are handled first and cannot be overridden
 by a custom configuration.</p>
    <dl>
@@ -1081,6 +1115,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#element-allow-list">element allow list</a><span>, in §2.3</span>
    <li><a href="#element-block-list">element block list</a><span>, in §2.3</span>
    <li><a href="#element-drop-list">element drop list</a><span>, in §2.3</span>
+   <li><a href="#handle-funky-elements">handle funky elements</a><span>, in §2.4</span>
    <li><a href="#sanitize">sanitize</a><span>, in §2.4</span>
    <li><a href="#sanitize-an-attribute">sanitize an attribute</a><span>, in §2.4</span>
    <li><a href="#sanitize-an-element">sanitize an element</a><span>, in §2.4</span>
@@ -1119,6 +1154,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-concept-node-clone">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-element-interface">
+   <a href="https://dom.spec.whatwg.org/#concept-element-interface">https://dom.spec.whatwg.org/#concept-element-interface</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-element-interface">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-concept-element-interface①">(2)</a> <a href="#ref-for-concept-element-interface②">(3)</a> <a href="#ref-for-concept-element-interface③">(4)</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-inclusive-descendant">
    <a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant</a><b>Referenced in:</b>
    <ul>
@@ -1141,6 +1182,36 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <a href="https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlbuttonelement">
+   <a href="https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement">https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlbuttonelement">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlformelement">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">https://html.spec.whatwg.org/multipage/forms.html#htmlformelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlformelement">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlhyperlinkelementutils">
+   <a href="https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils">https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlhyperlinkelementutils">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlinputelement">
+   <a href="https://html.spec.whatwg.org/multipage/input.html#htmlinputelement">https://html.spec.whatwg.org/multipage/input.html#htmlinputelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlinputelement">2.4. Algorithms {#algorithms}</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmltemplateelement">
+   <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement">https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmltemplateelement">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-custom-element">
@@ -1222,6 +1293,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="term-for-concept-node-append">append</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-attribute">attribute list</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-clone">clone a node</span>
+     <li><span class="dfn-paneled" id="term-for-concept-element-interface">element interface</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-inclusive-descendant">inclusive descendant</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-order">tree order</span>
     </ul>
@@ -1234,6 +1306,11 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-htmlbuttonelement">HTMLButtonElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlformelement">HTMLFormElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlhyperlinkelementutils">HTMLHyperlinkElementUtils</span>
+     <li><span class="dfn-paneled" id="term-for-htmlinputelement">HTMLInputElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmltemplateelement">HTMLTemplateElement</span>
      <li><span class="dfn-paneled" id="term-for-custom-element">custom element</span>
      <li><span class="dfn-paneled" id="term-for-html-fragment-serialisation-algorithm">html fragment serialization algorithm</span>
      <li><span class="dfn-paneled" id="term-for-html-parser">html parser</span>
@@ -1273,6 +1350,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <dl>
    <dt id="biblio-dompurify">[DOMPURIFY]
    <dd><a href="https://github.com/cure53/DOMPurify">DOMPurify</a>. URL: <a href="https://github.com/cure53/DOMPurify">https://github.com/cure53/DOMPurify</a>
+   <dt id="biblio-url">[URL]
+   <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/">URL Standard</a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def">[
@@ -1381,8 +1460,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <aside class="dfn-panel" data-for="sanitize-document-fragment">
    <b><a href="#sanitize-document-fragment">#sanitize-document-fragment</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sanitize-document-fragment">2.4. Algorithms {#algorithms}</a>
-    <li><a href="#ref-for-sanitize-document-fragment①">2.5. Default Configuration {#defaults}</a>
+    <li><a href="#ref-for-sanitize-document-fragment">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-sanitize-document-fragment①">(2)</a>
+    <li><a href="#ref-for-sanitize-document-fragment②">2.5. Default Configuration {#defaults}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize-a-node">
@@ -1407,6 +1486,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <b><a href="#attribute-match">#attribute-match</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-attribute-match">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-attribute-match①">(2)</a> <a href="#ref-for-attribute-match②">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="handle-funky-elements">
+   <b><a href="#handle-funky-elements">#handle-funky-elements</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-handle-funky-elements">2.4. Algorithms {#algorithms}</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="create-a-document-fragment">
