@@ -131,10 +131,16 @@ handle additional, application-specific use cases.
   };
 </pre>
 
-* The constructor creates a Sanitizer instance.
-  It retains a copy of |config| as its [=configuration object=].
-* The `sanitize` method runs the [=sanitize=] algorithm on |input|,
-* The `sanitizeToString` method runs the [=sanitizeToString=] algorithm on |input|.
+* The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
+    <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
+    are to create a new Sanitizer instance, and to retains a copy of |config|
+    as its [=configuration object=].
+* The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
+    method steps are to return the result of running the [=sanitize=]
+    algorithm on |input|,
+* The <dfn method for=Sanitizer><code>sanitizeToString(<var>input</var>)</code></dfn>
+    method steps are to return the result of running [=sanitizeToString=]
+    algorithm on |input|.
 
 Example:
 ```js
