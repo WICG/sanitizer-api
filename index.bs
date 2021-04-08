@@ -267,14 +267,14 @@ Examples for attributes and attribute match lists:
 To <dfn>sanitize</dfn> a given |input|, run these steps:
 
 1. run [=create a document fragment=] algorithm on the |input|.
-2. run the [=sanitize a document fragment=] algorithm on the resulting fragment,
-3. and return its result.
+1. run the [=sanitize a document fragment=] algorithm on the resulting fragment,
+1. and return its result.
 
 To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
 
 1. run [=create a document fragment=] algorithm on the |input|.
-2. run the [=sanitize=] algorithm on the resulting fragment,
-3. run the steps of the [=HTML Fragment Serialization Algorithm=] with
+1. run the [=sanitize=] algorithm on the resulting fragment,
+1. run the steps of the [=HTML Fragment Serialization Algorithm=] with
      the fragment root of step 1 as the |node|, and return the result string.
 
 To <dfn>create a document fragment</dfn>
@@ -283,17 +283,17 @@ named |fragment| from a Sanitizer |input|, run these steps:
 1. Switch based on |input|'s type:
   1. if |input| is of type {{DocumentFragment}}, then:
     1. let |node| refer to |input|.
-  2. if |input| is of type {{Document}}, then:
+  1. if |input| is of type {{Document}}, then:
     1. let |node| refer to |input|'s `documentElement`.
-  3. if |input| is of type `DOMString`, then:
+  1. if |input| is of type `DOMString`, then:
     1. let |node| be the result of the {{parseFromString}} algorithm
         with |input| as first parameter (`string`),
         and `"text/html"` as second parameter (`type`).
-2. Let |clone| be the result of running [=clone a node=] on |node| with the
+1. Let |clone| be the result of running [=clone a node=] on |node| with the
    `clone children flag` set to `true`.
-3. Let `f` be the result of {{createDocumentFragment}}.
-4. [=Append=] the node |clone| to the parent |f|.
-5. Return |f|.
+1. Let `f` be the result of {{createDocumentFragment}}.
+1. [=Append=] the node |clone| to the parent |f|.
+1. Return |f|.
 
 Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
   context for {{parseFromString}}, or if we need to re-work the API to take
@@ -302,25 +302,25 @@ Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
 To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
 
 1. let |m| be a map that maps nodes to a [=sanitize action=]
-2. let |nodes| be a list containing the [=inclusive descendants=] of |fragment|, in [=tree order=].
-3. [=list/iterate|for each=] |node| in |nodes|:
+1. let |nodes| be a list containing the [=inclusive descendants=] of |fragment|, in [=tree order=].
+1. [=list/iterate|for each=] |node| in |nodes|:
   1. call [=sanitize a node=] and insert |node| and the result value into |m|
-4. [=list/iterate|for each=] |node| in |nodes|:
+1. [=list/iterate|for each=] |node| in |nodes|:
   1. if m[node] is `drop`, remove the |node| and all children from |fragment|.
-  2. if m[node] is `block`, replace the |node| with all of its element and text node children from |fragment|.
-  3. if m[node] is `keep`, do nothing.
+  1. if m[node] is `block`, replace the |node| with all of its element and text node children from |fragment|.
+  1. if m[node] is `keep`, do nothing.
 
 To <dfn>sanitize a node</dfn> named |node| run these steps:
 
 1. let |config| be the Sanitizer's [=effective configuration=].
-2. if |node| is an element node:
+1. if |node| is an element node:
   1. let |element| be |node|'s element.
-  2. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
+  1. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
     1. determine the [=sanitize action=] that |config| assigns to the |element| and |attr| pair.
-    2. if the result is different from `keep`, remove |attr| from |element|.
-  3. run the steps to [=handle funky elements=] on |element|.
-  4. return the [=sanitize action=] that |config| assigns to |element|.
-3. otherwise, return 'keep'
+    1. if the result is different from `keep`, remove |attr| from |element|.
+  1. run the steps to [=handle funky elements=] on |element|.
+  1. return the [=sanitize action=] that |config| assigns to |element|.
+1. otherwise, return 'keep'
 
 Issue: What about comment nodes, CDATA, etc. ?
 
@@ -330,17 +330,17 @@ algorithm collects these in one place. To <dfn>handle funky elements</dfn>,
 run these steps:
 
 1. if |element|'s [=element interface=] is {{HTMLTemplateElement}}:
-  2. Run the steps of the [=sanitize document fragment=] algorithm on
+  1. Run the steps of the [=sanitize document fragment=] algorithm on
      |element|'s |content| attribute, and replace |element|'s |content|
      attribute with the result.
-  3. Drop all child nodes of |element|.
-2. if |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}} mixin:
+  1. Drop all child nodes of |element|.
+1. if |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}} mixin:
   1. if |element|'s `protocol` property is "javascript:", then remove the
      `href` attribute from |element|.
-3. if |element|'s [=element interface=] is {{HTMLFormElement}}:
+1. if |element|'s [=element interface=] is {{HTMLFormElement}}:
   1. if |element|'s `action` attribute is a [[URL]] with `javascript:`
      protocol, remove the `action` attribute.
-4. if |element|'s [=element interface=] is {{HTMLInputElement}}
+1. if |element|'s [=element interface=] is {{HTMLInputElement}}
     or {{HTMLButtonElement}}:
   1. if |element|'s `formaction` attribute is a [[URL]] with `javascript:`
      protocol, remove the `formaction` attribute.
@@ -396,19 +396,19 @@ for a given |element| is determined by running these steps:
 
 1. if |element|'s [=element kind=] is `custom` and if |config|'s
    [=allow custom elements option=] is unset or set to anything other than `true`, return 'drop'.
-2. let |name| be |element|'s tag name.
-3. if |name| is in |config|'s [=element drop list=] return 'drop'.
-4. if |name| is in |config|'s [=element block list=] return 'block'.
-5. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'.
-6. if |config| does not have a non-empty [=element allow list=] and |name| is not it the [=default configuration=]'s [=element allow list=] return 'block'.
-8. return 'keep'.
+1. let |name| be |element|'s tag name.
+1. if |name| is in |config|'s [=element drop list=] return 'drop'.
+1. if |name| is in |config|'s [=element block list=] return 'block'.
+1. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'.
+1. if |config| does not have a non-empty [=element allow list=] and |name| is not it the [=default configuration=]'s [=element allow list=] return 'block'.
+1. return 'keep'.
 
 And for a given pair of |element| and |attribute|:
 
 1. if |config|'s [=attribute drop list=] contains |attribute|'s local name as key, and the associated value contains either |element|'s tag name or the string `"*"`, then return `drop`.
-2. if |config| has a non-empty [=attribute allow list=] and it does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
-3. if |config| does not have a non-empty [=attribute allow list=] and [=default configuration=]'s [=attribute allow list=] does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
-4. return 'keep'.
+1. if |config| has a non-empty [=attribute allow list=] and it does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
+1. if |config| does not have a non-empty [=attribute allow list=] and [=default configuration=]'s [=attribute allow list=] does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
+1. return 'keep'.
 
 ### Baseline and Defaults ### {#defaults}
 
@@ -421,11 +421,11 @@ The <dfn>baseline effective configuration</dfn> is defined as follows:
 - For an |element|:
   1. if |element|'s [=element kind=] is `regular` and if |element|'s tag name
      is not in the [=baseline element allow list=], return `drop`.
-  2. otherwise, return `keep`.
+  1. otherwise, return `keep`.
 - For an |element| and |attribute| pair:
   1. if |attribute|'s [=attribute kind=] is `regular` and if |attribute|'s
      name is not in the [=baseline attribute allow list=] return `drop`
-  2. otherwise, return `keep`.
+  1. otherwise, return `keep`.
 
 
 The sanitizer has a built-in [=default configuration=], which is stricter than
