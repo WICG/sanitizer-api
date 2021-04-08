@@ -56,8 +56,7 @@ spec:dom; type:dfn; text:append
 }
 </pre>
 
-Introduction {#intro}
-=====================
+# Introduction # {#intro}
 
 <em>This section is not normative.</em>
 
@@ -84,8 +83,7 @@ so in a way that is much more likely to be maintained and updated along with
 the browser's own changing parser implementation. This document outlines an
 API which aims to do just that.
 
-Goals {#goals}
---------------
+## Goals ## {#goals}
 
 *   Mitigate the risk of DOM-based cross-site scripting attacks by providing
     developers with mechanisms for handling user-controlled HTML which prevent
@@ -99,8 +97,7 @@ Goals {#goals}
     <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a>
     attacks.
 
-Examples {#examples}
---------------------
+## Examples ## {#examples}
 
 ```js
 let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
@@ -113,10 +110,9 @@ let sanitizedFragment = s.sanitize(userControlledInput);
 element.replaceChildren(s.sanitize(userControlledInput));
 ```
 
-Framework {#framework}
-======================
+# Framework # {#framework}
 
-## Sanitizer API {#sanitizer-api}
+## Sanitizer API ## {#sanitizer-api}
 
 The core API is the `Sanitizer` object and the sanitize method. Sanitizers can
 be instantiated using an optional `SanitizerConfig` dictionary for options.
@@ -146,7 +142,7 @@ Example:
   element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
 ```
 
-## Input Types {#inputs}
+## Input Types ## {#inputs}
 
 The sanitization methods support three input types: `DOMString`, `Document`,
 and `DocumentFragment`. In all cases, the sanitization will work on a
@@ -166,7 +162,7 @@ Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
     or light processing for some elements (`"<image>"` to `"<img>"`);
 
 
-## The Configuration Dictionary {#config}
+## The Configuration Dictionary ## {#config}
 
 The <dfn lt="configuration">sanitizer's configuration object</dfn> is a
 dictionary which describes modifications to the sanitize operation. If a
@@ -234,7 +230,7 @@ Examples:
   new Sanitizer().sanitizeToString("abc <script>alert(1)</script> def");
 ```
 
-### Attribute Match Lists {#attr-match-list}
+### Attribute Match Lists ### {#attr-match-list}
 
 An <dfn>attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given |attribute|
@@ -266,7 +262,7 @@ Examples for attributes and attribute match lists:
   new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitizeToString(sample);
 ```
 
-## Algorithms {#algorithms}
+## Algorithms ## {#algorithms}
 
 To <dfn>sanitize</dfn> a given |input|, run these steps:
 
@@ -349,7 +345,7 @@ run these steps:
   1. if |element|'s `formaction` attribute is a [[URL]] with `javascript:`
      protocol, remove the `formaction` attribute.
 
-### The Effective Configuration {#configuration}
+### The Effective Configuration ### {#configuration}
 
 A Sanitizer is potentially complex, so we will define a helper
 construct, the *effective configuration*. This is mostly a specification
@@ -414,7 +410,7 @@ And for a given pair of |element| and |attribute|:
 3. if |config| does not have a non-empty [=attribute allow list=] and [=default configuration=]'s [=attribute allow list=] does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
 4. return 'keep'.
 
-### Baseline and Defaults {#defaults}
+### Baseline and Defaults ### {#defaults}
 
 Issue: The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
@@ -457,7 +453,7 @@ path: resources/default-configuration.json
 highlight: js
 </pre>
 
-# Security Considerations {#security-considerations}
+# Security Considerations # {#security-considerations}
 
 The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
 by traversing a supplied HTML content and removing elements and attributes
@@ -469,7 +465,7 @@ That being said, there are security issues which the correct usage of the
 Sanitizer API will not be able to protect against and the scenarios will be
 laid out in the following sections.
 
-## Server-Side Reflected and Stored XSS {#server-side-xss}
+## Server-Side Reflected and Stored XSS ## {#server-side-xss}
 
 <em>This section is not normative.</em>
 
@@ -477,7 +473,7 @@ The Sanitizer API operates solely in the DOM and adds a capability to traverse
 and filter an existing DocumentFragment. The Sanitizer does not address
 server-side reflected or stored XSS.
 
-## DOM clobbering {#dom-clobbering}
+## DOM clobbering ## {#dom-clobbering}
 
 <em>This section is not normative.</em>
 
@@ -489,7 +485,7 @@ the malicious content.
 The Sanitizer API does not protect DOM clobbering attacks in its
 default state, but can be configured to remove `id` and `name` attributes.
 
-## XSS with Script gadgets {#script-gadgets}
+## XSS with Script gadgets ## {#script-gadgets}
 
 <em>This section is not normative.</em>
 
@@ -506,7 +502,7 @@ like `data-` and `slot` attributes and elements like `<slot>` and `<template>`.
 We believe that these restrictions are not exhaustive and encourage page
 authors to examine their third party libraries for this behavior.
 
-## Mutated XSS {#mutated-xss}
+## Mutated XSS ## {#mutated-xss}
 
 <em>This section is not normative.</em>
 
@@ -524,8 +520,7 @@ parsing. Directly operating on a fragment after sanitization also comes with a
 performance benefit, as the cost of additional serialization and parsing is
 avoided.
 
-Acknowledgements {#ack}
-=======================
+# Acknowledgements # {#ack}
 
 Cure53's [[DOMPURIFY]] is a clear inspiration for the API this document
 describes, as is Internet Explorer's {{window.toStaticHTML()}}.
