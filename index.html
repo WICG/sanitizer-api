@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 66fe8a0b9, updated Mon Mar 22 11:51:39 2021 -0700" name="generator">
+  <meta content="Bikeshed version 132fff3bd, updated Mon Apr 5 17:14:30 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="3be8e05f4094b345fc236f1a45f3f9d027e94854" name="document-revision">
+  <meta content="1a91a761a470f60db6fa651fcc8ddfd22c099a87" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -567,7 +567,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-03-23">23 March 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-09">9 April 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -616,27 +616,27 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li>
      <a href="#framework"><span class="secno">2</span> <span class="content">Framework</span></a>
      <ol class="toc">
-      <li><a href="#sanitizer-api"><span class="secno">2.1</span> <span class="content">Sanitizer API {#sanitizer-api}</span></a>
-      <li><a href="#inputs"><span class="secno">2.2</span> <span class="content">Input Types {#inputs}</span></a>
+      <li><a href="#sanitizer-api"><span class="secno">2.1</span> <span class="content">Sanitizer API</span></a>
+      <li><a href="#inputs"><span class="secno">2.2</span> <span class="content">Input Types</span></a>
       <li>
-       <a href="#config"><span class="secno">2.3</span> <span class="content">The Configuration Dictionary {#config}</span></a>
+       <a href="#config"><span class="secno">2.3</span> <span class="content">The Configuration Dictionary</span></a>
        <ol class="toc">
-        <li><a href="#attr-match-list"><span class="secno">2.3.1</span> <span class="content">Attribute Match Lists {#attr-match-list}</span></a>
+        <li><a href="#attr-match-list"><span class="secno">2.3.1</span> <span class="content">Attribute Match Lists</span></a>
        </ol>
       <li>
-       <a href="#algorithms"><span class="secno">2.4</span> <span class="content">Algorithms {#algorithms}</span></a>
+       <a href="#algorithms"><span class="secno">2.4</span> <span class="content">Algorithms</span></a>
        <ol class="toc">
-        <li><a href="#configuration①"><span class="secno">2.4.1</span> <span class="content">The Effective Configuration {#configuration}</span></a>
-        <li><a href="#defaults"><span class="secno">2.4.2</span> <span class="content">Baseline and Defaults {#defaults}</span></a>
+        <li><a href="#configuration①"><span class="secno">2.4.1</span> <span class="content">The Effective Configuration</span></a>
+        <li><a href="#defaults"><span class="secno">2.4.2</span> <span class="content">Baseline and Defaults</span></a>
        </ol>
      </ol>
     <li>
-     <a href="#security-considerations"><span class="secno">3</span> <span class="content">Security Considerations {#security-considerations}</span></a>
+     <a href="#security-considerations"><span class="secno">3</span> <span class="content">Security Considerations</span></a>
      <ol class="toc">
-      <li><a href="#server-side-xss"><span class="secno">3.1</span> <span class="content">Server-Side Reflected and Stored XSS {#server-side-xss}</span></a>
-      <li><a href="#dom-clobbering"><span class="secno">3.2</span> <span class="content">DOM clobbering {#dom-clobbering}</span></a>
-      <li><a href="#script-gadgets"><span class="secno">3.3</span> <span class="content">XSS with Script gadgets {#script-gadgets}</span></a>
-      <li><a href="#mutated-xss"><span class="secno">3.4</span> <span class="content">Mutated XSS {#mutated-xss}</span></a>
+      <li><a href="#server-side-xss"><span class="secno">3.1</span> <span class="content">Server-Side Reflected and Stored XSS</span></a>
+      <li><a href="#dom-clobbering"><span class="secno">3.2</span> <span class="content">DOM clobbering</span></a>
+      <li><a href="#script-gadgets"><span class="secno">3.3</span> <span class="content">XSS with Script gadgets</span></a>
+      <li><a href="#mutated-xss"><span class="secno">3.4</span> <span class="content">Mutated XSS</span></a>
      </ol>
     <li><a href="#ack"><span class="secno">4</span> <span class="content">Acknowledgements</span></a>
     <li>
@@ -702,7 +702,7 @@ API which aims to do just that.</p>
 element<c- p>.</c->replaceChildren<c- p>(</c->s<c- p>.</c->sanitize<c- p>(</c->userControlledInput<c- p>));</c->
 </pre>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
-   <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API {#sanitizer-api}</span><a class="self-link" href="#sanitizer-api"></a></h3>
+   <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API</span><a class="self-link" href="#sanitizer-api"></a></h3>
    <p>The core API is the <code>Sanitizer</code> object and the sanitize method. Sanitizers can
 be instantiated using an optional <code>SanitizerConfig</code> dictionary for options.
 The most common use-case - preventing XSS - is handled by default,
@@ -712,25 +712,25 @@ handle additional, application-specific use cases.</p>
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>
 ] <c- b>interface</c-> <dfn class="idl-code" data-dfn-type="interface" data-export id="sanitizer"><code><c- g>Sanitizer</c-></code><a class="self-link" href="#sanitizer"></a></dfn> {
-  <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(config)|constructor(config)|Sanitizer()|constructor()" id="dom-sanitizer-sanitizer"><code><c- g>constructor</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer"></a></dfn>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/Sanitizer(config), Sanitizer/constructor(config), Sanitizer/Sanitizer(), Sanitizer/constructor()" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer-config-config"></a></dfn> = {});
-  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment"><c- n>DocumentFragment</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export data-lt="sanitize(input)" id="dom-sanitizer-sanitize"><code><c- g>sanitize</c-></code><a class="self-link" href="#dom-sanitizer-sanitize"></a></dfn>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitize(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitize-input-input"></a></dfn>);
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export data-lt="sanitizeToString(input)" id="dom-sanitizer-sanitizetostring"><code><c- g>sanitizeToString</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetostring"></a></dfn>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput①"><c- n>SanitizerInput</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeToString(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizetostring-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetostring-input-input"></a></dfn>);
+  <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer" id="ref-for-dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/Sanitizer(config), Sanitizer/constructor(config), Sanitizer/Sanitizer(), Sanitizer/constructor()" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer-config-config"></a></dfn> = {});
+  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment"><c- n>DocumentFragment</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitize" id="ref-for-dom-sanitizer-sanitize"><c- g>sanitize</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitize(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitize-input-input"></a></dfn>);
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizetostring" id="ref-for-dom-sanitizer-sanitizetostring"><c- g>sanitizeToString</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput①"><c- n>SanitizerInput</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeToString(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizetostring-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetostring-input-input"></a></dfn>);
 };
 </pre>
    <ul>
     <li data-md>
-     <p>The constructor creates a Sanitizer instance.
-It retains a copy of <var>config</var> as its <a data-link-type="dfn">configuration object</a>.</p>
+     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(config)|constructor(config)|Sanitizer()|constructor()" id="dom-sanitizer-sanitizer"> <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
+  are to create a new Sanitizer instance, and to retains a copy of <var>config</var> as its <a data-link-type="dfn">configuration object</a>.</p>
     <li data-md>
-     <p>The <code>sanitize</code> method runs the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> algorithm on <var>input</var>,</p>
+     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-sanitize"><code>sanitize(<var>input</var>)</code></dfn> method steps are to return the result of running the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> algorithm on <var>input</var>,</p>
     <li data-md>
-     <p>The <code>sanitizeToString</code> method runs the <a data-link-type="dfn" href="#sanitizetostring" id="ref-for-sanitizetostring">sanitizeToString</a> algorithm on <var>input</var>.</p>
+     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-sanitizetostring"><code>sanitizeToString(<var>input</var>)</code></dfn> method steps are to return the result of running <a data-link-type="dfn" href="#sanitizetostring" id="ref-for-sanitizetostring">sanitizeToString</a> algorithm on <var>input</var>.</p>
    </ul>
    <p>Example:</p>
 <pre class="language-js highlight">  <c- c1>// Replace an element’s content from unsanitized input:</c->
   element<c- p>.</c->replaceChildren<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c->userControlledInput<c- p>));</c->
 </pre>
-   <h3 class="heading settled" data-level="2.2" id="inputs"><span class="secno">2.2. </span><span class="content">Input Types {#inputs}</span><a class="self-link" href="#inputs"></a></h3>
+   <h3 class="heading settled" data-level="2.2" id="inputs"><span class="secno">2.2. </span><span class="content">Input Types</span><a class="self-link" href="#inputs"></a></h3>
    <p>The sanitization methods support three input types: <code>DOMString</code>, <code>Document</code>,
 and <code>DocumentFragment</code>. In all cases, the sanitization will work on a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment①">DocumentFragment</a></code> internally, but the work-fragment will be created by
 parsing, cloning, or using the fragment as-is, respectively.</p>
@@ -743,7 +743,7 @@ parsing, cloning, or using the fragment as-is, respectively.</p>
     character-for-character identical to the input.
     Examples would be character regularization (<code>"&amp;szlig;"</code> to <code>"ß"</code>),
     or light processing for some elements (<code>"&lt;image>"</code> to <code>"&lt;img>"</code>);</p>
-   <h3 class="heading settled" data-level="2.3" id="config"><span class="secno">2.3. </span><span class="content">The Configuration Dictionary {#config}</span><a class="self-link" href="#config"></a></h3>
+   <h3 class="heading settled" data-level="2.3" id="config"><span class="secno">2.3. </span><span class="content">The Configuration Dictionary</span><a class="self-link" href="#config"></a></h3>
    <p>The <dfn data-dfn-type="dfn" data-lt="configuration" data-noexport id="configuration">sanitizer’s configuration object<a class="self-link" href="#configuration"></a></dfn> is a
 dictionary which describes modifications to the sanitize operation. If a
 Sanitizer has not received an explicit configuration, for example when being
@@ -810,7 +810,7 @@ is used as the configuration object.</p>
   <c- c1>// Scripts will be blocked: "abc alert(1) def"</c->
   <c- k>new</c-> Sanitizer<c- p>().</c->sanitizeToString<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
 </pre>
-   <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists {#attr-match-list}</span><a class="self-link" href="#attr-match-list"></a></h4>
+   <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists</span><a class="self-link" href="#attr-match-list"></a></h4>
    <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-match-list">attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given <var>attribute</var> belonging to an <var>element</var> matches an <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list②">attribute match list</a>, if the
 attribute’s local name is a key in the match list, and element’s local name
@@ -835,7 +835,7 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
   <c- c1>// Block id, everywhere: "&lt;span class='theclass' style='font-weight: bold'>...&lt;/span>";</c->
   <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
 </pre>
-   <h3 class="heading settled" data-level="2.4" id="algorithms"><span class="secno">2.4. </span><span class="content">Algorithms {#algorithms}</span><a class="self-link" href="#algorithms"></a></h3>
+   <h3 class="heading settled" data-level="2.4" id="algorithms"><span class="secno">2.4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h3>
    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> a given <var>input</var>, run these steps:</p>
    <ol>
     <li data-md>
@@ -949,7 +949,7 @@ run these steps:</p>
    <ol>
     <li data-md>
      <p>if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> is <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement">HTMLTemplateElement</a></code>:</p>
-     <ol start="2">
+     <ol>
       <li data-md>
        <p>Run the steps of the <a data-link-type="dfn">sanitize document fragment</a> algorithm on <var>element</var>’s <var>content</var> attribute, and replace <var>element</var>’s <var>content</var> attribute with the result.</p>
       <li data-md>
@@ -974,7 +974,7 @@ run these steps:</p>
        <p>if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol, remove the <code>formaction</code> attribute.</p>
      </ol>
    </ol>
-   <h4 class="heading settled" data-level="2.4.1" id="configuration①"><span class="secno">2.4.1. </span><span class="content">The Effective Configuration {#configuration}</span><a class="self-link" href="#configuration①"></a></h4>
+   <h4 class="heading settled" data-level="2.4.1" id="configuration①"><span class="secno">2.4.1. </span><span class="content">The Effective Configuration</span><a class="self-link" href="#configuration①"></a></h4>
    <p>A Sanitizer is potentially complex, so we will define a helper
 construct, the <em>effective configuration</em>. This is mostly a specification
 convenience and allows us to explain a Sanitizer’s operation in two steps:
@@ -1039,7 +1039,7 @@ helper definition:  The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexpo
     <li data-md>
      <p>return 'keep'.</p>
    </ol>
-   <h4 class="heading settled" data-level="2.4.2" id="defaults"><span class="secno">2.4.2. </span><span class="content">Baseline and Defaults {#defaults}</span><a class="self-link" href="#defaults"></a></h4>
+   <h4 class="heading settled" data-level="2.4.2" id="defaults"><span class="secno">2.4.2. </span><span class="content">Baseline and Defaults</span><a class="self-link" href="#defaults"></a></h4>
    <p class="issue" id="issue-53c87d03"><a class="self-link" href="#issue-53c87d03"></a> The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
     purposes only.</p>
@@ -2174,7 +2174,7 @@ as legacy or unusual constructs.</p>
   <c- p>}</c->
 <c- p>}</c->
 </pre>
-   <h2 class="heading settled" data-level="3" id="security-considerations"><span class="secno">3. </span><span class="content">Security Considerations {#security-considerations}</span><a class="self-link" href="#security-considerations"></a></h2>
+   <h2 class="heading settled" data-level="3" id="security-considerations"><span class="secno">3. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
    <p>The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
 by traversing a supplied HTML content and removing elements and attributes
 according to a configuration. The specified API must not support
@@ -2183,12 +2183,12 @@ and doing so would be a bug in the threat model.</p>
    <p>That being said, there are security issues which the correct usage of the
 Sanitizer API will not be able to protect against and the scenarios will be
 laid out in the following sections.</p>
-   <h3 class="heading settled" data-level="3.1" id="server-side-xss"><span class="secno">3.1. </span><span class="content">Server-Side Reflected and Stored XSS {#server-side-xss}</span><a class="self-link" href="#server-side-xss"></a></h3>
+   <h3 class="heading settled" data-level="3.1" id="server-side-xss"><span class="secno">3.1. </span><span class="content">Server-Side Reflected and Stored XSS</span><a class="self-link" href="#server-side-xss"></a></h3>
    <p><em>This section is not normative.</em></p>
    <p>The Sanitizer API operates solely in the DOM and adds a capability to traverse
 and filter an existing DocumentFragment. The Sanitizer does not address
 server-side reflected or stored XSS.</p>
-   <h3 class="heading settled" data-level="3.2" id="dom-clobbering"><span class="secno">3.2. </span><span class="content">DOM clobbering {#dom-clobbering}</span><a class="self-link" href="#dom-clobbering"></a></h3>
+   <h3 class="heading settled" data-level="3.2" id="dom-clobbering"><span class="secno">3.2. </span><span class="content">DOM clobbering</span><a class="self-link" href="#dom-clobbering"></a></h3>
    <p><em>This section is not normative.</em></p>
    <p>DOM clobbering describes an attack in which malicious HTML confuses an
 application by naming elements through <code>id</code> or <code>name</code> attributes such that
@@ -2196,7 +2196,7 @@ properties like <code>children</code> of an HTML element in the DOM are overshad
 the malicious content.</p>
    <p>The Sanitizer API does not protect DOM clobbering attacks in its
 default state, but can be configured to remove <code>id</code> and <code>name</code> attributes.</p>
-   <h3 class="heading settled" data-level="3.3" id="script-gadgets"><span class="secno">3.3. </span><span class="content">XSS with Script gadgets {#script-gadgets}</span><a class="self-link" href="#script-gadgets"></a></h3>
+   <h3 class="heading settled" data-level="3.3" id="script-gadgets"><span class="secno">3.3. </span><span class="content">XSS with Script gadgets</span><a class="self-link" href="#script-gadgets"></a></h3>
    <p><em>This section is not normative.</em></p>
    <p>Script gadgets is a technique in which an attacker uses existing application
 code from popular JavaScript libraries to cause their own code to execute.
@@ -2209,7 +2209,7 @@ that is known to be widely used for templating and framework-specific code,
 like <code>data-</code> and <code>slot</code> attributes and elements like <code>&lt;slot></code> and <code>&lt;template></code>.
 We believe that these restrictions are not exhaustive and encourage page
 authors to examine their third party libraries for this behavior.</p>
-   <h3 class="heading settled" data-level="3.4" id="mutated-xss"><span class="secno">3.4. </span><span class="content">Mutated XSS {#mutated-xss}</span><a class="self-link" href="#mutated-xss"></a></h3>
+   <h3 class="heading settled" data-level="3.4" id="mutated-xss"><span class="secno">3.4. </span><span class="content">Mutated XSS</span><a class="self-link" href="#mutated-xss"></a></h3>
    <p><em>This section is not normative.</em></p>
    <p>Mutated XSS or mXSS describes an attack based on parser mismatches when parsing
 an HTML snippet without the correct context. In particular, when a parsed HTML
@@ -2280,38 +2280,38 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <aside class="dfn-panel" data-for="term-for-concept-node-append">
    <a href="https://dom.spec.whatwg.org/#concept-node-append">https://dom.spec.whatwg.org/#concept-node-append</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-node-append">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-concept-node-append">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-element-attribute">
    <a href="https://dom.spec.whatwg.org/#concept-element-attribute">https://dom.spec.whatwg.org/#concept-element-attribute</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-element-attribute">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-concept-element-attribute">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-clone">
    <a href="https://dom.spec.whatwg.org/#concept-node-clone">https://dom.spec.whatwg.org/#concept-node-clone</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-node-clone">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-concept-node-clone">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-element-interface">
    <a href="https://dom.spec.whatwg.org/#concept-element-interface">https://dom.spec.whatwg.org/#concept-element-interface</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-element-interface">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-concept-element-interface①">(2)</a> <a href="#ref-for-concept-element-interface②">(3)</a> <a href="#ref-for-concept-element-interface③">(4)</a>
-    <li><a href="#ref-for-concept-element-interface④">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-concept-element-interface">2.4. Algorithms</a> <a href="#ref-for-concept-element-interface①">(2)</a> <a href="#ref-for-concept-element-interface②">(3)</a> <a href="#ref-for-concept-element-interface③">(4)</a>
+    <li><a href="#ref-for-concept-element-interface④">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-inclusive-descendant">
    <a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-tree-inclusive-descendant">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-concept-tree-inclusive-descendant">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-order">
    <a href="https://dom.spec.whatwg.org/#concept-tree-order">https://dom.spec.whatwg.org/#concept-tree-order</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-tree-order">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-concept-tree-order">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-widl-Element-innerHTML">
@@ -2323,113 +2323,113 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <aside class="dfn-panel" data-for="term-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">
    <a href="https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type①">(2)</a>
+    <li><a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">2.4. Algorithms</a> <a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlbuttonelement">
    <a href="https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement">https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlbuttonelement">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-htmlbuttonelement">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlformelement">
    <a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">https://html.spec.whatwg.org/multipage/forms.html#htmlformelement</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlformelement">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-htmlformelement">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlhyperlinkelementutils">
    <a href="https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils">https://html.spec.whatwg.org/multipage/links.html#htmlhyperlinkelementutils</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlhyperlinkelementutils">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-htmlhyperlinkelementutils">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlinputelement">
    <a href="https://html.spec.whatwg.org/multipage/input.html#htmlinputelement">https://html.spec.whatwg.org/multipage/input.html#htmlinputelement</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlinputelement">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-htmlinputelement">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmltemplateelement">
    <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement">https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmltemplateelement">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-htmltemplateelement">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlunknownelement">
    <a href="https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement">https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlunknownelement">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-htmlunknownelement">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-custom-element">
    <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element">https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-custom-element">2.3. The Configuration Dictionary {#config}</a>
+    <li><a href="#ref-for-custom-element">2.3. The Configuration Dictionary</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-html-fragment-serialisation-algorithm">
    <a href="https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm">https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-html-fragment-serialisation-algorithm">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-html-fragment-serialisation-algorithm">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-html-parser">
    <a href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser">https://html.spec.whatwg.org/multipage/parsing.html#html-parser</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-html-parser">2.2. Input Types {#inputs}</a>
+    <li><a href="#ref-for-html-parser">2.2. Input Types</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-valid-custom-element-name">
    <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name">https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-valid-custom-element-name">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-valid-custom-element-name">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-list-iterate">
    <a href="https://infra.spec.whatwg.org/#list-iterate">https://infra.spec.whatwg.org/#list-iterate</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-list-iterate">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-list-iterate①">(2)</a> <a href="#ref-for-list-iterate②">(3)</a>
+    <li><a href="#ref-for-list-iterate">2.4. Algorithms</a> <a href="#ref-for-list-iterate①">(2)</a> <a href="#ref-for-list-iterate②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
    <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMString">2.1. Sanitizer API {#sanitizer-api}</a>
-    <li><a href="#ref-for-idl-DOMString①">2.2. Input Types {#inputs}</a>
-    <li><a href="#ref-for-idl-DOMString②">2.3. The Configuration Dictionary {#config}</a> <a href="#ref-for-idl-DOMString③">(2)</a> <a href="#ref-for-idl-DOMString④">(3)</a>
-    <li><a href="#ref-for-idl-DOMString⑤">2.3.1. Attribute Match Lists {#attr-match-list}</a> <a href="#ref-for-idl-DOMString⑥">(2)</a>
+    <li><a href="#ref-for-idl-DOMString">2.1. Sanitizer API</a>
+    <li><a href="#ref-for-idl-DOMString①">2.2. Input Types</a>
+    <li><a href="#ref-for-idl-DOMString②">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-DOMString③">(2)</a> <a href="#ref-for-idl-DOMString④">(3)</a>
+    <li><a href="#ref-for-idl-DOMString⑤">2.3.1. Attribute Match Lists</a> <a href="#ref-for-idl-DOMString⑥">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-Exposed">
    <a href="https://heycam.github.io/webidl/#Exposed">https://heycam.github.io/webidl/#Exposed</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-Exposed">2.1. Sanitizer API {#sanitizer-api}</a>
+    <li><a href="#ref-for-Exposed">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-SecureContext">
    <a href="https://heycam.github.io/webidl/#SecureContext">https://heycam.github.io/webidl/#SecureContext</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-SecureContext">2.1. Sanitizer API {#sanitizer-api}</a>
+    <li><a href="#ref-for-SecureContext">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
    <a href="https://heycam.github.io/webidl/#idl-boolean">https://heycam.github.io/webidl/#idl-boolean</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary {#config}</a>
+    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-record">
    <a href="https://heycam.github.io/webidl/#idl-record">https://heycam.github.io/webidl/#idl-record</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-record">2.3.1. Attribute Match Lists {#attr-match-list}</a>
+    <li><a href="#ref-for-idl-record">2.3.1. Attribute Match Lists</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-sequence">
    <a href="https://heycam.github.io/webidl/#idl-sequence">https://heycam.github.io/webidl/#idl-sequence</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-sequence">2.3. The Configuration Dictionary {#config}</a> <a href="#ref-for-idl-sequence①">(2)</a> <a href="#ref-for-idl-sequence②">(3)</a>
-    <li><a href="#ref-for-idl-sequence③">2.3.1. Attribute Match Lists {#attr-match-list}</a>
+    <li><a href="#ref-for-idl-sequence">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-sequence①">(2)</a> <a href="#ref-for-idl-sequence②">(3)</a>
+    <li><a href="#ref-for-idl-sequence③">2.3.1. Attribute Match Lists</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -2507,9 +2507,9 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext"><c- g>SecureContext</c-></a>
 ] <c- b>interface</c-> <a href="#sanitizer"><code><c- g>Sanitizer</c-></code></a> {
-  <a href="#dom-sanitizer-sanitizer"><code><c- g>constructor</c-></code></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a href="#dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code></a> = {});
-  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <a href="#dom-sanitizer-sanitize"><code><c- g>sanitize</c-></code></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <a href="#dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code></a>);
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-sanitizetostring"><code><c- g>sanitizeToString</c-></code></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <a href="#dom-sanitizer-sanitizetostring-input-input"><code><c- g>input</c-></code></a>);
+  <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a href="#dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code></a> = {});
+  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitize"><c- g>sanitize</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <a href="#dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code></a>);
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizetostring"><c- g>sanitizeToString</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <a href="#dom-sanitizer-sanitizetostring-input-input"><code><c- g>input</c-></code></a>);
 };
 
 <c- b>typedef</c-> (<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#interface-Document"><c- n>Document</c-></a>) <a href="#typedefdef-sanitizerinput"><code><c- g>SanitizerInput</c-></code></a>;
@@ -2537,161 +2537,179 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     are still under discussion. The values below are for illustrative
     purposes only.<a href="#issue-53c87d03"> ↵ </a></div>
   </div>
+  <aside class="dfn-panel" data-for="dom-sanitizer-sanitizer">
+   <b><a href="#dom-sanitizer-sanitizer">#dom-sanitizer-sanitizer</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-sanitizer-sanitizer">2.1. Sanitizer API</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-sanitizer-sanitize">
+   <b><a href="#dom-sanitizer-sanitize">#dom-sanitizer-sanitize</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-sanitizer-sanitize">2.1. Sanitizer API</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-sanitizer-sanitizetostring">
+   <b><a href="#dom-sanitizer-sanitizetostring">#dom-sanitizer-sanitizetostring</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-sanitizer-sanitizetostring">2.1. Sanitizer API</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="typedefdef-sanitizerinput">
    <b><a href="#typedefdef-sanitizerinput">#typedefdef-sanitizerinput</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-typedefdef-sanitizerinput">2.1. Sanitizer API {#sanitizer-api}</a> <a href="#ref-for-typedefdef-sanitizerinput①">(2)</a>
+    <li><a href="#ref-for-typedefdef-sanitizerinput">2.1. Sanitizer API</a> <a href="#ref-for-typedefdef-sanitizerinput①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-sanitizerconfig">
    <b><a href="#dictdef-sanitizerconfig">#dictdef-sanitizerconfig</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-sanitizerconfig">2.1. Sanitizer API {#sanitizer-api}</a>
+    <li><a href="#ref-for-dictdef-sanitizerconfig">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-allow-list">
    <b><a href="#element-allow-list">#element-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-allow-list">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-element-allow-list①">(2)</a> <a href="#ref-for-element-allow-list②">(3)</a> <a href="#ref-for-element-allow-list③">(4)</a>
+    <li><a href="#ref-for-element-allow-list">2.4.1. The Effective Configuration</a> <a href="#ref-for-element-allow-list①">(2)</a> <a href="#ref-for-element-allow-list②">(3)</a> <a href="#ref-for-element-allow-list③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-block-list">
    <b><a href="#element-block-list">#element-block-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-block-list">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-element-block-list">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-drop-list">
    <b><a href="#element-drop-list">#element-drop-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-drop-list">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-element-drop-list">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-allow-list">
    <b><a href="#attribute-allow-list">#attribute-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-attribute-allow-list">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-attribute-allow-list①">(2)</a> <a href="#ref-for-attribute-allow-list②">(3)</a>
+    <li><a href="#ref-for-attribute-allow-list">2.4.1. The Effective Configuration</a> <a href="#ref-for-attribute-allow-list①">(2)</a> <a href="#ref-for-attribute-allow-list②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-drop-list">
    <b><a href="#attribute-drop-list">#attribute-drop-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-attribute-drop-list">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-attribute-drop-list">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="allow-custom-elements-option">
    <b><a href="#allow-custom-elements-option">#allow-custom-elements-option</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-allow-custom-elements-option">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-allow-custom-elements-option">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-match-list">
    <b><a href="#attribute-match-list">#attribute-match-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-attribute-match-list">2.3. The Configuration Dictionary {#config}</a> <a href="#ref-for-attribute-match-list①">(2)</a>
-    <li><a href="#ref-for-attribute-match-list②">2.3.1. Attribute Match Lists {#attr-match-list}</a>
+    <li><a href="#ref-for-attribute-match-list">2.3. The Configuration Dictionary</a> <a href="#ref-for-attribute-match-list①">(2)</a>
+    <li><a href="#ref-for-attribute-match-list②">2.3.1. Attribute Match Lists</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="typedefdef-attributematchlist">
    <b><a href="#typedefdef-attributematchlist">#typedefdef-attributematchlist</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-typedefdef-attributematchlist">2.3. The Configuration Dictionary {#config}</a> <a href="#ref-for-typedefdef-attributematchlist①">(2)</a>
+    <li><a href="#ref-for-typedefdef-attributematchlist">2.3. The Configuration Dictionary</a> <a href="#ref-for-typedefdef-attributematchlist①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize">
    <b><a href="#sanitize">#sanitize</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sanitize">2.1. Sanitizer API {#sanitizer-api}</a>
-    <li><a href="#ref-for-sanitize①">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-sanitize">2.1. Sanitizer API</a>
+    <li><a href="#ref-for-sanitize①">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitizetostring">
    <b><a href="#sanitizetostring">#sanitizetostring</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sanitizetostring">2.1. Sanitizer API {#sanitizer-api}</a>
+    <li><a href="#ref-for-sanitizetostring">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="create-a-document-fragment">
    <b><a href="#create-a-document-fragment">#create-a-document-fragment</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-create-a-document-fragment">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-create-a-document-fragment①">(2)</a>
+    <li><a href="#ref-for-create-a-document-fragment">2.4. Algorithms</a> <a href="#ref-for-create-a-document-fragment①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize-a-document-fragment">
    <b><a href="#sanitize-a-document-fragment">#sanitize-a-document-fragment</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sanitize-a-document-fragment">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-sanitize-a-document-fragment">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize-a-node">
    <b><a href="#sanitize-a-node">#sanitize-a-node</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sanitize-a-node">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-sanitize-a-node">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="handle-funky-elements">
    <b><a href="#handle-funky-elements">#handle-funky-elements</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-handle-funky-elements">2.4. Algorithms {#algorithms}</a>
+    <li><a href="#ref-for-handle-funky-elements">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="effective-configuration">
    <b><a href="#effective-configuration">#effective-configuration</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-effective-configuration">2.4. Algorithms {#algorithms}</a>
-    <li><a href="#ref-for-effective-configuration①">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-effective-configuration②">(2)</a> <a href="#ref-for-effective-configuration③">(3)</a>
+    <li><a href="#ref-for-effective-configuration">2.4. Algorithms</a>
+    <li><a href="#ref-for-effective-configuration①">2.4.1. The Effective Configuration</a> <a href="#ref-for-effective-configuration②">(2)</a> <a href="#ref-for-effective-configuration③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize-action">
    <b><a href="#sanitize-action">#sanitize-action</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sanitize-action">2.4. Algorithms {#algorithms}</a> <a href="#ref-for-sanitize-action①">(2)</a> <a href="#ref-for-sanitize-action②">(3)</a>
-    <li><a href="#ref-for-sanitize-action③">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-sanitize-action④">(2)</a>
+    <li><a href="#ref-for-sanitize-action">2.4. Algorithms</a> <a href="#ref-for-sanitize-action①">(2)</a> <a href="#ref-for-sanitize-action②">(3)</a>
+    <li><a href="#ref-for-sanitize-action③">2.4.1. The Effective Configuration</a> <a href="#ref-for-sanitize-action④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="stricter-action">
    <b><a href="#stricter-action">#stricter-action</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-stricter-action">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-stricter-action">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-kind">
    <b><a href="#element-kind">#element-kind</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-kind">2.4.1. The Effective Configuration {#configuration}</a>
-    <li><a href="#ref-for-element-kind①">2.4.2. Baseline and Defaults {#defaults}</a>
+    <li><a href="#ref-for-element-kind">2.4.1. The Effective Configuration</a>
+    <li><a href="#ref-for-element-kind①">2.4.2. Baseline and Defaults</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-kind">
    <b><a href="#attribute-kind">#attribute-kind</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-attribute-kind">2.4.2. Baseline and Defaults {#defaults}</a>
+    <li><a href="#ref-for-attribute-kind">2.4.2. Baseline and Defaults</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="baseline-effective-configuration">
    <b><a href="#baseline-effective-configuration">#baseline-effective-configuration</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-baseline-effective-configuration">2.4.1. The Effective Configuration {#configuration}</a>
+    <li><a href="#ref-for-baseline-effective-configuration">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="baseline-element-allow-list">
    <b><a href="#baseline-element-allow-list">#baseline-element-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-baseline-element-allow-list">2.4.2. Baseline and Defaults {#defaults}</a>
+    <li><a href="#ref-for-baseline-element-allow-list">2.4.2. Baseline and Defaults</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="baseline-attribute-allow-list">
    <b><a href="#baseline-attribute-allow-list">#baseline-attribute-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-baseline-attribute-allow-list">2.4.2. Baseline and Defaults {#defaults}</a>
+    <li><a href="#ref-for-baseline-attribute-allow-list">2.4.2. Baseline and Defaults</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="default-configuration">
    <b><a href="#default-configuration">#default-configuration</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-default-configuration">2.3. The Configuration Dictionary {#config}</a>
-    <li><a href="#ref-for-default-configuration①">2.4.1. The Effective Configuration {#configuration}</a> <a href="#ref-for-default-configuration②">(2)</a> <a href="#ref-for-default-configuration③">(3)</a>
-    <li><a href="#ref-for-default-configuration④">2.4.2. Baseline and Defaults {#defaults}</a>
+    <li><a href="#ref-for-default-configuration">2.3. The Configuration Dictionary</a>
+    <li><a href="#ref-for-default-configuration①">2.4.1. The Effective Configuration</a> <a href="#ref-for-default-configuration②">(2)</a> <a href="#ref-for-default-configuration③">(3)</a>
+    <li><a href="#ref-for-default-configuration④">2.4.2. Baseline and Defaults</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */
