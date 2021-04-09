@@ -170,9 +170,9 @@ Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
 
 ## The Configuration Dictionary ## {#config}
 
-The <dfn lt="configuration">sanitizer's configuration object</dfn> is a
-dictionary which describes modifications to the sanitize operation. If a
-Sanitizer has not received an explicit configuration, for example when being
+The Sanitizer's <dfn>configuration object</dfn> is a dictionary which
+describes modifications to the sanitize operation. If a Sanitizer has
+not received an explicit configuration, for example when being
 constructed without any parameters, then the [=default configuration=] value
 is used as the configuration object.
 
@@ -271,38 +271,44 @@ Examples for attributes and attribute match lists:
 ## Algorithms ## {#algorithms}
 
 <div algorithm="sanitize">
-To <dfn>sanitize</dfn> a given |input|, run these steps:
-  1. run [=create a document fragment=] algorithm on the |input|.
-  1. run the [=sanitize a document fragment=] algorithm on the resulting fragment,
-  1. and return its result.
+To <dfn>sanitize</dfn> a given |input| of type {{SanitizerInput}},
+run these steps:
+  1. Let |fragment| be the result of running the [=create a document fragment=]
+     algorithm on |input|.
+  1. Run the [=sanitize a document fragment=] algorithm on |fragment|.
+  1. Return |fragment|.
 </div>
 
 <div algorithm="sanitizeToString">
-To <dfn>sanitizeToString</dfn> a given |input|, run these steps:
-  1. run [=create a document fragment=] algorithm on the |input|.
-  1. run the [=sanitize=] algorithm on the resulting fragment,
-  1. run the steps of the [=HTML Fragment Serialization Algorithm=] with
-      the fragment root of step 1 as the |node|, and return the result string.
+To <dfn>sanitizeToString</dfn> a given |input| of type {{SanitizerInput}}, run these steps:
+  1. Let |fragment| be the result of the [=create a document fragment=]
+     algorithm on |input|.
+  1. Let |sanitized| be the result of running the [=sanitize=] algorithm on
+     |fragment|.
+  1. Let |result| be the result of running the
+     [=HTML Fragment Serialization Algorithm=] with |sanitized| as the `node`
+     argument.
+  1. Return |result|.
 </div>
 
 <div algorithm="create a document fragment">
-To <dfn>create a document fragment</dfn> named |fragment| from a
-Sanitizer |input|, run these steps:
+To <dfn>create a document fragment</dfn> named |fragment| from an
+|input| of type {{SanitizerInput}}, run these steps:
 
   1. Switch based on |input|'s type:
-    1. if |input| is of type {{DocumentFragment}}, then:
-      1. let |node| refer to |input|.
-    1. if |input| is of type {{Document}}, then:
-      1. let |node| refer to |input|'s `documentElement`.
-    1. if |input| is of type `DOMString`, then:
-      1. let |node| be the result of the {{parseFromString}} algorithm
+    1. If |input| is of type {{DocumentFragment}}, then:
+      1. Let |node| refer to |input|.
+    1. If |input| is of type {{Document}}, then:
+      1. Let |node| refer to |input|'s `documentElement`.
+    1. If |input| is of type `DOMString`, then:
+      1. Let |node| be the result of running the {{parseFromString}} algorithm
           with |input| as first parameter (`string`),
           and `"text/html"` as second parameter (`type`).
   1. Let |clone| be the result of running [=clone a node=] on |node| with the
      `clone children flag` set to `true`.
-  1. Let `f` be the result of {{createDocumentFragment}}.
-  1. [=Append=] the node |clone| to the parent |f|.
-  1. Return |f|.
+  1. Let `fragment` be the result of {{createDocumentFragment}}.
+  1. [=Append=] the node |clone| to the parent |fragment|.
+  1. Return |fragment|.
 
 Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
   context for {{parseFromString}}, or if we need to re-work the API to take
@@ -312,28 +318,38 @@ Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
 <div algorithm="sanitize a document fragment">
 To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
 
-  1. let |m| be a map that maps nodes to a [=sanitize action=]
-  1. let |nodes| be a list containing the [=inclusive descendants=] of |fragment|, in [=tree order=].
-  1. [=list/iterate|for each=] |node| in |nodes|:
-    1. call [=sanitize a node=] and insert |node| and the result value into |m|
-  1. [=list/iterate|for each=] |node| in |nodes|:
-    1. if m[node] is `drop`, remove the |node| and all children from |fragment|.
-    1. if m[node] is `block`, replace the |node| with all of its element and text node children from |fragment|.
-    1. if m[node] is `keep`, do nothing.
+  1. Let |m| be a map that maps nodes to a [=sanitize action=]
+  1. Let |nodes| be a list containing the [=inclusive descendants=] of
+     |fragment|, in [=tree order=].
+  1. [=list/iterate|For each=] |node| in |nodes|:
+    1. Let |action| be the result of running the [=sanitize a node=] algorithm
+       on |node|.
+    1. Insert |node| and |action| into |m|
+  1. [=list/iterate|For each=] |node| in |nodes|:
+    1. If m[node] is `drop`, remove the |node| and all children from |fragment|.
+    1. If m[node] is `block`, replace the |node| with all of its element and text node children from |fragment|.
+    1. If m[node] is `keep`, do nothing.
 </div>
 
 <div algorithm="sanitize a node">
 To <dfn>sanitize a node</dfn> named |node| run these steps:
 
-  1. let |config| be the Sanitizer's [=effective configuration=].
-  1. if |node| is an element node:
-    1. let |element| be |node|'s element.
-    1. [=list/iterate|for each=] |attr| in |element|'s [=Element/attribute list=]:
-      1. determine the [=sanitize action=] that |config| assigns to the |element| and |attr| pair.
-      1. if the result is different from `keep`, remove |attr| from |element|.
-    1. run the steps to [=handle funky elements=] on |element|.
-    1. return the [=sanitize action=] that |config| assigns to |element|.
-  1. otherwise, return 'keep'
+  1. Let |sanitizer| be the current Sanitizer.
+  1. If |node| is an element node:
+    1. Let |element| be |node|'s element.
+    1. [=list/iterate|For each=] |attr| in |element|'s
+       [=Element/attribute list=]:
+      1. Let |attr action| be the resulf of running the
+         [=effective attribute configuration=] algorithm on |sanitizer|,
+         |attr|, and |element|.
+      1. If |attr action| is different from `keep`, remove |attr| from
+        i |element|.
+    1. Run the steps to [=handle funky elements=] on |element|.
+    1. Let |action| be the resulf of running the
+       [=effective element configuration=] algorithm on |sanitizer| and
+       |element|.
+    1. Return |action|.
+  1. Return 'keep'
 
 Issue: What about comment nodes, CDATA, etc. ?
 </div>
@@ -344,23 +360,24 @@ expressed in terms of configuration options or other algorithms. The following
 algorithm collects these in one place.
 
 <div algorithm="handle funky elements">
-To <dfn>handle funky elements</dfn>, run these steps:
+To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
 
-  1. if |element|'s [=element interface=] is {{HTMLTemplateElement}}:
-    1. Run the steps of the [=sanitize document fragment=] algorithm on
+  1. If |element|'s [=element interface=] is {{HTMLTemplateElement}}:
+    1. Run the steps of the [=sanitize a document fragment=] algorithm on
        |element|'s |content| attribute, and replace |element|'s |content|
        attribute with the result.
     1. Drop all child nodes of |element|.
-  1. if |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}} mixin:
-    1. if |element|'s `protocol` property is "javascript:", then remove the
-       `href` attribute from |element|.
-  1. if |element|'s [=element interface=] is {{HTMLFormElement}}:
-    1. if |element|'s `action` attribute is a [[URL]] with `javascript:`
-       protocol, remove the `action` attribute.
+  1. If |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}}
+     mixin, and if |element|'s `protocol` property is "javascript:":
+    1. Remove the `href` attribute from |element|.
+  1. if |element|'s [=element interface=] is {{HTMLFormElement}},
+     and if |element|'s `action` attribute is a [[URL]] with `javascript:`
+     protocol:
+    1. Remove the `action` attribute from |element|.
   1. if |element|'s [=element interface=] is {{HTMLInputElement}}
-      or {{HTMLButtonElement}}:
-    1. if |element|'s `formaction` attribute is a [[URL]] with `javascript:`
-       protocol, remove the `formaction` attribute.
+      or {{HTMLButtonElement}}, and if |element|'s `formaction` attribute is
+      a [[URL]] with `javascript:` protocol
+    1. Remove the `formaction` attribute from |element|.
 </div>
 
 ### The Effective Configuration ### {#configuration}
@@ -373,63 +390,104 @@ Sanitzer's operation based on it.
 
 An <dfn>effective configuration</dfn> maps a given |element| or a given pair of
 |element| and |attribute| to a [=sanitize action=].
-A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
 
-A Sanitizer's [=effective configuration=] is merged from the
-[=baseline effective configuration=] and the effective configuration derived
-from the Sanitizer's [=configuration object=]. If no configuration object has
-been provided, the built-in [=default configuration=] is used instead.
-To merge two
-[=effective configurations=], map any given |element| or a pair of |element|
-and |attribute| to the [=stricter action=] of its constituent configurations.
+A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
 To determine the <dfn>stricter action</dfn> of two [=sanitize actions=], pick
 the 'larger' of the two actions assuming a transitively defined order with
 `drop` &gt; `block`, and `block` &gt; `keep`.
 
-Note: This definition of stricter actions ensures that the built-in baseline
+<div algorithm="effective element configuration">
+To determine a Sanitizer |sanitizer|'s
+<dfn>effective element configuration</dfn> for an element |element|,
+run these steps:
+  1. Let |config| be |sanitizer|'s [=configuration object=].
+  1. Let |baseline action| be the result of running the steps of the
+     [=determine the baseline configuration for an element=] algorithm
+     for the element |element|.
+  1. Let |config action| be the result of running the steps of the
+     [=determine the effective configuration for an element=] algorithm
+     for the element |element| and the config |config|.
+  1. Return the [=stricter action=] of |baseline action| and |config action|.
+
+Note: The definition of stricter actions ensures that the built-in baseline
       configuration cannot be overriden, and therefor forms a hard guarantee
-      for all Sanitizer instances.
+      for all Sanitizer instances. (Likewise for attributes.)
+</div>
+
+<div algorithm="effective attribute configuration">
+To determine a Sanitizer |sanitizer|'s
+<dfn>effective attribute configuration</dfn> for an attribute |attr|
+attached to an element |element|, run these steps:
+  1. Let |config| be |sanitizer|'s [=configuration object=].
+  1. Let |baseline action| be the result of running the steps of the
+     [=determine the baseline configuration for an attribute=] algorithm
+     on the attribute |attr|.
+  1. Let |config action| be the result of running the steps of the
+     [=determine the effective configuration for an attribute=] algorithm
+     on the attribute |attr|, with the element |element| and the
+     config |config|.
+  1. Return the [=stricter action=] of |baseline action| and |config action|.
+</div>
 
 Before describing how an effective configuration is derived, we need a
-helper definition:  The <dfn>element kind</dfn> of an |element| is one of
-`regular`, `unknown`, or `custom`. Let |kind| be:
-- `custom`, if |element|'s tag name is a [=valid custom element name=],
-- `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
-   tag name denotes an unknown element &mdash; that is, if the
-   [=element interface=] the [[HTML]] specification assigns to it would
-   be {{HTMLUnknownElement}},
-- `regular`, otherwise.
+helper definition:
 
+<div algorithm="element kind">
+The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`, or `custom`. Let <var ignore>element kind</var> be:
+  - `custom`, if |element|'s tag name is a [=valid custom element name=],
+  - `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
+     tag name denotes an unknown element &mdash; that is, if the
+     [=element interface=] the [[HTML]] specification assigns to it would
+     be {{HTMLUnknownElement}},
+  - `regular`, otherwise.
+</div>
+
+<div algorithm="attribute kind">
 Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
-or `unknown`. Let |kind| be:
-- `unknown`, if the [[HTML]] specifcation does not assign any meaning to
-   |attribute|'s name.
-- `regular`, otherwise.
+or `unknown`. Let <var ignore>attribute kind</var> be:
+  - `unknown`, if the [[HTML]] specifcation does not assign any meaning to
+     |attribute|'s name.
+  - `regular`, otherwise.
+</div>
 
 Issue(WICG/sanitizer-api#72): The spec currently treats MathML and SVG as
     `unknown` content and therefore blocked by default. This needs to be fixed.
 
-The [=effective configuration=] for a [=configuration object=] named |config|
-for a given |element| is determined by running these steps:
+<div algorithm="determine the effective configuration for an element">
+To <dfn>determine the effective configuration for an element</dfn> |element|,
+given a [=configuration object=] |config|, run these steps:
 
-<div algorithm="determine effective configuration for an element">
-  1. if |element|'s [=element kind=] is `custom` and if |config|'s
-     [=allow custom elements option=] is unset or set to anything other than `true`, return 'drop'.
-  1. let |name| be |element|'s tag name.
-  1. if |name| is in |config|'s [=element drop list=] return 'drop'.
-  1. if |name| is in |config|'s [=element block list=] return 'block'.
-  1. if |config| has a non-empty [=element allow list=] and |name| is not in |config|'s [=element allow list=] return 'block'.
-  1. if |config| does not have a non-empty [=element allow list=] and |name| is not it the [=default configuration=]'s [=element allow list=] return 'block'.
-  1. return 'keep'.
+  1. If |element|'s [=element kind=] is `custom` and if |config|'s
+     [=allow custom elements option=] is unset or set to anything other
+     than `true`: Return `drop`.
+  1. Let |name| be |element|'s tag name.
+  1. If |name| is in |config|'s [=element drop list=]: Return `drop`.
+  1. If |name| is in |config|'s [=element block list=]: Return `block`.
+  1. If |config| has a non-empty [=element allow list=] and |name| is not
+     in |config|'s [=element allow list=]: Return `block`.
+  1. If |config| does not have a non-empty [=element allow list=] and
+     |name| is not it the [=default configuration=]'s [=element allow list=]:
+     Return `block`.
+  1. Return `keep`.
 </div>
 
-And for a given pair of |element| and |attribute|:
+<div algorithm="determine the effective configuration for an attribute">
+To <dfn>determine the effective configuration for an attribute</dfn> |attr|,
+attached to an element |element|, and given a [=configuration object=] |config|,
+run these steps:
 
-<div algorithm="determine effective configuration for an attribute">
-  1. if |config|'s [=attribute drop list=] contains |attribute|'s local name as key, and the associated value contains either |element|'s tag name or the string `"*"`, then return `drop`.
-  1. if |config| has a non-empty [=attribute allow list=] and it does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
-  1. if |config| does not have a non-empty [=attribute allow list=] and [=default configuration=]'s [=attribute allow list=] does not contain |attribute|'s local name, or |attribute|'s associated value contains neither |element|'s tag name nor the string `"*"`, then return `drop`.
-  1. return 'keep'.
+  1. if |config|'s [=attribute drop list=] contains |attr|'s local
+     name as key, and the associated value contains either |element|'s tag
+     name or the string `"*"`: Return `drop`.
+  1. If |config| has a non-empty [=attribute allow list=] and it does not
+     contain |attr|'s local name, or |attr|'s associated value
+     contains neither |element|'s tag name nor the string `"*"`:
+     Return `drop`.
+  1. if |config| does not have a non-empty [=attribute allow list=] and
+     [=default configuration=]'s [=attribute allow list=] does not contain
+     |attr|'s local name, or |attr|'s associated value contains
+     neither |element|'s tag name nor the string `"*"`: Return `drop`.
+  1. Return `keep`.
 </div>
 
 ### Baseline and Defaults ### {#defaults}
@@ -438,17 +496,20 @@ Issue: The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
     purposes only.
 
-The <dfn>baseline effective configuration</dfn> is defined as follows:
+<div algorithm="determine the baseline configuration for an element">
+To <dfn>determine the baseline configuration for an element</dfn>
+|element|, run these steps:
+  1. if |element|'s [=element kind=] is `regular` and if |element|'s tag name
+     is not in the [=baseline element allow list=]: Return `drop`.
+  1. Return `keep`.
+</div>
 
-<div algorithm="baseline effective configuration">
-  - For an |element|:
-    1. if |element|'s [=element kind=] is `regular` and if |element|'s tag name
-       is not in the [=baseline element allow list=], return `drop`.
-    1. otherwise, return `keep`.
-  - For an |element| and |attribute| pair:
-    1. if |attribute|'s [=attribute kind=] is `regular` and if |attribute|'s
-       name is not in the [=baseline attribute allow list=] return `drop`
-    1. otherwise, return `keep`.
+<div algorithm="determine the baseline configuration for an attribute">
+To <dfn>determine the baseline configuration for an attribute</dfn>
+|attr|, run these steps:
+  1. If |attr|'s [=attribute kind=] is `regular` and if |attr|'s
+     name is not in the [=baseline attribute allow list=]: Return `drop`
+  1. Return `keep`.
 </div>
 
 The sanitizer has a built-in [=default configuration=], which is stricter than
