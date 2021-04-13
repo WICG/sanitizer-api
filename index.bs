@@ -52,6 +52,10 @@ spec:dom; type:dfn; text:append
     "publisher": "WHATWG",
     "repository": "https://github.com/whatwg/html",
   "id": "HTML"
+  },
+  "DEFAULTS": {
+    "href": "https://github.com/WICG/sanitizer-api/blob/main/resources/defaults-derivation.html",
+    "title": "Sanitizer API Defaults"
   }
 }
 </pre>
@@ -516,26 +520,11 @@ The sanitizer has a built-in [=default configuration=], which is stricter than
 the baseline and aims to eliminate any script-injection possibility, as well
 as legacy or unusual constructs.
 
-The built-in <dfn>baseline element allow list</dfn> has the following value:
+The defaults and baseline are defined by three JSON constants,
+[=baseline element allow list=], [=baseline attribute allow list=],
+[=default configuration=]. For better readability, these have been moved to
+an <a href=#constants>appendix A</a>.
 
-<pre class=include-code>
-path: resources/baseline-element-allow-list.json
-highlight: js
-</pre>
-
-The <dfn>baseline attribute allow list</dfn> has the following value:
-
-<pre class=include-code>
-path: resources/baseline-attribute-allow-list.json
-highlight: js
-</pre>
-
-The built-in <dfn>default configuration</dfn> has the following value:
-
-<pre class=include-code>
-path: resources/default-configuration.json
-highlight: js
-</pre>
 
 # Security Considerations # {#security-considerations}
 
@@ -608,3 +597,41 @@ avoided.
 
 Cure53's [[DOMPURIFY]] is a clear inspiration for the API this document
 describes, as is Internet Explorer's {{window.toStaticHTML()}}.
+
+# Appendix A: Built-in Constants # {#constants}
+
+<em>This appendix is normative.</em>
+
+These constants define core behaviour of the Sanitizer algorithm.
+
+Note: The normative values of these constants are found below. They have
+    been derived with the [[DEFAULTS]] script. It is expected that these
+    values will be updated to include additional HTML elements as they are
+    introduced in user agents.
+
+## The Baseline Element Allow List ## {#baseline-element-allow-list}
+
+The built-in <dfn>baseline element allow list</dfn> has the following value:
+
+<pre class=include-code>
+path: resources/baseline-element-allow-list.json
+highlight: js
+</pre>
+
+## The Baseline Attribute Allow List ## {#baseline-attribute-allow-list}
+
+The <dfn>baseline attribute allow list</dfn> has the following value:
+
+<pre class=include-code>
+path: resources/baseline-attribute-allow-list.json
+highlight: js
+</pre>
+
+## The Default Configuration Object ## {#default-configuration-object}
+
+The built-in <dfn>default configuration</dfn> has the following value:
+
+<pre class=include-code>
+path: resources/default-configuration.json
+highlight: js
+</pre>
