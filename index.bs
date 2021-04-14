@@ -600,16 +600,70 @@ describes, as is Internet Explorer's {{window.toStaticHTML()}}.
 
 # Appendix A: Built-in Constants # {#constants}
 
-<em>This appendix is normative.</em>
-
 These constants define core behaviour of the Sanitizer algorithm.
 
-Note: The normative values of these constants are found below. They have
-    been derived with the [[DEFAULTS]] script. It is expected that these
-    values will be updated to include additional HTML elements as they are
+## Built-ins Justification ## {#builtins-justification}
+
+<em>This subsection is super duper non-normative.</em>
+
+Note: The normative values of these constants are found below. The derivation
+    of these are explained here, with an implementation in the [[DEFAULTS]]
+    script. It is expected that these values will change before this
+    specifcation is finalized. Also, we expect these
+    to be updated to include additional HTML elements as they are
     introduced in user agents.
 
+For the purpose of this Sanitizer API, [[HTML]] constructs fall into one of
+four classes, where the first defines the baseline, and the first, second,
+plus the third define the default:
+
+1. Elements and attributes that (directly) execute script.
+   In other words, elements and attributes that are unconditionally script-ish.
+2. Legacy and "difficult" elements and attributes.
+  Examples are the `<plaintext>` `<xmp>` and elements, which have special
+  parsing rules attached to them. These are not dangerous _per se_, but they
+  have contributed to existing vulnerability.
+3. Elements and attributes that we feel rarely make sense in user-supplied
+  content.
+4. All the rest.
+
+Specifically:
+
+1. Script-ish constructs:
+  - The {{HTMLScriptElement}}, which proudly executes script as its sole purpose.
+  - All [event handler attributes]((https://html.spec.whatwg.org/#event-handler-attributes),
+    since these also execute script.
+  - {{HTMLIFrameElement}}, which loads arbitrary HTML content and therefor also script.
+  - The legacy {{HTMLObjectElement}} and {{HTMLEmbedElement}}, which load
+    non-HTML active content. Also, `<object>`'s side-kick {{HTMLParamElement}}.
+  - The [no-longer conforming](https://html.spec.whatwg.org/#non-conforming-features)
+    `<frame>`, `<frameset>`, and `<applet>` tags, which are
+    outdated versions companions of several elements listed above.
+  - The `<noframes>`, `<noembed>`, and `<nolayer>` elements.
+    These, by themselves, are arguably not script-ish, but they are companions
+    to elements listed above, and make no sense on their own.
+  - Also, the {{HTMLBaseElement}}, as this effectively modifies interpretation
+    of other URLs.
+
+2. Legacy and "difficult" elements.
+  - Special parsing behaviour. This is not dangerous in its own right, but has
+    contributed to mXSS-style attacks. This includes:
+      - `<plaintext>` (Which parses in [=PLAINTEXT state=].)
+      - The non-conforming [`<xmp>`](https://html.spec.whatwg.org/#xmp) element.
+  - Legacy elements:
+      - `<image>` ([which is parsed as `<img>`](https://html.spec.whatwg.org/#parsing-main-inbody)).
+      - `<basefont>`
+
+3. Constructs unlikely to be beneficial in user-supplied content:
+  - The {{HTMLTemplateElement}}, which introduces a new template to be used
+    by JavaScript, and its {{HTMLSlotElement}} accomplice.
+  - The frame-like [HTMLPortalElement](https://wicg.github.io/portals/).
+  - {{HTMLDataElement}},
+  - The (deprecated) [allowpaymentrequest](https://www.w3.org/TR/payment-request/) attribute.
+
 ## The Baseline Element Allow List ## {#baseline-elements}
+
+<em>This subsection is normative.</em>
 
 The built-in <dfn>baseline element allow list</dfn> has the following value:
 
@@ -620,6 +674,8 @@ highlight: js
 
 ## The Baseline Attribute Allow List ## {#baseline-attributes}
 
+<em>This subsection is normative.</em>
+
 The <dfn>baseline attribute allow list</dfn> has the following value:
 
 <pre class=include-code>
@@ -628,6 +684,8 @@ highlight: js
 </pre>
 
 ## The Default Configuration Object ## {#default-configuration-object}
+
+<em>This subsection is normative.</em>
 
 The built-in <dfn>default configuration</dfn> has the following value:
 
