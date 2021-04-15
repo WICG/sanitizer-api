@@ -392,7 +392,7 @@ convenience and allows us to explain a Sanitizer's operation in two steps:
 One, how to derive the effective configuration, and two, define the
 Sanitzer's operation based on it.
 
-An <dfn>effective configuration</dfn> maps a given |element| or a given pair of
+An effective configuration maps a given |element| or a given pair of
 |element| and |attribute| to a [=sanitize action=].
 
 A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
@@ -609,7 +609,7 @@ Note: The normative values of these constants are found below. They have
     values will be updated to include additional HTML elements as they are
     introduced in user agents.
 
-## The Baseline Element Allow List ## {#baseline-element-allow-list}
+## The Baseline Element Allow List ## {#baseline-elements}
 
 The built-in <dfn>baseline element allow list</dfn> has the following value:
 
@@ -618,7 +618,7 @@ path: resources/baseline-element-allow-list.json
 highlight: js
 </pre>
 
-## The Baseline Attribute Allow List ## {#baseline-attribute-allow-list}
+## The Baseline Attribute Allow List ## {#baseline-attributes}
 
 The <dfn>baseline attribute allow list</dfn> has the following value:
 
