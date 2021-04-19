@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version a042bcd28, updated Mon Apr 12 16:56:49 2021 -0700" name="generator">
+  <meta content="Bikeshed version 3509d0448, updated Fri Apr 16 17:27:34 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="e4a69035ddbba8e93ec2ca9fe7d644f7ead80d73" name="document-revision">
+  <meta content="cf0f98185d1f2294087a21123ba77ebf5a9e60bf" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -113,9 +113,9 @@ pre .property::before, pre .property::after {
     --ins-bg: transparent;
 
     --a-normal-text: #034575;
-    --a-normal-underline: #707070;
+    --a-normal-underline: #bbb;
     --a-visited-text: var(--a-normal-text);
-    --a-visited-underline: #bbb;
+    --a-visited-underline: #707070;
     --a-hover-bg: rgba(75%, 75%, 75%, .25);
     --a-active-text: #c00;
     --a-active-underline: #c00;
@@ -578,7 +578,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-13">13 April 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-19">19 April 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -653,8 +653,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li>
      <a href="#constants"><span class="secno"></span> <span class="content">Appendix A: Built-in Constants</span></a>
      <ol class="toc">
-      <li><a href="#baseline-element-allow-list"><span class="secno"></span> <span class="content">The Baseline Element Allow List</span></a>
-      <li><a href="#baseline-attribute-allow-list"><span class="secno"></span> <span class="content">The Baseline Attribute Allow List</span></a>
+      <li><a href="#baseline-elements"><span class="secno"></span> <span class="content">The Baseline Element Allow List</span></a>
+      <li><a href="#baseline-attributes"><span class="secno"></span> <span class="content">The Baseline Attribute Allow List</span></a>
       <li><a href="#default-configuration-object"><span class="secno"></span> <span class="content">The Default Configuration Object</span></a>
      </ol>
     <li>
@@ -1020,7 +1020,7 @@ construct, the <em>effective configuration</em>. This is mostly a specification
 convenience and allows us to explain a Sanitizer’s operation in two steps:
 One, how to derive the effective configuration, and two, define the
 Sanitzer’s operation based on it.</p>
-   <p>An <dfn data-dfn-type="dfn" data-noexport id="effective-configuration">effective configuration<a class="self-link" href="#effective-configuration"></a></dfn> maps a given <var>element</var> or a given pair of <var>element</var> and <var>attribute</var> to a <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action①">sanitize action</a>.</p>
+   <p>An effective configuration maps a given <var>element</var> or a given pair of <var>element</var> and <var>attribute</var> to a <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action①">sanitize action</a>.</p>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-action">sanitize action</dfn> can have the values <code>keep</code>, <code>drop</code>, or <code>block</code>.
 To determine the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="stricter-action">stricter action</dfn> of two <a data-link-type="dfn" href="#sanitize-action" id="ref-for-sanitize-action②">sanitize actions</a>, pick
 the 'larger' of the two actions assuming a transitively defined order with <code>drop</code> > <code>block</code>, and <code>block</code> > <code>keep</code>.</p>
@@ -1137,7 +1137,7 @@ run these steps:
     <ol>
      <li data-md>
       <p>if <var>element</var>’s <a data-link-type="dfn" href="#element-kind" id="ref-for-element-kind①">element kind</a> is <code>regular</code> and if <var>element</var>’s tag name
- is not in the <a data-link-type="dfn" href="#baseline-element-allow-list①" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>: Return <code>drop</code>.</p>
+ is not in the <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list">baseline element allow list</a>: Return <code>drop</code>.</p>
      <li data-md>
       <p>Return <code>keep</code>.</p>
     </ol>
@@ -1147,7 +1147,7 @@ run these steps:
     <ol>
      <li data-md>
       <p>If <var>attr</var>’s <a data-link-type="dfn" href="#attribute-kind" id="ref-for-attribute-kind">attribute kind</a> is <code>regular</code> and if <var>attr</var>’s
- name is not in the <a data-link-type="dfn" href="#baseline-attribute-allow-list①" id="ref-for-baseline-attribute-allow-list①">baseline attribute allow list</a>: Return <code>drop</code></p>
+ name is not in the <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list">baseline attribute allow list</a>: Return <code>drop</code></p>
      <li data-md>
       <p>Return <code>keep</code>.</p>
     </ol>
@@ -1155,7 +1155,7 @@ run these steps:
    <p>The sanitizer has a built-in <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration③">default configuration</a>, which is stricter than
 the baseline and aims to eliminate any script-injection possibility, as well
 as legacy or unusual constructs.</p>
-   <p>The defaults and baseline are defined by three JSON constants, <a data-link-type="dfn" href="#baseline-element-allow-list①" id="ref-for-baseline-element-allow-list①①">baseline element allow list</a>, <a data-link-type="dfn" href="#baseline-attribute-allow-list①" id="ref-for-baseline-attribute-allow-list①①">baseline attribute allow list</a>, <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration④">default configuration</a>. For better readability, these have been moved to
+   <p>The defaults and baseline are defined by three JSON constants, <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>, <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list①">baseline attribute allow list</a>, <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration④">default configuration</a>. For better readability, these have been moved to
 an <a href="#constants">appendix A</a>.</p>
    <h2 class="heading settled" data-level="3" id="security-considerations"><span class="secno">3. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
    <p>The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
@@ -1216,8 +1216,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     been derived with the <a data-link-type="biblio" href="#biblio-defaults">[DEFAULTS]</a> script. It is expected that these
     values will be updated to include additional HTML elements as they are
     introduced in user agents.</p>
-   <h3 class="heading settled" id="baseline-element-allow-list"><span class="content">The Baseline Element Allow List</span><a class="self-link" href="#baseline-element-allow-list"></a></h3>
-   <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-element-allow-list①">baseline element allow list</dfn> has the following value:</p>
+   <h3 class="heading settled" id="baseline-elements"><span class="content">The Baseline Element Allow List</span><a class="self-link" href="#baseline-elements"></a></h3>
+   <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-element-allow-list">baseline element allow list</dfn> has the following value:</p>
 <pre class="include-code highlight" path="resources/baseline-element-allow-list.json"><c- p>[</c->
   <c- u>"a"</c-><c- p>,</c->
   <c- u>"abbr"</c-><c- p>,</c->
@@ -1350,8 +1350,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <c- u>"xmp"</c->
 <c- p>]</c->
 </pre>
-   <h3 class="heading settled" id="baseline-attribute-allow-list"><span class="content">The Baseline Attribute Allow List</span><a class="self-link" href="#baseline-attribute-allow-list"></a></h3>
-   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-attribute-allow-list①">baseline attribute allow list</dfn> has the following value:</p>
+   <h3 class="heading settled" id="baseline-attributes"><span class="content">The Baseline Attribute Allow List</span><a class="self-link" href="#baseline-attributes"></a></h3>
+   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-attribute-allow-list">baseline attribute allow list</dfn> has the following value:</p>
 <pre class="include-code highlight" path="resources/baseline-attribute-allow-list.json"><c- p>[</c->
   <c- u>"abbr"</c-><c- p>,</c->
   <c- u>"accept"</c-><c- p>,</c->
@@ -2340,8 +2340,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#attribute-kind">attribute kind</a><span>, in §2.4.1</span>
    <li><a href="#attribute-match-list">attribute match list</a><span>, in §2.3.1</span>
    <li><a href="#typedefdef-attributematchlist">AttributeMatchList</a><span>, in §2.3.1</span>
-   <li><a href="#baseline-attribute-allow-list①">baseline attribute allow list</a><span>, in §Unnumbered section</span>
-   <li><a href="#baseline-element-allow-list①">baseline element allow list</a><span>, in §Unnumbered section</span>
+   <li><a href="#baseline-attribute-allow-list">baseline attribute allow list</a><span>, in §Unnumbered section</span>
+   <li><a href="#baseline-element-allow-list">baseline element allow list</a><span>, in §Unnumbered section</span>
    <li><a href="#dom-sanitizerconfig-blockelements">blockElements</a><span>, in §2.3</span>
    <li><a href="#configuration-object">configuration object</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizer-sanitizer">constructor()</a><span>, in §2.1</span>
@@ -2355,7 +2355,6 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#dom-sanitizerconfig-dropattributes">dropAttributes</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizerconfig-dropelements">dropElements</a><span>, in §2.3</span>
    <li><a href="#effective-attribute-configuration">effective attribute configuration</a><span>, in §2.4.1</span>
-   <li><a href="#effective-configuration">effective configuration</a><span>, in §2.4.1</span>
    <li><a href="#effective-element-configuration">effective element configuration</a><span>, in §2.4.1</span>
    <li><a href="#element-allow-list">element allow list</a><span>, in §2.3</span>
    <li><a href="#element-block-list">element block list</a><span>, in §2.3</span>
@@ -2830,16 +2829,16 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-determine-the-baseline-configuration-for-an-attribute">2.4.1. The Effective Configuration</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="baseline-element-allow-list①">
-   <b><a href="#baseline-element-allow-list①">#baseline-element-allow-list①</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="baseline-element-allow-list">
+   <b><a href="#baseline-element-allow-list">#baseline-element-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-baseline-element-allow-list①">2.4.2. Baseline and Defaults</a> <a href="#ref-for-baseline-element-allow-list①①">(2)</a>
+    <li><a href="#ref-for-baseline-element-allow-list">2.4.2. Baseline and Defaults</a> <a href="#ref-for-baseline-element-allow-list①">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="baseline-attribute-allow-list①">
-   <b><a href="#baseline-attribute-allow-list①">#baseline-attribute-allow-list①</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="baseline-attribute-allow-list">
+   <b><a href="#baseline-attribute-allow-list">#baseline-attribute-allow-list</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-baseline-attribute-allow-list①">2.4.2. Baseline and Defaults</a> <a href="#ref-for-baseline-attribute-allow-list①①">(2)</a>
+    <li><a href="#ref-for-baseline-attribute-allow-list">2.4.2. Baseline and Defaults</a> <a href="#ref-for-baseline-attribute-allow-list①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="default-configuration">
