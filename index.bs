@@ -124,13 +124,6 @@ The most common use-case - preventing XSS - is handled by default,
 so that creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.
 
-Example:
-```js
-  // Replace an element's content from unsanitized input:
-  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
-```
-
-
 <pre class="idl">
   [
     Exposed=(Window),
@@ -165,6 +158,12 @@ Example:
     are to return the value of the [=default configuration=] object.
     Note that is the same as running the [=query the sanitizer config=]
     algorithm on a `Sanitizer` instance created without parameters.
+
+Example:
+```js
+  // Replace an element's content from unsanitized input:
+  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
+```
 
 ## Input Types ## {#inputs}
 
