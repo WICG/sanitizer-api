@@ -124,20 +124,31 @@ The most common use-case - preventing XSS - is handled by default,
 so that creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.
 
+Example:
+```js
+  // Replace an element's content from unsanitized input:
+  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
+```
+
+
 <pre class="idl">
   [
     Exposed=(Window),
     SecureContext
   ] interface Sanitizer {
     constructor(optional SanitizerConfig config = {});
+
     DocumentFragment sanitize(SanitizerInput input);
     DOMString sanitizeToString(SanitizerInput input);
+
+    SanitizerConfig config();
+    static SanitizerConfig defaultConfig();
   };
 </pre>
 
 * The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
     <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to create a new Sanitizer instance, and to retains a copy of |config|
+    are to create a new Sanitizer instance, and to retain a copy of |config|
     as its [=configuration object=].
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
@@ -145,12 +156,15 @@ handle additional, application-specific use cases.
 * The <dfn method for=Sanitizer><code>sanitizeToString(<var>input</var>)</code></dfn>
     method steps are to return the result of running [=sanitizeToString=]
     algorithm on |input|.
-
-Example:
-```js
-  // Replace an element's content from unsanitized input:
-  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
-```
+* The <dfn method for=Sanitizer><code>config()</code></dfn> method steps are
+    to return the result of running the [=query the sanitizer config=]
+    algorithm. It essentially returns a copy of the Sanitizer's
+    [=configuration object=], with some degree of normalization.
+* The value of the static
+    <dfn method for=Sanitizer><code>defaultConfig()</code></dfn> method steps
+    are to return the value of the [=default configuration=] object.
+    Note that is the same as running the [=query the sanitizer config=]
+    algorithm on a `Sanitizer` instance created without parameters.
 
 ## Input Types ## {#inputs}
 
@@ -238,6 +252,32 @@ Examples:
 
   // Scripts will be blocked: "abc alert(1) def"
   new Sanitizer().sanitizeToString("abc <script>alert(1)</script> def");
+```
+
+A sanitizer's configuration can be queried using the
+[=query the sanitizer config=] method.
+
+Examples:
+```js
+  // Does the default config allow script elements?
+  Sanitizer.defaultConfig().allowElements.includes("script")  // false
+
+  // We found a Sanitizer instance. Does it have an allow-list configured?
+  const a_sanitizer = ...;
+  !!a_sanitizer.config().allowElements // true, iff an allowElements list is configured
+
+  // If it does have an allow elements list, does it include the <div> element?
+  a_sanitizer.config().allowElements.includes("div")  // true, iff "div" is in allowElements.
+
+  // Note that the config attribute might do some normaliztion. E.g., it won't
+  // contain key/value pairs that are not declare in the IDL.
+  Object.keys(new Sanitizer({madeUpDictionaryKey: "Hello"}).config())  // []
+
+  // As a Sanitizer's config describes its operation, a new sanitizer with
+  // another instance's configuration should behave identically.
+  // (For illustration only. It would make more sense to just use a directly.)
+  const a = /* ... a Sanitizer we found somewhere ... */;
+  const b = new Sanitizer(a.config());  // b should behave the same as a.
 ```
 
 ### Attribute Match Lists ### {#attr-match-list}
@@ -382,6 +422,18 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
       or {{HTMLButtonElement}}, and if |element|'s `formaction` attribute is
       a [[URL]] with `javascript:` protocol
     1. Remove the `formaction` attribute from |element|.
+</div>
+
+<div algorithm="query the sanitizer config">
+To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
+run these steps:
+  1. Let |sanitizer| be the current Sanitizer.
+  2. Let |config| be |sanitizer|'s [=configuration object=], or the
+     [=default configuration=] if no [=configuration object=] was given.
+  3. Let |result| be a newly constructed SanitizerOptions dictionary.
+  4. For any non-empty member of |config| whose key is declared in
+     SanitizerOptions, copy the value to |result|.
+  5. Return |result|.
 </div>
 
 ### The Effective Configuration ### {#configuration}
