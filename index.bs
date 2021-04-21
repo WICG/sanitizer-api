@@ -600,6 +600,8 @@ describes, as is Internet Explorer's {{window.toStaticHTML()}}.
 
 # Appendix A: Built-in Constants # {#constants}
 
+<em>This appendix is normative, except where explicitly noted otherwise.</em>
+
 These constants define core behaviour of the Sanitizer algorithm.
 
 ## Built-ins Justification ## {#builtins-justification}
@@ -663,8 +665,6 @@ Specifically:
 
 ## The Baseline Element Allow List ## {#baseline-elements}
 
-<em>This subsection is normative.</em>
-
 The built-in <dfn>baseline element allow list</dfn> has the following value:
 
 <pre class=include-code>
@@ -674,8 +674,6 @@ highlight: js
 
 ## The Baseline Attribute Allow List ## {#baseline-attributes}
 
-<em>This subsection is normative.</em>
-
 The <dfn>baseline attribute allow list</dfn> has the following value:
 
 <pre class=include-code>
@@ -684,8 +682,6 @@ highlight: js
 </pre>
 
 ## The Default Configuration Object ## {#default-configuration-object}
-
-<em>This subsection is normative.</em>
 
 The built-in <dfn>default configuration</dfn> has the following value:
 
