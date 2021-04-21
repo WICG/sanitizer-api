@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3509d0448, updated Fri Apr 16 17:27:34 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="cf0f98185d1f2294087a21123ba77ebf5a9e60bf" name="document-revision">
+  <meta content="f7a48b5de911591857b878e1cf163e84828dad98" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -578,7 +578,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-19">19 April 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-21">21 April 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -653,6 +653,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li>
      <a href="#constants"><span class="secno"></span> <span class="content">Appendix A: Built-in Constants</span></a>
      <ol class="toc">
+      <li><a href="#builtins-justification"><span class="secno"></span> <span class="content">Built-ins Justification</span></a>
       <li><a href="#baseline-elements"><span class="secno"></span> <span class="content">The Baseline Element Allow List</span></a>
       <li><a href="#baseline-attributes"><span class="secno"></span> <span class="content">The Baseline Attribute Allow List</span></a>
       <li><a href="#default-configuration-object"><span class="secno"></span> <span class="content">The Default Configuration Object</span></a>
@@ -1078,7 +1079,7 @@ helper definition:</p>
      Similarly, the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-kind">attribute kind</dfn> of an <var>attribute</var> is one of <code>regular</code> or <code>unknown</code>. Let <var>attribute kind</var> be: 
     <ul>
      <li data-md>
-      <p><code>unknown</code>, if the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specifcation does not assign any meaning to <var>attribute</var>’s name.</p>
+      <p><code>unknown</code>, if the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification does not assign any meaning to <var>attribute</var>’s name.</p>
      <li data-md>
       <p><code>regular</code>, otherwise.</p>
     </ul>
@@ -1210,12 +1211,94 @@ avoided.</p>
    <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
 describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
    <h2 class="heading settled" id="constants"><span class="content">Appendix A: Built-in Constants</span><a class="self-link" href="#constants"></a></h2>
-   <p><em>This appendix is normative.</em></p>
+   <p><em>This appendix is normative, except where explicitly noted otherwise.</em></p>
    <p>These constants define core behaviour of the Sanitizer algorithm.</p>
-   <p class="note" role="note"><span>Note:</span> The normative values of these constants are found below. They have
-    been derived with the <a data-link-type="biblio" href="#biblio-defaults">[DEFAULTS]</a> script. It is expected that these
-    values will be updated to include additional HTML elements as they are
+   <h3 class="heading settled" id="builtins-justification"><span class="content">Built-ins Justification</span><a class="self-link" href="#builtins-justification"></a></h3>
+   <p><em>This subsection is super duper non-normative.</em></p>
+   <p class="note" role="note"><span>Note:</span> The normative values of these constants are found below. The derivation
+    of these are explained here, with an implementation in the <a data-link-type="biblio" href="#biblio-defaults">[DEFAULTS]</a> script. It is expected that these values will change before this
+    specification is finalized. Also, we expect these
+    to be updated to include additional HTML elements as they are
     introduced in user agents.</p>
+   <p>For the purpose of this Sanitizer API, <a data-link-type="biblio" href="#biblio-html">[HTML]</a> constructs fall into one of
+four classes, where the first defines the baseline, and the first, second,
+plus the third define the default:</p>
+   <ol>
+    <li data-md>
+     <p>Elements and attributes that (directly) execute script.
+ In other words, elements and attributes that are unconditionally script-ish.</p>
+    <li data-md>
+     <p>Legacy and "difficult" elements and attributes.
+Examples are the <code>&lt;plaintext></code> <code>&lt;xmp></code> and elements, which have special
+parsing rules attached to them. These are not dangerous _per se_, but they
+have contributed to existing vulnerability.</p>
+    <li data-md>
+     <p>Elements and attributes that we feel rarely make sense in user-supplied
+content.</p>
+    <li data-md>
+     <p>All the rest.</p>
+   </ol>
+   <p>Specifically:</p>
+   <ol>
+    <li data-md>
+     <p>Script-ish constructs:</p>
+     <ul>
+      <li data-md>
+       <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement" id="ref-for-htmlscriptelement">HTMLScriptElement</a></code>, which proudly executes script as its sole purpose.</p>
+      <li data-md>
+       <p>All <a href="(https://html.spec.whatwg.org/#event-handler-attributes">event handler attributes</a>,
+since these also execute script.</p>
+      <li data-md>
+       <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement" id="ref-for-htmliframeelement">HTMLIFrameElement</a></code>, which loads arbitrary HTML content and therefor also script.</p>
+      <li data-md>
+       <p>The legacy <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement" id="ref-for-htmlobjectelement">HTMLObjectElement</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement" id="ref-for-htmlembedelement">HTMLEmbedElement</a></code>, which load
+non-HTML active content. Also, <code>&lt;object></code>'s side-kick <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlparamelement" id="ref-for-htmlparamelement">HTMLParamElement</a></code>.</p>
+      <li data-md>
+       <p>The <a href="https://html.spec.whatwg.org/#non-conforming-features">no-longer conforming</a> <code>&lt;frame></code>, <code>&lt;frameset></code>, and <code>&lt;applet></code> tags, which are
+outdated versions companions of several elements listed above.</p>
+      <li data-md>
+       <p>The <code>&lt;noscript></code>, <code>&lt;noframes></code>, <code>&lt;noembed></code>, and <code>&lt;nolayer></code> elements.
+These, by themselves, are arguably not script-ish, but they are companions
+to elements listed above, and make no sense on their own.</p>
+      <li data-md>
+       <p>Also, the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/semantics.html#htmlbaseelement" id="ref-for-htmlbaseelement">HTMLBaseElement</a></code>, as this effectively modifies interpretation
+of other URLs.</p>
+     </ul>
+    <li data-md>
+     <p>Legacy and "difficult" elements.</p>
+     <ul>
+      <li data-md>
+       <p>Special parsing behaviour. This is not dangerous in its own right, but has
+contributed to mXSS-style attacks. This includes:</p>
+       <ul>
+        <li data-md>
+         <p><code>&lt;plaintext></code> (Which parses in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state" id="ref-for-plaintext-state">PLAINTEXT state</a>.)</p>
+        <li data-md>
+         <p>The non-conforming [<code>&lt;xmp></code>](https://html.spec.whatwg.org/#xmp) element.</p>
+       </ul>
+      <li data-md>
+       <p>Legacy elements:</p>
+       <ul>
+        <li data-md>
+         <p><code>&lt;image></code> ([which is parsed as <code>&lt;img></code>](https://html.spec.whatwg.org/#parsing-main-inbody)).</p>
+        <li data-md>
+         <p><code>&lt;basefont></code></p>
+       </ul>
+     </ul>
+    <li data-md>
+     <p>Constructs unlikely to be beneficial in user-supplied content:</p>
+     <ul>
+      <li data-md>
+       <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement①">HTMLTemplateElement</a></code>, which introduces a new template to be used
+by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmlslotelement" id="ref-for-htmlslotelement">HTMLSlotElement</a></code> accomplice.</p>
+      <li data-md>
+       <p>The frame-like <a href="https://wicg.github.io/portals/">HTMLPortalElement</a>.</p>
+      <li data-md>
+       <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmldataelement" id="ref-for-htmldataelement">HTMLDataElement</a></code>,</p>
+      <li data-md>
+       <p>The (deprecated) <a href="https://www.w3.org/TR/payment-request/">allowpaymentrequest</a> attribute.</p>
+     </ul>
+   </ol>
    <h3 class="heading settled" id="baseline-elements"><span class="content">The Baseline Element Allow List</span><a class="self-link" href="#baseline-elements"></a></h3>
    <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-element-allow-list">baseline element allow list</dfn> has the following value:</p>
 <pre class="include-code highlight" path="resources/baseline-element-allow-list.json"><c- p>[</c->
@@ -2430,10 +2513,28 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">2.4. Algorithms</a> <a href="#ref-for-widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type①">(2)</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlbaseelement">
+   <a href="https://html.spec.whatwg.org/multipage/semantics.html#htmlbaseelement">https://html.spec.whatwg.org/multipage/semantics.html#htmlbaseelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlbaseelement">Built-ins Justification</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-htmlbuttonelement">
    <a href="https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement">https://html.spec.whatwg.org/multipage/form-elements.html#htmlbuttonelement</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-htmlbuttonelement">2.4. Algorithms</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmldataelement">
+   <a href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmldataelement">https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmldataelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmldataelement">Built-ins Justification</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlembedelement">
+   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlembedelement">Built-ins Justification</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlformelement">
@@ -2448,16 +2549,47 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
     <li><a href="#ref-for-htmlhyperlinkelementutils">2.4. Algorithms</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-htmliframeelement">
+   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmliframeelement">Built-ins Justification</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-htmlinputelement">
    <a href="https://html.spec.whatwg.org/multipage/input.html#htmlinputelement">https://html.spec.whatwg.org/multipage/input.html#htmlinputelement</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-htmlinputelement">2.4. Algorithms</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlobjectelement">
+   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlobjectelement">Built-ins Justification</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlparamelement">
+   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlparamelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlparamelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlparamelement">Built-ins Justification</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlscriptelement">
+   <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement">https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlscriptelement">Built-ins Justification</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlslotelement">
+   <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmlslotelement">https://html.spec.whatwg.org/multipage/scripting.html#htmlslotelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlslotelement">Built-ins Justification</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-htmltemplateelement">
    <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement">https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-htmltemplateelement">2.4. Algorithms</a>
+    <li><a href="#ref-for-htmltemplateelement①">Built-ins Justification</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlunknownelement">
@@ -2482,6 +2614,12 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <a href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser">https://html.spec.whatwg.org/multipage/parsing.html#html-parser</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-html-parser">2.2. Input Types</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-plaintext-state">
+   <a href="https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state">https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-plaintext-state">Built-ins Justification</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-valid-custom-element-name">
@@ -2558,15 +2696,24 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-htmlbaseelement">HTMLBaseElement</span>
      <li><span class="dfn-paneled" id="term-for-htmlbuttonelement">HTMLButtonElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmldataelement">HTMLDataElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlembedelement">HTMLEmbedElement</span>
      <li><span class="dfn-paneled" id="term-for-htmlformelement">HTMLFormElement</span>
      <li><span class="dfn-paneled" id="term-for-htmlhyperlinkelementutils">HTMLHyperlinkElementUtils</span>
+     <li><span class="dfn-paneled" id="term-for-htmliframeelement">HTMLIFrameElement</span>
      <li><span class="dfn-paneled" id="term-for-htmlinputelement">HTMLInputElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlobjectelement">HTMLObjectElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlparamelement">HTMLParamElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlscriptelement">HTMLScriptElement</span>
+     <li><span class="dfn-paneled" id="term-for-htmlslotelement">HTMLSlotElement</span>
      <li><span class="dfn-paneled" id="term-for-htmltemplateelement">HTMLTemplateElement</span>
      <li><span class="dfn-paneled" id="term-for-htmlunknownelement">HTMLUnknownElement</span>
      <li><span class="dfn-paneled" id="term-for-custom-element">custom element</span>
      <li><span class="dfn-paneled" id="term-for-html-fragment-serialisation-algorithm">html fragment serialization algorithm</span>
      <li><span class="dfn-paneled" id="term-for-html-parser">html parser</span>
+     <li><span class="dfn-paneled" id="term-for-plaintext-state">plaintext state</span>
      <li><span class="dfn-paneled" id="term-for-valid-custom-element-name">valid custom element name</span>
     </ul>
    <li>
