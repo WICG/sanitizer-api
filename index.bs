@@ -163,7 +163,7 @@ Example:
   element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
 
   // defaultConfig() and new Sanitizer().config should be the same.
-  // (For illustration purposes only. There are less potato ways of implementing
+  // (For illustration purposes only. There are better ways of implementing
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
 ```
