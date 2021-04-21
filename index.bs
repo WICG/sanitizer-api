@@ -156,13 +156,16 @@ handle additional, application-specific use cases.
 * The value of the static
     <dfn method for=Sanitizer><code>defaultConfig()</code></dfn> method steps
     are to return the value of the [=default configuration=] object.
-    Note that is the same as running the [=query the sanitizer config=]
-    algorithm on a `Sanitizer` instance created without parameters.
 
 Example:
 ```js
   // Replace an element's content from unsanitized input:
   element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
+
+  // defaultConfig() and new Sanitizer().config should be the same.
+  // (For illustration purposes only. There are less potato ways of implementing
+  // object equality in JavaScript.)
+  JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
 ```
 
 ## Input Types ## {#inputs}
@@ -263,10 +266,10 @@ Examples:
 
   // We found a Sanitizer instance. Does it have an allow-list configured?
   const a_sanitizer = ...;
-  !!a_sanitizer.config().allowElements // true, iff an allowElements list is configured
+  !!a_sanitizer.config().allowElements // true, if an allowElements list is configured
 
   // If it does have an allow elements list, does it include the <div> element?
-  a_sanitizer.config().allowElements.includes("div")  // true, iff "div" is in allowElements.
+  a_sanitizer.config().allowElements.includes("div")  // true, if "div" is in allowElements.
 
   // Note that the config attribute might do some normaliztion. E.g., it won't
   // contain key/value pairs that are not declare in the IDL.
@@ -274,7 +277,7 @@ Examples:
 
   // As a Sanitizer's config describes its operation, a new sanitizer with
   // another instance's configuration should behave identically.
-  // (For illustration only. It would make more sense to just use a directly.)
+  // (For illustration purposes only. It would make more sense to just use a directly.)
   const a = /* ... a Sanitizer we found somewhere ... */;
   const b = new Sanitizer(a.config());  // b should behave the same as a.
 ```
