@@ -449,7 +449,7 @@ The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`, or `
 <div algorithm="attribute kind">
 Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
 or `unknown`. Let <var ignore>attribute kind</var> be:
-  - `unknown`, if the [[HTML]] specifcation does not assign any meaning to
+  - `unknown`, if the [[HTML]] specification does not assign any meaning to
      |attribute|'s name.
   - `regular`, otherwise.
 </div>
@@ -609,7 +609,7 @@ These constants define core behaviour of the Sanitizer algorithm.
 Note: The normative values of these constants are found below. The derivation
     of these are explained here, with an implementation in the [[DEFAULTS]]
     script. It is expected that these values will change before this
-    specifcation is finalized. Also, we expect these
+    specification is finalized. Also, we expect these
     to be updated to include additional HTML elements as they are
     introduced in user agents.
 
