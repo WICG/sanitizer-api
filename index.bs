@@ -134,6 +134,11 @@ handle additional, application-specific use cases.
     DocumentFragment sanitize(SanitizerInput input);
     DOMString sanitizeToString(SanitizerInput input);
 
+    static readonly attribute Sanitizer default;
+    static readonly attribute Sanitizer nofetch;
+    static readonly attribute Sanitizer nonavigate;
+    static readonly attribute Sanitizer richtext;
+
     SanitizerConfig config();
     static SanitizerConfig defaultConfig();
   };
@@ -166,6 +171,34 @@ Example:
   // (For illustration purposes only. There are better ways of implementing
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
+```
+
+## Presets ## {#presets}
+
+The value of each of the static preset attributes, {{default}}, {{nofetch}},
+{{nonavigate}}, and {{richtext}} is the result of creating a
+{{Sanitizer}} instance with the appropriate configuration constant used as the
+[=configuration object=]. The pairing of {{Sanitizer}} preset attributes
+and the constants to use as the [=configuration object=] are listed below:
+
+* <dfn attribute for=Sanitizer>default</dfn>: [=default configuration=] object.
+* <dfn attribute for=Sanitizer>nofetch</dfn>: [=nofetch configuration object=].
+* <dfn attribute for=Sanitizer>nonavigate</dfn>: [=nonavigate configuration object=].
+* <dfn attribute for=Sanitizer>richtext</dfn>: [=richtext configuration object=].
+
+Examples:
+```js
+  // Preset "rich text" allows only formatting:
+  // <p class="blubb"><b>text</b></p>
+  Sanitizer.richtext.sanitize("<p id=bla class=blubb><a href=https://example.org><b>text</b></a>");
+
+  // Preset "no fetch" does not allow constructs that cause network activity:
+  // <a href="http://example.net">link</a>
+  Sanitizer.nofetch.sanitize("<img src=thatsthejoke.jpg><a href=http://example.net>link</a>")
+
+  // Preset "no navigate" does not allow constucts that cause navigation:
+  // <img src=thatsthejoke.jpg>link
+  Sanitizer.nonavigate.sanitize("<img src=thatsthejoke.jpg><a href=http://example.net>link</a>")
 ```
 
 ## Input Types ## {#inputs}
@@ -743,3 +776,33 @@ The built-in <dfn>default configuration</dfn> has the following value:
 path: resources/default-configuration.json
 highlight: js
 </pre>
+
+## Presets ## {#preset-values}
+
+The <dfn>nofetch configuration object</dfn> has the following value:
+
+Issue(WICG/sanitizer-api#57): Determine value.
+
+<pre class=include-code>
+path: resources/preset-nofetch-configuration.json
+highlight: js
+</pre>
+
+The <dfn>nonavigate configuration object</dfn> has the following value:
+
+Issue(WICG/sanitizer-api#71): Determine value.
+
+<pre class=include-code>
+path: resources/preset-nonavigate-configuration.json
+highlight: js
+</pre>
+
+The <dfn>richtext configuration object</dfn> has the following value.
+
+Issue: Determine value. The value below is a placeholder.
+
+<pre class=include-code>
+path: resources/preset-richtext-configuration.json
+highlight: js
+</pre>
+

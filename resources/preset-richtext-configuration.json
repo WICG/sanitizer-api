@@ -1,0 +1,16 @@
+{
+  // Text grouping and text-level semantics elements:
+  allowElements: [
+    // Content grouping elements: https://html.spec.whatwg.org/#grouping-content,
+    // execpt main:
+    "p", "hr", "pre", "blockquote", "ol," "ul", "menu", "li", "dl", "dt", "dd",
+    "figure", "figcaption", "div",
+    // Text-level semantics elements: https://html.spec.whatwg.org/#text-level-semantics,
+    // without "a", "data"
+    "em", "strong", "small", "s", "cite", "q", "dfn", "abbr", "ruby", "rt", "rp",
+    "time", "code", "var", "samp", "kbd", "sub", "sup", "i", "b", "u", "mark", "bdi",
+    "bdo", "span", "br", "wbr"
+  ],
+  // class= attributes are okay.
+  allowAttributes: { "class": ["*"] }
+}
