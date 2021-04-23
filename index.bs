@@ -484,6 +484,7 @@ is used as the configuration object.
     AttributeMatchList allowAttributes;
     AttributeMatchList dropAttributes;
     boolean allowCustomElements;
+    boolean allowComments;
   };
 </pre>
 
@@ -507,10 +508,13 @@ Note: Element names are expected to be ascii lowercase and those that don't
 :: The <dfn>attribute drop list</dfn>  is an [=attribute match list=], which
    determines whether an attribute (on a given element) should be dropped.
 : allowCustomElements
-:: <dfn>allow custom elements option</dfn> determines whether
+:: The <dfn>allow custom elements option</dfn> determines whether
    [=custom elements=] are to be considered. The default is to drop them.
    If this option is true, custom elements will still be checked against all
    other built-in or configured configured checks.
+: allowComments
+:: The <dfn>allow comments option</dfn> determines whether HTML comments are
+   allowed.
 
 Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   while `blockElements` and `dropElements` defaults to keeping unknown
@@ -718,6 +722,11 @@ To <dfn>sanitize a node</dfn> named |node| run these steps:
     1. Return |action|.
   1. If |node| is a {{Document}} or {{DocumentFragment}} node and if |node|'s
      [=parent=] is null: Return `keep`.
+  1. If |node| is a {{Comment}} [=node=]:
+    1. Let |config| be |sanitizer|'s [=configuration object=], or the
+       [=default configuration=] if no [=configuration object=] was given.
+    2. If |config|'s [=allow comments option=] is missing, or set to anything
+       other then `true`: Return `drop`.
   1. If |node| is a {{Text}} [=node=]: Return `keep`.
   1. Return `drop`
 </div>
