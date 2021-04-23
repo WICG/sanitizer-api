@@ -5,9 +5,10 @@ easy-to-use capability to sanitize HTML into the web platform.
 
 Status:
 
-* It is currently being incubated in a [WICG](https://wicg.io/),
+* The Sanitizer API is currently being incubated in the
+  [Sanitizer API](https://github.com/WICG/sanitizer-api) [WICG](https://wicg.io/),
   with the goal of bringing this as a standard into the
-  [W3C WebAppSec WG](https://www.w3.org/2011/webappsec/).
+  [W3C WebAppSec Working Group](https://www.w3.org/2011/webappsec/).
 * Early implementations are available in [select web browsers](#Implementations).
 * The API is not finalized and still subject to change.
 
@@ -16,10 +17,10 @@ Here you can find additional information:
 * This document explains the problem and basic usage. It contains excerpts
   from some of the documents below.
 * The [draft specification](https://wicg.github.io/sanitizer-api/).
-* [FAQ](faq.md).
-* The [original explainer](oexplainer.md) goes into more detail about why
-  we are proposing this as a new standard (rather than a library). (The API
-  proposed there is a little outdated, however.)
+* An [FAQ](faq.md).
+* The [original explainer](explainer.md) goes into more detail about why
+  we are proposing this as a new standard (rather than a library). The API
+  proposed there is a little outdated, however.
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Sanitizer_API).
 * An early [W3C TAG review](https://github.com/w3ctag/design-reviews/issues/619).
 * Implementation Status:
@@ -51,38 +52,39 @@ Example:
   // Every webapp has to deal with untrusted input in some form. It could be
   // data off the network; from query parameters; any user inputs; or
   // (sometimes) even from ones own server. Here, we use the simplest form as
-  // an example, and get data right out of a <textarea> element:
+  // an example and get data right out of a <textarea> element:
   const untrusted_input = document.querySelector("textarea").textContent;
 
   // In most cases, we don't want the user input to contain any markup anyhow,
   // in which case the easiest and best method is to just assign it to
-  // .textContent:
+  // another .textContent:
   document.querySelector( ...something... ).textContent = untrusted_input;
 
-  // But what if want markup? Then, sanitize it before use. The result might be
-  // ugly, or contain curse words, but it won't contain any script:
+  // But what if want (some) markup? Then, sanitize it before use. The result
+  // might be ugly, or contain curse words, but it won't contain any script:
   const sanitizer = new Sanitizer();
   document.querySelector( ...something... ).replaceChildren(
       sanitizer.sanitize(untrusted_input));
 
   // All of these values for untrusted_input would have had the same result:
-  // - "<em>Hello World!</em>"
-  // - "<script src='https://example.org/'></script><em>Hello World!</em>"
-  // - "<em onlick='console.log(1)'>Hello World!</em>
+  // <em>Hello World!</em>
+  sanitizer.sanitize("<em>Hello World!</em>");
+  sanitizer.sanitize(""<script src='https://example.org/'></script><em>Hello World!</em>");
+  sanitizer.sanitize(""<em onlick='console.log(1)'>Hello World!</em>");
 ```
 
 Oftentimes, applications have additional &mdash; often stricter &mdash;
-requirement beyond just script execution. For example, in a certain context
+requirements beyond just script execution. For example, in a certain context
 an application might want to allow formatted text, but no structural or other
-complex markup. To accomodote this, the API allows for creation of multiple
+complex markup. To accomodate this, the API allows for creation of multiple
 `Sanitizer` instances, which can be customized on creation.
 
 Example:
 ```js
   // We must sanitize untrusted inputs, but we may want to restrict it further
-  // to meet, for example, design goals. Here, we'll have one Sanitizer only
+  // to meet other, related design goals. Here, we'll have one Sanitizer only
   // for scripting, and then another that allows for character-level formatting
-  // elements, and the class= attribute on any element, but nothing else.
+  // elements, plus the class= attribute on any element, but nothing else.
   const sanitizer = new Sanitizer();
   const for_display = new Sanitizer({
     allowElements: ['span', 'em', 'strong', 'b', 'i'],
@@ -90,19 +92,19 @@ Example:
   });
 
   const untrusted_example = "Well, <em class=nonchalant onclick='alert(\'General Kenobi\');'><a href='https://obiwan.org/home.php'>hello there<a>!"
-  sanitizer.sanitize(untrusted_example);  // Well, <em class=nonchalant><a href='https://obiwan.org/home.php'>hello there<a>!</em>"
-  for_display.sanitize(untrusted_example);  // Well, <em class=nonchalant>hello there!</em>
+  sanitizer.sanitize(untrusted_example);  // Well, <em class="nonchalant"><a href='https://obiwan.org/home.php'>hello there<a>!</em>
+  for_display.sanitize(untrusted_example);  // Well, <em class="nonchalant">hello there!</em>
 
   // The following code will insert our untrusted_example into a block element
   // we have picked for this purpose. We can be sure that it won't contain
-  // script, and we can also be sure that it contains non block-level elements
-  // or more. (Or really, less.)
+  // script, and we can also be sure that it contains no block-level markup
+  // or more.
   document.querySelector("p.out").replaceChildren(for_display.sanitize(untrusted_example));
 ```
 
 It is the over-arching design goal of the Sanitizer API to be safe and simple,
-at the same time. Therefore the API is not only safe by default, but is always
-safe. The Sanitizer will enforce a baseline that does not allow script
+at the same time. Therefore the API is not only safe by default, but is also
+perma-safe. The Sanitizer will enforce a baseline that does not allow script
 execution, even if a developer may have inadvertently configured script-ish
 elements or attributes to be supported.
 
@@ -114,7 +116,7 @@ Example:
   });
 
   const untrusted_input = "<span onclick='2+2'>some</span><script>2+2</script>thing";
-  misconfigured.sanitize(untrusted_input);  // <span>some</span>thing";
+  misconfigured.sanitize(untrusted_input);  // <span>some</span>thing
 ```
 
 ## Taking a Step Back: The Problem We're Solving
