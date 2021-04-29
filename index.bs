@@ -159,20 +159,32 @@ handle additional, application-specific use cases.
 
 Example:
 ```js
-  // Replace an element's content from unsanitized input:
-  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
+  // The core API of the Sanitizer is the .sanitize method:
+  const sanitizer = new Sanitizer();
+  let untrusted_input = "Hello!";
 
-  // defaultConfig() and new Sanitizer().config should be the same.
-  // (For illustration purposes only. There are better ways of implementing
-  // object equality in JavaScript.)
-  JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
+  // Returns a DocumentFragment with one text node, "Hello!".
+  sanitizer.sanitize(untrusted_input);
+
+  // Probably we want to put this somewhere in our DOM:
+  element.replaceChildren(sanitizer.sanitize(untrusted_input));
+
+  // If our input contains markup it'll be mostly preserved, except for
+  // script-y markup:
+  untrusted_input = "<em onclick='alert(1);'>Hello!</em>";
+  sanitizer.sanitizer(untrusted_input);  // <em>Hello!</em>
+  element.replaceChildren(sanitizer.sanitize(untrusted_input));  // No alert!
 
   // The .sanitize method is the primary API, and returns a DocumentFragment.
   // The .sanitizeToString method returns a DocumentFragment serialized as a
   // string.
-  (new Sanitizer().sanitize("hello")) instanceof DocumentFragment;  // true
-  typeof new Sanitizer().sanitize("hello");  // "object"
-  typeof new Sanitizer().sanitizeToString("hello");  // "string"
+  (sanitizer.sanitize("hello")) instanceof DocumentFragment;  // true
+  typeof sanitizer.sanitize("hello");  // "object"
+  typeof sanitizer.sanitizeToString("hello");  // "string"
+
+  // In case our code expects the input in string form, we can use
+  // .sanitizeToString. But ,sanitize will commonly be the better choice.
+  let scriptless_input_string = sanitizer.sanitizeToString(untrusted_input);
 ```
 
 Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
@@ -286,6 +298,11 @@ Examples:
   // (For illustration purposes only. It would make more sense to just use a directly.)
   const a = /* ... a Sanitizer we found somewhere ... */;
   const b = new Sanitizer(a.config());  // b should behave the same as a.
+
+  // defaultConfig() and new Sanitizer().config should be the same.
+  // (For illustration purposes only. There are better ways of implementing
+  // object equality in JavaScript.)
+  JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
 ```
 
 ### Attribute Match Lists ### {#attr-match-list}
