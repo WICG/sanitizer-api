@@ -705,6 +705,7 @@ Specifically:
   - Special parsing behaviour. This is not dangerous in its own right, but has
     contributed to mXSS-style attacks. This includes:
       - `<plaintext>` (Which parses in [=PLAINTEXT state=].)
+      - `<title>` and `<textarea>` (Which parse in [=RCDATA state=].)
       - The non-conforming [`<xmp>`](https://html.spec.whatwg.org/#xmp) element.
   - Legacy elements:
       - `<image>` ([which is parsed as `<img>`](https://html.spec.whatwg.org/#parsing-main-inbody)).
