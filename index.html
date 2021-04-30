@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 63985be8d, updated Thu Apr 22 17:16:48 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="2856eca64a8f8074805beb5242589b8655de79f2" name="document-revision">
+  <meta content="5952f3d4987345c5b74478c7749459af0b31dc06" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -756,27 +756,46 @@ handle additional, application-specific use cases.</p>
   are to return the value of the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration">default configuration</a> object.</p>
    </ul>
    <p>Example:</p>
-<pre class="language-js highlight">  <c- c1>// Replace an element’s content from unsanitized input:</c->
-  element<c- p>.</c->replaceChildren<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c->userControlledInput<c- p>));</c->
+<pre class="language-js highlight">  <c- c1>// The core API of the Sanitizer is the .sanitize method:</c->
+  <c- a>const</c-> sanitizer <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>();</c->
+  <c- a>let</c-> untrusted_input <c- o>=</c-> <c- u>"Hello!"</c-><c- p>;</c->
 
-  <c- c1>// defaultConfig() and new Sanitizer().config should be the same.</c->
-  <c- c1>// (For illustration purposes only. There are better ways of implementing</c->
-  <c- c1>// object equality in JavaScript.)</c->
-  JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->defaultConfig<c- p>())</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->config<c- p>());</c->  <c- c1>// true</c->
+  <c- c1>// Returns a DocumentFragment with one text node, "Hello!".</c->
+  sanitizer<c- p>.</c->sanitize<c- p>(</c->untrusted_input<c- p>);</c->
+
+  <c- c1>// Probably we want to put this somewhere in our DOM:</c->
+  element<c- p>.</c->replaceChildren<c- p>(</c->sanitizer<c- p>.</c->sanitize<c- p>(</c->untrusted_input<c- p>));</c->
+
+  <c- c1>// If our input contains markup it’ll be mostly preserved, except for</c->
+  <c- c1>// script-y markup:</c->
+  untrusted_input <c- o>=</c-> <c- u>"&lt;em onclick='alert(1);'>Hello!&lt;/em>"</c-><c- p>;</c->
+  sanitizer<c- p>.</c->sanitizer<c- p>(</c->untrusted_input<c- p>);</c->  <c- c1>// &lt;em>Hello!&lt;/em></c->
+  element<c- p>.</c->replaceChildren<c- p>(</c->sanitizer<c- p>.</c->sanitize<c- p>(</c->untrusted_input<c- p>));</c->  <c- c1>// No alert!</c->
+
+  <c- c1>// The .sanitize method is the primary API, and returns a DocumentFragment.</c->
+  <c- c1>// The .sanitizeToString method returns a DocumentFragment serialized as a</c->
+  <c- c1>// string.</c->
+  <c- p>(</c->sanitizer<c- p>.</c->sanitize<c- p>(</c-><c- u>"hello"</c-><c- p>))</c-> <c- k>instanceof</c-> DocumentFragment<c- p>;</c->  <c- c1>// true</c->
+  <c- k>typeof</c-> sanitizer<c- p>.</c->sanitize<c- p>(</c-><c- u>"hello"</c-><c- p>);</c->  <c- c1>// "object"</c->
+  <c- k>typeof</c-> sanitizer<c- p>.</c->sanitizeToString<c- p>(</c-><c- u>"hello"</c-><c- p>);</c->  <c- c1>// "string"</c->
+
+  <c- c1>// In case our code expects the input in string form, we can use</c->
+  <c- c1>// .sanitizeToString. But ,sanitize will commonly be the better choice.</c->
+  <c- a>let</c-> scriptless_input_string <c- o>=</c-> sanitizer<c- p>.</c->sanitizeToString<c- p>(</c->untrusted_input<c- p>);</c->
 </pre>
+   <p class="note" role="note"><span>Note:</span> Sanitizing a string will use the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser" id="ref-for-html-parser">HTML Parser</a> to parse the input,
+    which will perform some degree of normalization. So even
+    if no sanitization steps are taken on a particular input, it cannot be
+    guaranteed that the output of <code>.sanitizeToString</code> will be
+    character-for-character identical to the input.
+    Examples would be character regularization (<code>"&amp;szlig;"</code> to <code>"ß"</code>),
+    or light processing for some elements (<code>"&lt;image>"</code> to <code>"&lt;img>"</code>);</p>
    <h3 class="heading settled" data-level="2.2" id="inputs"><span class="secno">2.2. </span><span class="content">Input Types</span><a class="self-link" href="#inputs"></a></h3>
    <p>The sanitization methods support three input types: <code>DOMString</code>, <code>Document</code>,
 and <code>DocumentFragment</code>. In all cases, the sanitization will work on a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment①">DocumentFragment</a></code> internally, but the work-fragment will be created by
 parsing, cloning, or using the fragment as-is, respectively.</p>
 <pre class="idl highlight def"><c- b>typedef</c-> (<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment②"><c- n>DocumentFragment</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#interface-Document" id="ref-for-interface-Document"><c- n>Document</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-sanitizerinput"><code><c- g>SanitizerInput</c-></code></dfn>;
 </pre>
-   <p class="note" role="note"><span>Note:</span> Sanitizing a string will use the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser" id="ref-for-html-parser">HTML Parser</a> to parse the input,
-    which will perform some degree of normalization. So even
-    if no sanitization steps are taken on a particular input, it cannot be
-    guaranteed that the output of <code>sanitizeToString</code> will be
-    character-for-character identical to the input.
-    Examples would be character regularization (<code>"&amp;szlig;"</code> to <code>"ß"</code>),
-    or light processing for some elements (<code>"&lt;image>"</code> to <code>"&lt;img>"</code>);</p>
    <h3 class="heading settled" data-level="2.3" id="config"><span class="secno">2.3. </span><span class="content">The Configuration Dictionary</span><a class="self-link" href="#config"></a></h3>
    <p>The Sanitizer’s <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="configuration-object">configuration object</dfn> is a dictionary which
 describes modifications to the sanitize operation. If a Sanitizer has
@@ -827,22 +846,22 @@ is used as the configuration object.</p>
    <p>Examples:</p>
 <pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>;</c->
 
-  <c- c1>// "Some text &lt;b>with&lt;/b> text tags."</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->allowElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Some text &lt;b>with&lt;/b> text tags.</c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->allowElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
-  <c- c1>// "Some text &lt;i>with&lt;/i> &lt;blink>tags&lt;/blink>."</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->blockElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Some text &lt;i>with&lt;/i> &lt;blink>tags&lt;/blink>.</c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->blockElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
-  <c- c1>// "Some text &lt;blink>tags&lt;/blink>."</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->dropElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Some text &lt;blink>tags&lt;/blink>.</c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->dropElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
   <c- c1>// Note: The default configuration handles XSS-relevant input:</c->
 
   <c- c1>// Non-scripting input will be passed through:</c->
-  <c- k>new</c-> Sanitizer<c- p>().</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->  <c- c1>// Will output sample unmodified.</c->
+  <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c->sample<c- p>);</c->  <c- c1>// Will output sample unmodified.</c->
 
   <c- c1>// Scripts will be blocked: "abc alert(1) def"</c->
-  <c- k>new</c-> Sanitizer<c- p>().</c->sanitizeToString<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
+  <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
 </pre>
    <p>A sanitizer’s configuration can be queried using the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config①">query the sanitizer config</a> method.</p>
    <p>Examples:</p>
@@ -865,6 +884,11 @@ is used as the configuration object.</p>
   <c- c1>// (For illustration purposes only. It would make more sense to just use a directly.)</c->
   <c- a>const</c-> a <c- o>=</c-> <c- d>/* ... a Sanitizer we found somewhere ... */</c-><c- p>;</c->
   <c- a>const</c-> b <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>(</c->a<c- p>.</c->config<c- p>());</c->  <c- c1>// b should behave the same as a.</c->
+
+  <c- c1>// defaultConfig() and new Sanitizer().config should be the same.</c->
+  <c- c1>// (For illustration purposes only. There are better ways of implementing</c->
+  <c- c1>// object equality in JavaScript.)</c->
+  JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->defaultConfig<c- p>())</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->config<c- p>());</c->  <c- c1>// true</c->
 </pre>
    <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists</span><a class="self-link" href="#attr-match-list"></a></h4>
    <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-match-list">attribute match list</dfn> is a map of attribute names to element names,
@@ -876,20 +900,20 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
    <p>Examples for attributes and attribute match lists:</p>
 <pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"&lt;span id='span1' class='theclass' style='font-weight: bold'>hello&lt;/span>"</c-><c- p>;</c->
 
-  <c- c1>// Allow only &lt;span style>: "&lt;span style='font-weight: bold'>...&lt;/span>"</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"span"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Allow only &lt;span style>: &lt;span style='font-weight: bold'>...&lt;/span></c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"span"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
-  <c- c1>// Allow style, but not on span: "&lt;span>...&lt;/span>"</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"div"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Allow style, but not on span: &lt;span>...&lt;/span></c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"div"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
-  <c- c1>// Allow style on any elements: "&lt;span style='font-weight: bold'>...&lt;/span>"</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Allow style on any elements: &lt;span style='font-weight: bold'>...&lt;/span></c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
-  <c- c1>// Block &lt;span id>: "&lt;span class='theclass' style='font-weight: bold'>...&lt;/span>";</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"span"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Block &lt;span id>: &lt;span class='theclass' style='font-weight: bold'>...&lt;/span></c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"span"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 
-  <c- c1>// Block id, everywhere: "&lt;span class='theclass' style='font-weight: bold'>...&lt;/span>";</c->
-  <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitizeToString<c- p>(</c->sample<c- p>);</c->
+  <c- c1>// Block id, everywhere: &lt;span class='theclass' style='font-weight: bold'>...&lt;/span></c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 </pre>
    <h3 class="heading settled" data-level="2.4" id="algorithms"><span class="secno">2.4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h3>
    <div class="algorithm" data-algorithm="sanitize">
@@ -2670,7 +2694,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="term-for-html-parser">
    <a href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser">https://html.spec.whatwg.org/multipage/parsing.html#html-parser</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-html-parser">2.2. Input Types</a>
+    <li><a href="#ref-for-html-parser">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-plaintext-state">
