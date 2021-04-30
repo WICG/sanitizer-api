@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 3509d0448, updated Fri Apr 16 17:27:34 2021 -0700" name="generator">
+  <meta content="Bikeshed version 63985be8d, updated Thu Apr 22 17:16:48 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="d10bdfb195ec0c794493dd287c31f95c45f8246e" name="document-revision">
+  <meta content="2856eca64a8f8074805beb5242589b8655de79f2" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -578,7 +578,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-21">21 April 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-30">30 April 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1328,6 +1328,8 @@ contributed to mXSS-style attacks. This includes:</p>
         <li data-md>
          <p><code>&lt;plaintext></code> (Which parses in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state" id="ref-for-plaintext-state">PLAINTEXT state</a>.)</p>
         <li data-md>
+         <p><code>&lt;title></code> and <code>&lt;textarea></code> (Which parse in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#rcdata-state" id="ref-for-rcdata-state">RCDATA state</a>.)</p>
+        <li data-md>
          <p>The non-conforming [<code>&lt;xmp></code>](https://html.spec.whatwg.org/#xmp) element.</p>
        </ul>
       <li data-md>
@@ -1814,12 +1816,10 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <c- u>"table"</c-><c- p>,</c->
     <c- u>"tbody"</c-><c- p>,</c->
     <c- u>"td"</c-><c- p>,</c->
-    <c- u>"textarea"</c-><c- p>,</c->
     <c- u>"tfoot"</c-><c- p>,</c->
     <c- u>"th"</c-><c- p>,</c->
     <c- u>"thead"</c-><c- p>,</c->
     <c- u>"time"</c-><c- p>,</c->
-    <c- u>"title"</c-><c- p>,</c->
     <c- u>"tr"</c-><c- p>,</c->
     <c- u>"track"</c-><c- p>,</c->
     <c- u>"tt"</c-><c- p>,</c->
@@ -2679,6 +2679,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-plaintext-state">Built-ins Justification</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-rcdata-state">
+   <a href="https://html.spec.whatwg.org/multipage/parsing.html#rcdata-state">https://html.spec.whatwg.org/multipage/parsing.html#rcdata-state</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-rcdata-state">Built-ins Justification</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-valid-custom-element-name">
    <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name">https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name</a><b>Referenced in:</b>
    <ul>
@@ -2771,6 +2777,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-html-fragment-serialisation-algorithm">html fragment serialization algorithm</span>
      <li><span class="dfn-paneled" id="term-for-html-parser">html parser</span>
      <li><span class="dfn-paneled" id="term-for-plaintext-state">plaintext state</span>
+     <li><span class="dfn-paneled" id="term-for-rcdata-state">rcdata state</span>
      <li><span class="dfn-paneled" id="term-for-valid-custom-element-name">valid custom element name</span>
     </ul>
    <li>
