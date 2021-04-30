@@ -159,14 +159,41 @@ handle additional, application-specific use cases.
 
 Example:
 ```js
-  // Replace an element's content from unsanitized input:
-  element.replaceChildren(new Sanitizer().sanitize(userControlledInput));
+  // The core API of the Sanitizer is the .sanitize method:
+  const sanitizer = new Sanitizer();
+  let untrusted_input = "Hello!";
 
-  // defaultConfig() and new Sanitizer().config should be the same.
-  // (For illustration purposes only. There are better ways of implementing
-  // object equality in JavaScript.)
-  JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
+  // Returns a DocumentFragment with one text node, "Hello!".
+  sanitizer.sanitize(untrusted_input);
+
+  // Probably we want to put this somewhere in our DOM:
+  element.replaceChildren(sanitizer.sanitize(untrusted_input));
+
+  // If our input contains markup it'll be mostly preserved, except for
+  // script-y markup:
+  untrusted_input = "<em onclick='alert(1);'>Hello!</em>";
+  sanitizer.sanitizer(untrusted_input);  // <em>Hello!</em>
+  element.replaceChildren(sanitizer.sanitize(untrusted_input));  // No alert!
+
+  // The .sanitize method is the primary API, and returns a DocumentFragment.
+  // The .sanitizeToString method returns a DocumentFragment serialized as a
+  // string.
+  (sanitizer.sanitize("hello")) instanceof DocumentFragment;  // true
+  typeof sanitizer.sanitize("hello");  // "object"
+  typeof sanitizer.sanitizeToString("hello");  // "string"
+
+  // In case our code expects the input in string form, we can use
+  // .sanitizeToString. But ,sanitize will commonly be the better choice.
+  let scriptless_input_string = sanitizer.sanitizeToString(untrusted_input);
 ```
+
+Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
+    which will perform some degree of normalization. So even
+    if no sanitization steps are taken on a particular input, it cannot be
+    guaranteed that the output of `.sanitizeToString` will be
+    character-for-character identical to the input.
+    Examples would be character regularization (`"&szlig;"` to `"ß"`),
+    or light processing for some elements (`"<image>"` to `"<img>"`);
 
 ## Input Types ## {#inputs}
 
@@ -178,15 +205,6 @@ parsing, cloning, or using the fragment as-is, respectively.
 <pre class="idl">
   typedef (DOMString or DocumentFragment or Document) SanitizerInput;
 </pre>
-
-Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
-    which will perform some degree of normalization. So even
-    if no sanitization steps are taken on a particular input, it cannot be
-    guaranteed that the output of `sanitizeToString` will be
-    character-for-character identical to the input.
-    Examples would be character regularization (`"&szlig;"` to `"ß"`),
-    or light processing for some elements (`"<image>"` to `"<img>"`);
-
 
 ## The Configuration Dictionary ## {#config}
 
@@ -238,22 +256,22 @@ Examples:
 ```js
   const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
 
-  // "Some text <b>with</b> text tags."
-  new Sanitizer({allowElements: [ "b" ]).sanitizeToString(sample);
+  // Some text <b>with</b> text tags.
+  new Sanitizer({allowElements: [ "b" ]).sanitize(sample);
 
-  // "Some text <i>with</i> <blink>tags</blink>."
-  new Sanitizer({blockElements: [ "b" ]).sanitizeToString(sample);
+  // Some text <i>with</i> <blink>tags</blink>.
+  new Sanitizer({blockElements: [ "b" ]).sanitize(sample);
 
-  // "Some text <blink>tags</blink>."
-  new Sanitizer({dropElements: [ "b" ]).sanitizeToString(sample);
+  // Some text <blink>tags</blink>.
+  new Sanitizer({dropElements: [ "b" ]).sanitize(sample);
 
   // Note: The default configuration handles XSS-relevant input:
 
   // Non-scripting input will be passed through:
-  new Sanitizer().sanitizeToString(sample);  // Will output sample unmodified.
+  new Sanitizer().sanitize(sample);  // Will output sample unmodified.
 
   // Scripts will be blocked: "abc alert(1) def"
-  new Sanitizer().sanitizeToString("abc <script>alert(1)</script> def");
+  new Sanitizer().sanitize("abc <script>alert(1)</script> def");
 ```
 
 A sanitizer's configuration can be queried using the
@@ -280,6 +298,11 @@ Examples:
   // (For illustration purposes only. It would make more sense to just use a directly.)
   const a = /* ... a Sanitizer we found somewhere ... */;
   const b = new Sanitizer(a.config());  // b should behave the same as a.
+
+  // defaultConfig() and new Sanitizer().config should be the same.
+  // (For illustration purposes only. There are better ways of implementing
+  // object equality in JavaScript.)
+  JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
 ```
 
 ### Attribute Match Lists ### {#attr-match-list}
@@ -298,20 +321,20 @@ Examples for attributes and attribute match lists:
 ```js
   const sample = "<span id='span1' class='theclass' style='font-weight: bold'>hello</span>";
 
-  // Allow only <span style>: "<span style='font-weight: bold'>...</span>"
-  new Sanitizer({allowAttributes: {"style": ["span"]}}).sanitizeToString(sample);
+  // Allow only <span style>: <span style='font-weight: bold'>...</span>
+  new Sanitizer({allowAttributes: {"style": ["span"]}}).sanitize(sample);
 
-  // Allow style, but not on span: "<span>...</span>"
-  new Sanitizer({allowAttributes: {"style": ["div"]}}).sanitizeToString(sample);
+  // Allow style, but not on span: <span>...</span>
+  new Sanitizer({allowAttributes: {"style": ["div"]}}).sanitize(sample);
 
-  // Allow style on any elements: "<span style='font-weight: bold'>...</span>"
-  new Sanitizer({allowAttributes: {"style": ["*"]}}).sanitizeToString(sample);
+  // Allow style on any elements: <span style='font-weight: bold'>...</span>
+  new Sanitizer({allowAttributes: {"style": ["*"]}}).sanitize(sample);
 
-  // Block <span id>: "<span class='theclass' style='font-weight: bold'>...</span>";
-  new Sanitizer({blockAttributes: {"id": ["span"]}}).sanitizeToString(sample);
+  // Block <span id>: <span class='theclass' style='font-weight: bold'>...</span>
+  new Sanitizer({blockAttributes: {"id": ["span"]}}).sanitize(sample);
 
-  // Block id, everywhere: "<span class='theclass' style='font-weight: bold'>...</span>";
-  new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitizeToString(sample);
+  // Block id, everywhere: <span class='theclass' style='font-weight: bold'>...</span>
+  new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitize(sample);
 ```
 
 ## Algorithms ## {#algorithms}
