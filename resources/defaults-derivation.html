@@ -112,7 +112,7 @@ function toTextContent(element_id, value) {
 const baseline_element_allow_list =
     new Helper(known_elements).without([
         "applet", "base", "embed", "iframe", "noembed", "noframes", "nolayer",
-        "object", "frame", "frameset", "param", "script",
+        "noscript", "object", "frame", "frameset", "param", "script",
     ]).val;
 
 const baseline_attribute_allow_list =
