@@ -14,15 +14,9 @@ Status:
 
 Here you can find additional information:
 
-* This document explains the problem and basic usage. It contains excerpts
-  from some of the documents below.
 * The [draft specification](https://wicg.github.io/sanitizer-api/).
-* An [FAQ](faq.md).
-* The [original explainer](explainer.md) goes into more detail about why
-  we are proposing this as a new standard (rather than a library). The API
-  proposed there is a little outdated, however.
+* A list of [questions & answers](faq.md).
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Sanitizer_API).
-* An early [W3C TAG review](https://github.com/w3ctag/design-reviews/issues/619).
 * Implementation Status:
   * [Mozilla position](https://github.com/mozilla/standards-positions/issues/106),
     [Chrome Status](https://www.chromestatus.com/feature/5786893650231296),
@@ -30,6 +24,12 @@ Here you can find additional information:
   * [Can I use 'Sanitizer API'](https://caniuse.com/mdn-api_sanitizer)?
   * [Web Platform Tests](https://wpt.fyi/results/sanitizer-api?label=experimental&label=master&aligned)
     ([test source](https://github.com/web-platform-tests/wpt/tree/master/sanitizer-api)).
+* The [Sanitizer API Playground](https://sanitizer-api.dev) is an easy way to
+  play with the API, if it's enabled in your browser.
+* An early [W3C TAG review](https://github.com/w3ctag/design-reviews/issues/619).
+* The [original explainer](explainer.md) goes into more detail about why
+  we are proposing this as a new standard (rather than a library). The API
+  proposed there is a little outdated, however.
 
 ## Implementations
 
