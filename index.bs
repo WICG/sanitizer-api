@@ -225,6 +225,9 @@ is used as the configuration object.
   };
 </pre>
 
+Note: Element names are expected to be ascii lowercase and those that don't
+  conform will be lowercased.
+
 : allowElements
 :: The <dfn>element allow list</dfn> is a sequence of strings with
     elements that the sanitizer should retain in the input.
