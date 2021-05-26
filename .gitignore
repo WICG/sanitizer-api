@@ -1,5 +1,3 @@
 /.project
-/.ninja_*
-build.ninja
-/out/
-nohup.out
+/out
+/*.ninja*
