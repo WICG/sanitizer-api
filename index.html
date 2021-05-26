@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 63985be8d, updated Thu Apr 22 17:16:48 2021 -0700" name="generator">
+  <meta content="Bikeshed version 800b43329, updated Tue May 25 14:13:32 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="5952f3d4987345c5b74478c7749459af0b31dc06" name="document-revision">
+  <meta content="55e20d3d66007e57d97db13424fe47289d03583d" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -578,7 +578,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-30">30 April 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-05-26">26 May 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1381,7 +1381,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    </ol>
    <h3 class="heading settled" id="baseline-elements"><span class="content">The Baseline Element Allow List</span><a class="self-link" href="#baseline-elements"></a></h3>
    <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-element-allow-list">baseline element allow list</dfn> has the following value:</p>
-<pre class="include-code highlight" path="resources/baseline-element-allow-list.json"><c- p>[</c->
+<pre class="include-code highlight"><c- p>[</c->
   <c- u>"a"</c-><c- p>,</c->
   <c- u>"abbr"</c-><c- p>,</c->
   <c- u>"acronym"</c-><c- p>,</c->
@@ -1459,7 +1459,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <c- u>"meter"</c-><c- p>,</c->
   <c- u>"nav"</c-><c- p>,</c->
   <c- u>"nobr"</c-><c- p>,</c->
-  <c- u>"noscript"</c-><c- p>,</c->
   <c- u>"ol"</c-><c- p>,</c->
   <c- u>"optgroup"</c-><c- p>,</c->
   <c- u>"option"</c-><c- p>,</c->
@@ -1515,7 +1514,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
 </pre>
    <h3 class="heading settled" id="baseline-attributes"><span class="content">The Baseline Attribute Allow List</span><a class="self-link" href="#baseline-attributes"></a></h3>
    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="baseline-attribute-allow-list">baseline attribute allow list</dfn> has the following value:</p>
-<pre class="include-code highlight" path="resources/baseline-attribute-allow-list.json"><c- p>[</c->
+<pre class="include-code highlight"><c- p>[</c->
   <c- u>"abbr"</c-><c- p>,</c->
   <c- u>"accept"</c-><c- p>,</c->
   <c- u>"accept-charset"</c-><c- p>,</c->
@@ -1731,7 +1730,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
 </pre>
    <h3 class="heading settled" id="default-configuration-object"><span class="content">The Default Configuration Object</span><a class="self-link" href="#default-configuration-object"></a></h3>
    <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="default-configuration">default configuration</dfn> has the following value:</p>
-<pre class="include-code highlight" path="resources/default-configuration.json"><c- p>{</c->
+<pre class="include-code highlight"><c- p>{</c->
   <c- u>"allowCustomElements"</c-><c- o>:</c-> <c- kc>false</c-><c- p>,</c->
   <c- u>"allowElements"</c-><c- o>:</c-> <c- p>[</c->
     <c- u>"a"</c-><c- p>,</c->
@@ -1807,7 +1806,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <c- u>"meter"</c-><c- p>,</c->
     <c- u>"nav"</c-><c- p>,</c->
     <c- u>"nobr"</c-><c- p>,</c->
-    <c- u>"noscript"</c-><c- p>,</c->
     <c- u>"ol"</c-><c- p>,</c->
     <c- u>"optgroup"</c-><c- p>,</c->
     <c- u>"option"</c-><c- p>,</c->
