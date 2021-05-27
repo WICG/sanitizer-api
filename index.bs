@@ -769,14 +769,13 @@ run these steps:
   3. Let |result| be a newly constructed SanitizerOptions dictionary.
   4. For any non-empty member of |config| whose key is declared in
      SanitizerOptions, copy the value to |result|.
-  5. All element names in |result| should beconverted to lower case.
-     Element names are contained in:
-     - The values in the [=element allow list=], [=element block list=], and
-       [=element drop list=].
-     - The mapped values in the [=attribute allow list=] and
-       [=attribute drop list=].
+  5. All element names in |result| should be converted to lower case.
   6. Return |result|.
 </div>
+
+Note: The configuration object contains element names in the
+  [=element allow list=], [=element block list=], and [=element drop list=], and
+  in the mapped values in the [=attribute allow list=] and [=attribute drop list=].
 
 ### The Effective Configuration ### {#configuration}
 
