@@ -467,9 +467,6 @@ is used as the configuration object.
   };
 </pre>
 
-Note: Element names are expected to be ascii lowercase and those that don't
-  conform will be lowercased.
-
 : allowElements
 :: The <dfn>element allow list</dfn> is a sequence of strings with
     elements that the sanitizer should retain in the input.
@@ -563,6 +560,9 @@ A sanitizer's configuration can be queried using the
   // (For illustration purposes only. There are better ways of implementing
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
+
+  // Element names are normalized.
+  new Sanitizer({allowElements: ["EM", "sPAn"]}).config().allowElements  // ["em", "span"]
 ```
 </div>
 
@@ -760,7 +760,25 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
     1. Remove the `formaction` attribute from |element|.
 </div>
 
-## The Effective Configuration ## {#configuration-algorithms}
+<div algorithm="query the sanitizer config">
+To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
+run these steps:
+  1. Let |sanitizer| be the current Sanitizer.
+  2. Let |config| be |sanitizer|'s [=configuration object=], or the
+     [=default configuration=] if no [=configuration object=] was given.
+  3. Let |result| be a newly constructed SanitizerOptions dictionary.
+  4. For any non-empty member of |config| whose key is declared in
+     SanitizerOptions, copy the value to |result|.
+  5. All element names in |result| should beconverted to lower case.
+     Element names are contained in:
+     - The values in the [=element allow list=], [=element block list=], and
+       [=element drop list=].
+     - The mapped values in the [=attribute allow list=] and
+       [=attribute drop list=].
+  6. Return |result|.
+</div>
+
+### The Effective Configuration ### {#configuration}
 
 A Sanitizer is potentially complex, so we will define a helper
 construct, the *effective configuration*. This is mostly a specification
@@ -813,7 +831,8 @@ Before describing how an effective configuration is derived, we need a
 helper definition:
 
 <div algorithm="element kind">
-The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`, or `custom`. Let <var ignore>element kind</var> be:
+The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`,
+or `custom`. Let <var ignore>element kind</var> be:
   - `custom`, if |element|'s tag name is a [=valid custom element name=],
   - `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
      tag name denotes an unknown element &mdash; that is, if the
@@ -840,7 +859,7 @@ given a [=configuration object=] |config|, run these steps:
   1. If |element|'s [=element kind=] is `custom` and if |config|'s
      [=allow custom elements option=] is unset or set to anything other
      than `true`: Return `drop`.
-  1. Let |name| be |element|'s tag name.
+  1. Let |name| be the |element|'s tag name in lower case.
   1. If |name| is in |config|'s [=element drop list=]: Return `drop`.
   1. If |name| is in |config|'s [=element block list=]: Return `block`.
   1. If |config| has a non-empty [=element allow list=] and |name| is not
@@ -858,15 +877,16 @@ run these steps:
 
   1. if |config|'s [=attribute drop list=] contains |attr|'s local
      name as key, and the associated value contains either |element|'s tag
-     name or the string `"*"`: Return `drop`.
+     name (with case-insensitve comparison) or the string `"*"`: Return `drop`.
   1. If |config| has a non-empty [=attribute allow list=] and it does not
-     contain |attr|'s local name, or |attr|'s associated value
-     contains neither |element|'s tag name nor the string `"*"`:
-     Return `drop`.
+     contain |attr|'s local name, or |attr|'s associated value contains neither
+     |element|'s tag name  (with case-insensitive comparison) nor the string
+     `"*"`: Return `drop`.
   1. if |config| does not have a non-empty [=attribute allow list=] and
      [=default configuration=]'s [=attribute allow list=] does not contain
      |attr|'s local name, or |attr|'s associated value contains
-     neither |element|'s tag name nor the string `"*"`: Return `drop`.
+     neither |element|'s tag name (with case-insensitive comparison) nor the
+     string `"*"`: Return `drop`.
   1. Return `keep`.
 </div>
 
