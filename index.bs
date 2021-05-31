@@ -292,8 +292,8 @@ handle additional, application-specific use cases.
 
 * The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
     <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to create a new Sanitizer instance, and to retain a copy of |config|
-    as its [=configuration object=].
+    are to run the steps [=create a sanitizer=] algorithm with |config| as
+    parameter.
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
     algorithm on |input|,
@@ -604,6 +604,19 @@ Examples for attributes and attribute match lists:
 
 ## API Implementation ## {#api-algorithms}
 
+<div algorithm="create a sanitizer">
+To <dfn>create a Sanitizer</dfn> with an optional |config| parameter, run
+these steps:
+  1. Let |sanitizer| be a newly created Sanitizer instance.
+  1. Create a copy of |config|.
+  1. Convert all element names in |config|'s copy to ASCII lower case.
+  1. Return |sanitizer|, with |config|'s copy as its [=configuration object=].
+</div>
+
+Note: The configuration object contains element names in the
+  [=element allow list=], [=element block list=], and [=element drop list=], and
+  in the mapped values in the [=attribute allow list=] and [=attribute drop list=].
+
 <div algorithm="sanitize">
 To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
 run these steps:
@@ -764,18 +777,13 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
 To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
 run these steps:
   1. Let |sanitizer| be the current Sanitizer.
-  2. Let |config| be |sanitizer|'s [=configuration object=], or the
+  1. Let |config| be |sanitizer|'s [=configuration object=], or the
      [=default configuration=] if no [=configuration object=] was given.
-  3. Let |result| be a newly constructed SanitizerOptions dictionary.
-  4. For any non-empty member of |config| whose key is declared in
+  1. Let |result| be a newly constructed SanitizerOptions dictionary.
+  1. For any non-empty member of |config| whose key is declared in
      SanitizerOptions, copy the value to |result|.
-  5. All element names in |result| should be converted to lower case.
-  6. Return |result|.
+  1. Return |result|.
 </div>
-
-Note: The configuration object contains element names in the
-  [=element allow list=], [=element block list=], and [=element drop list=], and
-  in the mapped values in the [=attribute allow list=] and [=attribute drop list=].
 
 ### The Effective Configuration ### {#configuration}
 
