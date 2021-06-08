@@ -76,7 +76,7 @@ Example:
 Oftentimes, applications have additional &mdash; often stricter &mdash;
 requirements beyond just script execution. For example, in a certain context
 an application might want to allow formatted text, but no structural or other
-complex markup. To accomodate this, the API allows for creation of multiple
+complex markup. To accommodate this, the API allows for creation of multiple
 `Sanitizer` instances, which can be customized on creation.
 
 Example:
@@ -102,7 +102,7 @@ Example:
   document.querySelector("p.out").replaceChildren(for_display.sanitize(untrusted_example));
 ```
 
-It is the over-arching design goal of the Sanitizer API to be safe and simple,
+It is the overarching design goal of the Sanitizer API to be safe and simple,
 at the same time. Therefore the API is not only safe by default, but is also
 perma-safe. The Sanitizer will enforce a baseline that does not allow script
 execution, even if a developer may have inadvertently configured script-ish
