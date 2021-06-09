@@ -23,8 +23,6 @@ WPT Path Prefix: /sanitizer-api/
 spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
   type: attribute
     text: innerHTML; for: Element; url: #widl-Element-innerHTML
-  type: method
-    text: parseFromString; url: #widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
 text: Document; type: interface; url: https://dom.spec.whatwg.org/#interface-Document
@@ -135,8 +133,8 @@ handle additional, application-specific use cases.
   ] interface Sanitizer {
     constructor(optional SanitizerConfig config = {});
 
-    DocumentFragment sanitize(SanitizerInput input);
-    DOMString sanitizeToString(SanitizerInput input);
+    DocumentFragment sanitize((Document or DocumentFragment) input);
+    Element? sanitizeFor(DOMString element, DOMString input);
 
     SanitizerConfig getConfiguration();
     static SanitizerConfig getDefaultConfiguration();
@@ -150,9 +148,9 @@ handle additional, application-specific use cases.
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
     algorithm on |input|,
-* The <dfn method for=Sanitizer><code>sanitizeToString(<var>input</var>)</code></dfn>
-    method steps are to return the result of running [=sanitizeToString=]
-    algorithm on |input|.
+* The <dfn method for=Sanitizer><code>sanitizeFor(<var>element</var>, <var>input</var>)</code></dfn>
+    method steps are to return the result of running [=sanitizeFor=]
+    algorithm on |element| and |input|.
 * The <dfn method for=Sanitizer><code>getConfiguration()</code></dfn> method steps are
     to return the result of running the [=query the sanitizer config=]
     algorithm. It essentially returns a copy of the Sanitizer's
@@ -161,55 +159,142 @@ handle additional, application-specific use cases.
     <dfn method for=Sanitizer><code>getDefaultConfiguration()</code></dfn> method steps
     are to return the value of the [=default configuration=] object.
 
+The {{Element}} interface gains an additional method, `SetInnerHTML2000` which
+applies a string using a Sanitzer directly to an existing element node.
+
+<pre class="idl">
+  partial interface Element {
+    undefined SetInnerHTML2000(DOMString input, Sanitizer sanitizer);
+  };
+</pre>
+
+* The <dfn method for=Element><code>SetInnerHTML2000(<var>input</var>, <var>sanitizer</var>)</code></dfn>
+  method steps are to run the [=sanitizeAndSet=] algorithm on |input| and
+  |sanitizer|.
+
+Issue: Is this how we specify a method on existing class "owned" by a different spe?
+
+Issue: Agree on name. `SetInnerHTML2000` is a placeholder, carefully chosen to generate maximum feedback.
+
 <div class="example">
 ```js
-  // The core API of the Sanitizer is the .sanitize method:
-  const sanitizer = new Sanitizer();
-  let untrusted_input = "Hello!";
+  // To make our examples easy to follow, we'll need a way create DOM nodes.
+  // The following is hacky way to accomplish this, for illustration only,
+  // that you shall pretty please not use in practice. This parsing method can
+  // cause side-effects based on the string being parsed, which is insecure.
+  // In fact, this very API exists for the sole purpose of preventing the
+  // problems that this approach has.
+  //
+  // But... for our examples we'll need something that is quick and easy, since
+  // we cannot use our won API just yet...
+  const to_node = str => (new DOMParser).parseFromString(str, "text/html").body.firstChild;
 
-  // Returns a DocumentFragment with one text node, "Hello!".
-  sanitizer.sanitize(untrusted_input);
+  // The core API of the Sanitizer is the .sanitize method:
+  let untrusted_input = to_node("Hello!");
+  const sanitizer = new Sanitizer();
+  sanitizer.sanitize(untrusted_input);  // DocumentFragment w/ a text node, "Hello!"
 
   // Probably we want to put this somewhere in our DOM:
   element.replaceChildren(sanitizer.sanitize(untrusted_input));
 
   // If our input contains markup it'll be mostly preserved, except for
   // script-y markup:
-  untrusted_input = "<em onclick='alert(1);'>Hello!</em>";
+  untrusted_input = to_node("<em onclick='alert(1);'>Hello!</em>");
   sanitizer.sanitizer(untrusted_input);  // <em>Hello!</em>
   element.replaceChildren(sanitizer.sanitize(untrusted_input));  // No alert!
 
   // The .sanitize method is the primary API, and returns a DocumentFragment.
-  // The .sanitizeToString method returns a DocumentFragment serialized as a
-  // string.
-  (sanitizer.sanitize("hello")) instanceof DocumentFragment;  // true
-  typeof sanitizer.sanitize("hello");  // "object"
-  typeof sanitizer.sanitizeToString("hello");  // "string"
+  // The .sanitizeFor method returns an HTML element node.
+  const hello = to_node("hello");
+  (sanitizer.sanitize(hello))) instanceof DocumentFragment;  // true
+  (sanitizer.sanitizeFor("template", "hello") instanceof HTMLTemplateElement;  // true
+```
 
-  // In case our code expects the input in string form, we can use
-  // .sanitizeToString. But ,sanitize will commonly be the better choice.
-  let scriptless_input_string = sanitizer.sanitizeToString(untrusted_input);
+## String Handling ## {#api-string-handling}
+
+Parsing (and unparsing) strings to (or from) HTML requires a context element.
+Thus, the `sanitizeFor` method requires us to pass in a context, which we can
+in turn hand over to the HTML Parser.
+
+Additionally, the {{Element}} interface gains a `SetInnerHTML2000` method, which
+always knows the correct context, because it is applied to a given {{Element}}
+instance, and it's this {{Element}} that is the correct context for both parsing
+and unparsing.
+
+One way to conceptualize this is to view string sanitization as a three step
+operation: 1, parsing the string; 2, sanitizing the resulting node tree;
+and 3, grafting the subtree onto our DOM. `Sanitizer.sanitize` is the middle step.
+`Sanitizer.sanitizeFor` performs the first and second step, but leaves the
+third to the developer. Element.SetInnerHTML2000 does all three. Which to use
+depends on the structure of your application, whether you can do all three
+steps simultaneously, or whether maybe the sanitization is removed (in either
+code structure or point in time) from the modification of the DOM.
+
+Examples:
+```js
+  // If the markup to be sanitized is already available as a tree, for example
+  // from an embedded frame, one can use sanitize:
+  document.getElementById("target").replaceChildren(
+    sanitizer.sanitize(
+      document.querySelector("iframe#myframe").contentWindow.document.body));
+
+  // If the markup to be sanitized is present in string form, but we already
+  // have the element we want to insert in available:
+  const untrusted_input = "....";
+  document.getElementById("someelement").SetInnerHTML2000(untrusted_input, sanitizer);
+
+  // If the markup to be sanitized is present in string form, but we don't want
+  // to do the DOM insertion now:
+  let no_xss = sanitizer.sanitizeFor("dic", untrusted_input);
+  // ... much later ...
+  document.querySelector("div#targetdiv").replaceChildren(no_xss.children);
+
+  // Note that parsing HTML depends on the current context in many ways, some
+  // subtle, some not so much. Supplying a different context than what the
+  // result will eventually be used in has both security and functional risks.
+  // It's up to the developer to handle this safely.
+  //
+  // Example: Most, many parsing contexts disallow table  data (<td>) without
+  //          an enclosing table.
+  sanitizer.sanitizeFor("div", "<td>data</td>").innerHTML  // "data"
+  sanitizer.sanitizeFor("table", "<td>data</td>").innerHTML  // "<td>data</td>"
 ```
 </div>
 
+<div class="note">
 Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
-    which will perform some degree of normalization. So even
-    if no sanitization steps are taken on a particular input, it cannot be
-    guaranteed that the output of `.sanitizeToString` will be
-    character-for-character identical to the input.
-    Examples would be character regularization (`"&szlig;"` to `"ß"`),
-    or light processing for some elements (`"<image>"` to `"<img>"`);
+which will perform some degree of normalization. So even
+if no sanitization steps are taken on a particular input, it cannot be
+guaranteed that the output of `.sanitizeToString` will be
+character-for-character identical to the input.
 
-## Input Types ## {#inputs}
+Examples:
+    ```js
+    sanitizer.sanitizeFor("div", "Stra&szlig;e")  // Straße
+    sanitizer.sanitizeFor("div", "<image>")  // <img>
+    ```
+</div>
 
-The sanitization methods support three input types: `DOMString`, `Document`,
-and `DocumentFragment`. In all cases, the sanitization will work on a
-{{DocumentFragment}} internally, but the work-fragment will be created by
-parsing, cloning, or using the fragment as-is, respectively.
+<div class="note">
+Note: `Sanitizer.sanitizeFor` and `Element.SetInnerHTML2000` can replace the
+    respective other. Both are provided, since they map to slightly different
+    use cases.
 
-<pre class="idl">
-  typedef (DOMString or DocumentFragment or Document) SanitizerInput;
-</pre>
+Examples:
+    ```js
+    // sanitizeFor, based on SetInnerHTML.
+    function sanitizeFor(element, input) {
+      const elem = document.createElement(element);
+      elem.SetInnerHTML2000(input, this);
+      return elem;
+    }
+
+    // SetInnerHTML2000, based on sanitizeFor.
+    function SetInnerHTML2000(input, sanitizer) {
+      this.replaceChildren(sanitizer.sanitizeFor(this.localName, input).children);
+    }
+    ```
+</div>
 
 ## The Configuration Dictionary ## {#config}
 
@@ -355,10 +440,12 @@ Examples for attributes and attribute match lists:
 ```
 </div>
 
-## Algorithms ## {#algorithms}
+# Algorithms # {#algorithms}
+
+## API Implementation ## {#api-algorithms}
 
 <div algorithm="sanitize">
-To <dfn>sanitize</dfn> a given |input| of type {{SanitizerInput}},
+To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
 run these steps:
   1. Let |fragment| be the result of running the [=create a document fragment=]
      algorithm on |input|.
@@ -366,41 +453,62 @@ run these steps:
   1. Return |fragment|.
 </div>
 
-<div algorithm="sanitizeToString">
-To <dfn>sanitizeToString</dfn> a given |input| of type {{SanitizerInput}}, run these steps:
-  1. Let |fragment| be the result of the [=create a document fragment=]
-     algorithm on |input|.
-  1. Let |sanitized| be the result of running the [=sanitize=] algorithm on
-     |fragment|.
-  1. Let |result| be the result of running the
-     [=HTML Fragment Serialization Algorithm=] with |sanitized| as the `node`
-     argument.
-  1. Return |result|.
+<div algorithm="sanitizeFor">
+To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
+|DOMString| and a given |input| of type |DOMString| run these steps:
+  1. Let |node| be an HTML element created by ... from |element|.
+  1. Let |fragment| be the result of invoking the
+     [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm),
+     with |node| as the `context element` and |input| as `markup`.
+  1. Run the steps of the [=sanitize a document fragment=] algorithm on |fragment|.
+  1. [=Replace all=] with |fragment| as the `node` and |node| as the `parent`.
+  1. Return |node|.
 </div>
+
+Issue: The above will produce funny results for `<script>`.
+
+<div algorithm="sanitizeAndSet">
+To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
+{{Sanitizer}} |sanitizer| on an {{Element}} node |this|, run these steps:
+  1. Let |fragment| be the result of invoking the
+     [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
+     with |this| as the `context node` and |value| as `markup`.
+  1. Run the steos if the [=sanitize a document fragment=] algorithm
+     on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
+  1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
+</div>
+
+Issue: Define what happens on error conditions.
 
 <div algorithm="create a document fragment">
 To <dfn>create a document fragment</dfn> named |fragment| from an
-|input| of type {{SanitizerInput}}, run these steps:
+|input| of type `Document or DocumentFragment`, run these steps:
 
   1. Switch based on |input|'s type:
     1. If |input| is of type {{DocumentFragment}}, then:
       1. Let |node| refer to |input|.
     1. If |input| is of type {{Document}}, then:
       1. Let |node| refer to |input|'s `documentElement`.
-    1. If |input| is of type `DOMString`, then:
-      1. Let |node| be the result of running the {{parseFromString}} algorithm
-          with |input| as first parameter (`string`),
-          and `"text/html"` as second parameter (`type`).
   1. Let |clone| be the result of running [=clone a node=] on |node| with the
      `clone children flag` set to `true`.
   1. Let `fragment` be the result of {{createDocumentFragment}}.
   1. [=Append=] the node |clone| to the parent |fragment|.
   1. Return |fragment|.
-
-Issue(WICG/sanitizer-api#42): It's unclear whether we can assume a generic
-  context for {{parseFromString}}, or if we need to re-work the API to take
-  the insertion context of the created fragment into account.
 </div>
+
+<div algorithm="query the sanitizer config">
+To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
+run these steps:
+  1. Let |sanitizer| be the current Sanitizer.
+  2. Let |config| be |sanitizer|'s [=configuration object=], or the
+     [=default configuration=] if no [=configuration object=] was given.
+  3. Let |result| be a newly constructed SanitizerOptions dictionary.
+  4. For any non-empty member of |config| whose key is declared in
+     SanitizerOptions, copy the value to |result|.
+  5. Return |result|.
+</div>
+
+## Sanitization Algorithms ## {#sanitizer-algorithms}
 
 <div algorithm="sanitize a document fragment">
 To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
@@ -468,19 +576,7 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
     1. Remove the `formaction` attribute from |element|.
 </div>
 
-<div algorithm="query the sanitizer config">
-To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
-run these steps:
-  1. Let |sanitizer| be the current Sanitizer.
-  2. Let |config| be |sanitizer|'s [=configuration object=], or the
-     [=default configuration=] if no [=configuration object=] was given.
-  3. Let |result| be a newly constructed SanitizerOptions dictionary.
-  4. For any non-empty member of |config| whose key is declared in
-     SanitizerOptions, copy the value to |result|.
-  5. Return |result|.
-</div>
-
-### The Effective Configuration ### {#configuration}
+## The Effective Configuration ## {#configuration-algorithms}
 
 A Sanitizer is potentially complex, so we will define a helper
 construct, the *effective configuration*. This is mostly a specification
@@ -590,7 +686,7 @@ run these steps:
   1. Return `keep`.
 </div>
 
-### Baseline and Defaults ### {#defaults}
+## Baseline and Defaults ## {#defaults}
 
 Issue: The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
@@ -682,8 +778,16 @@ parsed and interpreted exactly the same when inserted into a different parent
 element. An example for carrying out such an attack is by relying on the
 change of parsing behavior for foreign content or misnested tags.
 
-The Sanitizer API does not protect against mutated XSS, however we encourage
-authors to use the `sanitize()` function of the API which returns a
+The Sanitizer API offers help against Mutated XSS, but relies on some degree of
+cooperation by the developers. The `sanitize()` function does not handle strings
+and is therefore unaffected. The `SetInnerHTML2000` function combines sanitization
+with DOM modification and can implicitly apply the correct context. The
+`sanitizeFor()` function combines parsing and sanitization, and relies on the
+developer to supply the correct context for the eventual application of its
+result.
+
+If the data to be sanitized is available as a node tree, we encourage authors
+to use the `sanitize()` function of the API which returns a
 DocumentFragment and avoids risks that come with serialization and additional
 parsing. Directly operating on a fragment after sanitization also comes with a
 performance benefit, as the cost of additional serialization and parsing is
