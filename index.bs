@@ -101,18 +101,27 @@ API which aims to do just that.
     <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a>
     attacks.
 
-## Examples ## {#examples}
+## API Summary ## {#api-summary}
 
 <div class="example">
 ```js
-let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
-
-// Create a DocumentFragment from unsanitized input:
 let s = new Sanitizer();
-let sanitizedFragment = s.sanitize(userControlledInput);
 
-// Replace an element's content from unsanitized input:
-element.replaceChildren(s.sanitize(userControlledInput));
+// Case: The input data is available as a tree of DOM nodes.
+let userControlledTree = ...;
+element.replaceChildren(s.sanitize(userControlledTree));
+
+// Case: The input is available as a string, and we know the element to insert
+// it into:
+let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
+element.SetInnerHTML2000(userControlledInput, s);
+
+// Case: The input is available as a string, and we know which type of element
+// we will eventually insert it to, but can't or don't want to perform the
+// insertion now:
+let div = s.sanitizeFor("div", userControlledInput);
+// Later:
+document.querySelector(\`${div.localName}#target\`).replaceChildren(div.children);
 ```
 </div>
 
