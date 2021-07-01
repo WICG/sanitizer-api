@@ -425,8 +425,6 @@ To <dfn>sanitize a node</dfn> named |node| run these steps:
      [=parent=] is null: Return `keep`.
   1. If |node| is a {{Text}} [=node=]: Return `keep`.
   1. Return `drop`
-
-Issue: What about comment nodes, CDATA, etc. ?
 </div>
 
 
