@@ -547,6 +547,17 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
 </wpt>
 </div>
 
+In addition to allow and block lists for elements and attributes, there are
+also options to configure some node or element types.
+
+Examples:
+```js
+  // Comments will be dropped by default.
+  const comment = "Hello <!-- comment --> World!";
+  new Sanitizer().sanitize(comment);  // "Hello  World!"
+  new Sanitizer({allowComments: true}).sanitize(comment);  // Same as comment.
+```
+
 A sanitizer's configuration can be queried using the
 [=query the sanitizer config=] method.
 
