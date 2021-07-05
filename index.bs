@@ -292,7 +292,7 @@ handle additional, application-specific use cases.
 
 * The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
     <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to run the steps [=create a sanitizer=] algorithm with |config| as
+    are to run the [=create a sanitizer=] algorithm steps with |config| as
     parameter.
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
@@ -497,6 +497,10 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to `allowAttributes` and `dropAttributes`.
 
+Note: Element names are normalized, following the rules of the HTML Parser.
+  This means elements are usually lowercase, except for a small-ish number
+  of mixed case element names in non-HTML namespaces (SVG, MathML).
+
 <div class="example">
 ```js
   const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
@@ -571,8 +575,8 @@ A sanitizer's configuration can be queried using the
 An <dfn>attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given |attribute|
 belonging to an |element| matches an [=attribute match list=], if the
-attribute's local name is a key in the match list, and element's local name
-or `"*"` are found in the attribute's value list.
+attribute's [=Attr/local name=] is a key in the match list, and element's
+[=Element/local name=] or `"*"` are found in the attribute's value list.
 
 <pre class="idl">
   typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
@@ -609,13 +613,36 @@ To <dfn>create a Sanitizer</dfn> with an optional |config| parameter, run
 these steps:
   1. Let |sanitizer| be a newly created Sanitizer instance.
   1. Create a copy of |config|.
-  1. Convert all element names in |config|'s copy to ASCII lower case.
+  1. Normalize all element names in |config|'s copy by running the
+     [=normalize element name=] algorithm on each of them.
   1. Return |sanitizer|, with |config|'s copy as its [=configuration object=].
 </div>
 
 Note: The configuration object contains element names in the
   [=element allow list=], [=element block list=], and [=element drop list=], and
   in the mapped values in the [=attribute allow list=] and [=attribute drop list=].
+
+<div algorithm="normalize element name">
+To <dfn>normalize element name</dfn> |name|, run these steps:
+  1. Convert |name| to [=ASCII lowercase=].
+  1. Return |name|.
+
+<div class="issue">
+This method will not work for SVG and/or MathML elements, which are not
+  currently supported. When they are, replace the steps above with:
+
+  1. Convert |name| to [=ASCII lowercase=].
+  1. Let |prefix| be the empty string.
+  1. If |name| contains a ":" (U+003E), then split the string on it and
+     set |prefix| to the part before, and update |name| with the part after.
+  1. If |prefix| is either "svg" or "math", then adjust the name as described
+     in the "any other start tag" branch of the
+     [The rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
+     subchapter in the HTML parsing spec.
+  1. Return |name|.
+</div>
+
+</div>
 
 <div algorithm="sanitize">
 To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
@@ -840,9 +867,9 @@ helper definition:
 <div algorithm="element kind">
 The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`,
 or `custom`. Let <var ignore>element kind</var> be:
-  - `custom`, if |element|'s tag name is a [=valid custom element name=],
+  - `custom`, if |element|'s [=Element/local name=] is a [=valid custom element name=],
   - `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
-     tag name denotes an unknown element &mdash; that is, if the
+     [=Element/local name=] denotes an unknown element &mdash; that is, if the
      [=element interface=] the [[HTML]] specification assigns to it would
      be {{HTMLUnknownElement}},
   - `regular`, otherwise.
@@ -866,7 +893,7 @@ given a [=configuration object=] |config|, run these steps:
   1. If |element|'s [=element kind=] is `custom` and if |config|'s
      [=allow custom elements option=] is unset or set to anything other
      than `true`: Return `drop`.
-  1. Let |name| be the |element|'s tag name in lower case.
+  1. Let |name| be the |element|'s [=Element/local name=].
   1. If |name| is in |config|'s [=element drop list=]: Return `drop`.
   1. If |name| is in |config|'s [=element block list=]: Return `block`.
   1. If |config| has a non-empty [=element allow list=] and |name| is not
@@ -882,19 +909,24 @@ To <dfn>determine the effective configuration for an attribute</dfn> |attr|,
 attached to an element |element|, and given a [=configuration object=] |config|,
 run these steps:
 
-  1. if |config|'s [=attribute drop list=] contains |attr|'s local
-     name as key, and the associated value contains either |element|'s tag
-     name (with case-insensitve comparison) or the string `"*"`: Return `drop`.
+  1. if |config|'s [=attribute drop list=] contains |attr|'s [=Attr/local name=]
+     as key, and the associated value contains either |element|'s
+     ]=Element/local name=] or the string `"*"`: Return `drop`.
   1. If |config| has a non-empty [=attribute allow list=] and it does not
-     contain |attr|'s local name, or |attr|'s associated value contains neither
-     |element|'s tag name  (with case-insensitive comparison) nor the string
-     `"*"`: Return `drop`.
+     contain |attr|'s [=Attr/local name=], or
+     |attr|'s associated value contains neither
+     |element|'s [=Element/local name=] nor the string `"*"`: Return `drop`.
   1. if |config| does not have a non-empty [=attribute allow list=] and
      [=default configuration=]'s [=attribute allow list=] does not contain
-     |attr|'s local name, or |attr|'s associated value contains
-     neither |element|'s tag name (with case-insensitive comparison) nor the
-     string `"*"`: Return `drop`.
+     |attr|'s [=Attr/local name=], or |attr|'s associated value contains
+     neither |element|'s [=Element/local name=] nor the string `"*"`:
+     Return `drop`.
   1. Return `keep`.
+
+Note: The element names in the Sanitizer configuration are normalized according
+  to normalization step in the HTML Parser, just like elements'
+  [=Element/local names=] are. Thus, the comparison is effectively case
+  insensitive.
 </div>
 
 ## Baseline and Defaults ## {#defaults}
@@ -906,8 +938,9 @@ Issue: The sanitizer baseline and defaults need to be carefully vetted, and
 <div algorithm="determine the baseline configuration for an element">
 To <dfn>determine the baseline configuration for an element</dfn>
 |element|, run these steps:
-  1. if |element|'s [=element kind=] is `regular` and if |element|'s tag name
-     is not in the [=baseline element allow list=]: Return `drop`.
+  1. if |element|'s [=element kind=] is `regular` and if |element|'s
+     [=Element/local name=] is not in the [=baseline element allow list=]:
+     Return `drop`.
   1. Return `keep`.
 </div>
 
