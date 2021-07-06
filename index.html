@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3d6a6fcbb, updated Wed Jun 16 16:19:39 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="f3f52ce95d9516f525c071a7f9f56c21205840be" name="document-revision">
+  <meta content="fe767f01a25dbade75c434baad5bd089e92ebdd2" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1041,9 +1041,12 @@ i <var>element</var>.</p>
         <p>Return <var>action</var>.</p>
       </ol>
      <li data-md>
-      <p>Return 'keep'</p>
+      <p>If <var>node</var> is a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#interface-Document" id="ref-for-interface-Document②">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment④">DocumentFragment</a></code> node and if <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-parent" id="ref-for-concept-tree-parent">parent</a> is null: Return <code>keep</code>.</p>
+     <li data-md>
+      <p>If <var>node</var> is a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text">Text</a></code> <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#boundary-point-node" id="ref-for-boundary-point-node">node</a>: Return <code>keep</code>.</p>
+     <li data-md>
+      <p>Return <code>drop</code></p>
     </ol>
-    <p class="issue" id="issue-0e5b0c6b"><a class="self-link" href="#issue-0e5b0c6b"></a> What about comment nodes, CDATA, etc. ?</p>
    </div>
    <p>Some HTML elements require special treatment in a way that can’t be easily
 expressed in terms of configuration options or other algorithms. The following
@@ -2548,6 +2551,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-element">1. Introduction</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-text">
+   <a href="https://dom.spec.whatwg.org/#text">https://dom.spec.whatwg.org/#text</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-text">2.4. Algorithms</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-append">
    <a href="https://dom.spec.whatwg.org/#concept-node-append">https://dom.spec.whatwg.org/#concept-node-append</a><b>Referenced in:</b>
    <ul>
@@ -2577,6 +2586,18 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-tree-inclusive-descendant">2.4. Algorithms</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-boundary-point-node">
+   <a href="https://dom.spec.whatwg.org/#boundary-point-node">https://dom.spec.whatwg.org/#boundary-point-node</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-boundary-point-node">2.4. Algorithms</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-tree-parent">
+   <a href="https://dom.spec.whatwg.org/#concept-tree-parent">https://dom.spec.whatwg.org/#concept-tree-parent</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-tree-parent">2.4. Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-order">
@@ -2770,11 +2791,14 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-element">Element</span>
+     <li><span class="dfn-paneled" id="term-for-text">Text</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-append">append</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-attribute">attribute list</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-clone">clone a node</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-interface">element interface</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-inclusive-descendant">inclusive descendant</span>
+     <li><span class="dfn-paneled" id="term-for-boundary-point-node">node</span>
+     <li><span class="dfn-paneled" id="term-for-concept-tree-parent">parent</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-order">tree order</span>
     </ul>
    <li>
@@ -2879,7 +2903,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <div class="issue"> It’s unclear whether we can assume a generic
   context for <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/DOM-Parsing/#widl-DOMParser-parseFromString-Document-DOMString-str-SupportedType-type">parseFromString</a></code>, or if we need to re-work the API to take
   the insertion context of the created fragment into account. <a href="https://github.com/WICG/sanitizer-api/issues/42">&lt;https://github.com/WICG/sanitizer-api/issues/42></a><a href="#issue-8301a077"> ↵ </a></div>
-   <div class="issue"> What about comment nodes, CDATA, etc. ?<a href="#issue-0e5b0c6b"> ↵ </a></div>
    <div class="issue"> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a><a href="#issue-40748180"> ↵ </a></div>
    <div class="issue"> The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
