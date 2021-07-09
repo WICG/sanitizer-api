@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3d6a6fcbb, updated Wed Jun 16 16:19:39 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="ec39722d508e6894809466e57d2821a56900b93c" name="document-revision">
+  <meta content="aa33d253cc5c015fb88a67081280d12f616d212c" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -733,31 +733,30 @@ handle additional, application-specific use cases.</p>
 <pre class="idl highlight def">[
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>
-] <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="sanitizer"><code><c- g>Sanitizer</c-></code></dfn> {
-  <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer" id="ref-for-dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/Sanitizer(aConfig), Sanitizer/constructor(aConfig), Sanitizer/Sanitizer(), Sanitizer/constructor()" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-aconfig-aconfig"><code><c- g>aConfig</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer-aconfig-aconfig"></a></dfn> = {});
+] <c- b>interface</c-> <dfn class="idl-code" data-dfn-type="interface" data-export id="sanitizer"><code><c- g>Sanitizer</c-></code><a class="self-link" href="#sanitizer"></a></dfn> {
+  <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer" id="ref-for-dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/Sanitizer(config), Sanitizer/constructor(config), Sanitizer/Sanitizer(), Sanitizer/constructor()" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer-config-config"></a></dfn> = {});
 
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment"><c- n>DocumentFragment</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitize" id="ref-for-dom-sanitizer-sanitize"><c- g>sanitize</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitize(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitize-input-input"></a></dfn>);
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizetostring" id="ref-for-dom-sanitizer-sanitizetostring"><c- g>sanitizeToString</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput①"><c- n>SanitizerInput</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeToString(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizetostring-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitizetostring-input-input"></a></dfn>);
 
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="SanitizerConfig" href="#dom-sanitizer-config" id="ref-for-dom-sanitizer-config"><c- g>config</c-></a>;
-  <c- b>static</c-> <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig②"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="SanitizerConfig" href="#dom-sanitizer-defaultconfig" id="ref-for-dom-sanitizer-defaultconfig"><c- g>defaultConfig</c-></a>;
+  <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getconfiguration" id="ref-for-dom-sanitizer-getconfiguration"><c- g>getConfiguration</c-></a>();
+  <c- b>static</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig②"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getdefaultconfiguration" id="ref-for-dom-sanitizer-getdefaultconfiguration"><c- g>getDefaultConfiguration</c-></a>();
 };
 </pre>
    <ul>
     <li data-md>
-     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(aConfig)|constructor(aConfig)|Sanitizer()|constructor()" id="dom-sanitizer-sanitizer"> <code>new Sanitizer(<var>aConfig</var>)</code></dfn> constructor steps
-  are to create a new Sanitizer instance, and to retain a copy of <var>aConfig</var> as its <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object">configuration object</a>.</p>
+     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(config)|constructor(config)|Sanitizer()|constructor()" id="dom-sanitizer-sanitizer"> <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
+  are to create a new Sanitizer instance, and to retain a copy of <var>config</var> as its <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object">configuration object</a>.</p>
     <li data-md>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-sanitize"><code>sanitize(<var>input</var>)</code></dfn> method steps are to return the result of running the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> algorithm on <var>input</var>,</p>
     <li data-md>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-sanitizetostring"><code>sanitizeToString(<var>input</var>)</code></dfn> method steps are to return the result of running <a data-link-type="dfn" href="#sanitizetostring" id="ref-for-sanitizetostring">sanitizeToString</a> algorithm on <var>input</var>.</p>
     <li data-md>
-     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="attribute" data-export id="dom-sanitizer-config"><code>config</code></dfn> attribute getter
-  steps steps are to return the result of running the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config">query the sanitizer
-  config</a> algorithm. It essentially returns a copy of the Sanitizer’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object①">configuration object</a>, with some degree of normalization.</p>
+     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-getconfiguration"><code>getConfiguration()</code></dfn> method steps are
+  to return the result of running the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config">query the sanitizer config</a> algorithm. It essentially returns a copy of the Sanitizer’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object①">configuration object</a>, with some degree of normalization.</p>
     <li data-md>
-     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="attribute" data-export id="dom-sanitizer-defaultconfig"><code>defaultConfig</code></dfn> attribute
-  getter steps are to return the value of the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration">default configuration</a> object.</p>
+     <p>The value of the static <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-getdefaultconfiguration"><code>getDefaultConfiguration()</code></dfn> method steps
+  are to return the value of the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration">default configuration</a> object.</p>
    </ul>
    <div class="example" id="example-68705b8a">
     <a class="self-link" href="#example-68705b8a"></a> 
@@ -873,35 +872,33 @@ is used as the configuration object.</p>
   <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
 </pre>
    </div>
-   <p>A sanitizer’s configuration can be queried using the <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer">Sanitizer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-sanitizer-config" id="ref-for-dom-sanitizer-config①">config</a></code> read-only attribute. The default configuration
-can be quried using the <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①">Sanitizer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-sanitizer-defaultconfig" id="ref-for-dom-sanitizer-defaultconfig①">defaultConfig</a></code> static read-only
-attribute.</p>
-   <div class="example" id="example-363c44cc">
-    <a class="self-link" href="#example-363c44cc"></a> 
+   <p>A sanitizer’s configuration can be queried using the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config①">query the sanitizer config</a> method.</p>
+   <div class="example" id="example-0c045ef2">
+    <a class="self-link" href="#example-0c045ef2"></a> 
 <pre class="language-js highlight">  <c- c1>// Does the default config allow script elements?</c->
-  Sanitizer<c- p>.</c->defaultConfig<c- p>.</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"script"</c-><c- p>)</c->  <c- c1>// false</c->
+  Sanitizer<c- p>.</c->getDefaultConfiguration<c- p>().</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"script"</c-><c- p>)</c->  <c- c1>// false</c->
 
   <c- c1>// We found a Sanitizer instance. Does it have an allow-list configured?</c->
   <c- a>const</c-> a_sanitizer <c- o>=</c-> <c- p>...;</c->
-  <c- o>!!</c->a_sanitizer<c- p>.</c->config<c- p>.</c->allowElements <c- c1>// true, if an allowElements list is configured</c->
+  <c- o>!!</c->a_sanitizer<c- p>.</c->getConfiguration<c- p>().</c->allowElements <c- c1>// true, if an allowElements list is configured</c->
 
   <c- c1>// If it does have an allow elements list, does it include the &lt;div> element?</c->
-  a_sanitizer<c- p>.</c->config<c- p>.</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"div"</c-><c- p>)</c->  <c- c1>// true, if "div" is in allowElements.</c->
+  a_sanitizer<c- p>.</c->getConfiguration<c- p>().</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"div"</c-><c- p>)</c->  <c- c1>// true, if "div" is in allowElements.</c->
 
-  <c- c1>// Note that the config attribute might do some normaliztion. E.g., it won’t</c->
+  <c- c1>// Note that the getConfiguration method might do some normalization. E.g., it won’t</c->
   <c- c1>// contain key/value pairs that are not declare in the IDL.</c->
-  Object<c- p>.</c->keys<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>({</c->madeUpDictionaryKey<c- o>:</c-> <c- u>"Hello"</c-><c- p>}).</c->config<c- p>)</c->  <c- c1>// []</c->
+  Object<c- p>.</c->keys<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>({</c->madeUpDictionaryKey<c- o>:</c-> <c- u>"Hello"</c-><c- p>}).</c->getConfiguration<c- p>())</c->  <c- c1>// []</c->
 
   <c- c1>// As a Sanitizer’s config describes its operation, a new sanitizer with</c->
   <c- c1>// another instance’s configuration should behave identically.</c->
   <c- c1>// (For illustration purposes only. It would make more sense to just use a directly.)</c->
   <c- a>const</c-> a <c- o>=</c-> <c- d>/* ... a Sanitizer we found somewhere ... */</c-><c- p>;</c->
-  <c- a>const</c-> b <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>(</c->a<c- p>.</c->config<c- p>);</c->  <c- c1>// b should behave the same as a.</c->
+  <c- a>const</c-> b <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>(</c->a<c- p>.</c->getConfiguration<c- p>());</c->  <c- c1>// b should behave the same as a.</c->
 
-  <c- c1>// defaultConfig and new Sanitizer().config should be the same.</c->
+  <c- c1>// getDefaultConfiguration() and new Sanitizer().getConfiguration should be the same.</c->
   <c- c1>// (For illustration purposes only. There are better ways of implementing</c->
   <c- c1>// object equality in JavaScript.)</c->
-  JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->defaultConfig<c- p>)</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->config<c- p>);</c->  <c- c1>// true</c->
+  JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->getDefaultConfiguration<c- p>())</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->getConfiguration<c- p>());</c->  <c- c1>// true</c->
 </pre>
    </div>
    <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists</span><a class="self-link" href="#attr-match-list"></a></h4>
@@ -2521,12 +2518,10 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#baseline-attribute-allow-list">baseline attribute allow list</a><span>, in §Unnumbered section</span>
    <li><a href="#baseline-element-allow-list">baseline element allow list</a><span>, in §Unnumbered section</span>
    <li><a href="#dom-sanitizerconfig-blockelements">blockElements</a><span>, in §2.3</span>
-   <li><a href="#dom-sanitizer-config">config</a><span>, in §2.1</span>
    <li><a href="#configuration-object">configuration object</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizer-sanitizer">constructor()</a><span>, in §2.1</span>
-   <li><a href="#dom-sanitizer-sanitizer">constructor(aConfig)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizer">constructor(config)</a><span>, in §2.1</span>
    <li><a href="#create-a-document-fragment">create a document fragment</a><span>, in §2.4</span>
-   <li><a href="#dom-sanitizer-defaultconfig">defaultConfig</a><span>, in §2.1</span>
    <li><a href="#default-configuration">default configuration</a><span>, in §Unnumbered section</span>
    <li><a href="#determine-the-baseline-configuration-for-an-attribute">determine the baseline configuration for an attribute</a><span>, in §2.4.2</span>
    <li><a href="#determine-the-baseline-configuration-for-an-element">determine the baseline configuration for an element</a><span>, in §2.4.2</span>
@@ -2540,6 +2535,8 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#element-block-list">element block list</a><span>, in §2.3</span>
    <li><a href="#element-drop-list">element drop list</a><span>, in §2.3</span>
    <li><a href="#element-kind">element kind</a><span>, in §2.4.1</span>
+   <li><a href="#dom-sanitizer-getconfiguration">getConfiguration()</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-getdefaultconfiguration">getDefaultConfiguration()</a><span>, in §2.1</span>
    <li><a href="#handle-funky-elements">handle funky elements</a><span>, in §2.4</span>
    <li><a href="#query-the-sanitizer-config">query the sanitizer config</a><span>, in §2.4</span>
    <li><a href="#sanitize">sanitize</a><span>, in §2.4</span>
@@ -2549,7 +2546,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#dom-sanitizer-sanitize">sanitize(input)</a><span>, in §2.1</span>
    <li><a href="#sanitizer">Sanitizer</a><span>, in §2.1</span>
    <li><a href="#dom-sanitizer-sanitizer">Sanitizer()</a><span>, in §2.1</span>
-   <li><a href="#dom-sanitizer-sanitizer">Sanitizer(aConfig)</a><span>, in §2.1</span>
+   <li><a href="#dom-sanitizer-sanitizer">Sanitizer(config)</a><span>, in §2.1</span>
    <li><a href="#dictdef-sanitizerconfig">SanitizerConfig</a><span>, in §2.3</span>
    <li><a href="#typedefdef-sanitizerinput">SanitizerInput</a><span>, in §2.2</span>
    <li><a href="#sanitizetostring">sanitizeToString</a><span>, in §2.4</span>
@@ -2886,13 +2883,13 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
   <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext"><c- g>SecureContext</c-></a>
 ] <c- b>interface</c-> <a href="#sanitizer"><code><c- g>Sanitizer</c-></code></a> {
-  <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a href="#dom-sanitizer-sanitizer-aconfig-aconfig"><code><c- g>aConfig</c-></code></a> = {});
+  <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a href="#dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code></a> = {});
 
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitize"><c- g>sanitize</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <a href="#dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code></a>);
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizetostring"><c- g>sanitizeToString</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerinput"><c- n>SanitizerInput</c-></a> <a href="#dom-sanitizer-sanitizetostring-input-input"><code><c- g>input</c-></code></a>);
 
-  <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="SanitizerConfig" href="#dom-sanitizer-config"><c- g>config</c-></a>;
-  <c- b>static</c-> <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="SanitizerConfig" href="#dom-sanitizer-defaultconfig"><c- g>defaultConfig</c-></a>;
+  <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getconfiguration"><c- g>getConfiguration</c-></a>();
+  <c- b>static</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getdefaultconfiguration"><c- g>getDefaultConfiguration</c-></a>();
 };
 
 <c- b>typedef</c-> (<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#interface-Document"><c- n>Document</c-></a>) <a href="#typedefdef-sanitizerinput"><code><c- g>SanitizerInput</c-></code></a>;
@@ -2919,12 +2916,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     are still under discussion. The values below are for illustrative
     purposes only.<a href="#issue-53c87d03"> ↵ </a></div>
   </div>
-  <aside class="dfn-panel" data-for="sanitizer">
-   <b><a href="#sanitizer">#sanitizer</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitizer">2.3. The Configuration Dictionary</a> <a href="#ref-for-sanitizer①">(2)</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="dom-sanitizer-sanitizer">
    <b><a href="#dom-sanitizer-sanitizer">#dom-sanitizer-sanitizer</a></b><b>Referenced in:</b>
    <ul>
@@ -2943,18 +2934,16 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-dom-sanitizer-sanitizetostring">2.1. Sanitizer API</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-config">
-   <b><a href="#dom-sanitizer-config">#dom-sanitizer-config</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="dom-sanitizer-getconfiguration">
+   <b><a href="#dom-sanitizer-getconfiguration">#dom-sanitizer-getconfiguration</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-sanitizer-config">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-dom-sanitizer-config①">2.3. The Configuration Dictionary</a>
+    <li><a href="#ref-for-dom-sanitizer-getconfiguration">2.1. Sanitizer API</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-defaultconfig">
-   <b><a href="#dom-sanitizer-defaultconfig">#dom-sanitizer-defaultconfig</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="dom-sanitizer-getdefaultconfiguration">
+   <b><a href="#dom-sanitizer-getdefaultconfiguration">#dom-sanitizer-getdefaultconfiguration</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-sanitizer-defaultconfig">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-dom-sanitizer-defaultconfig①">2.3. The Configuration Dictionary</a>
+    <li><a href="#ref-for-dom-sanitizer-getdefaultconfiguration">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="typedefdef-sanitizerinput">
@@ -3068,6 +3057,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <b><a href="#query-the-sanitizer-config">#query-the-sanitizer-config</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-query-the-sanitizer-config">2.1. Sanitizer API</a>
+    <li><a href="#ref-for-query-the-sanitizer-config①">2.3. The Configuration Dictionary</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="sanitize-action">
