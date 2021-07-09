@@ -119,7 +119,7 @@ element.replaceChildren(s.sanitize(userControlledTree));
 // Case: The input is available as a string, and we know the element to insert
 // it into:
 let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
-element.SetInnerHTML2000(userControlledInput, s);
+element.SetHTML(userControlledInput, s);
 
 // Case: The input is available as a string, and we know which type of element
 // we will eventually insert it to, but can't or don't want to perform the
@@ -173,22 +173,20 @@ handle additional, application-specific use cases.
     <dfn method for=Sanitizer><code>getDefaultConfiguration()</code></dfn> method steps
     are to return the value of the [=default configuration=] object.
 
-The {{Element}} interface gains an additional method, `SetInnerHTML2000` which
+The {{Element}} interface gains an additional method, `SetHTML` which
 applies a string using a Sanitzer directly to an existing element node.
 
 <pre class="idl">
   partial interface Element {
-    undefined SetInnerHTML2000(DOMString input, Sanitizer sanitizer);
+    undefined SetHTML(DOMString input, Sanitizer sanitizer);
   };
 </pre>
 
-* The <dfn method for=Element><code>SetInnerHTML2000(<var>input</var>, <var>sanitizer</var>)</code></dfn>
+* The <dfn method for=Element><code>SetHTML(<var>input</var>, <var>sanitizer</var>)</code></dfn>
   method steps are to run the [=sanitizeAndSet=] algorithm on |input| and
   |sanitizer|.
 
 Issue: Is this how we specify a method on existing class "owned" by a different spe?
-
-Issue: Agree on name. `SetInnerHTML2000` is a placeholder, carefully chosen to generate maximum feedback.
 
 <div class="example">
 ```js
@@ -231,7 +229,7 @@ Parsing (and unparsing) strings to (or from) HTML requires a context element.
 Thus, the `sanitizeFor` method requires us to pass in a context, which we can
 in turn hand over to the HTML Parser.
 
-Additionally, the {{Element}} interface gains a `SetInnerHTML2000` method, which
+Additionally, the {{Element}} interface gains a `SetHTML` method, which
 always knows the correct context, because it is applied to a given {{Element}}
 instance. This {{Element}} is the correct context for both parsing and
 unparsing its own content.
@@ -241,7 +239,7 @@ operation: 1, parsing the string; 2, sanitizing the resulting node tree;
 and 3, grafting the resulting subtree onto our live DOM.
 `Sanitizer.sanitize` is the middle step.
 `Sanitizer.sanitizeFor` performs the first and second steps, but leaves the
-third to the developer. `Element.SetInnerHTML2000` does all three. Which to use
+third to the developer. `Element.SetHTML` does all three. Which to use
 depends on the structure of your application, whether you can do all three
 steps simultaneously, or whether maybe the sanitization is removed (in either
 code structure or point in time) from the eventual modification of the DOM.
@@ -257,7 +255,7 @@ Examples:
   // If the markup to be sanitized is present in string form, but we already
   // have the element we want to insert in available:
   const untrusted_input = "....";
-  document.getElementById("someelement").SetInnerHTML2000(untrusted_input, sanitizer);
+  document.getElementById("someelement").SetHTML(untrusted_input, sanitizer);
 
   // If the markup to be sanitized is present in string form, but we don't want
   // to do the DOM insertion now:
@@ -292,7 +290,7 @@ Examples:
 </div>
 
 <div class="note">
-Note: `Sanitizer.sanitizeFor` and `Element.SetInnerHTML2000` can replace the
+Note: `Sanitizer.sanitizeFor` and `Element.SetHTML` can replace the
     respective other. Both are provided, since they support different use cases.
 
 Examples:
@@ -300,12 +298,12 @@ Examples:
     // sanitizeFor, based on SetInnerHTML.
     function sanitizeFor(element, input) {
       const elem = document.createElement(element);
-      elem.SetInnerHTML2000(input, this);
+      elem.SetHTML(input, this);
       return elem;
     }
 
-    // SetInnerHTML2000, based on sanitizeFor.
-    function SetInnerHTML2000(input, sanitizer) {
+    // SetHTML, based on sanitizeFor.
+    function SetHTML(input, sanitizer) {
       this.replaceChildren(sanitizer.sanitizeFor(this.localName, input).children);
     }
     ```
@@ -796,7 +794,7 @@ misnested tags.
 
 The Sanitizer API offers help against Mutated XSS, but relies on some amount of
 cooperation by the developers. The `sanitize()` function does not handle strings
-and is therefore unaffected. The `SetInnerHTML2000` function combines sanitization
+and is therefore unaffected. The `SetHTML` function combines sanitization
 with DOM modification and can implicitly apply the correct context. The
 `sanitizeFor()` function combines parsing and sanitization, and relies on the
 developer to supply the correct context for the eventual application of its
