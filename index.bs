@@ -134,8 +134,8 @@ handle additional, application-specific use cases.
     DocumentFragment sanitize(SanitizerInput input);
     DOMString sanitizeToString(SanitizerInput input);
 
-    SanitizerConfig config();
-    static SanitizerConfig defaultConfig();
+    SanitizerConfig getConfiguration();
+    static SanitizerConfig getDefaultConfiguration();
   };
 </pre>
 
@@ -149,12 +149,12 @@ handle additional, application-specific use cases.
 * The <dfn method for=Sanitizer><code>sanitizeToString(<var>input</var>)</code></dfn>
     method steps are to return the result of running [=sanitizeToString=]
     algorithm on |input|.
-* The <dfn method for=Sanitizer><code>config()</code></dfn> method steps are
+* The <dfn method for=Sanitizer><code>getConfiguration()</code></dfn> method steps are
     to return the result of running the [=query the sanitizer config=]
     algorithm. It essentially returns a copy of the Sanitizer's
     [=configuration object=], with some degree of normalization.
 * The value of the static
-    <dfn method for=Sanitizer><code>defaultConfig()</code></dfn> method steps
+    <dfn method for=Sanitizer><code>getDefaultConfiguration()</code></dfn> method steps
     are to return the value of the [=default configuration=] object.
 
 Example:
@@ -283,29 +283,29 @@ A sanitizer's configuration can be queried using the
 Examples:
 ```js
   // Does the default config allow script elements?
-  Sanitizer.defaultConfig().allowElements.includes("script")  // false
+  Sanitizer.getDefaultConfiguration().allowElements.includes("script")  // false
 
   // We found a Sanitizer instance. Does it have an allow-list configured?
   const a_sanitizer = ...;
-  !!a_sanitizer.config().allowElements // true, if an allowElements list is configured
+  !!a_sanitizer.getConfiguration().allowElements // true, if an allowElements list is configured
 
   // If it does have an allow elements list, does it include the <div> element?
-  a_sanitizer.config().allowElements.includes("div")  // true, if "div" is in allowElements.
+  a_sanitizer.getConfiguration().allowElements.includes("div")  // true, if "div" is in allowElements.
 
-  // Note that the config attribute might do some normaliztion. E.g., it won't
+  // Note that the getConfiguration method might do some normalization. E.g., it won't
   // contain key/value pairs that are not declare in the IDL.
-  Object.keys(new Sanitizer({madeUpDictionaryKey: "Hello"}).config())  // []
+  Object.keys(new Sanitizer({madeUpDictionaryKey: "Hello"}).getConfiguration())  // []
 
   // As a Sanitizer's config describes its operation, a new sanitizer with
   // another instance's configuration should behave identically.
   // (For illustration purposes only. It would make more sense to just use a directly.)
   const a = /* ... a Sanitizer we found somewhere ... */;
-  const b = new Sanitizer(a.config());  // b should behave the same as a.
+  const b = new Sanitizer(a.getConfiguration());  // b should behave the same as a.
 
-  // defaultConfig() and new Sanitizer().config should be the same.
+  // getDefaultConfiguration() and new Sanitizer().getConfiguration should be the same.
   // (For illustration purposes only. There are better ways of implementing
   // object equality in JavaScript.)
-  JSON.stringify(Sanitizer.defaultConfig()) == JSON.stringify(new Sanitizer().config());  // true
+  JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
 ```
 
 ### Attribute Match Lists ### {#attr-match-list}
