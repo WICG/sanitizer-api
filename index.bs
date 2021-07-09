@@ -244,7 +244,7 @@ depends on the structure of your application, whether you can do all three
 steps simultaneously, or whether maybe the sanitization is removed (in either
 code structure or point in time) from the eventual modification of the DOM.
 
-Examples:
+<div class="example">
 ```js
   // If the markup to be sanitized is already available as a tree, for example
   // from an embedded frame, one can use sanitize:
@@ -282,18 +282,19 @@ if no sanitization steps are taken on a particular input, it cannot be
 guaranteed that the output of `.sanitizeToString` will be
 character-for-character identical to the input.
 
-Examples:
+<div class="example">
     ```js
     sanitizer.sanitizeFor("div", "Stra&szlig;e")  // Straße
     sanitizer.sanitizeFor("div", "<image>")  // <img>
     ```
+</div>
 </div>
 
 <div class="note">
 Note: `Sanitizer.sanitizeFor` and `Element.SetHTML` can replace the
     respective other. Both are provided, since they support different use cases.
 
-Examples:
+<div class="example">
     ```js
     // sanitizeFor, based on SetInnerHTML.
     function sanitizeFor(element, input) {
@@ -307,6 +308,7 @@ Examples:
       this.replaceChildren(sanitizer.sanitizeFor(this.localName, input).children);
     }
     ```
+</div>
 </div>
 
 ## The Configuration Dictionary ## {#config}
