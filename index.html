@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3d6a6fcbb, updated Wed Jun 16 16:19:39 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="fe767f01a25dbade75c434baad5bd089e92ebdd2" name="document-revision">
+  <meta content="ec39722d508e6894809466e57d2821a56900b93c" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -578,7 +578,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-07-06">6 July 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-07-09">9 July 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -711,6 +711,8 @@ API which aims to do just that.</p>
   Adding certain elements and attributes can prevent <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a> attacks.</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="examples"><span class="secno">1.2. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
+   <div class="example" id="example-32591527">
+    <a class="self-link" href="#example-32591527"></a> 
 <pre class="language-js highlight"><c- a>let</c-> userControlledInput <c- o>=</c-> <c- u>"&amp;lt;img src=x onerror=alert(1)//&amp;gt;"</c-><c- p>;</c->
 
 <c- c1>// Create a DocumentFragment from unsanitized input:</c->
@@ -720,6 +722,7 @@ API which aims to do just that.</p>
 <c- c1>// Replace an element’s content from unsanitized input:</c->
 element<c- p>.</c->replaceChildren<c- p>(</c->s<c- p>.</c->sanitize<c- p>(</c->userControlledInput<c- p>));</c->
 </pre>
+   </div>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
    <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API</span><a class="self-link" href="#sanitizer-api"></a></h3>
    <p>The core API is the <code>Sanitizer</code> object and the sanitize method. Sanitizers can
@@ -756,7 +759,8 @@ handle additional, application-specific use cases.</p>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="attribute" data-export id="dom-sanitizer-defaultconfig"><code>defaultConfig</code></dfn> attribute
   getter steps are to return the value of the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration">default configuration</a> object.</p>
    </ul>
-   <p>Example:</p>
+   <div class="example" id="example-68705b8a">
+    <a class="self-link" href="#example-68705b8a"></a> 
 <pre class="language-js highlight">  <c- c1>// The core API of the Sanitizer is the .sanitize method:</c->
   <c- a>const</c-> sanitizer <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>();</c->
   <c- a>let</c-> untrusted_input <c- o>=</c-> <c- u>"Hello!"</c-><c- p>;</c->
@@ -784,6 +788,7 @@ handle additional, application-specific use cases.</p>
   <c- c1>// .sanitizeToString. But ,sanitize will commonly be the better choice.</c->
   <c- a>let</c-> scriptless_input_string <c- o>=</c-> sanitizer<c- p>.</c->sanitizeToString<c- p>(</c->untrusted_input<c- p>);</c->
 </pre>
+   </div>
    <p class="note" role="note"><span>Note:</span> Sanitizing a string will use the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser" id="ref-for-html-parser">HTML Parser</a> to parse the input,
     which will perform some degree of normalization. So even
     if no sanitization steps are taken on a particular input, it cannot be
@@ -846,7 +851,8 @@ is used as the configuration object.</p>
   while <code>blockElements</code> and <code>dropElements</code> defaults to keeping unknown
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to <code>allowAttributes</code> and <code>dropAttributes</code>.</p>
-   <p>Examples:</p>
+   <div class="example" id="example-665b3412">
+    <a class="self-link" href="#example-665b3412"></a> 
 <pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>;</c->
 
   <c- c1>// Some text &lt;b>with&lt;/b> text tags.</c->
@@ -866,10 +872,12 @@ is used as the configuration object.</p>
   <c- c1>// Scripts will be blocked: "abc alert(1) def"</c->
   <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
 </pre>
+   </div>
    <p>A sanitizer’s configuration can be queried using the <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer">Sanitizer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-sanitizer-config" id="ref-for-dom-sanitizer-config①">config</a></code> read-only attribute. The default configuration
 can be quried using the <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①">Sanitizer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-sanitizer-defaultconfig" id="ref-for-dom-sanitizer-defaultconfig①">defaultConfig</a></code> static read-only
 attribute.</p>
-   <p>Examples:</p>
+   <div class="example" id="example-363c44cc">
+    <a class="self-link" href="#example-363c44cc"></a> 
 <pre class="language-js highlight">  <c- c1>// Does the default config allow script elements?</c->
   Sanitizer<c- p>.</c->defaultConfig<c- p>.</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"script"</c-><c- p>)</c->  <c- c1>// false</c->
 
@@ -895,6 +903,7 @@ attribute.</p>
   <c- c1>// object equality in JavaScript.)</c->
   JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->defaultConfig<c- p>)</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->config<c- p>);</c->  <c- c1>// true</c->
 </pre>
+   </div>
    <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists</span><a class="self-link" href="#attr-match-list"></a></h4>
    <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-match-list">attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given <var>attribute</var> belonging to an <var>element</var> matches an <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list②">attribute match list</a>, if the
@@ -902,7 +911,8 @@ attribute’s local name is a key in the match list, and element’s local name
 or <code>"*"</code> are found in the attribute’s value list.</p>
 <pre class="idl highlight def"><c- b>typedef</c-> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-record" id="ref-for-idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑤"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>>> <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></dfn>;
 </pre>
-   <p>Examples for attributes and attribute match lists:</p>
+   <div class="example" id="example-3498c90d">
+    <a class="self-link" href="#example-3498c90d"></a> Examples for attributes and attribute match lists: 
 <pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"&lt;span id='span1' class='theclass' style='font-weight: bold'>hello&lt;/span>"</c-><c- p>;</c->
 
   <c- c1>// Allow only &lt;span style>: &lt;span style='font-weight: bold'>...&lt;/span></c->
@@ -920,6 +930,7 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
   <c- c1>// Block id, everywhere: &lt;span class='theclass' style='font-weight: bold'>...&lt;/span></c->
   <c- k>new</c-> Sanitizer<c- p>({</c->blockAttributes<c- o>:</c-> <c- p>{</c-><c- u>"id"</c-><c- o>:</c-> <c- p>[</c-><c- u>"*"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
 </pre>
+   </div>
    <h3 class="heading settled" data-level="2.4" id="algorithms"><span class="secno">2.4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h3>
    <div class="algorithm" data-algorithm="sanitize">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> a given <var>input</var> of type <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerinput" id="ref-for-typedefdef-sanitizerinput②">SanitizerInput</a></code>,
