@@ -38,6 +38,11 @@ spec:dom; type:dfn; text:append
     "title": "DOMPurify",
     "publisher": "Cure53"
   },
+  "MXSS": {
+    "href": "https://cure53.de/fp170.pdf",
+    "title": "mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations",
+    "publisher": "Ruhr-Universität Bochum"
+  },
   "HTML":{
     "authors": [
       "Anne van Kesteren",
@@ -119,9 +124,9 @@ element.SetInnerHTML2000(userControlledInput, s);
 // Case: The input is available as a string, and we know which type of element
 // we will eventually insert it to, but can't or don't want to perform the
 // insertion now:
-let div = s.sanitizeFor("div", userControlledInput);
+let forDiv = s.sanitizeFor("div", userControlledInput);
 // Later:
-document.querySelector(\`${div.localName}#target\`).replaceChildren(div.children);
+document.querySelector(\`${forDiv.localName}#target\`).replaceChildren(forDiv.children);
 ```
 </div>
 
@@ -195,7 +200,7 @@ Issue: Agree on name. `SetInnerHTML2000` is a placeholder, carefully chosen to g
   // problems that this approach has.
   //
   // But... for our examples we'll need something that is quick and easy, since
-  // we cannot use our won API just yet...
+  // we cannot use our own Sanitizer API to demo our own Sanitizer API...
   const to_node = str => (new DOMParser).parseFromString(str, "text/html").body.firstChild;
 
   // The core API of the Sanitizer is the .sanitize method:
@@ -213,7 +218,8 @@ Issue: Agree on name. `SetInnerHTML2000` is a placeholder, carefully chosen to g
   element.replaceChildren(sanitizer.sanitize(untrusted_input));  // No alert!
 
   // The .sanitize method is the primary API, and returns a DocumentFragment.
-  // The .sanitizeFor method returns an HTML element node.
+  // The .sanitizeFor method accepts and parses a string and returns an HTML
+  // element node.
   const hello = to_node("hello");
   (sanitizer.sanitize(hello))) instanceof DocumentFragment;  // true
   (sanitizer.sanitizeFor("template", "hello") instanceof HTMLTemplateElement;  // true
@@ -227,17 +233,18 @@ in turn hand over to the HTML Parser.
 
 Additionally, the {{Element}} interface gains a `SetInnerHTML2000` method, which
 always knows the correct context, because it is applied to a given {{Element}}
-instance, and it's this {{Element}} that is the correct context for both parsing
-and unparsing.
+instance. This {{Element}} is the correct context for both parsing and
+unparsing its own content.
 
 One way to conceptualize this is to view string sanitization as a three step
 operation: 1, parsing the string; 2, sanitizing the resulting node tree;
-and 3, grafting the subtree onto our DOM. `Sanitizer.sanitize` is the middle step.
-`Sanitizer.sanitizeFor` performs the first and second step, but leaves the
-third to the developer. Element.SetInnerHTML2000 does all three. Which to use
+and 3, grafting the resulting subtree onto our live DOM.
+`Sanitizer.sanitize` is the middle step.
+`Sanitizer.sanitizeFor` performs the first and second steps, but leaves the
+third to the developer. `Element.SetInnerHTML2000` does all three. Which to use
 depends on the structure of your application, whether you can do all three
 steps simultaneously, or whether maybe the sanitization is removed (in either
-code structure or point in time) from the modification of the DOM.
+code structure or point in time) from the eventual modification of the DOM.
 
 Examples:
 ```js
@@ -286,8 +293,7 @@ Examples:
 
 <div class="note">
 Note: `Sanitizer.sanitizeFor` and `Element.SetInnerHTML2000` can replace the
-    respective other. Both are provided, since they map to slightly different
-    use cases.
+    respective other. Both are provided, since they support different use cases.
 
 Examples:
     ```js
@@ -780,14 +786,15 @@ authors to examine their third party libraries for this behavior.
 
 <em>This section is not normative.</em>
 
-Mutated XSS or mXSS describes an attack based on parser mismatches when parsing
-an HTML snippet without the correct context. In particular, when a parsed HTML
-fragment has been serialized to a string, the format is not guaranteed to be
-parsed and interpreted exactly the same when inserted into a different parent
-element. An example for carrying out such an attack is by relying on the
-change of parsing behavior for foreign content or misnested tags.
+Mutated XSS or mXSS describes an attack based on parser context mismatches
+when parsing an HTML snippet without the correct context. In particular,
+when a parsed HTML fragment has been serialized to a string, the string is
+not guaranteed to be parsed and interpreted exactly the same when inserted
+into a different parent element. An example for carrying out such an attack
+is by relying on the change of parsing behavior for foreign content or
+misnested tags.
 
-The Sanitizer API offers help against Mutated XSS, but relies on some degree of
+The Sanitizer API offers help against Mutated XSS, but relies on some amount of
 cooperation by the developers. The `sanitize()` function does not handle strings
 and is therefore unaffected. The `SetInnerHTML2000` function combines sanitization
 with DOM modification and can implicitly apply the correct context. The
@@ -801,6 +808,8 @@ DocumentFragment and avoids risks that come with serialization and additional
 parsing. Directly operating on a fragment after sanitization also comes with a
 performance benefit, as the cost of additional serialization and parsing is
 avoided.
+
+A more complete treatement of mXSS can be found in [[MXSS]].
 
 # Acknowledgements # {#ack}
 
