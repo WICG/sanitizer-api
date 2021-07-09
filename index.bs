@@ -103,6 +103,7 @@ API which aims to do just that.
 
 ## Examples ## {#examples}
 
+<div class="example">
 ```js
 let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
 
@@ -113,6 +114,7 @@ let sanitizedFragment = s.sanitize(userControlledInput);
 // Replace an element's content from unsanitized input:
 element.replaceChildren(s.sanitize(userControlledInput));
 ```
+</div>
 
 # Framework # {#framework}
 
@@ -157,7 +159,7 @@ handle additional, application-specific use cases.
     getter steps are to return the value of the [=default configuration=]
     object.
 
-Example:
+<div class="example">
 ```js
   // The core API of the Sanitizer is the .sanitize method:
   const sanitizer = new Sanitizer();
@@ -186,6 +188,7 @@ Example:
   // .sanitizeToString. But ,sanitize will commonly be the better choice.
   let scriptless_input_string = sanitizer.sanitizeToString(untrusted_input);
 ```
+</div>
 
 Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
     which will perform some degree of normalization. So even
@@ -255,7 +258,7 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to `allowAttributes` and `dropAttributes`.
 
-Examples:
+<div class="example">
 ```js
   const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
 
@@ -276,13 +279,14 @@ Examples:
   // Scripts will be blocked: "abc alert(1) def"
   new Sanitizer().sanitize("abc <script>alert(1)</script> def");
 ```
+</div>
 
 A sanitizer's configuration can be queried using the
 {{Sanitizer}}'s {{config}} read-only attribute. The default configuration
 can be quried using the {{Sanitizer}}'s {{defaultConfig}} static read-only
 attribute.
 
-Examples:
+<div class="example">
 ```js
   // Does the default config allow script elements?
   Sanitizer.defaultConfig.allowElements.includes("script")  // false
@@ -309,6 +313,7 @@ Examples:
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.defaultConfig) == JSON.stringify(new Sanitizer().config);  // true
 ```
+</div>
 
 ### Attribute Match Lists ### {#attr-match-list}
 
@@ -322,6 +327,7 @@ or `"*"` are found in the attribute's value list.
   typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
 </pre>
 
+<div class="example">
 Examples for attributes and attribute match lists:
 ```js
   const sample = "<span id='span1' class='theclass' style='font-weight: bold'>hello</span>";
@@ -341,6 +347,7 @@ Examples for attributes and attribute match lists:
   // Block id, everywhere: <span class='theclass' style='font-weight: bold'>...</span>
   new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitize(sample);
 ```
+</div>
 
 ## Algorithms ## {#algorithms}
 
