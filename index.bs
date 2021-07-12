@@ -16,6 +16,8 @@ Indent: 2
 Work Status: exploring
 Boilerplate: omit conformance
 Markup Shorthands: css off, markdown on
+WPT Display: inline
+WPT Path Prefix: /sanitizer-api/
 </pre>
 <pre class="anchors">
 spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
@@ -279,6 +281,9 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   // Scripts will be blocked: "abc alert(1) def"
   new Sanitizer().sanitize("abc <script>alert(1)</script> def");
 ```
+<wpt>
+  sanitizer-sanitize.https.tentative.html
+</wpt>
 </div>
 
 A sanitizer's configuration can be queried using the
@@ -311,6 +316,9 @@ A sanitizer's configuration can be queried using the
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
 ```
+<wpt>
+  sanitizer-config.https.tentative.html
+</wpt>
 </div>
 
 ### Attribute Match Lists ### {#attr-match-list}
