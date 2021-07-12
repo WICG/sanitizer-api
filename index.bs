@@ -146,7 +146,7 @@ reasons and implications for the Sanitizer API.
 
 To convert a string into a tree of nodes (or a fragment), it needs to be parsed.
 The [HTML parsing algorithm](https://html.spec.whatwg.org/multipage/parsing.html#parsing)
-carefully specifies how parsing HTML worksThis parsing algorithm is dependent
+carefully specifies how parsing HTML works. This parsing algorithm is dependent
 on the current node as its parsing context. That is, the same string parsed
 in the context of different HTML nodes will yield different parse trees.
 
@@ -228,16 +228,16 @@ document.getElementById("target").SetHTML(user_string, sanitizer);
 
 ### Case 3: Sanitizing a String with a Given Context. ### {#string-context-case-3}
 
-If the user data is available in string form and we wish to sanitize it now
-but apply the result to the DOM later, then we can do so, but we must inform
-the Sanitizer about the context that it will be used in. To prevent context
-confusion we will return the result in a container that contains both the
-result, and also the parse context. Conveniently, this container already
+If the user data is available in string form and the developer wishes to
+sanitize it now, but apply the result to the DOM later, then the Sanitizer
+must be informed about the context that it will be used. To prevent context
+confusion the result is wrapper a container that contains both the
+result and also the parse context. Conveniently, this container already
 exists, and it is the node itself!
 
 <div class="example">
 ```js
-// We would like to re-use a certain piece of user input repeatedly, to insert
+// A certain piece of user input is meant to be used repeatedly, to insert
 // it in multiple elements on the page. All these elements will be <div>
 // elements.
 const user_string = "...";  // The user string.
@@ -248,16 +248,16 @@ sanitized instanceof HTMLDivElement  // true. The Sanitizer has given us a node.
 
 // ... later, in the same program ...
 for (let elem = ... of ...) {
-  // We expect all of our "elem" instances to be of the same type we have
-  // used in the .sanitizeFor call above. If we had an assertion library, we
-  // could check this as follows:
+  // All of our "elem" instances should be of the same type used in the
+  // .sanitizeFor call above. With an assertion library, this could look as
+  // follows:
   assert_true(elem instanceof sanitized.constructor);  // Assuming assert_true, like in WPT tests.
   elem.replaceChildren(sanitized.children);
 }
 
 // Instead of:
 elem.replaceChildren(sanitized.children);
-// we might also write:
+// one could write:
 elem.innerHTML = sanitized.innerHTML;
 // This should have the same effect, except be slower, since this will trigger
 // un-parsing and then re-parsing the node tree which we already have
@@ -278,11 +278,11 @@ strings in an inappropriate context remains with the developer.
 const user_string = "...";  // The user string.
 const sanitizer = new Sanitizer( ... );  // Our Sanitizer.
 
-// We plan to insert this string into a <div> container, but for $REASONS we
-// must retain the result as a string. It's up to the developer to remember the
-// context this was parsed in.
+// The developer plans to insert this string into a <div> element, but has to
+// keep this around as a string (instead of an element). It's important that
+// the developer remembers the parsing context and MUST NOT use this in a
+// different parsing context in order to prevent mXSS attacks.
 const sanitized_for_div = sanitizer.sanitizeFor("div", user_string).innerHTML;
-
 ```
 </div>
 
