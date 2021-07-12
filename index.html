@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3d6a6fcbb, updated Wed Jun 16 16:19:39 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="aa33d253cc5c015fb88a67081280d12f616d212c" name="document-revision">
+  <meta content="e27bd6b3bef40d1336808d7c3ec285222c910e8a" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -384,6 +384,131 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
     var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
     </style>
+<style>/* style-wpt */
+
+:root {
+    --wpt-border: hsl(0, 0%, 60%);
+    --wpt-bg: hsl(0, 0%, 95%);
+    --wpt-text: var(--text);
+    --wptheading-text: hsl(0, 0%, 30%);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --wpt-border: hsl(0, 0%, 30%);
+        --wpt-bg: var(--borderedblock-bg);
+        --wpt-text: var(--text);
+        --wptheading-text: hsl(0, 0%, 60%);
+    }
+}
+.wpt-tests-block {
+    list-style: none;
+    border-left: .5em solid var(--wpt-border);
+    background: var(--wpt-bg);
+    color: var(--wpt-text);
+    margin: 1em auto;
+    padding: .5em;
+}
+.wpt-tests-block summary {
+    color: var(--wptheading-text);
+    font-weight: normal;
+    text-transform: uppercase;
+}
+.wpt-tests-block summary::marker{
+    color: var(--wpt-border);
+}
+.wpt-tests-block summary:hover::marker{
+    color: var(--wpt-text);
+}
+/*
+   The only content  of a wpt test block in its closed state is the <summary>,
+   which contains the word TESTS,
+   and that is absolutely positioned.
+   In that closed state, wpt test blocks are styled
+   to have a top margin whose height is exactly equal
+   to the height of the absolutely positioned <summary>,
+   and no other background/padding/margin/border.
+   The wpt test block elements will therefore allow the maring
+   of the previous/next block elements
+   to collapse through them;
+   if this combined margin would be larger than its own top margin,
+   it stays as is,
+   and therefore the pre-existing vertical rhythm of the document is undisturbed.
+   If that combined margin would be smaller, it is grown to that size.
+   This means that the wpt test block ensures
+   that there's always enough vertical space to insert the summary,
+   without adding more than is needed.
+*/
+.wpt-tests-block:not([open]){
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 0.75em;
+    line-height: 1;
+    position: relative;
+    margin: 1em 0 0;
+}
+.wpt-tests-block:not([open]) summary {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+/*
+   It is possible that both the last child of a block element
+   and the block element itself
+   would be annotated with a <wpt> block each.
+   If the block element has a padding or a border,
+   that's fine, but otherwise
+   the bottom margin of the block and of its last child would collapse
+   and both <wpt> elements would overlap, being both placed there.
+   To avoid that, add 1px of padding to the <wpt> element annotating the last child
+   to prevent the bottom margin of the block and of its last child from collapsing
+   (and as much negative margin,
+   as wel only want to prevent margin collapsing,
+   but are not trying to actually take more space).
+*/
+.wpt-tests-block:not([open]):last-child {
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+}
+/*
+   Exception to the previous rule:
+   don't do that in non-last list items,
+   because it's not necessary,
+   and would therefore consume more space than strictly needed.
+   Lists must have list items as children, not <wpt> elements,
+   so a <wpt> element cannot be a sibling of a list item,
+   and the collision that the previous rule avoids cannot happen.
+*/
+li:not(:last-child) > .wpt-tests-block:not([open]):last-child,
+dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.wpt-tests-block:not([open]):not(:hover){
+    opacity: 0.5;
+}
+.wpt-tests-list {
+    list-style: none;
+    display: grid;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: 1fr auto auto;
+    grid-column-gap: .5em;
+}
+.wpt-tests-block hr:last-child {
+    display: none;
+}
+.wpt-test {
+    display: contents;
+}
+.wpt-test > a {
+    text-decoration: underline;
+    border: none;
+}
+.wpt-test > .wpt-name { grid-column: 1; }
+.wpt-test > .wpt-live { grid-column: 2; }
+.wpt-test > .wpt-source { grid-column: 3; }
+</style>
 <style>/* style-darkmode */
 
 @media (prefers-color-scheme: dark) {
@@ -578,7 +703,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-07-09">9 July 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-07-12">12 July 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -850,8 +975,8 @@ is used as the configuration object.</p>
   while <code>blockElements</code> and <code>dropElements</code> defaults to keeping unknown
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to <code>allowAttributes</code> and <code>dropAttributes</code>.</p>
-   <div class="example" id="example-665b3412">
-    <a class="self-link" href="#example-665b3412"></a> 
+   <div class="example" id="example-fd73794a">
+    <a class="self-link" href="#example-fd73794a"></a> 
 <pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>;</c->
 
   <c- c1>// Some text &lt;b>with&lt;/b> text tags.</c->
@@ -871,10 +996,16 @@ is used as the configuration object.</p>
   <c- c1>// Scripts will be blocked: "abc alert(1) def"</c->
   <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
 </pre>
+    <details class="wpt-tests-block" dir="ltr" lang="en" open>
+     <summary>Tests</summary>
+     <ul class="wpt-tests-list">
+      <li class="wpt-test"><a class="wpt-name" href="https://wpt.fyi/results/sanitizer-api/sanitizer-sanitize.https.tentative.html">sanitizer-sanitize.https.tentative.html</a> <a class="wpt-live" href="https://wpt.live/sanitizer-api/sanitizer-sanitize.https.tentative.html" title="sanitizer-api/sanitizer-sanitize.https.tentative.html"><small>(live test)</small></a> <a class="wpt-source" href="https://github.com/web-platform-tests/wpt/blob/master/sanitizer-api/sanitizer-sanitize.https.tentative.html"><small>(source)</small></a>
+     </ul>
+    </details>
    </div>
    <p>A sanitizer’s configuration can be queried using the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config①">query the sanitizer config</a> method.</p>
-   <div class="example" id="example-0c045ef2">
-    <a class="self-link" href="#example-0c045ef2"></a> 
+   <div class="example" id="example-e46b34f8">
+    <a class="self-link" href="#example-e46b34f8"></a> 
 <pre class="language-js highlight">  <c- c1>// Does the default config allow script elements?</c->
   Sanitizer<c- p>.</c->getDefaultConfiguration<c- p>().</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"script"</c-><c- p>)</c->  <c- c1>// false</c->
 
@@ -900,6 +1031,12 @@ is used as the configuration object.</p>
   <c- c1>// object equality in JavaScript.)</c->
   JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->getDefaultConfiguration<c- p>())</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- k>new</c-> Sanitizer<c- p>().</c->getConfiguration<c- p>());</c->  <c- c1>// true</c->
 </pre>
+    <details class="wpt-tests-block" dir="ltr" lang="en" open>
+     <summary>Tests</summary>
+     <ul class="wpt-tests-list">
+      <li class="wpt-test"><a class="wpt-name" href="https://wpt.fyi/results/sanitizer-api/sanitizer-config.https.tentative.html">sanitizer-config.https.tentative.html</a> <a class="wpt-live" href="https://wpt.live/sanitizer-api/sanitizer-config.https.tentative.html" title="sanitizer-api/sanitizer-config.https.tentative.html"><small>(live test)</small></a> <a class="wpt-source" href="https://github.com/web-platform-tests/wpt/blob/master/sanitizer-api/sanitizer-config.https.tentative.html"><small>(source)</small></a>
+     </ul>
+    </details>
    </div>
    <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists</span><a class="self-link" href="#attr-match-list"></a></h4>
    <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-match-list">attribute match list</dfn> is a map of attribute names to element names,
