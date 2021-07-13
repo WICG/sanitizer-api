@@ -553,7 +553,7 @@ also options to configure some node or element types.
 Examples:
 ```js
   // Comments will be dropped by default.
-  const comment = "Hello <!-- comment --> World!";
+  const comment = to_node("Hello <!-- comment --> World!");
   new Sanitizer().sanitize(comment);  // "Hello  World!"
   new Sanitizer({allowComments: true}).sanitize(comment);  // Same as comment.
 ```
