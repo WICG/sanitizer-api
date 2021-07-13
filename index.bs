@@ -222,6 +222,7 @@ Issue: Is this how we specify a method on existing class "owned" by a different 
   (sanitizer.sanitize(hello))) instanceof DocumentFragment;  // true
   (sanitizer.sanitizeFor("template", "hello") instanceof HTMLTemplateElement;  // true
 ```
+</div>
 
 ## String Handling ## {#api-string-handling}
 
