@@ -644,6 +644,10 @@ run these steps:
 To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 |DOMString| and a given |input| of type |DOMString| run these steps:
   1. Let |node| be an HTML element created by ... from |element|.
+  1. If the the result of running the steps of the
+     [=determine the baseline configuration for an element=] algorithm
+     for the element |node| is anything other than `keep`, then return
+     `null`.
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm),
      with |node| as the `context element` and |input| as `markup`.
@@ -652,11 +656,13 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
   1. Return |node|.
 </div>
 
-Issue: The above will produce funny results for `<script>`.
-
 <div algorithm="sanitizeAndSet">
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
 {{Sanitizer}} |sanitizer| on an {{Element}} node |this|, run these steps:
+  1. If the the result of running the steps of the
+     [=determine the baseline configuration for an element=] algorithm
+     for the element |this| is anything other than `keep`, then throw a
+     {{TypeError}} and return.
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
      with |this| as the `context node` and |value| as `markup`.
@@ -665,12 +671,9 @@ To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
   1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
 </div>
 
-Issue: Define what happens on error conditions.
-
 <div algorithm="create a document fragment">
 To <dfn>create a document fragment</dfn> named |fragment| from an
 |input| of type `Document or DocumentFragment`, run these steps:
-
   1. Switch based on |input|'s type:
     1. If |input| is of type {{DocumentFragment}}, then:
       1. Let |node| refer to |input|.
@@ -699,7 +702,6 @@ run these steps:
 
 <div algorithm="sanitize a document fragment">
 To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
-
   1. Let |m| be a map that maps nodes to a [=sanitize action=]
   1. Let |nodes| be a list containing the [=inclusive descendants=] of
      |fragment|, in [=tree order=].
@@ -715,7 +717,6 @@ To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
 
 <div algorithm="sanitize a node">
 To <dfn>sanitize a node</dfn> named |node| run these steps:
-
   1. Let |sanitizer| be the current Sanitizer.
   1. If |node| is an element node:
     1. Let |element| be |node|'s element.
