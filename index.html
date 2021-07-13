@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version bb6b91100, updated Mon Jul 12 16:52:37 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="faed2625cde40e70ab618ff077a7f075467649dc" name="document-revision">
+  <meta content="a47e67b7ed50732f35c5de802b01ff9cacefd8d6" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1166,6 +1166,7 @@ is used as the configuration object.</p>
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist" id="ref-for-typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="AttributeMatchList " id="dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowattributes"></a></dfn>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist" id="ref-for-typedefdef-attributematchlist①"><c- n>AttributeMatchList</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="AttributeMatchList " id="dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropattributes"></a></dfn>;
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcustomelements"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcomments"></a></dfn>;
 };
 </pre>
    <p class="note" role="note"><span>Note:</span> Element names are expected to be ascii lowercase and those that don’t
@@ -1194,9 +1195,13 @@ is used as the configuration object.</p>
  determines whether an attribute (on a given element) should be dropped.</p>
     <dt data-md>allowCustomElements
     <dd data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="allow-custom-elements-option">allow custom elements option</dfn> determines whether <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element" id="ref-for-custom-element">custom elements</a> are to be considered. The default is to drop them.
+     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="allow-custom-elements-option">allow custom elements option</dfn> determines whether <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element" id="ref-for-custom-element">custom elements</a> are to be considered. The default is to drop them.
  If this option is true, custom elements will still be checked against all
  other built-in or configured configured checks.</p>
+    <dt data-md>allowComments
+    <dd data-md>
+     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="allow-comments-option">allow comments option</dfn> determines whether HTML comments are
+ allowed.</p>
    </dl>
    <p class="note" role="note"><span>Note:</span> <code>allowElements</code> creates a sanitizer that defaults to dropping elements,
   while <code>blockElements</code> and <code>dropElements</code> defaults to keeping unknown
@@ -1230,6 +1235,14 @@ is used as the configuration object.</p>
      </ul>
     </details>
    </div>
+   <p>In addition to allow and block lists for elements and attributes, there are
+also options to configure some node or element types.</p>
+   <p>Examples:</p>
+<pre class="language-js highlight">  <c- c1>// Comments will be dropped by default.</c->
+  <c- a>const</c-> comment <c- o>=</c-> to_node<c- p>(</c-><c- u>"Hello  World!"</c-><c- p>);</c->
+  <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c->comment<c- p>);</c->  <c- c1>// "Hello  World!"</c->
+  <c- k>new</c-> Sanitizer<c- p>({</c->allowComments<c- o>:</c-> <c- kc>true</c-><c- p>}).</c->sanitize<c- p>(</c->comment<c- p>);</c->  <c- c1>// Same as comment.</c->
+</pre>
    <p>A sanitizer’s configuration can be queried using the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config①">query the sanitizer config</a> method.</p>
    <div class="example" id="example-e46b34f8">
     <a class="self-link" href="#example-e46b34f8"></a> 
@@ -1426,8 +1439,7 @@ run these steps:
          <li data-md>
           <p>Let <var>attr action</var> be the resulf of running the <a data-link-type="dfn" href="#effective-attribute-configuration" id="ref-for-effective-attribute-configuration">effective attribute configuration</a> algorithm on <var>sanitizer</var>, <var>attr</var>, and <var>element</var>.</p>
          <li data-md>
-          <p>If <var>attr action</var> is different from <code>keep</code>, remove <var>attr</var> from
-i <var>element</var>.</p>
+          <p>If <var>attr action</var> is different from <code>keep</code>, remove <var>attr</var> from <var>element</var>.</p>
         </ol>
        <li data-md>
         <p>Run the steps to <a data-link-type="dfn" href="#handle-funky-elements" id="ref-for-handle-funky-elements">handle funky elements</a> on <var>element</var>.</p>
@@ -1439,7 +1451,17 @@ i <var>element</var>.</p>
      <li data-md>
       <p>If <var>node</var> is a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#interface-Document" id="ref-for-interface-Document②">Document</a></code> or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment③">DocumentFragment</a></code> node and if <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-parent" id="ref-for-concept-tree-parent">parent</a> is null: Return <code>keep</code>.</p>
      <li data-md>
-      <p>If <var>node</var> is a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text">Text</a></code> <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#boundary-point-node" id="ref-for-boundary-point-node">node</a>: Return <code>keep</code>.</p>
+      <p>If <var>node</var> is a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#comment" id="ref-for-comment">Comment</a></code> <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#boundary-point-node" id="ref-for-boundary-point-node">node</a>:</p>
+      <ol>
+       <li data-md>
+        <p>Let <var>config</var> be <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object④">configuration object</a>, or the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration③">default configuration</a> if no <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑤">configuration object</a> was given.</p>
+       <li data-md>
+        <p>If <var>config</var>’s <a data-link-type="dfn" href="#allow-comments-option" id="ref-for-allow-comments-option">allow comments option</a> is present and is set to to <code>true</code>: Return <code>keep</code>.</p>
+       <li data-md>
+        <p>Return <code>drop</code>.</p>
+      </ol>
+     <li data-md>
+      <p>If <var>node</var> is a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text">Text</a></code> <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#boundary-point-node" id="ref-for-boundary-point-node①">node</a>: Return <code>keep</code>.</p>
      <li data-md>
       <p>Return <code>drop</code></p>
     </ol>
@@ -1495,7 +1517,7 @@ the 'larger' of the two actions assuming a transitively defined order with <code
 run these steps: 
     <ol>
      <li data-md>
-      <p>Let <var>config</var> be <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object④">configuration object</a>.</p>
+      <p>Let <var>config</var> be <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑥">configuration object</a>.</p>
      <li data-md>
       <p>Let <var>baseline action</var> be the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element">determine the baseline configuration for an element</a> algorithm
  for the element <var>element</var>.</p>
@@ -1513,7 +1535,7 @@ run these steps:
      To determine a Sanitizer <var>sanitizer</var>’s <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="effective-attribute-configuration">effective attribute configuration</dfn> for an attribute <var>attr</var> attached to an element <var>element</var>, run these steps: 
     <ol>
      <li data-md>
-      <p>Let <var>config</var> be <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑤">configuration object</a>.</p>
+      <p>Let <var>config</var> be <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑦">configuration object</a>.</p>
      <li data-md>
       <p>Let <var>baseline action</var> be the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-attribute" id="ref-for-determine-the-baseline-configuration-for-an-attribute">determine the baseline configuration for an attribute</a> algorithm
  on the attribute <var>attr</var>.</p>
@@ -1552,7 +1574,7 @@ helper definition:</p>
    <p class="issue" id="issue-40748180"><a class="self-link" href="#issue-40748180"></a> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a></p>
    <div class="algorithm" data-algorithm="determine the effective configuration for an element">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="determine-the-effective-configuration-for-an-element">determine the effective configuration for an element</dfn> <var>element</var>,
-given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑥">configuration object</a> <var>config</var>, run these steps: 
+given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑧">configuration object</a> <var>config</var>, run these steps: 
     <ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="#element-kind" id="ref-for-element-kind">element kind</a> is <code>custom</code> and if <var>config</var>’s <a data-link-type="dfn" href="#allow-custom-elements-option" id="ref-for-allow-custom-elements-option">allow custom elements option</a> is unset or set to anything other
@@ -1567,7 +1589,7 @@ given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configu
       <p>If <var>config</var> has a non-empty <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list">element allow list</a> and <var>name</var> is not
  in <var>config</var>’s <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list①">element allow list</a>: Return <code>block</code>.</p>
      <li data-md>
-      <p>If <var>config</var> does not have a non-empty <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list②">element allow list</a> and <var>name</var> is not it the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration③">default configuration</a>'s <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list③">element allow list</a>:
+      <p>If <var>config</var> does not have a non-empty <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list②">element allow list</a> and <var>name</var> is not it the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration④">default configuration</a>'s <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list③">element allow list</a>:
  Return <code>block</code>.</p>
      <li data-md>
       <p>Return <code>keep</code>.</p>
@@ -1575,7 +1597,7 @@ given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configu
    </div>
    <div class="algorithm" data-algorithm="determine the effective configuration for an attribute">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="determine-the-effective-configuration-for-an-attribute">determine the effective configuration for an attribute</dfn> <var>attr</var>,
-attached to an element <var>element</var>, and given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑦">configuration object</a> <var>config</var>,
+attached to an element <var>element</var>, and given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑨">configuration object</a> <var>config</var>,
 run these steps: 
     <ol>
      <li data-md>
@@ -1588,7 +1610,7 @@ run these steps:
  contains neither <var>element</var>’s tag name nor the string <code>"*"</code>:
  Return <code>drop</code>.</p>
      <li data-md>
-      <p>if <var>config</var> does not have a non-empty <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list①">attribute allow list</a> and <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration④">default configuration</a>'s <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list②">attribute allow list</a> does not contain <var>attr</var>’s local name, or <var>attr</var>’s associated value contains
+      <p>if <var>config</var> does not have a non-empty <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list①">attribute allow list</a> and <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration⑤">default configuration</a>'s <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list②">attribute allow list</a> does not contain <var>attr</var>’s local name, or <var>attr</var>’s associated value contains
  neither <var>element</var>’s tag name nor the string <code>"*"</code>: Return <code>drop</code>.</p>
      <li data-md>
       <p>Return <code>keep</code>.</p>
@@ -1618,10 +1640,10 @@ run these steps:
       <p>Return <code>keep</code>.</p>
     </ol>
    </div>
-   <p>The sanitizer has a built-in <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration⑤">default configuration</a>, which is stricter than
+   <p>The sanitizer has a built-in <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration⑥">default configuration</a>, which is stricter than
 the baseline and aims to eliminate any script-injection possibility, as well
 as legacy or unusual constructs.</p>
-   <p>The defaults and baseline are defined by three JSON constants, <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>, <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list①">baseline attribute allow list</a>, <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration⑥">default configuration</a>. For better readability, these have been moved to
+   <p>The defaults and baseline are defined by three JSON constants, <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>, <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list①">baseline attribute allow list</a>, <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration⑦">default configuration</a>. For better readability, these have been moved to
 an <a href="#constants">appendix A</a>.</p>
    <h2 class="heading settled" data-level="4" id="security-considerations"><span class="secno">4. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
    <p>The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
@@ -2886,6 +2908,8 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#dom-sanitizerconfig-allowattributes">allowAttributes</a><span>, in §2.3</span>
+   <li><a href="#dom-sanitizerconfig-allowcomments">allowComments</a><span>, in §2.3</span>
+   <li><a href="#allow-comments-option">allow comments option</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizerconfig-allowcustomelements">allowCustomElements</a><span>, in §2.3</span>
    <li><a href="#allow-custom-elements-option">allow custom elements option</a><span>, in §2.3</span>
    <li><a href="#dom-sanitizerconfig-allowelements">allowElements</a><span>, in §2.3</span>
@@ -2933,6 +2957,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#dom-element-sethtml">setHTML(input, sanitizer)</a><span>, in §2.1</span>
    <li><a href="#stricter-action">stricter action</a><span>, in §3.3</span>
   </ul>
+  <aside class="dfn-panel" data-for="term-for-comment">
+   <a href="https://dom.spec.whatwg.org/#comment">https://dom.spec.whatwg.org/#comment</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-comment">3.2. Sanitization Algorithms</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-element">
    <a href="https://dom.spec.whatwg.org/#element">https://dom.spec.whatwg.org/#element</a><b>Referenced in:</b>
    <ul>
@@ -2988,7 +3018,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="term-for-boundary-point-node">
    <a href="https://dom.spec.whatwg.org/#boundary-point-node">https://dom.spec.whatwg.org/#boundary-point-node</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-boundary-point-node">3.2. Sanitization Algorithms</a>
+    <li><a href="#ref-for-boundary-point-node">3.2. Sanitization Algorithms</a> <a href="#ref-for-boundary-point-node①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-parent">
@@ -3159,7 +3189,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
    <a href="https://heycam.github.io/webidl/#idl-boolean">https://heycam.github.io/webidl/#idl-boolean</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a>
+    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-boolean①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-record">
@@ -3186,6 +3216,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-comment">Comment</span>
      <li><span class="dfn-paneled" id="term-for-element">Element</span>
      <li><span class="dfn-paneled" id="term-for-text">Text</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-append">append</span>
@@ -3298,6 +3329,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <a data-type="AttributeMatchList " href="#dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code></a>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <a data-type="AttributeMatchList " href="#dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code></a>;
 };
 
 <c- b>typedef</c-> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>>> <a href="#typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></a>;
@@ -3361,7 +3393,8 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <ul>
     <li><a href="#ref-for-configuration-object">2.1. Sanitizer API</a> <a href="#ref-for-configuration-object①">(2)</a>
     <li><a href="#ref-for-configuration-object②">3.1. API Implementation</a> <a href="#ref-for-configuration-object③">(2)</a>
-    <li><a href="#ref-for-configuration-object④">3.3. The Effective Configuration</a> <a href="#ref-for-configuration-object⑤">(2)</a> <a href="#ref-for-configuration-object⑥">(3)</a> <a href="#ref-for-configuration-object⑦">(4)</a>
+    <li><a href="#ref-for-configuration-object④">3.2. Sanitization Algorithms</a> <a href="#ref-for-configuration-object⑤">(2)</a>
+    <li><a href="#ref-for-configuration-object⑥">3.3. The Effective Configuration</a> <a href="#ref-for-configuration-object⑦">(2)</a> <a href="#ref-for-configuration-object⑧">(3)</a> <a href="#ref-for-configuration-object⑨">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-sanitizerconfig">
@@ -3404,6 +3437,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <b><a href="#allow-custom-elements-option">#allow-custom-elements-option</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-allow-custom-elements-option">3.3. The Effective Configuration</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="allow-comments-option">
+   <b><a href="#allow-comments-option">#allow-comments-option</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-allow-comments-option">3.2. Sanitization Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="attribute-match-list">
@@ -3549,8 +3588,9 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-default-configuration">2.1. Sanitizer API</a>
     <li><a href="#ref-for-default-configuration①">2.3. The Configuration Dictionary</a>
     <li><a href="#ref-for-default-configuration②">3.1. API Implementation</a>
-    <li><a href="#ref-for-default-configuration③">3.3. The Effective Configuration</a> <a href="#ref-for-default-configuration④">(2)</a>
-    <li><a href="#ref-for-default-configuration⑤">3.4. Baseline and Defaults</a> <a href="#ref-for-default-configuration⑥">(2)</a>
+    <li><a href="#ref-for-default-configuration③">3.2. Sanitization Algorithms</a>
+    <li><a href="#ref-for-default-configuration④">3.3. The Effective Configuration</a> <a href="#ref-for-default-configuration⑤">(2)</a>
+    <li><a href="#ref-for-default-configuration⑥">3.4. Baseline and Defaults</a> <a href="#ref-for-default-configuration⑦">(2)</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */
