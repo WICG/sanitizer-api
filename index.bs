@@ -43,6 +43,14 @@ spec:dom; type:dfn; text:append
     "title": "mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations",
     "publisher": "Ruhr-Universität Bochum"
   },
+  "MXSS1": {
+    "href": "https://research.securitum.com/mutation-xss-via-mathml-mutation-dompurify-2-0-17-bypass/",
+    "title": "Mutation XSS via namespace confusion"
+  },
+  "MXSS2": {
+    "href": "https://www.checkmarx.com/blog/technical-blog/vulnerabilities-discovered-in-mozilla-bleach/",
+    "title": "CVE-2020-6802 Write-up"
+  },
   "HTML":{
     "authors": [
       "Anne van Kesteren",
@@ -127,6 +135,154 @@ element.setHTML(userControlledInput, s);
 let forDiv = s.sanitizeFor("div", userControlledInput);
 // Later:
 document.querySelector(\`${forDiv.localName}#target\`).replaceChildren(forDiv.children);
+```
+</div>
+
+## The Trouble With Strings ## {#strings}
+
+Many HTML sanitizer libraries are based on string-to-string APIs, while this
+API does not offer such a method directly. This sub-section explains the
+reasons and implications for the Sanitizer API.
+
+To convert a string into a tree of nodes (or a fragment), it needs to be parsed.
+The [HTML parsing algorithm](https://html.spec.whatwg.org/multipage/parsing.html#parsing)
+carefully specifies how parsing HTML works. This parsing algorithm is dependent
+on the current node as its parsing context. That is, the same string parsed
+in the context of different HTML nodes will yield different parse trees.
+
+<div class="example">
+The string `<em>bla` in `<div>` and `<textarea>` context.
+  * `<div><em>bla</div>` &#8680; `<div><em>bla</em></div>`
+  * `<textarea><em>bla</textarea>` &#8680; `<textarea>&lt;em&gt;bla</textarea>`
+</div>
+
+<div class="example">
+A table cell in `<table>` and non-table (`<div>`) context.
+  * `<table><td>text</table>` &#8680; `<table><td>text</table>`
+  * `<div><td>text</div>`  &#8680; `<div>text</div>`
+</div>
+
+These differences can allow bugs to creep into a site's sanitization strategy,
+which can (and have been) exploited by a class of XSS-style attacks called mXSS.
+These attacks ultimately depend on confusions of the parsing context, for
+example when a developer will sanitize a string in one (parsing) context,
+while then applying the resulting string in a different context, where it will
+be interpreted differently.
+
+<div class="example">
+  Two mXSS-style examples in real-world libraries can be found in
+  [[MXSS1]]] and [[MXSS2]]. We'd like to stress that we picked these reports
+  for their ease of reading. There are similar reports for pretty much every
+  other tools that deals with HTML parsing.
+</div>
+
+Since this attack class depends on a particular usage of the string *after*
+the sanitization has occurred, the API itself has only limited capability
+to protect its users. As a result, the Sanitizer API follows the following
+principle:
+
+Whenever the Sanitzer API parses or unparses a DOM (sub-)tree to or from a
+string, it will either do so in a fashion where the correct parse context is
+implied by the operation; or it will require a parse context to be supplied by
+the developer and will retain the given context in the resulting argument.
+In other words, the Sanitzer API will never assume a parsing context, or
+disappear a parsing context that has been supplied earlier.
+
+### Case 1: Sanitizing With Nodes, Only. ### {#string-context-case-1}
+
+If the user data in question is already available as DOM nodes - for example
+a [=Document=] instance in a frame - then the Sanitizer can be easily used:
+
+<div class="example">
+```js
+const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
+
+// There is an iframe with id "userFrame", whose content we are interested in.
+const user_tree = document.getElementById("userFrame").contentWindow.document;
+const sanitized = sanitizer.sanitize(user_tree);
+```
+</div>
+
+Note: Parsing an HTML string can have various side-effects, like network
+  requests or executing scripts. Naively parsing these, e.g. by assigning a
+  string to `.innerHTML` of an unconnected element, will not reliably prevent
+  these. Therefore, if the user data to be sanitized is originally
+  in string form, we recommend to go with one of the following cases.
+
+### Case 2: Sanitizing a String with Implied Context. ### {#string-context-case-2}
+
+If the user data is available in string form and we wish to
+directly insert the sanitized subtree into the DOM, we can do so as follows:
+
+<div class="example">
+```js
+const user_string = "...";  // The user string.
+const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
+
+// We want to insert the HTML in user_string into a target element with id
+// target. That is, we want the equivalent of target.innerHTML = value, except
+// without the XSS risks.
+document.getElementById("target").setHTML(user_string, sanitizer);
+```
+</div>
+
+### Case 3: Sanitizing a String with a Given Context. ### {#string-context-case-3}
+
+If the user data is available in string form and the developer wishes to
+sanitize it now, but apply the result to the DOM later, then the Sanitizer
+must be informed about the context that it will be used. To prevent context
+confusion the result is wrapper a container that contains both the
+result and also the parse context. Conveniently, this container already
+exists, and it is the node itself!
+
+<div class="example">
+```js
+// A certain piece of user input is meant to be used repeatedly, to insert
+// it in multiple elements on the page. All these elements will be <div>
+// elements.
+const user_string = "...";  // The user string.
+const sanitizer = new Sanitizer( ... );  // Our Sanitizer.
+
+const sanitized = sanitizer.sanitizeFor("div", user_string);
+sanitized instanceof HTMLDivElement  // true. The Sanitizer has given us a node.
+
+// ... later, in the same program ...
+for (let elem = ... of ...) {
+  // All of our "elem" instances should be of the same type used in the
+  // .sanitizeFor call above. With an assertion library, this could look as
+  // follows:
+  assert_true(elem instanceof sanitized.constructor);  // Assuming assert_true, like in WPT tests.
+  elem.replaceChildren(sanitized.children);
+}
+
+// Instead of:
+elem.replaceChildren(sanitized.children);
+// one could write:
+elem.innerHTML = sanitized.innerHTML;
+// This should have the same effect, except be slower, since this will trigger
+// un-parsing and then re-parsing the node tree which we already have
+// available as a node tree. So we recommend to stick with the former version.
+```
+</div>
+
+### The Other Case ### {#string-context-case-other}
+
+What if neither of these cases works with a given application structure, and a
+string-to-string operation is required? In this case, the developer is free to
+take the sanitization result and remove it from its context. In this case, the
+responsibility to prevent mXSS-class attacks that stem from mis-applying those
+strings in an inappropriate context remains with the developer.
+
+<div class="example">
+```js
+const user_string = "...";  // The user string.
+const sanitizer = new Sanitizer( ... );  // Our Sanitizer.
+
+// The developer plans to insert this string into a <div> element, but has to
+// keep this around as a string (instead of an element). It's important that
+// the developer remembers the parsing context and MUST NOT use this in a
+// different parsing context in order to prevent mXSS attacks.
+const sanitized_for_div = sanitizer.sanitizeFor("div", user_string).innerHTML;
 ```
 </div>
 
