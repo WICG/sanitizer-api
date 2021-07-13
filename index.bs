@@ -222,7 +222,7 @@ const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
 // We want to insert the HTML in user_string into a target element with id
 // target. That is, we want the equivalent of target.innerHTML = value, except
 // without the XSS risks.
-document.getElementById("target").SetHTML(user_string, sanitizer);
+document.getElementById("target").setHTML(user_string, sanitizer);
 ```
 </div>
 
