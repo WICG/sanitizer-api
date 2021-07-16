@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version bb6b91100, updated Mon Jul 12 16:52:37 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="a47e67b7ed50732f35c5de802b01ff9cacefd8d6" name="document-revision">
+  <meta content="a1849eba46c36d64ec65f2bc4115a1d845a25850" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -703,7 +703,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-07-13">13 July 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-07-16">16 July 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1322,7 +1322,8 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="sanitizeFor" data-noexport id="sanitizefor">sanitize for</dfn> an <var>element</var> name of type <var>DOMString</var> and a given <var>input</var> of type <var>DOMString</var> run these steps: 
     <ol>
      <li data-md>
-      <p>Let <var>node</var> be an HTML element created by ... from <var>element</var>.</p>
+      <p>Let <var>node</var> be an HTML element created by running the steps
+ of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-create-element" id="ref-for-concept-create-element">creating an element</a> algorithm with the current document, <var>element</var>, the [[HTML namespace]], and no optional parameters.</p>
      <li data-md>
       <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a>,
  with <var>node</var> as the <code>context element</code> and <var>input</var> as <code>markup</code>.</p>
@@ -2996,6 +2997,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-concept-node-clone">3.1. API Implementation</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-create-element">
+   <a href="https://dom.spec.whatwg.org/#concept-create-element">https://dom.spec.whatwg.org/#concept-create-element</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-create-element">3.1. API Implementation</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document">
    <a href="https://dom.spec.whatwg.org/#concept-document">https://dom.spec.whatwg.org/#concept-document</a><b>Referenced in:</b>
    <ul>
@@ -3222,6 +3229,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-concept-node-append">append</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-attribute">attribute list</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-clone">clone a node</span>
+     <li><span class="dfn-paneled" id="term-for-concept-create-element">creating an element</span>
      <li><span class="dfn-paneled" id="term-for-concept-document">document</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-interface">element interface</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-inclusive-descendant">inclusive descendant</span>
