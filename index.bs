@@ -643,7 +643,9 @@ run these steps:
 <div algorithm="sanitizeFor">
 To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 |DOMString| and a given |input| of type |DOMString| run these steps:
-  1. Let |node| be an HTML element created by ... from |element|.
+  1. Let |node| be an HTML element created by running the steps
+     of the [=creating an element=] algorithm with the current document,
+     |element|, the [[HTML namespace]], and no optional parameters.
   1. If the the result of running the steps of the
      [=determine the baseline configuration for an element=] algorithm
      for the element |node| is anything other than `keep`, then return
