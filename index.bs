@@ -542,9 +542,6 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   // Scripts will be blocked: "abc alert(1) def"
   new Sanitizer().sanitize("abc <script>alert(1)</script> def");
 ```
-<wpt>
-  sanitizer-sanitize.https.tentative.html
-</wpt>
 </div>
 
 In addition to allow and block lists for elements and attributes, there are
@@ -588,9 +585,6 @@ A sanitizer's configuration can be queried using the
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
 ```
-<wpt>
-  sanitizer-config.https.tentative.html
-</wpt>
 </div>
 
 ### Attribute Match Lists ### {#attr-match-list}
@@ -638,6 +632,9 @@ run these steps:
      algorithm on |input|.
   1. Run the [=sanitize a document fragment=] algorithm on |fragment|.
   1. Return |fragment|.
+<wpt>
+  sanitizer-sanitize.https.tentative.html
+</wpt>
 </div>
 
 <div algorithm="sanitizeFor">
@@ -656,6 +653,9 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
   1. Run the steps of the [=sanitize a document fragment=] algorithm on |fragment|.
   1. [=Replace all=] with |fragment| as the `node` and |node| as the `parent`.
   1. Return |node|.
+<wpt>
+  sanitizer-sanitizeFor.https.tentative.html
+</wpt>
 </div>
 
 <div algorithm="sanitizeAndSet">
@@ -671,6 +671,9 @@ To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
   1. Run the steos if the [=sanitize a document fragment=] algorithm
      on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
   1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
+<wpt>
+  element-set-sanitized.https.tentative.html
+</wpt>
 </div>
 
 <div algorithm="create a document fragment">
@@ -698,6 +701,10 @@ run these steps:
   4. For any non-empty member of |config| whose key is declared in
      SanitizerOptions, copy the value to |result|.
   5. Return |result|.
+<wpt>
+  sanitizer-config.https.tentative.html
+  sanitizer-query-config.https.tentative.html
+</wpt>
 </div>
 
 ## Sanitization Algorithms ## {#sanitizer-algorithms}
