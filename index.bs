@@ -672,7 +672,7 @@ To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
      on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
   1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
 <wpt>
-  element-set-sanitized.https.tentative.html
+  element-set-sanitized-html.https.tentative.html
 </wpt>
 </div>
 
@@ -688,7 +688,7 @@ run these steps:
   5. Return |result|.
 <wpt>
   sanitizer-config.https.tentative.html
-  sanitizer-query-config.https.tentative.html
+  sanitizer-query-config.https.tenative.html
 </wpt>
 </div>
 
