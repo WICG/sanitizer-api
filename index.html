@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version bb6b91100, updated Mon Jul 12 16:52:37 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="a1849eba46c36d64ec65f2bc4115a1d845a25850" name="document-revision">
+  <meta content="44583580c5a5c75efb753f5098581974b644248b" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1325,6 +1325,9 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
       <p>Let <var>node</var> be an HTML element created by running the steps
  of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-create-element" id="ref-for-concept-create-element">creating an element</a> algorithm with the current document, <var>element</var>, the [[HTML namespace]], and no optional parameters.</p>
      <li data-md>
+      <p>If the the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element">determine the baseline configuration for an element</a> algorithm
+ for the element <var>node</var> is anything other than <code>keep</code>, then return <code>null</code>.</p>
+     <li data-md>
       <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a>,
  with <var>node</var> as the <code>context element</code> and <var>input</var> as <code>markup</code>.</p>
      <li data-md>
@@ -1335,10 +1338,12 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
       <p>Return <var>node</var>.</p>
     </ol>
    </div>
-   <p class="issue" id="issue-5e5601e4"><a class="self-link" href="#issue-5e5601e4"></a> The above will produce funny results for <code>&lt;script></code>.</p>
    <div class="algorithm" data-algorithm="sanitizeAndSet">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="sanitizeAndSet" data-noexport id="sanitizeandset">sanitize and set</dfn> a <var>value</var> using a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①">Sanitizer</a></code> <var>sanitizer</var> on an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> node <var>this</var>, run these steps: 
     <ol>
+     <li data-md>
+      <p>If the the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element①">determine the baseline configuration for an element</a> algorithm
+ for the element <var>this</var> is anything other than <code>keep</code>, then throw a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and return.</p>
      <li data-md>
       <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a> with <var>this</var> as the <code>context node</code> and <var>value</var> as <code>markup</code>.</p>
      <li data-md>
@@ -1348,7 +1353,6 @@ or <code>"*"</code> are found in the attribute’s value list.</p>
       <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">Replace all</a> with <var>fragment</var> as the <code>node</code> and <var>this</var> as the <code>parent</code>.</p>
     </ol>
    </div>
-   <p class="issue" id="issue-a5ac681f"><a class="self-link" href="#issue-a5ac681f"></a> Define what happens on error conditions.</p>
    <div class="algorithm" data-algorithm="create a document fragment">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="create-a-document-fragment">create a document fragment</dfn> named <var>fragment</var> from an <var>input</var> of type <code>Document or DocumentFragment</code>, run these steps: 
     <ol>
@@ -1520,7 +1524,7 @@ run these steps:
      <li data-md>
       <p>Let <var>config</var> be <var>sanitizer</var>’s <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑥">configuration object</a>.</p>
      <li data-md>
-      <p>Let <var>baseline action</var> be the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element">determine the baseline configuration for an element</a> algorithm
+      <p>Let <var>baseline action</var> be the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element②">determine the baseline configuration for an element</a> algorithm
  for the element <var>element</var>.</p>
      <li data-md>
       <p>Let <var>config action</var> be the result of running the steps of the <a data-link-type="dfn" href="#determine-the-effective-configuration-for-an-element" id="ref-for-determine-the-effective-configuration-for-an-element">determine the effective configuration for an element</a> algorithm
@@ -3193,6 +3197,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-SecureContext">2.1. Sanitizer API</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-exceptiondef-typeerror">
+   <a href="https://heycam.github.io/webidl/#exceptiondef-typeerror">https://heycam.github.io/webidl/#exceptiondef-typeerror</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-exceptiondef-typeerror">3.1. API Implementation</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
    <a href="https://heycam.github.io/webidl/#idl-boolean">https://heycam.github.io/webidl/#idl-boolean</a><b>Referenced in:</b>
    <ul>
@@ -3277,6 +3287,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
      <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
      <li><span class="dfn-paneled" id="term-for-SecureContext">SecureContext</span>
+     <li><span class="dfn-paneled" id="term-for-exceptiondef-typeerror">TypeError</span>
      <li><span class="dfn-paneled" id="term-for-idl-boolean">boolean</span>
      <li><span class="dfn-paneled" id="term-for-idl-record">record</span>
      <li><span class="dfn-paneled" id="term-for-idl-sequence">sequence</span>
@@ -3346,8 +3357,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Is this how we specify a method on existing class "owned" by a different spe?<a href="#issue-a1fbc017"> ↵ </a></div>
-   <div class="issue"> The above will produce funny results for <code>&lt;script></code>.<a href="#issue-5e5601e4"> ↵ </a></div>
-   <div class="issue"> Define what happens on error conditions.<a href="#issue-a5ac681f"> ↵ </a></div>
    <div class="issue"> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a><a href="#issue-40748180"> ↵ </a></div>
    <div class="issue"> The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
@@ -3569,7 +3578,8 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="determine-the-baseline-configuration-for-an-element">
    <b><a href="#determine-the-baseline-configuration-for-an-element">#determine-the-baseline-configuration-for-an-element</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-determine-the-baseline-configuration-for-an-element">3.3. The Effective Configuration</a>
+    <li><a href="#ref-for-determine-the-baseline-configuration-for-an-element">3.1. API Implementation</a> <a href="#ref-for-determine-the-baseline-configuration-for-an-element①">(2)</a>
+    <li><a href="#ref-for-determine-the-baseline-configuration-for-an-element②">3.3. The Effective Configuration</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="determine-the-baseline-configuration-for-an-attribute">
