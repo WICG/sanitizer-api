@@ -10,8 +10,9 @@ Editor: Frederik Braun 68466, Mozilla, fbraun@mozilla.com, https://frederik-brau
 Editor: Mario Heiderich, Cure53, mario@cure53.de, https://cure53.de
 Editor: Daniel Vogelheim, Google LLC, vogelheim@google.com, https://www.google.com
 Abstract:
-  This document specifies a set of APIs which allow developers to take untrusted
-  strings of HTML, and sanitize them for safe insertion into a document's DOM.
+  This document specifies a set of APIs which allow developers to take
+  untrusted HTML input and sanitize it for safe insertion into a document's
+  DOM.
 Indent: 2
 Work Status: exploring
 Boilerplate: omit conformance
@@ -20,16 +21,9 @@ WPT Display: inline
 WPT Path Prefix: /sanitizer-api/
 </pre>
 <pre class="anchors">
-spec: DOM-PARSING; urlPrefix: https://w3c.github.io/DOM-Parsing/
-  type: attribute
-    text: innerHTML; for: Element; url: #widl-Element-innerHTML
+text: innerHTML; type: attribute; for: Element; url: https://dom.spec.whatwg.org/#widl-Element-innerHTML
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
-text: Document; type: interface; url: https://dom.spec.whatwg.org/#interface-Document
-text: DocumentFragment; type: interface; url: https://dom.spec.whatwg.org/#documentfragment
-</pre>
-<pre class="link-defaults">
-spec:dom; type:dfn; text:append
 </pre>
 <pre class="biblio">
 {
@@ -50,21 +44,6 @@ spec:dom; type:dfn; text:append
   "MXSS2": {
     "href": "https://www.checkmarx.com/blog/technical-blog/vulnerabilities-discovered-in-mozilla-bleach/",
     "title": "CVE-2020-6802 Write-up"
-  },
-  "HTML":{
-    "authors": [
-      "Anne van Kesteren",
-      "Domenic Denicola",
-      "Ian Hickson",
-      "Philip Jägenstedt",
-      "Simon Pieters"
-    ],
-    "href": "https://html.spec.whatwg.org/multipage/",
-    "title": "HTML Standard",
-    "status": "Living Standard",
-    "publisher": "WHATWG",
-    "repository": "https://github.com/whatwg/html",
-  "id": "HTML"
   },
   "DEFAULTS": {
     "href": "https://github.com/WICG/sanitizer-api/blob/main/resources/defaults-derivation.html",
@@ -191,7 +170,7 @@ disappear a parsing context that has been supplied earlier.
 ### Case 1: Sanitizing With Nodes, Only. ### {#string-context-case-1}
 
 If the user data in question is already available as DOM nodes - for example
-a [=Document=] instance in a frame - then the Sanitizer can be easily used:
+a {{Document}} instance in a frame - then the Sanitizer can be easily used:
 
 <div class="example">
 ```js
@@ -680,12 +659,12 @@ To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
 To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
 run these steps:
   1. Let |sanitizer| be the current Sanitizer.
-  2. Let |config| be |sanitizer|'s [=configuration object=], or the
+  1. Let |config| be |sanitizer|'s [=configuration object=], or the
      [=default configuration=] if no [=configuration object=] was given.
-  3. Let |result| be a newly constructed SanitizerOptions dictionary.
-  4. For any non-empty member of |config| whose key is declared in
+  1. Let |result| be a newly constructed SanitizerOptions dictionary.
+  1. For any non-empty member of |config| whose key is declared in
      SanitizerOptions, copy the value to |result|.
-  5. Return |result|.
+  1. Return |result|.
 <wpt>
   sanitizer-config.https.tentative.html
   sanitizer-query-config.https.tenative.html
@@ -706,7 +685,7 @@ To <dfn>create a document fragment</dfn> named |fragment| from an
   1. Let |clone| be the result of running [=clone a node=] on |node| with the
      `clone children flag` set to `true`.
   1. Let `fragment` be the result of {{createDocumentFragment}}.
-  1. [=Append=] the node |clone| to the parent |fragment|.
+  1. [=/Append=] the node |clone| to the parent |fragment|.
   1. Return |fragment|.
 </div>
 
@@ -1029,13 +1008,13 @@ plus the third define the default:
 
 1. Elements and attributes that (directly) execute script.
    In other words, elements and attributes that are unconditionally script-ish.
-2. Legacy and "difficult" elements and attributes.
+1. Legacy and "difficult" elements and attributes.
   Examples are the `<plaintext>` `<xmp>` and elements, which have special
   parsing rules attached to them. These are not dangerous _per se_, but they
   have contributed to existing vulnerability.
-3. Elements and attributes that we feel rarely make sense in user-supplied
+1. Elements and attributes that we feel rarely make sense in user-supplied
   content.
-4. All the rest.
+1. All the rest.
 
 Specifically:
 
@@ -1055,7 +1034,7 @@ Specifically:
   - Also, the {{HTMLBaseElement}}, as this effectively modifies interpretation
     of other URLs.
 
-2. Legacy and "difficult" elements.
+1. Legacy and "difficult" elements.
   - Special parsing behaviour. This is not dangerous in its own right, but has
     contributed to mXSS-style attacks. This includes:
       - `<plaintext>` (Which parses in [=PLAINTEXT state=].)
@@ -1065,7 +1044,7 @@ Specifically:
       - `<image>` ([which is parsed as `<img>`](https://html.spec.whatwg.org/#parsing-main-inbody)).
       - `<basefont>`
 
-3. Constructs unlikely to be beneficial in user-supplied content:
+1. Constructs unlikely to be beneficial in user-supplied content:
   - The {{HTMLTemplateElement}}, which introduces a new template to be used
     by JavaScript, and its {{HTMLSlotElement}} accomplice.
   - The frame-like [HTMLPortalElement](https://wicg.github.io/portals/).
