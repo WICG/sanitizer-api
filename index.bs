@@ -505,13 +505,13 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
 
   // Some text <b>with</b> text tags.
-  new Sanitizer({allowElements: [ "b" ]).sanitize(sample);
+  new Sanitizer({allowElements: [ "b" ]}).sanitize(sample);
 
   // Some text <i>with</i> <blink>tags</blink>.
-  new Sanitizer({blockElements: [ "b" ]).sanitize(sample);
+  new Sanitizer({blockElements: [ "b" ]}).sanitize(sample);
 
   // Some text <blink>tags</blink>.
-  new Sanitizer({dropElements: [ "b" ]).sanitize(sample);
+  new Sanitizer({dropElements: [ "b" ]}).sanitize(sample);
 
   // Note: The default configuration handles XSS-relevant input:
 
@@ -593,10 +593,10 @@ Examples for attributes and attribute match lists:
   new Sanitizer({allowAttributes: {"style": ["*"]}}).sanitize(sample);
 
   // Block <span id>: <span class='theclass' style='font-weight: bold'>...</span>
-  new Sanitizer({blockAttributes: {"id": ["span"]}}).sanitize(sample);
+  new Sanitizer({dropAttributes: {"id": ["span"]}}).sanitize(sample);
 
   // Block id, everywhere: <span class='theclass' style='font-weight: bold'>...</span>
-  new Sanitizer({blockAttributes: {"id": ["*"]}}).sanitize(sample);
+  new Sanitizer({dropAttributes: {"id": ["*"]}}).sanitize(sample);
 ```
 </div>
 
