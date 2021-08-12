@@ -592,10 +592,10 @@ Examples for attributes and attribute match lists:
   // Allow style on any elements: <span style='font-weight: bold'>...</span>
   new Sanitizer({allowAttributes: {"style": ["*"]}}).sanitize(sample);
 
-  // Block <span id>: <span class='theclass' style='font-weight: bold'>...</span>
+  // Drop <span id>: <span class='theclass' style='font-weight: bold'>...</span>
   new Sanitizer({dropAttributes: {"id": ["span"]}}).sanitize(sample);
 
-  // Block id, everywhere: <span class='theclass' style='font-weight: bold'>...</span>
+  // Drop id, everywhere: <span class='theclass' style='font-weight: bold'>...</span>
   new Sanitizer({dropAttributes: {"id": ["*"]}}).sanitize(sample);
 ```
 </div>
