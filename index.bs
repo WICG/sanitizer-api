@@ -800,18 +800,6 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
     1. Remove the `formaction` attribute from |element|.
 </div>
 
-<div algorithm="query the sanitizer config">
-To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
-run these steps:
-  1. Let |sanitizer| be the current Sanitizer.
-  1. Let |config| be |sanitizer|'s [=configuration object=], or the
-     [=default configuration=] if no [=configuration object=] was given.
-  1. Let |result| be a newly constructed SanitizerOptions dictionary.
-  1. For any non-empty member of |config| whose key is declared in
-     SanitizerOptions, copy the value to |result|.
-  1. Return |result|.
-</div>
-
 ### The Effective Configuration ### {#configuration}
 
 A Sanitizer is potentially complex, so we will define a helper
