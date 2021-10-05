@@ -487,7 +487,7 @@ is used as the configuration object.
 :: The <dfn>allow custom elements option</dfn> determines whether
    [=custom elements=] are to be considered. The default is to drop them.
    If this option is true, custom elements will still be checked against all
-   other built-in or configured configured checks.
+   other built-in or configured checks.
 : allowComments
 :: The <dfn>allow comments option</dfn> determines whether HTML comments are
    allowed.
