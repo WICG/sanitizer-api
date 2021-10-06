@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version a210b7d86, updated Thu Sep 16 13:45:19 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="d4432939cec949db07ba2ef81dea8c9d6731d9c2" name="document-revision">
+  <meta content="2e5aee4782bd85e119a258b7825d5492d0c64db5" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -703,7 +703,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-10-05">5 October 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-10-06">6 October 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1131,8 +1131,8 @@ code structure or point in time) from the eventual modification of the DOM.</p>
      Note: Sanitizing a string will use the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser" id="ref-for-html-parser">HTML Parser</a> to parse the input,
 which will perform some degree of normalization. So even
 if no sanitization steps are taken on a particular input, it cannot be
-guaranteed that the output of <code>.sanitizeToString</code> will be
-character-for-character identical to the input. 
+guaranteed that the output of <code>.sanitizeFor</code> will be character-for-character
+identical to the input. 
     <div class="example" id="example-fc90214f">
      <a class="self-link" href="#example-fc90214f"></a> 
 <pre class="language-js highlight">    sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"div"</c-><c- p>,</c-> <c- u>"Stra&amp;szlig;e"</c-><c- p>)</c->  <c- c1>// Straße</c->
