@@ -415,8 +415,8 @@ code structure or point in time) from the eventual modification of the DOM.
 Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
 which will perform some degree of normalization. So even
 if no sanitization steps are taken on a particular input, it cannot be
-guaranteed that the output of `.sanitizeToString` will be
-character-for-character identical to the input.
+guaranteed that the output of `.sanitizeFor` will be character-for-character
+identical to the input.
 
 <div class="example">
     ```js
