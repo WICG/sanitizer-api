@@ -58,14 +58,14 @@ text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#do
 
 Web applications often need to work with strings of HTML on the client side,
 perhaps as part of a client-side templating solution, perhaps as part of
-rendering user generated content, etc. It is difficult to do so in a safe way,
-however; the naive approach of joining strings together and stuffing them into
-an {{Element}}'s {{Element/innerHTML}} is fraught with risk, as that can and
-will cause JavaScript execution in a number of unexpected ways.
+rendering user generated content, etc. It is difficult to do so in a safe way.
+The naive approach of joining strings together and stuffing them into
+an {{Element}}'s {{Element/innerHTML}} is fraught with risk, as it can cause
+JavaScript execution in a number of unexpected ways.
 
 Libraries like [[DOMPURIFY]] attempt to manage this problem by carefully
-parsing and sanitizing strings before insertion by constructing a DOM and
-walking its members through an allow-list. This has proven to be a fragile
+parsing and sanitizing strings before insertion, by constructing a DOM and
+filtering its members through an allow-list. This has proven to be a fragile
 approach, as the parsing APIs exposed to the web don't always map in
 reasonable ways to the browser's behavior when actually rendering a string as
 HTML in the "real" DOM. Moreover, the libraries need to keep on top of
@@ -113,15 +113,15 @@ element.setHTML(userControlledInput, s);
 // insertion now:
 let forDiv = s.sanitizeFor("div", userControlledInput);
 // Later:
-document.querySelector(\`${forDiv.localName}#target\`).replaceChildren(forDiv.children);
+document.querySelector(\`${forDiv.localName}#target\`).replaceChildren(...forDiv.childNodes);
 ```
 </div>
 
 ## The Trouble With Strings ## {#strings}
 
 Many HTML sanitizer libraries are based on string-to-string APIs, while this
-API does not offer such a method directly. This sub-section explains the
-reasons and implications for the Sanitizer API.
+API does not offer such a method. This sub-section explains the reasons and
+implications for the Sanitizer API.
 
 To convert a string into a tree of nodes (or a fragment), it needs to be parsed.
 The [HTML parsing algorithm](https://html.spec.whatwg.org/multipage/parsing.html#parsing)
@@ -176,7 +176,7 @@ a {{Document}} instance in a frame - then the Sanitizer can be easily used:
 ```js
 const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
 
-// There is an iframe with id "userFrame", whose content we are interested in.
+// There is an iframe with id "userFrame" whose content we are interested in.
 const user_tree = document.getElementById("userFrame").contentWindow.document;
 const sanitized = sanitizer.sanitize(user_tree);
 ```
@@ -231,11 +231,11 @@ for (let elem = ... of ...) {
   // .sanitizeFor call above. With an assertion library, this could look as
   // follows:
   assert_true(elem instanceof sanitized.constructor);  // Assuming assert_true, like in WPT tests.
-  elem.replaceChildren(sanitized.children);
+  elem.replaceChildren(...sanitized.childNodes);
 }
 
 // Instead of:
-elem.replaceChildren(sanitized.children);
+elem.replaceChildren(...sanitized.childNodes);
 // one could write:
 elem.innerHTML = sanitized.innerHTML;
 // This should have the same effect, except be slower, since this will trigger
@@ -309,7 +309,7 @@ handle additional, application-specific use cases.
     are to return the value of the [=default configuration=] object.
 
 The {{Element}} interface gains an additional method, `setHTML` which
-applies a string using a Sanitzer directly to an existing element node.
+applies a string using a `Sanitizer` directly to an existing element node.
 
 <pre class="idl">
   partial interface Element {
@@ -333,8 +333,8 @@ Issue: Is this how we specify a method on existing class "owned" by a different 
   // problems that this approach has.
   //
   // But... for our examples we'll need something that is quick and easy, since
-  // we cannot use our own Sanitizer API to demo our own Sanitizer API...
-  const to_node = str => (new DOMParser).parseFromString(str, "text/html").body.firstChild;
+  // we cannot use our own Sanitizer API to explain our own Sanitizer API.
+  const to_node = str => document.createRange().createContextualFragment(str);
 
   // The core API of the Sanitizer is the .sanitize method:
   let untrusted_input = to_node("Hello!");
@@ -347,23 +347,23 @@ Issue: Is this how we specify a method on existing class "owned" by a different 
   // If our input contains markup it'll be mostly preserved, except for
   // script-y markup:
   untrusted_input = to_node("<em onclick='alert(1);'>Hello!</em>");
-  sanitizer.sanitizer(untrusted_input);  // <em>Hello!</em>
+  sanitizer.sanitize(untrusted_input);  // <em>Hello!</em>
   element.replaceChildren(sanitizer.sanitize(untrusted_input));  // No alert!
 
   // The .sanitize method is the primary API, and returns a DocumentFragment.
   // The .sanitizeFor method accepts and parses a string and returns an HTML
   // element node.
   const hello = to_node("hello");
-  (sanitizer.sanitize(hello))) instanceof DocumentFragment;  // true
-  (sanitizer.sanitizeFor("template", "hello") instanceof HTMLTemplateElement;  // true
+  (sanitizer.sanitize(hello)) instanceof DocumentFragment;  // true
+  (sanitizer.sanitizeFor("template", "hello")) instanceof HTMLTemplateElement;  // true
 ```
 </div>
 
 ## String Handling ## {#api-string-handling}
 
 Parsing (and unparsing) strings to (or from) HTML requires a context element.
-Thus, the `sanitizeFor` method requires us to pass in a context, which we can
-in turn hand over to the HTML Parser.
+Thus, the `sanitizeFor` method requires us to pass in a context, which the
+implementation can then hand over to the HTML Parser.
 
 Additionally, the {{Element}} interface gains a `setHTML` method, which
 always knows the correct context, because it is applied to a given {{Element}}
@@ -386,7 +386,7 @@ code structure or point in time) from the eventual modification of the DOM.
   // from an embedded frame, one can use sanitize:
   document.getElementById("target").replaceChildren(
     sanitizer.sanitize(
-      document.querySelector("iframe#myframe").contentWindow.document.body));
+      document.querySelector("iframe#myframe").contentWindow.document));
 
   // If the markup to be sanitized is present in string form, but we already
   // have the element we want to insert in available:
@@ -395,9 +395,9 @@ code structure or point in time) from the eventual modification of the DOM.
 
   // If the markup to be sanitized is present in string form, but we don't want
   // to do the DOM insertion now:
-  let no_xss = sanitizer.sanitizeFor("dic", untrusted_input);
+  let no_xss = sanitizer.sanitizeFor("div", untrusted_input);
   // ... much later ...
-  document.querySelector("div#targetdiv").replaceChildren(no_xss.children);
+  document.querySelector("div#targetdiv").replaceChildren(...no_xss.childNodes);
 
   // Note that parsing HTML depends on the current context in many ways, some
   // subtle, some not so much. Supplying a different context than what the
@@ -428,7 +428,7 @@ identical to the input.
 
 <div class="note">
 Note: `Sanitizer.sanitizeFor` and `Element.setHTML` can replace the
-    respective other. Both are provided, since they support different use cases.
+    respective other. Both are provided since they support different use cases.
 
 <div class="example">
     ```js
@@ -441,7 +441,7 @@ Note: `Sanitizer.sanitizeFor` and `Element.setHTML` can replace the
 
     // setHTML, based on sanitizeFor.
     function setHTML(input, sanitizer) {
-      this.replaceChildren(sanitizer.sanitizeFor(this.localName, input).children);
+      this.replaceChildren(...sanitizer.sanitizeFor(this.localName, input).childNodes);
     }
     ```
 </div>
@@ -503,7 +503,8 @@ Note: Element names are normalized, following the rules of the HTML Parser.
 
 <div class="example">
 ```js
-  const sample = "Some text <b><i>with</i></b> <blink>tags</blink>.";
+  const sample = to_node("Some text <b><i>with</i></b> <blink>tags</blink>.");
+  const script_sample = to_node("abc <script>alert(1)</script> def");
 
   // Some text <b>with</b> text tags.
   new Sanitizer({allowElements: [ "b" ]}).sanitize(sample);
@@ -520,7 +521,7 @@ Note: Element names are normalized, following the rules of the HTML Parser.
   new Sanitizer().sanitize(sample);  // Will output sample unmodified.
 
   // Scripts will be blocked: "abc alert(1) def"
-  new Sanitizer().sanitize("abc <script>alert(1)</script> def");
+  new Sanitizer().sanitize(script_sample);
 ```
 </div>
 
@@ -585,7 +586,7 @@ attribute's [=Attr/local name=] is a key in the match list, and element's
 <div class="example">
 Examples for attributes and attribute match lists:
 ```js
-  const sample = "<span id='span1' class='theclass' style='font-weight: bold'>hello</span>";
+  const sample = to_node("<span id='span1' class='theclass' style='font-weight: bold'>hello</span>");
 
   // Allow only <span style>: <span style='font-weight: bold'>...</span>
   new Sanitizer({allowAttributes: {"style": ["span"]}}).sanitize(sample);
@@ -662,7 +663,7 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
   1. Let |node| be an HTML element created by running the steps
      of the [=creating an element=] algorithm with the current document,
      |element|, the [[HTML namespace]], and no optional parameters.
-  1. If the the result of running the steps of the
+  1. If the result of running the steps of the
      [=determine the baseline configuration for an element=] algorithm
      for the element |node| is anything other than `keep`, then return
      `null`.
@@ -680,7 +681,7 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 <div algorithm="sanitizeAndSet">
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
 {{Sanitizer}} |sanitizer| on an {{Element}} node |this|, run these steps:
-  1. If the the result of running the steps of the
+  1. If the result of running the steps of the
      [=determine the baseline configuration for an element=] algorithm
      for the element |this| is anything other than `keep`, then throw a
      {{TypeError}} and return.
@@ -831,7 +832,7 @@ run these steps:
 
 Note: The definition of stricter actions ensures that the built-in baseline
       configuration cannot be overriden, and therefor forms a hard guarantee
-      for all Sanitizer instances. (Likewise for attributes.)
+      for all Sanitizer instances. Likewise for attributes.
 </div>
 
 <div algorithm="effective attribute configuration">
@@ -952,7 +953,7 @@ an <a href=#constants>appendix A</a>.
 
 # Security Considerations # {#security-considerations}
 
-The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
+The Sanitizer API is intended to prevent DOM-based Cross-Site Scripting
 by traversing a supplied HTML content and removing elements and attributes
 according to a configuration. The specified API must not support
 the construction of a Sanitizer object that leaves script-capable markup in
@@ -986,7 +987,7 @@ default state, but can be configured to remove `id` and `name` attributes.
 
 <em>This section is not normative.</em>
 
-Script gadgets is a technique in which an attacker uses existing application
+Script gadgets are a technique in which an attacker uses existing application
 code from popular JavaScript libraries to cause their own code to execute.
 This is often done by injecting innocent-looking code or seemingly inert
 DOM nodes that is only parsed and interpreted by a framework which then
