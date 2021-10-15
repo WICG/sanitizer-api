@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version a210b7d86, updated Thu Sep 16 13:45:19 2021 -0700" name="generator">
+  <meta content="Bikeshed version d7036035b, updated Fri Oct 8 17:07:11 2021 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="2e5aee4782bd85e119a258b7825d5492d0c64db5" name="document-revision">
+  <meta content="c4077f28d302f9a70732d0e740fc0eeca055ced9" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -247,6 +247,16 @@ figcaption:not(.no-marker)::before {
 }
 
 .dfn-paneled { cursor: pointer; }
+</style>
+<style>/* style-issues */
+
+a[href].issue-return {
+    float: right;
+    float: inline-end;
+    color: var(--issueheading-text);
+    font-weight: bold;
+    text-decoration: none;
+}
 </style>
 <style>/* style-md-lists */
 
@@ -703,7 +713,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-10-06">6 October 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-10-15">15 October 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -819,13 +829,13 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <p><em>This section is not normative.</em></p>
    <p>Web applications often need to work with strings of HTML on the client side,
 perhaps as part of a client-side templating solution, perhaps as part of
-rendering user generated content, etc. It is difficult to do so in a safe way,
-however; the naive approach of joining strings together and stuffing them into
-an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#widl-Element-innerHTML" id="ref-for-widl-Element-innerHTML">innerHTML</a></code> is fraught with risk, as that can and
-will cause JavaScript execution in a number of unexpected ways.</p>
+rendering user generated content, etc. It is difficult to do so in a safe way.
+The naive approach of joining strings together and stuffing them into
+an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#widl-Element-innerHTML" id="ref-for-widl-Element-innerHTML">innerHTML</a></code> is fraught with risk, as it can cause
+JavaScript execution in a number of unexpected ways.</p>
    <p>Libraries like <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> attempt to manage this problem by carefully
-parsing and sanitizing strings before insertion by constructing a DOM and
-walking its members through an allow-list. This has proven to be a fragile
+parsing and sanitizing strings before insertion, by constructing a DOM and
+filtering its members through an allow-list. This has proven to be a fragile
 approach, as the parsing APIs exposed to the web don’t always map in
 reasonable ways to the browser’s behavior when actually rendering a string as
 HTML in the "real" DOM. Moreover, the libraries need to keep on top of
@@ -851,8 +861,8 @@ API which aims to do just that.</p>
   Adding certain elements and attributes can prevent <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a> attacks.</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="api-summary"><span class="secno">1.2. </span><span class="content">API Summary</span><a class="self-link" href="#api-summary"></a></h3>
-   <div class="example" id="example-3bf932a4">
-    <a class="self-link" href="#example-3bf932a4"></a> 
+   <div class="example" id="example-36f9e62e">
+    <a class="self-link" href="#example-36f9e62e"></a> 
 <pre class="language-js highlight"><c- a>let</c-> s <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>();</c->
 
 <c- c1>// Case: The input data is available as a tree of DOM nodes.</c->
@@ -869,13 +879,13 @@ element<c- p>.</c->setHTML<c- p>(</c->userControlledInput<c- p>,</c-> s<c- p>);<
 <c- c1>// insertion now:</c->
 <c- a>let</c-> forDiv <c- o>=</c-> s<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"div"</c-><c- p>,</c-> userControlledInput<c- p>);</c->
 <c- c1>// Later:</c->
-document<c- p>.</c->querySelector<c- p>(</c-><c- sb>`</c-><c- si>${</c->forDiv<c- p>.</c->localName<c- si>}</c-><c- sb>#target`</c-><c- p>).</c->replaceChildren<c- p>(</c->forDiv<c- p>.</c->children<c- p>);</c->
+document<c- p>.</c->querySelector<c- p>(</c-><c- sb>`</c-><c- si>${</c->forDiv<c- p>.</c->localName<c- si>}</c-><c- sb>#target`</c-><c- p>).</c->replaceChildren<c- p>(...</c->forDiv<c- p>.</c->childNodes<c- p>);</c->
 </pre>
    </div>
    <h3 class="heading settled" data-level="1.3" id="strings"><span class="secno">1.3. </span><span class="content">The Trouble With Strings</span><a class="self-link" href="#strings"></a></h3>
    <p>Many HTML sanitizer libraries are based on string-to-string APIs, while this
-API does not offer such a method directly. This sub-section explains the
-reasons and implications for the Sanitizer API.</p>
+API does not offer such a method. This sub-section explains the reasons and
+implications for the Sanitizer API.</p>
    <p>To convert a string into a tree of nodes (or a fragment), it needs to be parsed.
 The <a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing">HTML parsing algorithm</a> carefully specifies how parsing HTML works. This parsing algorithm is dependent
 on the current node as its parsing context. That is, the same string parsed
@@ -919,11 +929,11 @@ disappear a parsing context that has been supplied earlier.</p>
    <h4 class="heading settled" data-level="1.3.1" id="string-context-case-1"><span class="secno">1.3.1. </span><span class="content">Case 1: Sanitizing With Nodes, Only.</span><a class="self-link" href="#string-context-case-1"></a></h4>
    <p>If the user data in question is already available as DOM nodes - for example
 a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> instance in a frame - then the Sanitizer can be easily used:</p>
-   <div class="example" id="example-13178e98">
-    <a class="self-link" href="#example-13178e98"></a> 
+   <div class="example" id="example-4d22be26">
+    <a class="self-link" href="#example-4d22be26"></a> 
 <pre class="language-js highlight"><c- a>const</c-> sanitizer <c- o>=</c-> <c- k>new</c-> Sanitizer<c- p>(</c-> <c- p>...</c-> <c- p>);</c->  <c- c1>// Our Sanitizer;</c->
 
-<c- c1>// There is an iframe with id "userFrame", whose content we are interested in.</c->
+<c- c1>// There is an iframe with id "userFrame" whose content we are interested in.</c->
 <c- a>const</c-> user_tree <c- o>=</c-> document<c- p>.</c->getElementById<c- p>(</c-><c- u>"userFrame"</c-><c- p>).</c->contentWindow<c- p>.</c->document<c- p>;</c->
 <c- a>const</c-> sanitized <c- o>=</c-> sanitizer<c- p>.</c->sanitize<c- p>(</c->user_tree<c- p>);</c->
 </pre>
@@ -954,8 +964,8 @@ must be informed about the context that it will be used. To prevent context
 confusion the result is wrapper a container that contains both the
 result and also the parse context. Conveniently, this container already
 exists, and it is the node itself!</p>
-   <div class="example" id="example-28fe56c5">
-    <a class="self-link" href="#example-28fe56c5"></a> 
+   <div class="example" id="example-2244de59">
+    <a class="self-link" href="#example-2244de59"></a> 
 <pre class="language-js highlight"><c- c1>// A certain piece of user input is meant to be used repeatedly, to insert</c->
 <c- c1>// it in multiple elements on the page. All these elements will be &lt;div></c->
 <c- c1>// elements.</c->
@@ -971,11 +981,11 @@ sanitized <c- k>instanceof</c-> HTMLDivElement  <c- c1>// true. The Sanitizer ha
   <c- c1>// .sanitizeFor call above. With an assertion library, this could look as</c->
   <c- c1>// follows:</c->
   assert_true<c- p>(</c->elem <c- k>instanceof</c-> sanitized<c- p>.</c->constructor<c- p>);</c->  <c- c1>// Assuming assert_true, like in WPT tests.</c->
-  elem<c- p>.</c->replaceChildren<c- p>(</c->sanitized<c- p>.</c->children<c- p>);</c->
+  elem<c- p>.</c->replaceChildren<c- p>(...</c->sanitized<c- p>.</c->childNodes<c- p>);</c->
 <c- p>}</c->
 
 <c- c1>// Instead of:</c->
-elem<c- p>.</c->replaceChildren<c- p>(</c->sanitized<c- p>.</c->children<c- p>);</c->
+elem<c- p>.</c->replaceChildren<c- p>(...</c->sanitized<c- p>.</c->childNodes<c- p>);</c->
 <c- c1>// one could write:</c->
 elem<c- p>.</c->innerHTML <c- o>=</c-> sanitized<c- p>.</c->innerHTML<c- p>;</c->
 <c- c1>// This should have the same effect, except be slower, since this will trigger</c->
@@ -1009,13 +1019,13 @@ The most common use-case - preventing XSS - is handled by default,
 so that creating a Sanitizer with a custom config is necessary only to
 handle additional, application-specific use cases.</p>
 <pre class="idl highlight def">[
-  <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
-  <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>
+  <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
+  <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>
 ] <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="sanitizer"><code><c- g>Sanitizer</c-></code></dfn> {
   <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer" id="ref-for-dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/Sanitizer(config), Sanitizer/constructor(config), Sanitizer/Sanitizer(), Sanitizer/constructor()" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code><a class="self-link" href="#dom-sanitizer-sanitizer-config-config"></a></dfn> = {});
 
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment"><c- n>DocumentFragment</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitize" id="ref-for-dom-sanitizer-sanitize"><c- g>sanitize</c-></a>((<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①"><c- n>Document</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment①"><c- n>DocumentFragment</c-></a>) <dfn class="idl-code" data-dfn-for="Sanitizer/sanitize(input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitize-input-input"></a></dfn>);
-  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①"><c- n>Element</c-></a>? <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizefor" id="ref-for-dom-sanitizer-sanitizefor"><c- g>sanitizeFor</c-></a>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeFor(element, input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizefor-element-input-element"><code><c- g>element</c-></code><a class="self-link" href="#dom-sanitizer-sanitizefor-element-input-element"></a></dfn>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeFor(element, input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizefor-element-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitizefor-element-input-input"></a></dfn>);
+  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①"><c- n>Element</c-></a>? <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizefor" id="ref-for-dom-sanitizer-sanitizefor"><c- g>sanitizeFor</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeFor(element, input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizefor-element-input-element"><code><c- g>element</c-></code><a class="self-link" href="#dom-sanitizer-sanitizefor-element-input-element"></a></dfn>, <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Sanitizer/sanitizeFor(element, input)" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizefor-element-input-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-sanitizer-sanitizefor-element-input-input"></a></dfn>);
 
   <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getconfiguration" id="ref-for-dom-sanitizer-getconfiguration"><c- g>getConfiguration</c-></a>();
   <c- b>static</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig②"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getdefaultconfiguration" id="ref-for-dom-sanitizer-getdefaultconfiguration"><c- g>getDefaultConfiguration</c-></a>();
@@ -1038,9 +1048,9 @@ handle additional, application-specific use cases.</p>
   are to return the value of the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration">default configuration</a> object.</p>
    </ul>
    <p>The <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element②">Element</a></code> interface gains an additional method, <code>setHTML</code> which
-applies a string using a Sanitzer directly to an existing element node.</p>
+applies a string using a <code>Sanitizer</code> directly to an existing element node.</p>
 <pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://dom.spec.whatwg.org/#element" id="ref-for-element③"><c- g>Element</c-></a> {
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-element-sethtml" id="ref-for-dom-element-sethtml"><c- g>setHTML</c-></a>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Element/setHTML(input, sanitizer)" data-dfn-type="argument" data-export id="dom-element-sethtml-input-sanitizer-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-element-sethtml-input-sanitizer-input"></a></dfn>, <a data-link-type="idl-name" href="#sanitizer" id="ref-for-sanitizer"><c- n>Sanitizer</c-></a> <dfn class="idl-code" data-dfn-for="Element/setHTML(input, sanitizer)" data-dfn-type="argument" data-export id="dom-element-sethtml-input-sanitizer-sanitizer"><code><c- g>sanitizer</c-></code><a class="self-link" href="#dom-element-sethtml-input-sanitizer-sanitizer"></a></dfn>);
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-element-sethtml" id="ref-for-dom-element-sethtml"><c- g>setHTML</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Element/setHTML(input, sanitizer)" data-dfn-type="argument" data-export id="dom-element-sethtml-input-sanitizer-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-element-sethtml-input-sanitizer-input"></a></dfn>, <a data-link-type="idl-name" href="#sanitizer" id="ref-for-sanitizer"><c- n>Sanitizer</c-></a> <dfn class="idl-code" data-dfn-for="Element/setHTML(input, sanitizer)" data-dfn-type="argument" data-export id="dom-element-sethtml-input-sanitizer-sanitizer"><code><c- g>sanitizer</c-></code><a class="self-link" href="#dom-element-sethtml-input-sanitizer-sanitizer"></a></dfn>);
 };
 </pre>
    <ul>
@@ -1048,8 +1058,8 @@ applies a string using a Sanitzer directly to an existing element node.</p>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Element" data-dfn-type="method" data-export id="dom-element-sethtml"><code>setHTML(<var>input</var>, <var>sanitizer</var>)</code></dfn> method steps are to run the <a data-link-type="dfn" href="#sanitizeandset" id="ref-for-sanitizeandset">sanitizeAndSet</a> algorithm on <var>input</var> and <var>sanitizer</var>.</p>
    </ul>
    <p class="issue" id="issue-a1fbc017"><a class="self-link" href="#issue-a1fbc017"></a> Is this how we specify a method on existing class "owned" by a different spe?</p>
-   <div class="example" id="example-0131be02">
-    <a class="self-link" href="#example-0131be02"></a> 
+   <div class="example" id="example-8886c10c">
+    <a class="self-link" href="#example-8886c10c"></a> 
 <pre class="language-js highlight">  <c- c1>// To make our examples easy to follow, we’ll need a way create DOM nodes.</c->
   <c- c1>// The following is hacky way to accomplish this, for illustration only,</c->
   <c- c1>// that you shall pretty please not use in practice. This parsing method can</c->
@@ -1058,8 +1068,8 @@ applies a string using a Sanitzer directly to an existing element node.</p>
   <c- c1>// problems that this approach has.</c->
   <c- c1>//</c->
   <c- c1>// But... for our examples we’ll need something that is quick and easy, since</c->
-  <c- c1>// we cannot use our own Sanitizer API to demo our own Sanitizer API...</c->
-  <c- a>const</c-> to_node <c- o>=</c-> str <c- p>=></c-> <c- p>(</c-><c- k>new</c-> DOMParser<c- p>).</c->parseFromString<c- p>(</c->str<c- p>,</c-> <c- u>"text/html"</c-><c- p>).</c->body<c- p>.</c->firstChild<c- p>;</c->
+  <c- c1>// we cannot use our own Sanitizer API to explain our own Sanitizer API.</c->
+  <c- a>const</c-> to_node <c- o>=</c-> str <c- p>=></c-> document<c- p>.</c->createRange<c- p>().</c->createContextualFragment<c- p>(</c->str<c- p>);</c->
 
   <c- c1>// The core API of the Sanitizer is the .sanitize method:</c->
   <c- a>let</c-> untrusted_input <c- o>=</c-> to_node<c- p>(</c-><c- u>"Hello!"</c-><c- p>);</c->
@@ -1072,21 +1082,21 @@ applies a string using a Sanitzer directly to an existing element node.</p>
   <c- c1>// If our input contains markup it’ll be mostly preserved, except for</c->
   <c- c1>// script-y markup:</c->
   untrusted_input <c- o>=</c-> to_node<c- p>(</c-><c- u>"&lt;em onclick='alert(1);'>Hello!&lt;/em>"</c-><c- p>);</c->
-  sanitizer<c- p>.</c->sanitizer<c- p>(</c->untrusted_input<c- p>);</c->  <c- c1>// &lt;em>Hello!&lt;/em></c->
+  sanitizer<c- p>.</c->sanitize<c- p>(</c->untrusted_input<c- p>);</c->  <c- c1>// &lt;em>Hello!&lt;/em></c->
   element<c- p>.</c->replaceChildren<c- p>(</c->sanitizer<c- p>.</c->sanitize<c- p>(</c->untrusted_input<c- p>));</c->  <c- c1>// No alert!</c->
 
   <c- c1>// The .sanitize method is the primary API, and returns a DocumentFragment.</c->
   <c- c1>// The .sanitizeFor method accepts and parses a string and returns an HTML</c->
   <c- c1>// element node.</c->
   <c- a>const</c-> hello <c- o>=</c-> to_node<c- p>(</c-><c- u>"hello"</c-><c- p>);</c->
-  <c- p>(</c->sanitizer<c- p>.</c->sanitize<c- p>(</c->hello<c- p>)))</c-> <c- k>instanceof</c-> DocumentFragment<c- p>;</c->  <c- c1>// true</c->
-  <c- p>(</c->sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"template"</c-><c- p>,</c-> <c- u>"hello"</c-><c- p>)</c-> <c- k>instanceof</c-> HTMLTemplateElement<c- p>;</c->  <c- c1>// true</c->
+  <c- p>(</c->sanitizer<c- p>.</c->sanitize<c- p>(</c->hello<c- p>))</c-> <c- k>instanceof</c-> DocumentFragment<c- p>;</c->  <c- c1>// true</c->
+  <c- p>(</c->sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"template"</c-><c- p>,</c-> <c- u>"hello"</c-><c- p>))</c-> <c- k>instanceof</c-> HTMLTemplateElement<c- p>;</c->  <c- c1>// true</c->
 </pre>
    </div>
    <h3 class="heading settled" data-level="2.2" id="api-string-handling"><span class="secno">2.2. </span><span class="content">String Handling</span><a class="self-link" href="#api-string-handling"></a></h3>
    <p>Parsing (and unparsing) strings to (or from) HTML requires a context element.
-Thus, the <code>sanitizeFor</code> method requires us to pass in a context, which we can
-in turn hand over to the HTML Parser.</p>
+Thus, the <code>sanitizeFor</code> method requires us to pass in a context, which the
+implementation can then hand over to the HTML Parser.</p>
    <p>Additionally, the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element④">Element</a></code> interface gains a <code>setHTML</code> method, which
 always knows the correct context, because it is applied to a given <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑤">Element</a></code> instance. This <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑥">Element</a></code> is the correct context for both parsing and
 unparsing its own content.</p>
@@ -1097,13 +1107,13 @@ third to the developer. <code>Element.setHTML</code> does all three. Which to us
 depends on the structure of your application, whether you can do all three
 steps simultaneously, or whether maybe the sanitization is removed (in either
 code structure or point in time) from the eventual modification of the DOM.</p>
-   <div class="example" id="example-e18526eb">
-    <a class="self-link" href="#example-e18526eb"></a> 
+   <div class="example" id="example-698cf972">
+    <a class="self-link" href="#example-698cf972"></a> 
 <pre class="language-js highlight">  <c- c1>// If the markup to be sanitized is already available as a tree, for example</c->
   <c- c1>// from an embedded frame, one can use sanitize:</c->
   document<c- p>.</c->getElementById<c- p>(</c-><c- u>"target"</c-><c- p>).</c->replaceChildren<c- p>(</c->
     sanitizer<c- p>.</c->sanitize<c- p>(</c->
-      document<c- p>.</c->querySelector<c- p>(</c-><c- u>"iframe#myframe"</c-><c- p>).</c->contentWindow<c- p>.</c->document<c- p>.</c->body<c- p>));</c->
+      document<c- p>.</c->querySelector<c- p>(</c-><c- u>"iframe#myframe"</c-><c- p>).</c->contentWindow<c- p>.</c->document<c- p>));</c->
 
   <c- c1>// If the markup to be sanitized is present in string form, but we already</c->
   <c- c1>// have the element we want to insert in available:</c->
@@ -1112,9 +1122,9 @@ code structure or point in time) from the eventual modification of the DOM.</p>
 
   <c- c1>// If the markup to be sanitized is present in string form, but we don’t want</c->
   <c- c1>// to do the DOM insertion now:</c->
-  <c- a>let</c-> no_xss <c- o>=</c-> sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"dic"</c-><c- p>,</c-> untrusted_input<c- p>);</c->
+  <c- a>let</c-> no_xss <c- o>=</c-> sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"div"</c-><c- p>,</c-> untrusted_input<c- p>);</c->
   <c- c1>// ... much later ...</c->
-  document<c- p>.</c->querySelector<c- p>(</c-><c- u>"div#targetdiv"</c-><c- p>).</c->replaceChildren<c- p>(</c->no_xss<c- p>.</c->children<c- p>);</c->
+  document<c- p>.</c->querySelector<c- p>(</c-><c- u>"div#targetdiv"</c-><c- p>).</c->replaceChildren<c- p>(...</c->no_xss<c- p>.</c->childNodes<c- p>);</c->
 
   <c- c1>// Note that parsing HTML depends on the current context in many ways, some</c->
   <c- c1>// subtle, some not so much. Supplying a different context than what the</c->
@@ -1142,9 +1152,9 @@ identical to the input.
    </div>
    <div class="note" role="note">
      Note: <code>Sanitizer.sanitizeFor</code> and <code>Element.setHTML</code> can replace the
-    respective other. Both are provided, since they support different use cases. 
-    <div class="example" id="example-f76e42e3">
-     <a class="self-link" href="#example-f76e42e3"></a> 
+    respective other. Both are provided since they support different use cases. 
+    <div class="example" id="example-5e37cdc9">
+     <a class="self-link" href="#example-5e37cdc9"></a> 
 <pre class="language-js highlight">    <c- c1>// sanitizeFor, based on SetInnerHTML.</c->
     <c- a>function</c-> sanitizeFor<c- p>(</c->element<c- p>,</c-> input<c- p>)</c-> <c- p>{</c->
       <c- a>const</c-> elem <c- o>=</c-> document<c- p>.</c->createElement<c- p>(</c->element<c- p>);</c->
@@ -1154,7 +1164,7 @@ identical to the input.
 
     <c- c1>// setHTML, based on sanitizeFor.</c->
     <c- a>function</c-> setHTML<c- p>(</c->input<c- p>,</c-> sanitizer<c- p>)</c-> <c- p>{</c->
-      <c- k>this</c-><c- p>.</c->replaceChildren<c- p>(</c->sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- k>this</c-><c- p>.</c->localName<c- p>,</c-> input<c- p>).</c->children<c- p>);</c->
+      <c- k>this</c-><c- p>.</c->replaceChildren<c- p>(...</c->sanitizer<c- p>.</c->sanitizeFor<c- p>(</c-><c- k>this</c-><c- p>.</c->localName<c- p>,</c-> input<c- p>).</c->childNodes<c- p>);</c->
     <c- p>}</c->
 </pre>
     </div>
@@ -1166,13 +1176,13 @@ not received an explicit configuration, for example when being
 constructed without any parameters, then the <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration①">default configuration</a> value
 is used as the configuration object.</p>
 <pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-sanitizerconfig"><code><c- g>SanitizerConfig</c-></code></dfn> {
-  <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-allowelements"><code><c- g>allowElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowelements"></a></dfn>;
-  <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence①"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-blockelements"><code><c- g>blockElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-blockelements"></a></dfn>;
-  <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence②"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑤"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-dropelements"><code><c- g>dropElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropelements"></a></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-allowelements"><code><c- g>allowElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowelements"></a></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence①"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-blockelements"><code><c- g>blockElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-blockelements"></a></dfn>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence②"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑤"><c- b>DOMString</c-></a>> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="sequence<DOMString> " id="dom-sanitizerconfig-dropelements"><code><c- g>dropElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropelements"></a></dfn>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist" id="ref-for-typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="AttributeMatchList " id="dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowattributes"></a></dfn>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist" id="ref-for-typedefdef-attributematchlist①"><c- n>AttributeMatchList</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="AttributeMatchList " id="dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropattributes"></a></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcustomelements"></a></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcomments"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcustomelements"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcomments"></a></dfn>;
 };
 </pre>
    <dl>
@@ -1214,9 +1224,10 @@ is used as the configuration object.</p>
    <p class="note" role="note"><span>Note:</span> Element names are normalized, following the rules of the HTML Parser.
   This means elements are usually lowercase, except for a small-ish number
   of mixed case element names in non-HTML namespaces (SVG, MathML).</p>
-   <div class="example" id="example-95365679">
-    <a class="self-link" href="#example-95365679"></a> 
-<pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>;</c->
+   <div class="example" id="example-fe7e1384">
+    <a class="self-link" href="#example-fe7e1384"></a> 
+<pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> to_node<c- p>(</c-><c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>);</c->
+  <c- a>const</c-> script_sample <c- o>=</c-> to_node<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
 
   <c- c1>// Some text &lt;b>with&lt;/b> text tags.</c->
   <c- k>new</c-> Sanitizer<c- p>({</c->allowElements<c- o>:</c-> <c- p>[</c-> <c- u>"b"</c-> <c- p>]}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
@@ -1233,7 +1244,7 @@ is used as the configuration object.</p>
   <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c->sample<c- p>);</c->  <c- c1>// Will output sample unmodified.</c->
 
   <c- c1>// Scripts will be blocked: "abc alert(1) def"</c->
-  <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c-><c- u>"abc &lt;script>alert(1)&lt;/script> def"</c-><c- p>);</c->
+  <c- k>new</c-> Sanitizer<c- p>().</c->sanitize<c- p>(</c->script_sample<c- p>);</c->
 </pre>
    </div>
    <p>In addition to allow and block lists for elements and attributes, there are
@@ -1280,11 +1291,11 @@ also options to configure some node or element types.</p>
    <p>An <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-match-list">attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given <var>attribute</var> belonging to an <var>element</var> matches an <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list②">attribute match list</a>, if the
 attribute’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name">local name</a> is a key in the match list, and element’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name">local name</a> or <code>"*"</code> are found in the attribute’s value list.</p>
-<pre class="idl highlight def"><c- b>typedef</c-> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-record" id="ref-for-idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a>>> <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></dfn>;
+<pre class="idl highlight def"><c- b>typedef</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-record" id="ref-for-idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a>>> <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></dfn>;
 </pre>
-   <div class="example" id="example-c4b9f233">
-    <a class="self-link" href="#example-c4b9f233"></a> Examples for attributes and attribute match lists: 
-<pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> <c- u>"&lt;span id='span1' class='theclass' style='font-weight: bold'>hello&lt;/span>"</c-><c- p>;</c->
+   <div class="example" id="example-1002d69f">
+    <a class="self-link" href="#example-1002d69f"></a> Examples for attributes and attribute match lists: 
+<pre class="language-js highlight">  <c- a>const</c-> sample <c- o>=</c-> to_node<c- p>(</c-><c- u>"&lt;span id='span1' class='theclass' style='font-weight: bold'>hello&lt;/span>"</c-><c- p>);</c->
 
   <c- c1>// Allow only &lt;span style>: &lt;span style='font-weight: bold'>...&lt;/span></c->
   <c- k>new</c-> Sanitizer<c- p>({</c->allowAttributes<c- o>:</c-> <c- p>{</c-><c- u>"style"</c-><c- o>:</c-> <c- p>[</c-><c- u>"span"</c-><c- p>]}}).</c->sanitize<c- p>(</c->sample<c- p>);</c->
@@ -1371,7 +1382,7 @@ these steps:
       <p>Let <var>node</var> be an HTML element created by running the steps
  of the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-create-element" id="ref-for-concept-create-element">creating an element</a> algorithm with the current document, <var>element</var>, the [[HTML namespace]], and no optional parameters.</p>
      <li data-md>
-      <p>If the the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element">determine the baseline configuration for an element</a> algorithm
+      <p>If the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element">determine the baseline configuration for an element</a> algorithm
  for the element <var>node</var> is anything other than <code>keep</code>, then return <code>null</code>.</p>
      <li data-md>
       <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a>,
@@ -1394,8 +1405,8 @@ these steps:
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="sanitizeAndSet" data-noexport id="sanitizeandset">sanitize and set</dfn> a <var>value</var> using a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①">Sanitizer</a></code> <var>sanitizer</var> on an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> node <var>this</var>, run these steps: 
     <ol>
      <li data-md>
-      <p>If the the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element①">determine the baseline configuration for an element</a> algorithm
- for the element <var>this</var> is anything other than <code>keep</code>, then throw a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and return.</p>
+      <p>If the result of running the steps of the <a data-link-type="dfn" href="#determine-the-baseline-configuration-for-an-element" id="ref-for-determine-the-baseline-configuration-for-an-element①">determine the baseline configuration for an element</a> algorithm
+ for the element <var>this</var> is anything other than <code>keep</code>, then throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and return.</p>
      <li data-md>
       <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a> with <var>this</var> as the <code>context node</code> and <var>value</var> as <code>markup</code>.</p>
      <li data-md>
@@ -1600,7 +1611,7 @@ run these steps:
     </ol>
     <p class="note" role="note"><span>Note:</span> The definition of stricter actions ensures that the built-in baseline
       configuration cannot be overriden, and therefor forms a hard guarantee
-      for all Sanitizer instances. (Likewise for attributes.)</p>
+      for all Sanitizer instances. Likewise for attributes.</p>
    </div>
    <div class="algorithm" data-algorithm="effective attribute configuration">
      To determine a Sanitizer <var>sanitizer</var>’s <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="effective-attribute-configuration">effective attribute configuration</dfn> for an attribute <var>attr</var> attached to an element <var>element</var>, run these steps: 
@@ -1642,7 +1653,7 @@ or <code>custom</code>. Let <var>element kind</var> be:
       <p><code>regular</code>, otherwise.</p>
     </ul>
    </div>
-   <p class="issue" id="issue-40748180"><a class="self-link" href="#issue-40748180"></a> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a></p>
+   <p class="issue" id="issue-40748180"><a class="self-link" href="#issue-40748180"></a> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">[Issue #WICG/sanitizer-api#72]</a></p>
    <div class="algorithm" data-algorithm="determine the effective configuration for an element">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="determine-the-effective-configuration-for-an-element">determine the effective configuration for an element</dfn> <var>element</var>,
 given a <a data-link-type="dfn" href="#configuration-object" id="ref-for-configuration-object⑧">configuration object</a> <var>config</var>, run these steps: 
@@ -1718,7 +1729,7 @@ as legacy or unusual constructs.</p>
    <p>The defaults and baseline are defined by three JSON constants, <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>, <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list①">baseline attribute allow list</a>, <a data-link-type="dfn" href="#default-configuration" id="ref-for-default-configuration⑦">default configuration</a>. For better readability, these have been moved to
 an <a href="#constants">appendix A</a>.</p>
    <h2 class="heading settled" data-level="4" id="security-considerations"><span class="secno">4. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
-   <p>The Sanitizer API is intended to prevent DOM-Based Cross-Site Scripting
+   <p>The Sanitizer API is intended to prevent DOM-based Cross-Site Scripting
 by traversing a supplied HTML content and removing elements and attributes
 according to a configuration. The specified API must not support
 the construction of a Sanitizer object that leaves script-capable markup in
@@ -1741,7 +1752,7 @@ the malicious content.</p>
 default state, but can be configured to remove <code>id</code> and <code>name</code> attributes.</p>
    <h3 class="heading settled" data-level="4.3" id="script-gadgets"><span class="secno">4.3. </span><span class="content">XSS with Script gadgets</span><a class="self-link" href="#script-gadgets"></a></h3>
    <p><em>This section is not normative.</em></p>
-   <p>Script gadgets is a technique in which an attacker uses existing application
+   <p>Script gadgets are a technique in which an attacker uses existing application
 code from popular JavaScript libraries to cause their own code to execute.
 This is often done by injecting innocent-looking code or seemingly inert
 DOM nodes that is only parsed and interpreted by a framework which then
@@ -3266,7 +3277,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
-   <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#idl-DOMString">https://webidl.spec.whatwg.org/#idl-DOMString</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-idl-DOMString">2.1. Sanitizer API</a> <a href="#ref-for-idl-DOMString①">(2)</a> <a href="#ref-for-idl-DOMString②">(3)</a>
     <li><a href="#ref-for-idl-DOMString③">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-DOMString④">(2)</a> <a href="#ref-for-idl-DOMString⑤">(3)</a>
@@ -3274,44 +3285,44 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-Exposed">
-   <a href="https://heycam.github.io/webidl/#Exposed">https://heycam.github.io/webidl/#Exposed</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#Exposed">https://webidl.spec.whatwg.org/#Exposed</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-Exposed">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-SecureContext">
-   <a href="https://heycam.github.io/webidl/#SecureContext">https://heycam.github.io/webidl/#SecureContext</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#SecureContext">https://webidl.spec.whatwg.org/#SecureContext</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-SecureContext">2.1. Sanitizer API</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-exceptiondef-typeerror">
-   <a href="https://heycam.github.io/webidl/#exceptiondef-typeerror">https://heycam.github.io/webidl/#exceptiondef-typeerror</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror">https://webidl.spec.whatwg.org/#exceptiondef-typeerror</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-exceptiondef-typeerror">3.1. API Implementation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
-   <a href="https://heycam.github.io/webidl/#idl-boolean">https://heycam.github.io/webidl/#idl-boolean</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#idl-boolean">https://webidl.spec.whatwg.org/#idl-boolean</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-boolean①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-record">
-   <a href="https://heycam.github.io/webidl/#idl-record">https://heycam.github.io/webidl/#idl-record</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#idl-record">https://webidl.spec.whatwg.org/#idl-record</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-idl-record">2.3.1. Attribute Match Lists</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-sequence">
-   <a href="https://heycam.github.io/webidl/#idl-sequence">https://heycam.github.io/webidl/#idl-sequence</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#idl-sequence">https://webidl.spec.whatwg.org/#idl-sequence</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-idl-sequence">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-sequence①">(2)</a> <a href="#ref-for-idl-sequence②">(3)</a>
     <li><a href="#ref-for-idl-sequence③">2.3.1. Attribute Match Lists</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-undefined">
-   <a href="https://heycam.github.io/webidl/#idl-undefined">https://heycam.github.io/webidl/#idl-undefined</a><b>Referenced in:</b>
+   <a href="https://webidl.spec.whatwg.org/#idl-undefined">https://webidl.spec.whatwg.org/#idl-undefined</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-idl-undefined">2.1. Sanitizer API</a>
    </ul>
@@ -3368,7 +3379,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-list-iterate">iterate</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
+    <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
      <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
@@ -3389,8 +3400,8 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-infra">[INFRA]
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
-   <dt id="biblio-webidl">[WebIDL]
-   <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
+   <dt id="biblio-webidl">[WEBIDL]
+   <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
@@ -3409,38 +3420,38 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def">[
-  <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
-  <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext"><c- g>SecureContext</c-></a>
+  <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->),
+  <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>
 ] <c- b>interface</c-> <a href="#sanitizer"><code><c- g>Sanitizer</c-></code></a> {
   <a class="idl-code" data-link-type="constructor" href="#dom-sanitizer-sanitizer"><c- g>constructor</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a href="#dom-sanitizer-sanitizer-config-config"><code><c- g>config</c-></code></a> = {});
 
   <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitize"><c- g>sanitize</c-></a>((<a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#document"><c- n>Document</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#documentfragment"><c- n>DocumentFragment</c-></a>) <a href="#dom-sanitizer-sanitize-input-input"><code><c- g>input</c-></code></a>);
-  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element"><c- n>Element</c-></a>? <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizefor"><c- g>sanitizeFor</c-></a>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-sanitizefor-element-input-element"><code><c- g>element</c-></code></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-sanitizefor-element-input-input"><code><c- g>input</c-></code></a>);
+  <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#element"><c- n>Element</c-></a>? <a class="idl-code" data-link-type="method" href="#dom-sanitizer-sanitizefor"><c- g>sanitizeFor</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-sanitizefor-element-input-element"><code><c- g>element</c-></code></a>, <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-sanitizer-sanitizefor-element-input-input"><code><c- g>input</c-></code></a>);
 
   <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getconfiguration"><c- g>getConfiguration</c-></a>();
   <c- b>static</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-getdefaultconfiguration"><c- g>getDefaultConfiguration</c-></a>();
 };
 
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://dom.spec.whatwg.org/#element"><c- g>Element</c-></a> {
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-element-sethtml"><c- g>setHTML</c-></a>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-element-sethtml-input-sanitizer-input"><code><c- g>input</c-></code></a>, <a data-link-type="idl-name" href="#sanitizer"><c- n>Sanitizer</c-></a> <a href="#dom-element-sethtml-input-sanitizer-sanitizer"><code><c- g>sanitizer</c-></code></a>);
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-element-sethtml"><c- g>setHTML</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-element-sethtml-input-sanitizer-input"><code><c- g>input</c-></code></a>, <a data-link-type="idl-name" href="#sanitizer"><c- n>Sanitizer</c-></a> <a href="#dom-element-sethtml-input-sanitizer-sanitizer"><code><c- g>sanitizer</c-></code></a>);
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-sanitizerconfig"><code><c- g>SanitizerConfig</c-></code></a> {
-  <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-allowelements"><code><c- g>allowElements</c-></code></a>;
-  <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-blockelements"><code><c- g>blockElements</c-></code></a>;
-  <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-dropelements"><code><c- g>dropElements</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-allowelements"><code><c- g>allowElements</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-blockelements"><code><c- g>blockElements</c-></code></a>;
+  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>> <a data-type="sequence<DOMString> " href="#dom-sanitizerconfig-dropelements"><code><c- g>dropElements</c-></code></a>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <a data-type="AttributeMatchList " href="#dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code></a>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <a data-type="AttributeMatchList " href="#dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code></a>;
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code></a>;
 };
 
-<c- b>typedef</c-> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><c- b>DOMString</c-></a>>> <a href="#typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></a>;
+<c- b>typedef</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a>>> <a href="#typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></a>;
 
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> Is this how we specify a method on existing class "owned" by a different spe?<a href="#issue-a1fbc017"> ↵ </a></div>
+   <div class="issue"> Is this how we specify a method on existing class "owned" by a different spe? <a class="issue-return" href="#issue-a1fbc017" title="Jump to section">↵</a></div>
    <div class="issue">
      This method will not work for SVG and/or MathML elements, which are not
   currently supported. When they are, replace the steps above with: 
@@ -3458,12 +3469,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li data-md>
       <p>Return <var>name</var>.</p>
     </ol>
-    <a href="#issue-a500b4fb"> ↵ </a>
+     <a class="issue-return" href="#issue-a500b4fb" title="Jump to section">↵</a>
    </div>
-   <div class="issue"> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">&lt;https://github.com/WICG/sanitizer-api/issues/72></a><a href="#issue-40748180"> ↵ </a></div>
+   <div class="issue"> The spec currently treats MathML and SVG as <code>unknown</code> content and therefore blocked by default. This needs to be fixed. <a href="https://github.com/WICG/sanitizer-api/issues/72">[Issue #WICG/sanitizer-api#72]</a> <a class="issue-return" href="#issue-40748180" title="Jump to section">↵</a></div>
    <div class="issue"> The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
-    purposes only.<a href="#issue-53c87d03"> ↵ </a></div>
+    purposes only. <a class="issue-return" href="#issue-53c87d03" title="Jump to section">↵</a></div>
   </div>
   <aside class="dfn-panel" data-for="sanitizer">
    <b><a href="#sanitizer">#sanitizer</a></b><b>Referenced in:</b>
