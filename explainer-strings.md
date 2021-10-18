@@ -149,14 +149,14 @@ For `Sanitizer.sanitizeFor`, the developers will have to tell the Sanitizer
 what context they'd like to use the result in. The return value will contain
 both the result, and a newly created element that acts as the context node.
 Conveniently, a container for these two values already exists: It's the elment
-node`itself. Hence we return it, with the sanitized input as the children of the
+node itself. Hence we return it, with the sanitized input as the children of the
 newly created context element.
 
 ### An Escape Hatch
 
 What if a developer wishes to have a string-to-string API after all? Maybe
 because an existing code base was built around the assumption of a
-string-to-string sanitization library, and it isn'd easy to refactor?
+string-to-string sanitization library, and it isn't easy to refactor?
 
 The `Sanitizer.sanitizeFor`method provides an escape hatch:
 `.sanitizeFor(value, context).innerHTML`.
@@ -170,6 +170,7 @@ the developer.
 
 # Please Try it Out
 
-Please try out the Sanitizer API. The [FAQ shows how to enable it in current
+Please [try out the Sanitizer API](https://sanitizer-api.dev/?).
+The [FAQ shows how to enable it in current
 browsers](https://github.com/WICG/sanitizer-api/blob/main/faq.md#can-i-use-the-sanitizer-in-my-app). Issues and suggestions can be reported on
 [GitHub](https://github.com/WICG/sanitizer-api/issues).
