@@ -585,7 +585,7 @@ An <dfn>attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given |attribute|
 belonging to an |element| matches an [=attribute match list=], if the
 attribute's [=Attr/local name=] is a key in the match list, and element's
-[=Element/local name=] or `"*"` are found in the attribute's value list.
+[=Element/local name=] or `"*"` are found in the |attribute|'s value list.
 
 <pre class="idl">
   typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
@@ -612,6 +612,63 @@ Examples for attributes and attribute match lists:
   new Sanitizer({dropAttributes: {"id": ["*"]}}).sanitize(sample);
 ```
 </div>
+
+## Namespaces ## {#namespaces}
+
+The [[HTML]] spec embeds [[HTML#svg-0|SVG]] and [[HTML#mathml|MathML]] content,
+and supports [[HTML#attributes-2|several namespaced attributes]].
+This affects the Sanitizer API: Specifying namespaced element and
+attribute names in the [=configuration object=], and matching nodes against
+those configuration entries.
+
+When specifying element names, a set of fixed namespace
+designators can be used to designate elements in the non-default namespaces.
+Namespace designator and element names are seperated by a
+whitespace character. `svg` designates elements in the [=SVG namespace=], and
+`math` designates elements in the [=MathML namespace=]. All other elements are
+in the HTML namespace.
+
+<div class="example">
+* `"p"`: The `p` element in the [=HTML namespace=].
+* `"svg line"`: The `line` element in the [=SVG namespace=].
+* `"math mfrac"`: The `mfrac` element in the [=MathML namespace=].
+* `"dc contributor"`: Invalid. This does not designate an element, and
+  will not match anything.
+* `"svg"`: The `svg` element in the [=HTML namespace=].
+  <br>
+  Note the apparent
+  mismatch between the element name and the namespace it is in. This example
+  is valid, but is almost certainly not what the author intended. The
+  HTML parser has rules to translate the `<svg>` token into the `svg` element
+  in the [=SVG namespace=] (assuming a proper parsing context), while the
+  Sanitizer API does not.
+* `"svg svg"`: The `svg` element in the [=SVG namespace=].
+
+</div>
+
+Note: The [[HTML]] specification solves the problem of dstinguishing HTML
+  from "foreign" elements largely through the parse context. This means isn't
+  available to the Sanitizer [=configuration object=], since there is no
+  hierarchy or other relationship between configuration items. Therefore,
+  we introduce the explicit namespace designator.
+
+Attributes follow the syntax of [[HTML#attributes-2|HTML]], specifically the
+table at the end of the subsection. The attribute names listed there will be
+recognized as being in the namespace also listed there. No other namespaced
+attributes will be recognized.
+
+<div class="example">
+* `lang`: An attribute named `lang`, which is not in any namespace.
+* `xml:lang`: An attribute named `lang` in the namespace `"http://www.w3.org/XML/1998/namespace"`, which is usually known as the [=XML namespace=].
+* `my:lang`: An attribute `my:lang`, which is not in any namespace. This is valid, but probably not what you want.
+
+</div>
+
+Note: This Sanitizer API makes no attempt at supporting arbitrary namespaces
+  or the [XML Namespaces](https://www.w3.org/TR/xml-names/) specification in
+  general. We restrict notation and other support to the element and attribute
+  namespaces supported in the [[HTML]] specification, and there are no
+  recognized namespace designators that the ones listed here.
 
 # Algorithms # {#algorithms}
 
@@ -671,9 +728,8 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
   1. Let |node| be an HTML element created by running the steps
      of the [=creating an element=] algorithm with the current document,
      |element|, the [[HTML namespace]], and no optional parameters.
-  1. If the result of running the steps of the
-     [=determine the baseline configuration for an element=] algorithm
-     for the element |node| is anything other than `keep`, then return
+  1. If the [=element kind=] of |node| is `regular` and if the
+     [=baseline element allow list=] does not contain |element|, then return
      `null`.
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm),
@@ -690,10 +746,9 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
 {{SetHTMLOptions}} |options| dictionary on an {{Element}} node |this|,
 run these steps:
-  1. If the result of running the steps of the
-     [=determine the baseline configuration for an element=] algorithm
-     for the element |this| is anything other than `keep`, then throw a
-     {{TypeError}} and return.
+  1. If the [=element kind=] of |this| is `regular` and if the
+     [=baseline element allow list=] does not contain |this|'s
+     [=Element/local name=], then throw a {{TypeError}} and return.
   1. If the {{sanitizer}} member [=map/exists=] in the |options|
      {{SetHTMLOptions}} dictionary,
     1. then let |sanitizer| be [=map/get|the value=] of the {{sanitizer}} member
@@ -770,14 +825,12 @@ To <dfn>sanitize a node</dfn> named |node| run these steps:
     1. [=list/iterate|For each=] |attr| in |element|'s
        [=Element/attribute list=]:
       1. Let |attr action| be the resulf of running the
-         [=effective attribute configuration=] algorithm on |sanitizer|,
-         |attr|, and |element|.
+         [=sanitize action for an attribute=] algorithm on |attr| and |element|.
       1. If |attr action| is different from `keep`, remove |attr| from
         |element|.
     1. Run the steps to [=handle funky elements=] on |element|.
-    1. Let |action| be the resulf of running the
-       [=effective element configuration=] algorithm on |sanitizer| and
-       |element|.
+    1. Let |action| be the result of running the
+       [=sanitize action for an element=] on |element|.
     1. Return |action|.
   1. If |node| is a {{Document}} or {{DocumentFragment}} node and if |node|'s
      [=parent=] is null: Return `keep`.
@@ -789,7 +842,6 @@ To <dfn>sanitize a node</dfn> named |node| run these steps:
   1. If |node| is a {{Text}} [=node=]: Return `keep`.
   1. Return `drop`
 </div>
-
 
 Some HTML elements require special treatment in a way that can't be easily
 expressed in terms of configuration options or other algorithms. The following
@@ -816,68 +868,119 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
     1. Remove the `formaction` attribute from |element|.
 </div>
 
-### The Effective Configuration ### {#configuration}
-
-A Sanitizer is potentially complex, so we will define a helper
-construct, the *effective configuration*. This is mostly a specification
-convenience and allows us to explain a Sanitizer's operation in two steps:
-One, how to derive the effective configuration, and two, define the
-Sanitzer's operation based on it.
-
-An effective configuration maps a given |element| or a given pair of
-|element| and |attribute| to a [=sanitize action=].
+## Matching Against The Configuration ### {#configuration}
 
 A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
-To determine the <dfn>stricter action</dfn> of two [=sanitize actions=], pick
-the 'larger' of the two actions assuming a transitively defined order with
-`drop` &gt; `block`, and `block` &gt; `keep`.
 
-<div algorithm="effective element configuration">
-To determine a Sanitizer |sanitizer|'s
-<dfn>effective element configuration</dfn> for an element |element|,
+<div algorithm="element matches an element name">
+To determine whether an <dfn>|element| matches an element |name|</dfn>,
 run these steps:
-  1. Let |config| be |sanitizer|'s [=configuration object=].
-  1. Let |baseline action| be the result of running the steps of the
-     [=determine the baseline configuration for an element=] algorithm
-     for the element |element|.
-  1. Let |config action| be the result of running the steps of the
-     [=determine the effective configuration for an element=] algorithm
-     for the element |element| and the config |config|.
-  1. Return the [=stricter action=] of |baseline action| and |config action|.
 
-Note: The definition of stricter actions ensures that the built-in baseline
-      configuration cannot be overriden, and therefor forms a hard guarantee
-      for all Sanitizer instances. Likewise for attributes.
+  1. Let |tokens| be the result of running the [=split on ascii whitespace=]
+     algorithm on |name|.
+  1. If |tokens| contains one string,
+     and if |element| is in the [=HTML namespace=]
+     and if |element|'s [=Element/local name=] is an
+     [=ASCII case-insensitive=] match for the the one string in |tokens|:
+     Return `true`.
+  1. If |tokens| contains two strings
+     and if the first of these strings is "svg"
+     and if |element| is in the [=SVG namespace=]
+     and if |element|'s [=Element/local name=] is an
+     [=ASCII case-insensitive=] match for the second string in |tokens|:
+     Return `true`.
+  1. If |tokens| contains two strings
+     and if the first of these strings is "math"
+     and if |element| is in the [=MathML namespace=]
+     and if |element|'s [=Element/local name=] is an
+     [=ASCII case-insensitive=] match for the second string in |tokens|:
+     Return `true`.
+  1. Return `false`.
 </div>
 
-<div algorithm="effective attribute configuration">
-To determine a Sanitizer |sanitizer|'s
-<dfn>effective attribute configuration</dfn> for an attribute |attr|
-attached to an element |element|, run these steps:
-  1. Let |config| be |sanitizer|'s [=configuration object=].
-  1. Let |baseline action| be the result of running the steps of the
-     [=determine the baseline configuration for an attribute=] algorithm
-     on the attribute |attr|.
-  1. Let |config action| be the result of running the steps of the
-     [=determine the effective configuration for an attribute=] algorithm
-     on the attribute |attr|, with the element |element| and the
-     config |config|.
-  1. Return the [=stricter action=] of |baseline action| and |config action|.
+<div algorithm="sanitize action for an element">
+To determine the <dfn>sanitize action for an |element|</dfn>, given a
+Sanitizer configuration dictionary |config|, run these steps:
+
+  1. Let |kind| be |element|'s [=element kind=].
+  1. If |element| is of `regular` |kind| and does not
+     [=element matches an element name|match=] any name in the
+     [=baseline element allow list=]: Return `drop`.
+  1. If |element| is of `custom` |kind| and if |config|'s
+     [=allow custom elements option=] is unset or set to anything other
+     than `true`: Return `drop`.
+  1. If |element| [=element matches an element name|matches=] any name
+     in |config|'s [=element drop list=]: Return `drop`.
+  1. If |element| [=element matches an element name|matches=] any name
+     in |config|'s [=element block list=]: Return `block`.
+  1. If |config| has a non-empty [=element allow list=] and
+     if |element| [=element matches an element name|matches=] any name
+     in |config|'s [=element allow list=]: Return `block`.
+  1. If |config| does not have a non-empty [=element allow list=] and
+     if |element| does not [=element matches an element name|match=] any name
+     in the [=default configuration=]'s [=element allow list=]: Return `block`.
+  1. Return `keep`.
 </div>
 
-Before describing how an effective configuration is derived, we need a
-helper definition:
+
+<div algorithm="attribute matches an attribute match list">
+To determine whether an <dfn>|attribute| matches an [=attribute match
+list=]</dfn> |list|, run these steps:
+
+  1. If |attribute|'s does not match the [=attribute match list=] |list|'s
+     [key](https://webidl.spec.whatwg.org/#idl-record) and if the key is
+     not `"*"`: Return `false`.
+  1. Let |element| be the |attribute|'s {{ownerElement}}'s
+     [=Element/local name=].
+  1. If |list|'s [value](https://webidl.spec.whatwg.org/#idl-record) does not
+     contain |element| and value is not `["*"]`: Return `false`.
+  1. Return `true`.
+
+
+Note: The element names in the Sanitizer configuration are normalized according
+  to normalization step in the HTML Parser, just like elements'
+  [=Element/local names=] are. Thus, the comparison is effectively case
+  insensitive.
+</div>
+
+<div algorithm="sanitize action for an attribute">
+To determine the <dfn>sanitize action for an |attribute|</dfn> given a Sanitizer
+configuration dictionary |config|, run these steps:
+
+  1. Let |kind| be |attribute|'s [=attribute kind=].
+  1. If |attribute| is of `regular` |kind| and its name does not match any
+     name in the [=baseline attribute allow list=]: Return `drop`.
+  1. If |attribute| [=attribute matches an attribute match list|matches=] any
+     [=attribute match list=] in |config|'s [=attribute drop list=]: Return
+     `drop`.
+  1. If |config| has a non-empty [=attribute allow list=] and if |attribute|
+     does not [=attribute matches an attribute match list|match=] any
+     [=attribute match list=] in |config|'s [=attribute allow list=]: Return
+     `drop`.
+  1. If |config| has an empty [=attribute allow list=] and if |attribute|
+     does not [=attribute matches an attribute match list|match=] any
+     [=attribute match list=] in the [=default configuration=]'s
+     [=attribute allow list=]: Return `drop`.
+  1. Return `keep`.
+</div>
 
 <div algorithm="element kind">
 The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`,
 or `custom`. Let <var ignore>element kind</var> be:
-  - `custom`, if |element|'s [=Element/local name=] is a [=valid custom element name=],
+  - `custom`, if |element|'s [=Element/local name=] is a
+     [=valid custom element name=],
   - `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
      [=Element/local name=] denotes an unknown element &mdash; that is, if the
      [=element interface=] the [[HTML]] specification assigns to it would
      be {{HTMLUnknownElement}},
   - `regular`, otherwise.
 </div>
+
+
+Issue(WICG/sanitizer-api#72): The spec currently treats MathML and SVG as
+    `unknown` content and therefore blocked by default. This needs to be fixed.
+
+
 
 <div algorithm="attribute kind">
 Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
@@ -887,74 +990,12 @@ or `unknown`. Let <var ignore>attribute kind</var> be:
   - `regular`, otherwise.
 </div>
 
-Issue(WICG/sanitizer-api#72): The spec currently treats MathML and SVG as
-    `unknown` content and therefore blocked by default. This needs to be fixed.
-
-<div algorithm="determine the effective configuration for an element">
-To <dfn>determine the effective configuration for an element</dfn> |element|,
-given a [=configuration object=] |config|, run these steps:
-
-  1. If |element|'s [=element kind=] is `custom` and if |config|'s
-     [=allow custom elements option=] is unset or set to anything other
-     than `true`: Return `drop`.
-  1. Let |name| be the |element|'s [=Element/local name=].
-  1. If |name| is in |config|'s [=element drop list=]: Return `drop`.
-  1. If |name| is in |config|'s [=element block list=]: Return `block`.
-  1. If |config| has a non-empty [=element allow list=] and |name| is not
-     in |config|'s [=element allow list=]: Return `block`.
-  1. If |config| does not have a non-empty [=element allow list=] and
-     |name| is not it the [=default configuration=]'s [=element allow list=]:
-     Return `block`.
-  1. Return `keep`.
-</div>
-
-<div algorithm="determine the effective configuration for an attribute">
-To <dfn>determine the effective configuration for an attribute</dfn> |attr|,
-attached to an element |element|, and given a [=configuration object=] |config|,
-run these steps:
-
-  1. if |config|'s [=attribute drop list=] contains |attr|'s [=Attr/local name=]
-     as key, and the associated value contains either |element|'s
-     ]=Element/local name=] or the string `"*"`: Return `drop`.
-  1. If |config| has a non-empty [=attribute allow list=] and it does not
-     contain |attr|'s [=Attr/local name=], or
-     |attr|'s associated value contains neither
-     |element|'s [=Element/local name=] nor the string `"*"`: Return `drop`.
-  1. if |config| does not have a non-empty [=attribute allow list=] and
-     [=default configuration=]'s [=attribute allow list=] does not contain
-     |attr|'s [=Attr/local name=], or |attr|'s associated value contains
-     neither |element|'s [=Element/local name=] nor the string `"*"`:
-     Return `drop`.
-  1. Return `keep`.
-
-Note: The element names in the Sanitizer configuration are normalized according
-  to normalization step in the HTML Parser, just like elements'
-  [=Element/local names=] are. Thus, the comparison is effectively case
-  insensitive.
-</div>
 
 ## Baseline and Defaults ## {#defaults}
 
 Issue: The sanitizer baseline and defaults need to be carefully vetted, and
     are still under discussion. The values below are for illustrative
     purposes only.
-
-<div algorithm="determine the baseline configuration for an element">
-To <dfn>determine the baseline configuration for an element</dfn>
-|element|, run these steps:
-  1. if |element|'s [=element kind=] is `regular` and if |element|'s
-     [=Element/local name=] is not in the [=baseline element allow list=]:
-     Return `drop`.
-  1. Return `keep`.
-</div>
-
-<div algorithm="determine the baseline configuration for an attribute">
-To <dfn>determine the baseline configuration for an attribute</dfn>
-|attr|, run these steps:
-  1. If |attr|'s [=attribute kind=] is `regular` and if |attr|'s
-     name is not in the [=baseline attribute allow list=]: Return `drop`
-  1. Return `keep`.
-</div>
 
 The sanitizer has a built-in [=default configuration=], which is stricter than
 the baseline and aims to eliminate any script-injection possibility, as well
