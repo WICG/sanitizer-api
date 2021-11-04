@@ -980,12 +980,6 @@ or `custom`. Let <var ignore>element kind</var> be:
   - `regular`, otherwise.
 </div>
 
-
-Issue(WICG/sanitizer-api#72): The spec currently treats MathML and SVG as
-    `unknown` content and therefore blocked by default. This needs to be fixed.
-
-
-
 <div algorithm="attribute kind">
 Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
 or `unknown`. Let <var ignore>attribute kind</var> be:
