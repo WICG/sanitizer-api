@@ -584,8 +584,8 @@ A sanitizer's configuration can be queried using the
 An <dfn>attribute match list</dfn> is a map of attribute names to element names,
 where the special name "*" stands for all elements. A given |attribute|
 belonging to an |element| matches an [=attribute match list=], if the
-attribute's [=Attr/local name=] is a key in the match list, and element's
-[=Element/local name=] or `"*"` are found in the |attribute|'s value list.
+|attribute|'s name is a key in the match list, and |element|'s
+name or `"*"` are found in the |attribute|'s value list.
 
 <pre class="idl">
   typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
@@ -613,15 +613,21 @@ Examples for attributes and attribute match lists:
 ```
 </div>
 
+For [=attribute match lists=], the |attribute|'s name mostly refers to its
+[=Attr/local name=], and likewise the |element|'s name to its
+[=Element/local name=]. But for namespaced content it's a bit more complicated.
+
 ## Namespaces ## {#namespaces}
 
-The [[HTML]] spec embeds [[HTML#svg-0|SVG]] and [[HTML#mathml|MathML]] content,
-and supports [[HTML#attributes-2|several namespaced attributes]].
+The [[HTML]] spec embeds [[HTML#svg-0|SVG]] and [[HTML#mathml|MathML]] content
+and supports several [[HTML#attributes-2|namespaced attributes]].
 This affects the Sanitizer API: Specifying namespaced element and
-attribute names in the [=configuration object=], and matching nodes against
-those configuration entries.
+attribute names in the [=configuration object=] and [=attribute match lists=],
+and matching nodes against those configuration entries.
 
-When specifying element names, a set of fixed namespace
+The Sanitizer API aims to adopt the namespace model and namespace restrictions
+of the [[HTML]] specification, and to support exactly as much namespaced
+content as HTML does. When specifying element names, a set of fixed namespace
 designators can be used to designate elements in the non-default namespaces.
 Namespace designator and element names are seperated by a
 whitespace character. `svg` designates elements in the [=SVG namespace=], and
@@ -659,8 +665,11 @@ attributes will be recognized.
 
 <div class="example">
 * `lang`: An attribute named `lang`, which is not in any namespace.
-* `xml:lang`: An attribute named `lang` in the namespace `"http://www.w3.org/XML/1998/namespace"`, which is usually known as the [=XML namespace=].
-* `my:lang`: An attribute `my:lang`, which is not in any namespace. This is valid, but probably not what you want.
+* `xml:lang`: An attribute named `lang` in the namespace
+  `"http://www.w3.org/XML/1998/namespace"`, commonly known as the
+  [=XML namespace=].
+* `my:lang`: An attribute `my:lang`, which is not in any namespace.
+  This is valid, but probably not what you want.
 
 </div>
 
@@ -668,7 +677,7 @@ Note: This Sanitizer API makes no attempt at supporting arbitrary namespaces
   or the [XML Namespaces](https://www.w3.org/TR/xml-names/) specification in
   general. We restrict notation and other support to the element and attribute
   namespaces supported in the [[HTML]] specification, and there are no
-  recognized namespace designators that the ones listed here.
+  recognized namespace designators other that the ones listed here.
 
 # Algorithms # {#algorithms}
 
@@ -691,23 +700,14 @@ Note: The configuration object contains element names in the
 <div algorithm="normalize element name">
 To <dfn>normalize element name</dfn> |name|, run these steps:
   1. Convert |name| to [=ASCII lowercase=].
-  1. Return |name|.
-
-<div class="issue">
-This method will not work for SVG and/or MathML elements, which are not
-  currently supported. When they are, replace the steps above with:
-
-  1. Convert |name| to [=ASCII lowercase=].
   1. Let |prefix| be the empty string.
-  1. If |name| contains a ":" (U+003E), then split the string on it and
+  1. If |name| contains a " " (U+0020), then split the string on it and
      set |prefix| to the part before, and update |name| with the part after.
   1. If |prefix| is either "svg" or "math", then adjust the name as described
      in the "any other start tag" branch of the
      [The rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
      subchapter in the HTML parsing spec.
   1. Return |name|.
-</div>
-
 </div>
 
 <div algorithm="sanitize">
@@ -868,9 +868,33 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
     1. Remove the `formaction` attribute from |element|.
 </div>
 
-## Matching Against The Configuration ### {#configuration}
+## Matching Against The Configuration ## {#configuration}
 
 A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
+
+<div algorithm="sanitize action for an element">
+To determine the <dfn>sanitize action for an |element|</dfn>, given a
+Sanitizer configuration dictionary |config|, run these steps:
+
+  1. Let |kind| be |element|'s [=element kind=].
+  1. If |element| is of `regular` |kind| and does not
+     [=element matches an element name|match=] any name in the
+     [=baseline element allow list=]: Return `drop`.
+  1. If |element| is of `custom` |kind| and if |config|'s
+     [=allow custom elements option=] is unset or set to anything other
+     than `true`: Return `drop`.
+  1. If |element| [=element matches an element name|matches=] any name
+     in |config|'s [=element drop list=]: Return `drop`.
+  1. If |element| [=element matches an element name|matches=] any name
+     in |config|'s [=element block list=]: Return `block`.
+  1. If |config| has a non-empty [=element allow list=] and
+     if |element| [=element matches an element name|matches=] any name
+     in |config|'s [=element allow list=]: Return `block`.
+  1. If |config| does not have a non-empty [=element allow list=] and
+     if |element| does not [=element matches an element name|match=] any name
+     in the [=default configuration=]'s [=element allow list=]: Return `block`.
+  1. Return `keep`.
+</div>
 
 <div algorithm="element matches an element name">
 To determine whether an <dfn>|element| matches an element |name|</dfn>,
@@ -898,42 +922,22 @@ run these steps:
   1. Return `false`.
 </div>
 
-<div algorithm="sanitize action for an element">
-To determine the <dfn>sanitize action for an |element|</dfn>, given a
-Sanitizer configuration dictionary |config|, run these steps:
-
-  1. Let |kind| be |element|'s [=element kind=].
-  1. If |element| is of `regular` |kind| and does not
-     [=element matches an element name|match=] any name in the
-     [=baseline element allow list=]: Return `drop`.
-  1. If |element| is of `custom` |kind| and if |config|'s
-     [=allow custom elements option=] is unset or set to anything other
-     than `true`: Return `drop`.
-  1. If |element| [=element matches an element name|matches=] any name
-     in |config|'s [=element drop list=]: Return `drop`.
-  1. If |element| [=element matches an element name|matches=] any name
-     in |config|'s [=element block list=]: Return `block`.
-  1. If |config| has a non-empty [=element allow list=] and
-     if |element| [=element matches an element name|matches=] any name
-     in |config|'s [=element allow list=]: Return `block`.
-  1. If |config| does not have a non-empty [=element allow list=] and
-     if |element| does not [=element matches an element name|match=] any name
-     in the [=default configuration=]'s [=element allow list=]: Return `block`.
-  1. Return `keep`.
-</div>
-
-
 <div algorithm="attribute matches an attribute match list">
 To determine whether an <dfn>|attribute| matches an [=attribute match
 list=]</dfn> |list|, run these steps:
 
-  1. If |attribute|'s does not match the [=attribute match list=] |list|'s
+  1. If |attribute|'s [=Attr/local name=] does not match the
+     [=attribute match list=] |list|'s
      [key](https://webidl.spec.whatwg.org/#idl-record) and if the key is
      not `"*"`: Return `false`.
-  1. Let |element| be the |attribute|'s {{ownerElement}}'s
-     [=Element/local name=].
+  1. Let |element| be the |attribute|'s {{ownerElement}}.
+  1. Let |element name| be |element|'s [=Element/local name=].
+  1. If |element| is in either the [=SVG namespace|SVG=] or
+     [=MathML namespace|MathML=] namespaces, prefix |element name| with
+     the appropriate [[#namespaces|namespace designator]] plus a whitespace
+     character.
   1. If |list|'s [value](https://webidl.spec.whatwg.org/#idl-record) does not
-     contain |element| and value is not `["*"]`: Return `false`.
+     contain |element name| and value is not `["*"]`: Return `false`.
   1. Return `true`.
 
 
