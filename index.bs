@@ -694,10 +694,10 @@ run these steps:
      [=determine the baseline configuration for an element=] algorithm
      for the element |this| is anything other than `keep`, then throw a
      {{TypeError}} and return.
-  1. Let |sanitizer| be the value of the {{sanitizer}} member of the |options|
-     {{SetHTMLOptions}} dictionary, or a {{Sanitizer}} instance with the
-     [=default configuration=], if the {{sanitizer}} member does not contain
-     a {{Sanitizer}} instance.
+  1. Let |sanitizer| be [=map/get|the value=] of the {{sanitizer}} member
+     of the |options| {{SetHTMLOptions}} dictionary, or a {{Sanitizer}}
+     instance with the [=default configuration=] if the {{sanitizer}} member
+     does not [=map/exist=].
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
      with |this| as the `context node` and |value| as `markup`.
