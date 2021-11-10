@@ -727,7 +727,7 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 |DOMString| and a given |input| of type |DOMString| run these steps:
   1. Let |node| be an HTML element created by running the steps
      of the [=creating an element=] algorithm with the current document,
-     |element|, the [[HTML namespace]], and no optional parameters.
+     |element|, the [=HTML namespace=], and no optional parameters.
   1. If the [=element kind=] of |node| is `regular` and if the
      [=baseline element allow list=] does not contain |element|, then return
      `null`.
@@ -746,9 +746,9 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
 {{SetHTMLOptions}} |options| dictionary on an {{Element}} node |this|,
 run these steps:
-  1. If the [=element kind=] of |this| is `regular` and if the
-     [=baseline element allow list=] does not contain |this|'s
-     [=Element/local name=], then throw a {{TypeError}} and return.
+  1. If the [=element kind=] of |this| is `regular` and |this| does not
+     [=element matches an element name|match=] any name in the
+     [=baseline element allow list=], then throw a {{TypeError}} and return.
   1. If the {{sanitizer}} member [=map/exists=] in the |options|
      {{SetHTMLOptions}} dictionary,
     1. then let |sanitizer| be [=map/get|the value=] of the {{sanitizer}} member
