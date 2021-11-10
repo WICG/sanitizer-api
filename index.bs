@@ -312,8 +312,11 @@ The {{Element}} interface gains an additional method, `setHTML` which
 applies a string using a `Sanitizer` directly to an existing element node.
 
 <pre class="idl">
+  dictionary SetHTMLOptions {
+    Sanitizer sanitizer;
+  };
   partial interface Element {
-    undefined setHTML(DOMString input, Sanitizer sanitizer);
+    undefined setHTML(DOMString input, optional SetHTMLOptions options = {});
   };
 </pre>
 
@@ -391,7 +394,11 @@ code structure or point in time) from the eventual modification of the DOM.
   // If the markup to be sanitized is present in string form, but we already
   // have the element we want to insert in available:
   const untrusted_input = "....";
-  document.getElementById("someelement").setHTML(untrusted_input, sanitizer);
+  document.getElementById("someelement").setHTML(
+    untrusted_input, {sanitizer: sanitizer});
+
+  // Same as above, but using the default Sanitizer configuration:
+  document.getElementById("somelement").setHTML(untrusted_input);
 
   // If the markup to be sanitized is present in string form, but we don't want
   // to do the DOM insertion now:
@@ -435,12 +442,13 @@ Note: `Sanitizer.sanitizeFor` and `Element.setHTML` can replace the
     // sanitizeFor, based on SetInnerHTML.
     function sanitizeFor(element, input) {
       const elem = document.createElement(element);
-      elem.setHTML(input, this);
+      elem.setHTML(input, {sanitizer: this});
       return elem;
     }
 
     // setHTML, based on sanitizeFor.
-    function setHTML(input, sanitizer) {
+    function setHTML(input, options) {
+      const sanitizer = options?.sanitizer ?? new Sanitizer();
       this.replaceChildren(...sanitizer.sanitizeFor(this.localName, input).childNodes);
     }
     ```
@@ -679,12 +687,19 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
 </div>
 
 <div algorithm="sanitizeAndSet">
-To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using a
-{{Sanitizer}} |sanitizer| on an {{Element}} node |this|, run these steps:
+To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
+{{SetHTMLOptions}} |options| dictionary on an {{Element}} node |this|,
+run these steps:
   1. If the result of running the steps of the
      [=determine the baseline configuration for an element=] algorithm
      for the element |this| is anything other than `keep`, then throw a
      {{TypeError}} and return.
+  1. If the {{sanitizer}} member [=map/exists=] in the |options|
+     {{SetHTMLOptions}} dictionary,
+    1. then let |sanitizer| be [=map/get|the value=] of the {{sanitizer}} member
+       of the |options| {{SetHTMLOptions}} dictionary,
+    1. otherwise let |sanitizer| be the result of the [=create a Sanitizer=]
+       algorithm without a `config` parameter.
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
      with |this| as the `context node` and |value| as `markup`.
