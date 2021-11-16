@@ -581,11 +581,17 @@ A sanitizer's configuration can be queried using the
 
 ### Attribute Match Lists ### {#attr-match-list}
 
-An <dfn>attribute match list</dfn> is a map of attribute names to element names,
-where the special name "*" stands for all elements. A given |attribute|
-belonging to an |element| matches an [=attribute match list=], if the
-|attribute|'s name is a key in the match list, and |element|'s
-name or `"*"` are found in the |attribute|'s value list.
+An <dfn>attribute match list</dfn> is a map of attributes to elements,
+where the special name "*" stands for all attributes or elements.
+A given |attribute| belonging to an |element| matches an
+[=attribute match list=], if the |attribute| is a key in the match list,
+and |element| or `"*"` are found in the |attribute|'s value list.
+
+For elements in the [[HTML namespace]] and non-namespaced attributes - i.e.,
+what one may think of as normal [[HTML]] elements and attributes - elements
+are named by their [=Element/local name=], and
+[=Attr/local name|attributes, too=]. For "foreign" elements and attributes,
+the rules are explained in the [[#namespaces]] chapter below.
 
 <pre class="idl">
   typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
@@ -613,19 +619,14 @@ Examples for attributes and attribute match lists:
 ```
 </div>
 
-For [=attribute match lists=], the |attribute|'s name mostly refers to its
-[=Attr/local name=], and likewise the |element|'s name to its
-[=Element/local name=]. But for namespaced content it's a bit more complicated.
-
 ## Namespaces ## {#namespaces}
 
 The [[HTML]] spec embeds [[HTML#svg-0|SVG]] and [[HTML#mathml|MathML]] content
 and supports several [[HTML#attributes-2|namespaced attributes]].
-This affects the Sanitizer API: Specifying namespaced element and
-attribute names in the [=configuration object=] and [=attribute match lists=],
-and matching nodes against those configuration entries.
+To support these, the [=configuration object=] supports
+namespaced element and attribute names in the [=attribute match lists=].
 
-The Sanitizer API aims to adopt the namespace model and namespace restrictions
+The Sanitizer API uses the namespace model and namespace restrictions
 of the [[HTML]] specification, and to support exactly as much namespaced
 content as HTML does. When specifying element names, a set of fixed namespace
 designators can be used to designate elements in the non-default namespaces.
@@ -652,9 +653,9 @@ in the HTML namespace.
 
 </div>
 
-Note: The [[HTML]] specification solves the problem of dstinguishing HTML
-  from "foreign" elements largely through the parse context. This means isn't
-  available to the Sanitizer [=configuration object=], since there is no
+Note: The [[HTML]] specification solves the problem of distinguishing HTML
+  from "foreign" elements largely through the parse context. This distinction
+  isn't available to the Sanitizer [=configuration object=], since there is no
   hierarchy or other relationship between configuration items. Therefore,
   we introduce the explicit namespace designator.
 
@@ -674,7 +675,7 @@ attributes will be recognized.
 </div>
 
 Note: This Sanitizer API makes no attempt at supporting arbitrary namespaces
-  or the [XML Namespaces](https://www.w3.org/TR/xml-names/) specification in
+  or the [[XML-NAMES|Namespaces in XML]] specification in
   general. We restrict notation and other support to the element and attribute
   namespaces supported in the [[HTML]] specification, and there are no
   recognized namespace designators other that the ones listed here.
@@ -702,7 +703,7 @@ To <dfn>normalize element name</dfn> |name|, run these steps:
   1. Convert |name| to [=ASCII lowercase=].
   1. Let |prefix| be the empty string.
   1. If |name| contains a " " (U+0020), then split the string on it and
-     set |prefix| to the part before, and update |name| with the part after.
+     set |prefix| to the part before, and set |name| with the part after.
   1. If |prefix| is either "svg" or "math", then adjust the name as described
      in the "any other start tag" branch of the
      [The rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
@@ -723,20 +724,21 @@ run these steps:
 </div>
 
 <div algorithm="sanitizeFor">
-To <dfn lt="sanitizeFor">sanitize for</dfn> an |element| name of type
+To <dfn lt="sanitizeFor">sanitize for</dfn> an |element name| of type
 |DOMString| and a given |input| of type |DOMString| run these steps:
-  1. Let |node| be an HTML element created by running the steps
+  1. Let |element| be an HTML element created by running the steps
      of the [=creating an element=] algorithm with the current document,
-     |element|, the [=HTML namespace=], and no optional parameters.
-  1. If the [=element kind=] of |node| is `regular` and if the
-     [=baseline element allow list=] does not contain |element|, then return
-     `null`.
+     |element name|, the [=HTML namespace=], and no optional parameters.
+  1. If the [=element kind=] of |element| is `regular` and if the
+     [=baseline element allow list=] does not contain |element name|,
+     then return `null`.
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm),
-     with |node| as the `context element` and |input| as `markup`.
+     with |element| as the `context element` and |input| as `markup`.
   1. Run the steps of the [=sanitize a document fragment=] algorithm on |fragment|.
-  1. [=Replace all=] with |fragment| as the `node` and |node| as the `parent`.
-  1. Return |node|.
+  1. [=Replace all=] with |fragment| as the `node` and |element| as the
+     `parent`.
+  1. Return |element|.
 <wpt>
   sanitizer-sanitizeFor.https.tentative.html
 </wpt>
@@ -824,7 +826,7 @@ To <dfn>sanitize a node</dfn> named |node| run these steps:
     1. Let |element| be |node|'s element.
     1. [=list/iterate|For each=] |attr| in |element|'s
        [=Element/attribute list=]:
-      1. Let |attr action| be the resulf of running the
+      1. Let |attr action| be the result of running the
          [=sanitize action for an attribute=] algorithm on |attr| and |element|.
       1. If |attr action| is different from `keep`, remove |attr| from
         |element|.
@@ -877,7 +879,7 @@ To determine the <dfn>sanitize action for an |element|</dfn>, given a
 Sanitizer configuration dictionary |config|, run these steps:
 
   1. Let |kind| be |element|'s [=element kind=].
-  1. If |element| is of `regular` |kind| and does not
+  1. If |kind| is `regular` and |element| does not
      [=element matches an element name|match=] any name in the
      [=baseline element allow list=]: Return `drop`.
   1. If |element| is of `custom` |kind| and if |config|'s
@@ -902,22 +904,22 @@ run these steps:
 
   1. Let |tokens| be the result of running the [=split on ascii whitespace=]
      algorithm on |name|.
-  1. If |tokens| contains one string,
+  1. If |tokens|' [=list/size=] is 1,
      and if |element| is in the [=HTML namespace=]
      and if |element|'s [=Element/local name=] is an
-     [=ASCII case-insensitive=] match for the the one string in |tokens|:
+     [=ASCII case-insensitive=] match for |tokens|[0]:
      Return `true`.
-  1. If |tokens| contains two strings
-     and if the first of these strings is "svg"
+  1. If |tokens|' [=list/size=] is 2,
+     and if [tokens|[0] is "svg"
      and if |element| is in the [=SVG namespace=]
      and if |element|'s [=Element/local name=] is an
-     [=ASCII case-insensitive=] match for the second string in |tokens|:
+     [=ASCII case-insensitive=] match for |tokens|[1]:
      Return `true`.
-  1. If |tokens| contains two strings
-     and if the first of these strings is "math"
+  1. If |tokens|'s [=list/size=] is 2,
+     and if |tokens|[0] is "math"
      and if |element| is in the [=MathML namespace=]
      and if |element|'s [=Element/local name=] is an
-     [=ASCII case-insensitive=] match for the second string in |tokens|:
+     [=ASCII case-insensitive=] match for |tokens|[1]:
      Return `true`.
   1. Return `false`.
 </div>
@@ -952,7 +954,7 @@ To determine the <dfn>sanitize action for an |attribute|</dfn> given a Sanitizer
 configuration dictionary |config|, run these steps:
 
   1. Let |kind| be |attribute|'s [=attribute kind=].
-  1. If |attribute| is of `regular` |kind| and its name does not match any
+  1. If |kind| is `regular` and |attribute|'s name does not match any
      name in the [=baseline attribute allow list=]: Return `drop`.
   1. If |attribute| [=attribute matches an attribute match list|matches=] any
      [=attribute match list=] in |config|'s [=attribute drop list=]: Return
