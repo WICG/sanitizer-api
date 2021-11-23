@@ -631,15 +631,15 @@ of the [[HTML]] specification, and to support exactly as much namespaced
 content as HTML does. When specifying element names, a set of fixed namespace
 designators can be used to designate elements in the non-default namespaces.
 Namespace designator and element names are seperated by a
-whitespace character. `svg` designates elements in the [=SVG namespace=], and
-`math` designates elements in the [=MathML namespace=]. All other elements are
-in the HTML namespace.
+colon (`":"`) character. `svg` designates elements in the [=SVG namespace=],
+and `math` designates elements in the [=MathML namespace=]. All other elements
+are in the HTML namespace.
 
 <div class="example">
 * `"p"`: The `p` element in the [=HTML namespace=].
-* `"svg line"`: The `line` element in the [=SVG namespace=].
-* `"math mfrac"`: The `mfrac` element in the [=MathML namespace=].
-* `"dc contributor"`: Invalid. This does not designate an element, and
+* `"svg:line"`: The `line` element in the [=SVG namespace=].
+* `"math:mfrac"`: The `mfrac` element in the [=MathML namespace=].
+* `"dc:contributor"`: Invalid. This does not designate an element, and
   will not match anything.
 * `"svg"`: The `svg` element in the [=HTML namespace=].
   <br>
@@ -649,7 +649,7 @@ in the HTML namespace.
   HTML parser has rules to translate the `<svg>` token into the `svg` element
   in the [=SVG namespace=] (assuming a proper parsing context), while the
   Sanitizer API does not.
-* `"svg svg"`: The `svg` element in the [=SVG namespace=].
+* `"svg:svg"`: The `svg` element in the [=SVG namespace=].
 
 </div>
 
@@ -658,6 +658,11 @@ Note: The [[HTML]] specification solves the problem of distinguishing HTML
   isn't available to the Sanitizer [=configuration object=], since there is no
   hierarchy or other relationship between configuration items. Therefore,
   we introduce the explicit namespace designator.
+
+Note: The colon (`":"`, U+003C) character is a valid character in
+  [[HTML#start-tags|HTML tag names]].
+  But because we use it here unconditionally
+  to designate namespaces, it is not possible to sanitize such a name.
 
 Attributes follow the syntax of [[HTML#attributes-2|HTML]], specifically the
 table at the end of the subsection. The attribute names listed there will be
@@ -691,6 +696,7 @@ these steps:
   1. Create a copy of |config|.
   1. Normalize all element names in |config|'s copy by running the
      [=normalize element name=] algorithm on each of them.
+  1. Remove all element names that were normalized to `null`.
   1. Return |sanitizer|, with |config|'s copy as its [=configuration object=].
 </div>
 
@@ -701,14 +707,20 @@ Note: The configuration object contains element names in the
 <div algorithm="normalize element name">
 To <dfn>normalize element name</dfn> |name|, run these steps:
   1. Convert |name| to [=ASCII lowercase=].
-  1. Let |prefix| be the empty string.
-  1. If |name| contains a " " (U+0020), then split the string on it and
-     set |prefix| to the part before, and set |name| with the part after.
-  1. If |prefix| is either "svg" or "math", then adjust the name as described
-     in the "any other start tag" branch of the
-     [The rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
-     subchapter in the HTML parsing spec.
-  1. Return |name|.
+  1. Let |tokens| be the result of
+     [=strictly split a string|strictly splitting=] |name| on the delimiter
+     ":" (U+003A).
+  1. If |tokens|' [=list/size=] is 1, then return |tokens|[0].
+  1. If |tokens|' [=list/size=] is 2 and
+     |tokens|[0] equals either "svg" or "math", then:
+    1. Adjust |tokens|[1] as described in the "any other start tag"
+       branch of [the rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
+       subchapter in the HTML parsing spec.
+    1. Return the result of running [=concatenate=] on the list comprised of:
+       1. |tokens|[0]
+       1. `":"` (The string comprised of only the code point U+003A.)
+       1. |tokens|[1]
+  1. Return `null`.
 </div>
 
 <div algorithm="sanitize">
@@ -902,8 +914,9 @@ Sanitizer configuration dictionary |config|, run these steps:
 To determine whether an <dfn>|element| matches an element |name|</dfn>,
 run these steps:
 
-  1. Let |tokens| be the result of running the [=split on ascii whitespace=]
-     algorithm on |name|.
+  1. Let |tokens| be the result of running the
+     [=strictly split a string=] algorithm on |name| with the delimiter
+     ":" (U+003A).
   1. If |tokens|' [=list/size=] is 1,
      and if |element| is in the [=HTML namespace=]
      and if |element|'s [=Element/local name=] is an
