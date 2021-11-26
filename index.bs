@@ -631,9 +631,9 @@ of the [[HTML]] specification, and to support exactly as much namespaced
 content as HTML does. When specifying element names, a set of fixed namespace
 designators can be used to designate elements in the non-default namespaces.
 Namespace designator and element names are seperated by a
-colon (`":"`) character. `svg` designates elements in the [=SVG namespace=],
-and `math` designates elements in the [=MathML namespace=]. All other elements
-are in the HTML namespace.
+colon (`":"`, U+003A) character. `svg` designates elements in the
+[=SVG namespace=], and `math` designates elements in the [=MathML namespace=].
+All other elements are in the HTML namespace.
 
 <div class="example">
 * `"p"`: The `p` element in the [=HTML namespace=].
@@ -659,10 +659,12 @@ Note: The [[HTML]] specification solves the problem of distinguishing HTML
   hierarchy or other relationship between configuration items. Therefore,
   we introduce the explicit namespace designator.
 
-Note: The colon (`":"`, U+003C) character is a valid character in
+Note: The colon (`":"`, U+003A) character is a valid character in
   [[HTML#start-tags|HTML tag names]].
   But because we use it here unconditionally
-  to designate namespaces, it is not possible to sanitize such a name.
+  to designate namespaces, it is not possible to add a name with a colon in it
+  to an [=element allow list=]. Therefore all such elements would be blocked,
+  regardless of the configuration.
 
 Attributes follow the syntax of [[HTML#attributes-2|HTML]], specifically the
 table at the end of the subsection. The attribute names listed there will be
@@ -712,14 +714,12 @@ To <dfn>normalize element name</dfn> |name|, run these steps:
      ":" (U+003A).
   1. If |tokens|' [=list/size=] is 1, then return |tokens|[0].
   1. If |tokens|' [=list/size=] is 2 and
-     |tokens|[0] equals either "svg" or "math", then:
+     |tokens|[0] [=string/is=] either "svg" or "math", then:
     1. Adjust |tokens|[1] as described in the "any other start tag"
        branch of [the rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
        subchapter in the HTML parsing spec.
-    1. Return the result of running [=concatenate=] on the list comprised of:
-       1. |tokens|[0]
-       1. `":"` (The string comprised of only the code point U+003A.)
-       1. |tokens|[1]
+    1. Return the [=concatenation=] of the [=/list=]
+       &#x00AB;`|tokens|[0]`,`":"` (U+003A),`|tokens|[1]`&#x00BB;.
   1. Return `null`.
 </div>
 
