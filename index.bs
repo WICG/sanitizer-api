@@ -756,6 +756,8 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element name| of type
 </wpt>
 </div>
 
+Issue: Does the `.sanitizeFor` element name require namespace-related processing?
+
 <div algorithm="sanitizeAndSet">
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
 {{SetHTMLOptions}} |options| dictionary on an {{Element}} node |this|,
