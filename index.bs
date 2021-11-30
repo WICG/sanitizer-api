@@ -631,9 +631,13 @@ of the [[HTML]] specification, and to support exactly as much namespaced
 content as HTML does. When specifying element names, a set of fixed namespace
 designators can be used to designate elements in the non-default namespaces.
 Namespace designator and element names are seperated by a
-colon (`":"`, U+003A) character. `svg` designates elements in the
-[=SVG namespace=], and `math` designates elements in the [=MathML namespace=].
-All other elements are in the HTML namespace.
+colon (`":"`, U+003A) character. The following namespace designators are
+recognized:
+* `svg`: designates elements in the [=SVG namespace=].
+* `math`: designates elements in the [=MathML namespace=].
+* All elements without namespace designator are in the [=HTML namespace=].
+
+No other namespace designators are valid.
 
 <div class="example">
 * `"p"`: The `p` element in the [=HTML namespace=].
@@ -756,7 +760,7 @@ To <dfn lt="sanitizeFor">sanitize for</dfn> an |element name| of type
 </wpt>
 </div>
 
-Issue: Does the `.sanitizeFor` element name require namespace-related processing?
+Issue(140): Does the `.sanitizeFor` element name require namespace-related processing?
 
 <div algorithm="sanitizeAndSet">
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
