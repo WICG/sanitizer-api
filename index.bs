@@ -106,7 +106,7 @@ element.replaceChildren(s.sanitize(userControlledTree));
 // Case: The input is available as a string, and we know the element to insert
 // it into:
 let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
-element.setHTML(userControlledInput, s);
+element.setHTML(userControlledInput, {sanitizer: s});
 
 // Case: The input is available as a string, and we know which type of element
 // we will eventually insert it to, but can't or don't want to perform the
@@ -201,7 +201,7 @@ const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
 // We want to insert the HTML in user_string into a target element with id
 // target. That is, we want the equivalent of target.innerHTML = value, except
 // without the XSS risks.
-document.getElementById("target").setHTML(user_string, sanitizer);
+document.getElementById("target").setHTML(user_string, {sanitizer: sanitizer});
 ```
 </div>
 
@@ -320,9 +320,9 @@ applies a string using a `Sanitizer` directly to an existing element node.
   };
 </pre>
 
-* The <dfn method for=Element><code>setHTML(<var>input</var>, <var>sanitizer</var>)</code></dfn>
+* The <dfn method for=Element><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn>
   method steps are to run the [=sanitizeAndSet=] algorithm on |input| and
-  |sanitizer|.
+  |options|.
 
 Issue: Is this how we specify a method on existing class "owned" by a different spe?
 
