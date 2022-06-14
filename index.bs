@@ -292,7 +292,7 @@ handle additional, application-specific use cases.
 
 * The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
     <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to run the [=create a sanitizer=] algorithm steps with |config| as
+    are to run the [=create a sanitizer=] algorithm steps with |config| and |this| as
     parameter.
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
@@ -321,7 +321,7 @@ applies a string using a `Sanitizer` directly to an existing element node.
 </pre>
 
 * The <dfn method for=Element><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn>
-  method steps are to run the [=sanitizeAndSet=] algorithm on |input| and
+  method steps are to run the [=sanitizeAndSet=] algorithm on [=this=], |input|, and
   |options|.
 
 Issue: Is this how we specify a method on existing class "owned" by a different spe?
@@ -704,6 +704,8 @@ these steps:
      [=normalize element name=] algorithm on each of them.
   1. Remove all element names that were normalized to `null`.
   1. Return |sanitizer|, with |config|'s copy as its [=configuration object=].
+
+  Issue(148): This should explicitly state the config's properties in which element names are found and modify the config wih map operations.
 </div>
 
 Note: The configuration object contains element names in the
@@ -727,6 +729,8 @@ To <dfn>normalize element name</dfn> |name|, run these steps:
   1. Return `null`.
 </div>
 
+  Issue(145): We need to make a decision about normalizing lowercase/uppercase for element names at all. Other APIs are also case-sensitive (e.g., MutationObserver).
+
 <div algorithm="sanitize">
 To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
 run these steps:
@@ -738,6 +742,8 @@ run these steps:
   sanitizer-sanitize.https.tentative.html
 </wpt>
 </div>
+
+Issue(149): The sanitize algorithm does not need to run "create a document fragment".
 
 <div algorithm="sanitizeFor">
 To <dfn lt="sanitizeFor">sanitize for</dfn> an |element name| of type
@@ -782,7 +788,7 @@ run these steps:
      on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
   1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
 <wpt>
-  element-set-sanitized-html.https.tentative.html
+  element-set-sanitized-html.https.html
 </wpt>
 </div>
 
@@ -792,15 +798,17 @@ run these steps:
   1. Let |sanitizer| be the current Sanitizer.
   1. Let |config| be |sanitizer|'s [=configuration object=], or the
      [=default configuration=] if no [=configuration object=] was given.
-  1. Let |result| be a newly constructed SanitizerOptions dictionary.
+  1. Let |result| be a newly constructed {{SanitizerConfig}} dictionary.
   1. For any non-empty member of |config| whose key is declared in
-     SanitizerOptions, copy the value to |result|.
+     {{SanitizerConfig}}, copy the value to |result|.
   1. Return |result|.
 <wpt>
-  sanitizer-config.https.tentative.html
-  sanitizer-query-config.https.tenative.html
+  sanitizer-config.https.html
+  sanitizer-query-config.https.html
 </wpt>
 </div>
+
+Issue(150): IDL is taking care of most steps in "query the sanitizer config". Clean up.
 
 ## Helper Definitions ## {#helper-algorithms}
 
@@ -808,60 +816,65 @@ run these steps:
 To <dfn>create a document fragment</dfn> named |fragment| from an
 |input| of type `Document or DocumentFragment`, run these steps:
 
+  1. Let |node| be null.
   1. Switch based on |input|'s type:
     1. If |input| is of type {{DocumentFragment}}, then:
-      1. Let |node| refer to |input|.
+      1. Set |node| to |input|.
     1. If |input| is of type {{Document}}, then:
-      1. Let |node| refer to |input|'s `documentElement`.
+      1. Set |node| to |input|'s `documentElement`.
   1. Let |clone| be the result of running [=clone a node=] on |node| with the
-     `clone children flag` set to `true`.
-  1. Let `fragment` be the result of {{createDocumentFragment}}.
-  1. [=/Append=] the node |clone| to the parent |fragment|.
+     <i>clone children flag</i> set.
+  1. Let |fragment| be a new {{DocumentFragment}} whose [=Node/node document=] is |node|'s [=Node/node document=].
+  1. [=/Append=] the node |clone| to |fragment|.
   1. Return |fragment|.
 </div>
 
 ## Sanitization Algorithms ## {#sanitizer-algorithms}
 
 <div algorithm="sanitize a document fragment">
-To <dfn>sanitize a document fragment</dfn> named |fragment| run these steps:
-  1. Let |m| be a map that maps nodes to a [=sanitize action=]
+To <dfn>sanitize a document fragment</dfn> named |fragment| with a {{Sanitizer}} |sanitizer| run these steps:
+  1. Let |m| be a map that maps nodes to a [=sanitize action=].
   1. Let |nodes| be a list containing the [=inclusive descendants=] of
      |fragment|, in [=tree order=].
   1. [=list/iterate|For each=] |node| in |nodes|:
     1. Let |action| be the result of running the [=sanitize a node=] algorithm
-       on |node|.
-    1. Insert |node| and |action| into |m|
+       on |node| with |sanitizer|.
+    1. [=map/Set=] |m|[|node|] to |action|.
   1. [=list/iterate|For each=] |node| in |nodes|:
-    1. If m[node] is `drop`, remove the |node| and all children from |fragment|.
-    1. If m[node] is `block`, replace the |node| with all of its element and text node children from |fragment|.
-    1. If m[node] is `keep`, do nothing.
+    1. If |m|[|node|] is `drop`, [=/remove=] |node|.
+    1. If |m|[|node|] is `block`, [=/replace=] |node| with all of its element and text node children from |fragment|.
+    1. If |m|[|node|] is `keep`, do nothing.
 </div>
 
+Issue(156): The step above needs to explicitly iterate over the children and insert into parent. It could collect them in a variable or do things in place, but this is a bit too imprecise.
+
 <div algorithm="sanitize a node">
-To <dfn>sanitize a node</dfn> named |node| run these steps:
-  1. Let |sanitizer| be the current Sanitizer.
+To <dfn>sanitize a node</dfn> named |node| with |sanitizer| run these steps:
+  1. [=Assert=]: |node| is not a {{Document}} or {{DocumentFragment}} or {{Attr}} or {{DocumentType}} [=/node=].
   1. If |node| is an element node:
-    1. Let |element| be |node|'s element.
+    1. Let |element| be |node|.
     1. [=list/iterate|For each=] |attr| in |element|'s
        [=Element/attribute list=]:
       1. Let |attr action| be the result of running the
          [=sanitize action for an attribute=] algorithm on |attr| and |element|.
-      1. If |attr action| is different from `keep`, remove |attr| from
-        |element|.
+      1. If |attr action| is different from `keep`, [=remove an attribute=] supplying |attr|.
     1. Run the steps to [=handle funky elements=] on |element|.
     1. Let |action| be the result of running the
        [=sanitize action for an element=] on |element|.
     1. Return |action|.
-  1. If |node| is a {{Document}} or {{DocumentFragment}} node and if |node|'s
-     [=parent=] is null: Return `keep`.
   1. If |node| is a {{Comment}} [=node=]:
     1. Let |config| be |sanitizer|'s [=configuration object=], or the
        [=default configuration=] if no [=configuration object=] was given.
     1. If |config|'s [=allow comments option=] [=map/exists=] and `|config|[allowComments]` is `true`: Return `keep`.
     1. Return `drop`.
   1. If |node| is a {{Text}} [=node=]: Return `keep`.
-  1. Return `drop`
+  1. [=Assert=]: |node| is a {{ProcessingInstruction}}
+  1. Return `drop`.
 </div>
+
+Issue(151): The [=sanitize action for an attribute=] algorithm parameters do not match.
+Issue(152): consider renaming "configuration object" to "configuration dictionary".
+Issue(153): consider creating an effective sanitizer config. Also, IDL guarantees that a config is ALWAYS given. The question is really whether the members exists.
 
 Some HTML elements require special treatment in a way that can't be easily
 expressed in terms of configuration options or other algorithms. The following
@@ -872,8 +885,7 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
 
   1. If |element|'s [=element interface=] is {{HTMLTemplateElement}}:
     1. Run the steps of the [=sanitize a document fragment=] algorithm on
-       |element|'s |content| attribute, and replace |element|'s |content|
-       attribute with the result.
+       |element|'s [=template contents=] attribute.
     1. Drop all child nodes of |element|.
   1. If |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}}
      mixin, and if |element|'s `protocol` property is "javascript:":
@@ -888,30 +900,34 @@ To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
     1. Remove the `formaction` attribute from |element|.
 </div>
 
+Issue(147): Do not use the interfaces as an abstraction.
+Issue(154): Export and refer funky element properties more precisely.
+
+
 ## Matching Against The Configuration ## {#configuration}
 
-A <dfn>sanitize action</dfn> can have the values `keep`, `drop`, or `block`.
+A <dfn>sanitize action</dfn> is `keep`, `drop`, or `block`.
 
 <div algorithm="sanitize action for an element">
 To determine the <dfn>sanitize action for an |element|</dfn>, given a
-Sanitizer configuration dictionary |config|, run these steps:
+{{SanitizerConfig}} |config|, run these steps:
 
   1. Let |kind| be |element|'s [=element kind=].
   1. If |kind| is `regular` and |element| does not
      [=element matches an element name|match=] any name in the
      [=baseline element allow list=]: Return `drop`.
-  1. If |element| is of `custom` |kind| and if |config|'s
-     [=allow custom elements option=] does not [=map/exist=] or if
-     `|config|[allowCustomElements]` is `false`: Return `drop`.
+  1. If |kind| is `custom` and if |config|["{{SanitizerConfig/allowCustomElements}}"] does not [=map/exist=] or if
+     |config|["{{SanitizerConfig/allowCustomElements}}"] is `false`: Return `drop`.
   1. If |element| [=element matches an element name|matches=] any name
-     in |config|'s [=element drop list=]: Return `drop`.
+     in |config|["{{SanitizerConfig/dropElements}}"]: Return `drop`.
   1. If |element| [=element matches an element name|matches=] any name
-     in |config|'s [=element block list=]: Return `block`.
-  1. If [=element allow list=] [=map/exists=] in |config|:
-     1. Then : Let |allow list| be `|config|["allowElements"]`.
-     1. Otherwise: Let |allow list| be the [=default configuration=]'s
+     in |config|["{{SanitizerConfig/blockElements}}"]: Return `block`.
+  1. Let |allow list| be null.
+  1. If "{{SanitizerConfig/allowElements}}" [=map/exists=] in |config|:
+     1. Then : Set |allow list| to |config|["{{SanitizerConfig/allowElements}}"].
+     1. Otherwise: Set |allow list| to the [=default configuration=]'s
         [=element allow list=].
-  1. If |element| [=element matches an element name|matches=] any name
+  1. If |element| does not [=element matches an element name|match=] any name
      in |allow list|: Return `block`.
   1. Return `keep`.
 </div>
@@ -943,6 +959,9 @@ run these steps:
   1. Return `false`.
 </div>
 
+Issue(146): Whitespaces or colons?
+Issue(145): Clarify capitalization and normalization.
+
 <div algorithm="attribute matches an attribute match list">
 To determine whether an <dfn>|attribute| matches an [=attribute match
 list=]</dfn> |list|, run these steps:
@@ -951,7 +970,7 @@ list=]</dfn> |list|, run these steps:
      [=attribute match list=] |list|'s
      [key](https://webidl.spec.whatwg.org/#idl-record) and if the key is
      not `"*"`: Return `false`.
-  1. Let |element| be the |attribute|'s {{ownerElement}}.
+  1. Let |element| be the |attribute|'s {{Element}}.
   1. Let |element name| be |element|'s [=Element/local name=].
   1. If |element| is a in either the [=SVG namespace|SVG=] or
      [=MathML namespace|MathML=] namespaces (i.e., it's a
@@ -963,6 +982,7 @@ list=]</dfn> |list|, run these steps:
      contain |element name| and value is not `["*"]`: Return `false`.
   1. Return `true`.
 
+Issue(146): This algorithm is still using a whitespace.
 
 Note: The element names in the Sanitizer configuration are normalized according
   to normalization step in the HTML Parser, just like elements'
@@ -975,14 +995,14 @@ To determine the <dfn>sanitize action for an |attribute|</dfn> given a Sanitizer
 configuration dictionary |config|, run these steps:
 
   1. Let |kind| be |attribute|'s [=attribute kind=].
-  1. If |kind| is `regular` and |attribute|'s name does not match any
+  1. If |kind| is `regular` and |attribute|'s [=Attr/local name=] does not match any
      name in the [=baseline attribute allow list=]: Return `drop`.
   1. If |attribute| [=attribute matches an attribute match list|matches=] any
      [=attribute match list=] in |config|'s [=attribute drop list=]: Return
      `drop`.
   1. If [=attribute allow list=] [=map/exists=] in |config|:
      1. Then let |allow list| be `|config|["allowAttributes"]`.
-     1. Otherwise: Let |allow list| be the [=default configuration=|'s
+     1. Otherwise: Let |allow list| be the [=default configuration=]'s
         [=attribute allow list=].
   1. If |attribute| does not
      [=attribute matches an attribute match list|match=] any
@@ -999,6 +1019,9 @@ or `custom`. Let <var ignore>element kind</var> be:
      [=Element/local name=] denotes an unknown element &mdash; that is, if the
      [=element interface=] the [[HTML]] specification assigns to it would
      be {{HTMLUnknownElement}},
+
+Issue(147): We do not want to use the interface (e.g., "applet" and "blink" are HTMLUnknownElement)
+
   - `regular`, otherwise.
 </div>
 
@@ -1007,6 +1030,9 @@ Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
 or `unknown`. Let <var ignore>attribute kind</var> be:
   - `unknown`, if the [[HTML]] specification does not assign any meaning to
      |attribute|'s name.
+
+  Issue(147): Again, this needs to be more specific. Historical, obsolete, conforming, non-conforming (e.g. bgcolor). It is desirable we make a sanitizer-specific list.
+
   - `regular`, otherwise.
 </div>
 
