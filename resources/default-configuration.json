@@ -1,5 +1,6 @@
 {
   "allowCustomElements": false,
+  "allowUnknownElements": false,
   "allowElements": [
     "a",
     "abbr",

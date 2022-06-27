@@ -315,6 +315,7 @@ applies a string using a `Sanitizer` directly to an existing element node.
   dictionary SetHTMLOptions {
     Sanitizer sanitizer;
   };
+  [SecureContext]
   partial interface Element {
     undefined setHTML(DOMString input, optional SetHTMLOptions options = {});
   };
@@ -323,6 +324,12 @@ applies a string using a `Sanitizer` directly to an existing element node.
 * The <dfn method for=Element><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn>
   method steps are to run the [=sanitizeAndSet=] algorithm on [=this=], |input|, and
   |options|.
+
+<wpt>
+sanitizer-secure-context.https.html
+sanitizer-insecure-context.html
+idlharness.https.window.js
+</wpt>
 
 Issue: Is this how we specify a method on existing class "owned" by a different spe?
 
@@ -471,6 +478,7 @@ is used as the configuration object.
     AttributeMatchList allowAttributes;
     AttributeMatchList dropAttributes;
     boolean allowCustomElements;
+    boolean allowUnknownElements;
     boolean allowComments;
   };
 </pre>
@@ -492,10 +500,17 @@ is used as the configuration object.
 :: The <dfn>attribute drop list</dfn>  is an [=attribute match list=], which
    determines whether an attribute (on a given element) should be dropped.
 : allowCustomElements
-:: The <dfn>allow custom elements option</dfn> determines whether
+:: The {{SanitizerConfig/allowCustomElements|allow custom elements}} option
+   determines whether
    [=custom elements=] are to be considered. The default is to drop them.
    If this option is true, custom elements will still be checked against all
    other built-in or configured checks.
+: allowUnknownElements
+:: The {{SanitizerConfig/allowUnknownElements|allow unknown elements}} option
+   determines whether unknown HTML elements are to be considered. The default
+   is to drop them.
+   If this option is true, unkown HTML elements will still be checked against
+   all other built-in or configured checks.
 : allowComments
 :: The <dfn>allow comments option</dfn> determines whether HTML comments are
    allowed.
@@ -690,6 +705,10 @@ Note: This Sanitizer API makes no attempt at supporting arbitrary namespaces
   general. We restrict notation and other support to the element and attribute
   namespaces supported in the [[HTML]] specification, and there are no
   recognized namespace designators other that the ones listed here.
+
+<wpt>
+sanitizer-names.https.html
+</wpt>
 
 # Algorithms # {#algorithms}
 
@@ -918,6 +937,9 @@ To determine the <dfn>sanitize action for an |element|</dfn>, given a
      [=baseline element allow list=]: Return `drop`.
   1. If |kind| is `custom` and if |config|["{{SanitizerConfig/allowCustomElements}}"] does not [=map/exist=] or if
      |config|["{{SanitizerConfig/allowCustomElements}}"] is `false`: Return `drop`.
+  1. If |kind| is `unknown` and if |config|["{{SanitizerConfig/allowUnknownElements}}"]
+     does not [=map/exist=] or it |config|["{{SanitizerConfig/allowUnknownElements}}"]
+     is `false`: Return `drop`.
   1. If |element| [=element matches an element name|matches=] any name
      in |config|["{{SanitizerConfig/dropElements}}"]: Return `drop`.
   1. If |element| [=element matches an element name|matches=] any name
@@ -1096,8 +1118,9 @@ DOM nodes that is only parsed and interpreted by a framework which then
 performs the execution of JavaScript based on that input.
 
 The Sanitizer API can not prevent these attacks, but requires page authors to
-explicitly allow attributes and elements that are unknown to HTML and markup
-that is known to be widely used for templating and framework-specific code,
+explicitly allow unknown elements in general, and authors must additionally
+explicitly configure unknown attributes and elements and markup that is known
+to be widely used for templating and framework-specific code,
 like `data-` and `slot` attributes and elements like `<slot>` and `<template>`.
 We believe that these restrictions are not exhaustive and encourage page
 authors to examine their third party libraries for this behavior.
