@@ -784,7 +784,7 @@ run these steps:
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
      with |this| as the `context node` and |value| as `markup`.
-  1. Run the steos if the [=sanitize a document fragment=] algorithm
+  1. Run the steps if the [=sanitize a document fragment=] algorithm
      on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
   1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
 <wpt>
@@ -842,7 +842,7 @@ To <dfn>sanitize a document fragment</dfn> named |fragment| with a {{Sanitizer}}
     1. [=map/Set=] |m|[|node|] to |action|.
   1. [=list/iterate|For each=] |node| in |nodes|:
     1. If |m|[|node|] is `drop`, [=/remove=] |node|.
-    1. If |m|[|node|] is `block`, [=/replace=] |node| with all of its element and text node children from |fragment|.
+    1. If |m|[|node|] is `block`, invoke [=Replace with=] with |node| as |this| and |node|'s [=tree/children=] as |nodes|.
     1. If |m|[|node|] is `keep`, do nothing.
 </div>
 
