@@ -478,7 +478,7 @@ is used as the configuration object.
     AttributeMatchList allowAttributes;
     AttributeMatchList dropAttributes;
     boolean allowCustomElements;
-    boolean allowUnknownElements;
+    boolean allowUnknownMarkup;
     boolean allowComments;
   };
 </pre>
@@ -505,8 +505,8 @@ is used as the configuration object.
    [=custom elements=] are to be considered. The default is to drop them.
    If this option is true, custom elements will still be checked against all
    other built-in or configured checks.
-: allowUnknownElements
-:: The {{SanitizerConfig/allowUnknownElements|allow unknown elements}} option
+: allowUnknownMarkup
+:: The {{SanitizerConfig/allowUnknownMarkup|allow unknown markup}} option
    determines whether unknown HTML elements are to be considered. The default
    is to drop them.
    If this option is true, unkown HTML elements will still be checked against
@@ -937,8 +937,8 @@ To determine the <dfn>sanitize action for an |element|</dfn>, given a
      [=baseline element allow list=]: Return `drop`.
   1. If |kind| is `custom` and if |config|["{{SanitizerConfig/allowCustomElements}}"] does not [=map/exist=] or if
      |config|["{{SanitizerConfig/allowCustomElements}}"] is `false`: Return `drop`.
-  1. If |kind| is `unknown` and if |config|["{{SanitizerConfig/allowUnknownElements}}"]
-     does not [=map/exist=] or it |config|["{{SanitizerConfig/allowUnknownElements}}"]
+  1. If |kind| is `unknown` and if |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
+     does not [=map/exist=] or it |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
      is `false`: Return `drop`.
   1. If |element| [=element matches an element name|matches=] any name
      in |config|["{{SanitizerConfig/dropElements}}"]: Return `drop`.
@@ -1017,6 +1017,9 @@ To determine the <dfn>sanitize action for an |attribute|</dfn> given a Sanitizer
 configuration dictionary |config|, run these steps:
 
   1. Let |kind| be |attribute|'s [=attribute kind=].
+  1. If |kind| is `unknown` and if |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
+     does not [=map/exist=] or it |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
+     is `false`: Return `drop`.
   1. If |kind| is `regular` and |attribute|'s [=Attr/local name=] does not match any
      name in the [=baseline attribute allow list=]: Return `drop`.
   1. If |attribute| [=attribute matches an attribute match list|matches=] any
