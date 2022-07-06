@@ -303,7 +303,7 @@ handle additional, application-specific use cases.
 * The <dfn method for=Sanitizer><code>getConfiguration()</code></dfn> method steps are
     to return the result of running the [=query the sanitizer config=]
     algorithm. It essentially returns a copy of the Sanitizer's
-    [=configuration object=], with some degree of normalization.
+    [=configuration dictionary=], with some degree of normalization.
 * The value of the static
     <dfn method for=Sanitizer><code>getDefaultConfiguration()</code></dfn> method steps
     are to return the value of the [=default configuration=] object.
@@ -457,11 +457,11 @@ Note: `Sanitizer.sanitizeFor` and `Element.setHTML` can replace the
 
 ## The Configuration Dictionary ## {#config}
 
-The Sanitizer's <dfn>configuration object</dfn> is a dictionary which
+The Sanitizer's <dfn>configuration dictionary</dfn> is a dictionary which
 describes modifications to the sanitize operation. If a Sanitizer has
 not received an explicit configuration, for example when being
 constructed without any parameters, then the [=default configuration=] value
-is used as the configuration object.
+is used as the configuration dictionary.
 
 <pre class="idl">
   dictionary SanitizerConfig {
@@ -623,7 +623,7 @@ Examples for attributes and attribute match lists:
 
 The [[HTML]] spec embeds [[HTML#svg-0|SVG]] and [[HTML#mathml|MathML]] content
 and supports several [[HTML#attributes-2|namespaced attributes]].
-To support these, the [=configuration object=] supports
+To support these, the [=configuration dictionary=] supports
 namespaced element and attribute names in the [=attribute match lists=].
 
 The Sanitizer API uses the namespace model and namespace restrictions
@@ -659,7 +659,7 @@ No other namespace designators are valid.
 
 Note: The [[HTML]] specification solves the problem of distinguishing HTML
   from "foreign" elements largely through the parse context. This distinction
-  isn't available to the Sanitizer [=configuration object=], since there is no
+  isn't available to the Sanitizer [=configuration dictionary=], since there is no
   hierarchy or other relationship between configuration items. Therefore,
   we introduce the explicit namespace designator.
 
@@ -703,7 +703,7 @@ these steps:
   1. Normalize all element names in |config|'s copy by running the
      [=normalize element name=] algorithm on each of them.
   1. Remove all element names that were normalized to `null`.
-  1. Return |sanitizer|, with |config|'s copy as its [=configuration object=].
+  1. Return |sanitizer|, with |config|'s copy as its [=configuration dictionary=].
 
   Issue(148): This should explicitly state the config's properties in which element names are found and modify the config wih map operations.
 </div>
@@ -796,8 +796,8 @@ run these steps:
 To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
 run these steps:
   1. Let |sanitizer| be the current Sanitizer.
-  1. Let |config| be |sanitizer|'s [=configuration object=], or the
-     [=default configuration=] if no [=configuration object=] was given.
+  1. Let |config| be |sanitizer|'s [=configuration dictionary=], or the
+     [=default configuration=] if no [=configuration dictionary=] was given.
   1. Let |result| be a newly constructed {{SanitizerConfig}} dictionary.
   1. For any non-empty member of |config| whose key is declared in
      {{SanitizerConfig}}, copy the value to |result|.
@@ -863,8 +863,8 @@ To <dfn>sanitize a node</dfn> named |node| with |sanitizer| run these steps:
        [=sanitize action for an element=] on |element|.
     1. Return |action|.
   1. If |node| is a {{Comment}} [=node=]:
-    1. Let |config| be |sanitizer|'s [=configuration object=], or the
-       [=default configuration=] if no [=configuration object=] was given.
+    1. Let |config| be |sanitizer|'s [=configuration dictionary=], or the
+       [=default configuration=] if no [=configuration dictionary=] was given.
     1. If |config|'s [=allow comments option=] [=map/exists=] and `|config|[allowComments]` is `true`: Return `keep`.
     1. Return `drop`.
   1. If |node| is a {{Text}} [=node=]: Return `keep`.
@@ -873,7 +873,6 @@ To <dfn>sanitize a node</dfn> named |node| with |sanitizer| run these steps:
 </div>
 
 Issue(151): The [=sanitize action for an attribute=] algorithm parameters do not match.
-Issue(152): consider renaming "configuration object" to "configuration dictionary".
 Issue(153): consider creating an effective sanitizer config. Also, IDL guarantees that a config is ALWAYS given. The question is really whether the members exists.
 
 Some HTML elements require special treatment in a way that can't be easily
@@ -1220,7 +1219,7 @@ path: resources/baseline-attribute-allow-list.json
 highlight: js
 </pre>
 
-## The Default Configuration Object ## {#default-configuration-object}
+## The Default Configuration Dictionary ## {#default-configuration-dictionary}
 
 The built-in <dfn>default configuration</dfn> has the following value:
 
