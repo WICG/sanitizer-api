@@ -520,10 +520,6 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to `allowAttributes` and `dropAttributes`.
 
-Note: Element names are normalized, following the rules of the HTML Parser.
-  This means elements are usually lowercase, except for a small-ish number
-  of mixed case element names in non-HTML namespaces (SVG, MathML).
-
 <div class="example">
 ```js
   const sample = to_node("Some text <b><i>with</i></b> <blink>tags</blink>.");
@@ -588,9 +584,6 @@ A sanitizer's configuration can be queried using the
   // (For illustration purposes only. There are better ways of implementing
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
-
-  // Element names are normalized.
-  new Sanitizer({allowElements: ["EM", "sPAn"]}).config().allowElements  // ["em", "span"]
 ```
 </div>
 
@@ -994,7 +987,7 @@ list=]</dfn> |list|, run these steps:
   1. Let |element name| be |element|'s [=Element/local name=].
   1. If |element| is a in either the [=SVG namespace|SVG=] or
      [=MathML namespace|MathML=] namespaces (i.e., it's a
-     [foreign element][https://html.spec.whatwg.org/#foreign-elements]),
+     [foreign element](https://html.spec.whatwg.org/#foreign-elements)),
      then prefix |element name| with the appropriate
      [[#namespaces|namespace designator]] plus a whitespace
      character.
