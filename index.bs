@@ -292,7 +292,7 @@ handle additional, application-specific use cases.
 
 * The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
     <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to run the [=create a sanitizer=] algorithm steps with |config| and |this| as
+    are to run the [=create a sanitizer=] algorithm steps with |config| and <var ignore>this</var> as
     parameter.
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
