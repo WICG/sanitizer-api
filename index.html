@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="d5bfd973488d37d1a1e23b716a1d8a294b8e0709" name="document-revision">
+  <meta content="952be89f8c5868c218ab58ccd23b623cfbe07648" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -726,7 +726,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-07-06">6 July 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-07-07">7 July 2022</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1065,6 +1065,7 @@ applies a string using a <code>Sanitizer</code> directly to an existing element 
 <pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-sethtmloptions"><code><c- g>SetHTMLOptions</c-></code></dfn> {
   <a data-link-type="idl-name" href="#sanitizer" id="ref-for-sanitizer"><c- n>Sanitizer</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SetHTMLOptions" data-dfn-type="dict-member" data-export data-type="Sanitizer " id="dom-sethtmloptions-sanitizer"><code><c- g>sanitizer</c-></code></dfn>;
 };
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>]
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://dom.spec.whatwg.org/#element" id="ref-for-element③"><c- g>Element</c-></a> {
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-element-sethtml" id="ref-for-dom-element-sethtml"><c- g>setHTML</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="Element/setHTML(input, options), Element/setHTML(input)" data-dfn-type="argument" data-export id="dom-element-sethtml-input-options-input"><code><c- g>input</c-></code><a class="self-link" href="#dom-element-sethtml-input-options-input"></a></dfn>, <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sethtmloptions" id="ref-for-dictdef-sethtmloptions"><c- n>SetHTMLOptions</c-></a> <dfn class="idl-code" data-dfn-for="Element/setHTML(input, options), Element/setHTML(input)" data-dfn-type="argument" data-export id="dom-element-sethtml-input-options-options"><code><c- g>options</c-></code><a class="self-link" href="#dom-element-sethtml-input-options-options"></a></dfn> = {});
 };
@@ -1073,6 +1074,14 @@ applies a string using a <code>Sanitizer</code> directly to an existing element 
     <li data-md>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Element" data-dfn-type="method" data-export data-lt="setHTML(input, options)|setHTML(input)" id="dom-element-sethtml"><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn> method steps are to run the <a data-link-type="dfn" href="#sanitizeandset" id="ref-for-sanitizeandset">sanitizeAndSet</a> algorithm on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>, <var>input</var>, and <var>options</var>.</p>
    </ul>
+   <details class="wpt-tests-block" dir="ltr" lang="en" open>
+    <summary>Tests</summary>
+    <ul class="wpt-tests-list">
+     <li class="wpt-test"><a class="wpt-name" href="https://wpt.fyi/results/sanitizer-api/sanitizer-secure-context.https.html" title="sanitizer-api/sanitizer-secure-context.https.html">sanitizer-secure-context.https.html</a> <a class="wpt-live" href="https://wpt.live/sanitizer-api/sanitizer-secure-context.https.html"><small>(live test)</small></a> <a class="wpt-source" href="https://github.com/web-platform-tests/wpt/blob/master/sanitizer-api/sanitizer-secure-context.https.html"><small>(source)</small></a>
+     <li class="wpt-test"><a class="wpt-name" href="https://wpt.fyi/results/sanitizer-api/sanitizer-insecure-context.html" title="sanitizer-api/sanitizer-insecure-context.html">sanitizer-insecure-context.html</a> <a class="wpt-live" href="http://wpt.live/sanitizer-api/sanitizer-insecure-context.html"><small>(live test)</small></a> <a class="wpt-source" href="https://github.com/web-platform-tests/wpt/blob/master/sanitizer-api/sanitizer-insecure-context.html"><small>(source)</small></a>
+     <li class="wpt-test"><a class="wpt-name" href="https://wpt.fyi/results/sanitizer-api/idlharness.https.window.js" title="sanitizer-api/idlharness.https.window.js">idlharness.https.window.js</a> <a class="wpt-live" href="https://wpt.live/sanitizer-api/idlharness.https.window.js"><small>(live test)</small></a> <a class="wpt-source" href="https://github.com/web-platform-tests/wpt/blob/master/sanitizer-api/idlharness.https.window.js"><small>(source)</small></a>
+    </ul>
+   </details>
    <p class="issue" id="issue-a1fbc017"><a class="self-link" href="#issue-a1fbc017"></a> Is this how we specify a method on existing class "owned" by a different spe?</p>
    <div class="example" id="example-8886c10c">
     <a class="self-link" href="#example-8886c10c"></a> 
@@ -1203,7 +1212,8 @@ is used as the configuration dictionary.</p>
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist" id="ref-for-typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="AttributeMatchList " id="dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowattributes"></a></dfn>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist" id="ref-for-typedefdef-attributematchlist①"><c- n>AttributeMatchList</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="AttributeMatchList " id="dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code><a class="self-link" href="#dom-sanitizerconfig-dropattributes"></a></dfn>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code></dfn>;
-  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcomments"></a></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowunknownmarkup"><code><c- g>allowUnknownMarkup</c-></code></dfn>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②"><c- b>boolean</c-></a> <dfn class="idl-code" data-dfn-for="SanitizerConfig" data-dfn-type="dict-member" data-export data-type="boolean " id="dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code><a class="self-link" href="#dom-sanitizerconfig-allowcomments"></a></dfn>;
 };
 </pre>
    <dl>
@@ -1230,9 +1240,17 @@ is used as the configuration dictionary.</p>
  determines whether an attribute (on a given element) should be dropped.</p>
     <dt data-md>allowCustomElements
     <dd data-md>
-     <p>The <dfn data-dfn-type="dfn" data-noexport id="allow-custom-elements-option">allow custom elements option<a class="self-link" href="#allow-custom-elements-option"></a></dfn> determines whether <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element" id="ref-for-custom-element">custom elements</a> are to be considered. The default is to drop them.
+     <p>The <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowcustomelements" id="ref-for-dom-sanitizerconfig-allowcustomelements">allow custom elements</a></code> option
+ determines whether <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element" id="ref-for-custom-element">custom elements</a> are to be considered. The default is to drop them.
  If this option is true, custom elements will still be checked against all
  other built-in or configured checks.</p>
+    <dt data-md>allowUnknownMarkup
+    <dd data-md>
+     <p>The <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowunknownmarkup" id="ref-for-dom-sanitizerconfig-allowunknownmarkup">allow unknown markup</a></code> option
+ determines whether unknown HTML elements are to be considered. The default
+ is to drop them.
+ If this option is true, unkown HTML elements will still be checked against
+ all other built-in or configured checks.</p>
     <dt data-md>allowComments
     <dd data-md>
      <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="allow-comments-option">allow comments option</dfn> determines whether HTML comments are
@@ -1414,6 +1432,12 @@ This is valid, but probably not what you want.</p>
   general. We restrict notation and other support to the element and attribute
   namespaces supported in the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification, and there are no
   recognized namespace designators other that the ones listed here.</p>
+   <details class="wpt-tests-block" dir="ltr" lang="en" open>
+    <summary>Tests</summary>
+    <ul class="wpt-tests-list">
+     <li class="wpt-test"><a class="wpt-name" href="https://wpt.fyi/results/sanitizer-api/sanitizer-names.https.html" title="sanitizer-api/sanitizer-names.https.html">sanitizer-names.https.html</a> <a class="wpt-live" href="https://wpt.live/sanitizer-api/sanitizer-names.https.html"><small>(live test)</small></a> <a class="wpt-source" href="https://github.com/web-platform-tests/wpt/blob/master/sanitizer-api/sanitizer-names.https.html"><small>(source)</small></a>
+    </ul>
+   </details>
    <h2 class="heading settled" data-level="3" id="algorithms"><span class="secno">3. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="api-algorithms"><span class="secno">3.1. </span><span class="content">API Implementation</span><a class="self-link" href="#api-algorithms"></a></h3>
    <div class="algorithm" data-algorithm="create a sanitizer">
@@ -1713,7 +1737,11 @@ Issue(154): Export and refer funky element properties more precisely. <a href="h
      <li data-md>
       <p>If <var>kind</var> is <code>regular</code> and <var>element</var> does not <a data-link-type="dfn" href="#element-matches-an-element-name" id="ref-for-element-matches-an-element-name①">match</a> any name in the <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list②">baseline element allow list</a>: Return <code>drop</code>.</p>
      <li data-md>
-      <p>If <var>kind</var> is <code>custom</code> and if <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowcustomelements" id="ref-for-dom-sanitizerconfig-allowcustomelements">allowCustomElements</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exist</a> or if <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowcustomelements" id="ref-for-dom-sanitizerconfig-allowcustomelements①">allowCustomElements</a></code>"] is <code>false</code>: Return <code>drop</code>.</p>
+      <p>If <var>kind</var> is <code>custom</code> and if <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowcustomelements" id="ref-for-dom-sanitizerconfig-allowcustomelements①">allowCustomElements</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exist</a> or if <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowcustomelements" id="ref-for-dom-sanitizerconfig-allowcustomelements②">allowCustomElements</a></code>"] is <code>false</code>: Return <code>drop</code>.</p>
+     <li data-md>
+      <p>If <var>kind</var> is <code>unknown</code> and if <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowunknownmarkup" id="ref-for-dom-sanitizerconfig-allowunknownmarkup①">allowUnknownMarkup</a></code>"]
+ does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exist</a> or it <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowunknownmarkup" id="ref-for-dom-sanitizerconfig-allowunknownmarkup②">allowUnknownMarkup</a></code>"]
+ is <code>false</code>: Return <code>drop</code>.</p>
      <li data-md>
       <p>If <var>element</var> <a data-link-type="dfn" href="#element-matches-an-element-name" id="ref-for-element-matches-an-element-name②">matches</a> any name
  in <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dropelements" id="ref-for-dom-sanitizerconfig-dropelements">dropElements</a></code>"]: Return <code>drop</code>.</p>
@@ -1723,7 +1751,7 @@ Issue(154): Export and refer funky element properties more precisely. <a href="h
      <li data-md>
       <p>Let <var>allow list</var> be null.</p>
      <li data-md>
-      <p>If "<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowelements" id="ref-for-dom-sanitizerconfig-allowelements">allowElements</a></code>" <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exists</a> in <var>config</var>:</p>
+      <p>If "<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowelements" id="ref-for-dom-sanitizerconfig-allowelements">allowElements</a></code>" <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exists</a> in <var>config</var>:</p>
       <ol>
        <li data-md>
         <p>Then : Set <var>allow list</var> to <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowelements" id="ref-for-dom-sanitizerconfig-allowelements①">allowElements</a></code>"].</p>
@@ -1798,12 +1826,16 @@ configuration dictionary <var>config</var>, run these steps:
      <li data-md>
       <p>Let <var>kind</var> be <var>attribute</var>’s <a data-link-type="dfn" href="#attribute-kind" id="ref-for-attribute-kind">attribute kind</a>.</p>
      <li data-md>
+      <p>If <var>kind</var> is <code>unknown</code> and if <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowunknownmarkup" id="ref-for-dom-sanitizerconfig-allowunknownmarkup③">allowUnknownMarkup</a></code>"]
+ does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤">exist</a> or it <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-allowunknownmarkup" id="ref-for-dom-sanitizerconfig-allowunknownmarkup④">allowUnknownMarkup</a></code>"]
+ is <code>false</code>: Return <code>drop</code>.</p>
+     <li data-md>
       <p>If <var>kind</var> is <code>regular</code> and <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name②">local name</a> does not match any
  name in the <a data-link-type="dfn" href="#baseline-attribute-allow-list" id="ref-for-baseline-attribute-allow-list">baseline attribute allow list</a>: Return <code>drop</code>.</p>
      <li data-md>
       <p>If <var>attribute</var> <a data-link-type="dfn" href="#attribute-matches-an-attribute-match-list" id="ref-for-attribute-matches-an-attribute-match-list">matches</a> any <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list⑥">attribute match list</a> in <var>config</var>’s <a data-link-type="dfn" href="#attribute-drop-list" id="ref-for-attribute-drop-list①">attribute drop list</a>: Return <code>drop</code>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list①">attribute allow list</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exists</a> in <var>config</var>:</p>
+      <p>If <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list①">attribute allow list</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a> in <var>config</var>:</p>
       <ol>
        <li data-md>
         <p>Then let <var>allow list</var> be <code>|config|["allowAttributes"]</code>.</p>
@@ -1883,8 +1915,9 @@ This is often done by injecting innocent-looking code or seemingly inert
 DOM nodes that is only parsed and interpreted by a framework which then
 performs the execution of JavaScript based on that input.</p>
    <p>The Sanitizer API can not prevent these attacks, but requires page authors to
-explicitly allow attributes and elements that are unknown to HTML and markup
-that is known to be widely used for templating and framework-specific code,
+explicitly allow unknown elements in general, and authors must additionally
+explicitly configure unknown attributes and elements and markup that is known
+to be widely used for templating and framework-specific code,
 like <code>data-</code> and <code>slot</code> attributes and elements like <code>&lt;slot></code> and <code>&lt;template></code>.
 We believe that these restrictions are not exhaustive and encourage page
 authors to examine their third party libraries for this behavior.</p>
@@ -2357,6 +2390,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <p>The built-in <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="default-configuration">default configuration</dfn> has the following value:</p>
 <pre class="include-code highlight"><c- p>{</c->
   <c- u>"allowCustomElements"</c-><c- o>:</c-> <c- kc>false</c-><c- p>,</c->
+  <c- u>"allowUnknownMarkup"</c-><c- o>:</c-> <c- kc>false</c-><c- p>,</c->
   <c- u>"allowElements"</c-><c- o>:</c-> <c- p>[</c->
     <c- u>"a"</c-><c- p>,</c->
     <c- u>"abbr"</c-><c- p>,</c->
@@ -3119,8 +3153,8 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#dom-sanitizerconfig-allowcomments">allowComments</a><span>, in § 2.3</span>
    <li><a href="#allow-comments-option">allow comments option</a><span>, in § 2.3</span>
    <li><a href="#dom-sanitizerconfig-allowcustomelements">allowCustomElements</a><span>, in § 2.3</span>
-   <li><a href="#allow-custom-elements-option">allow custom elements option</a><span>, in § 2.3</span>
    <li><a href="#dom-sanitizerconfig-allowelements">allowElements</a><span>, in § 2.3</span>
+   <li><a href="#dom-sanitizerconfig-allowunknownmarkup">allowUnknownMarkup</a><span>, in § 2.3</span>
    <li><a href="#attribute-allow-list">attribute allow list</a><span>, in § 2.3</span>
    <li><a href="#attribute-drop-list">attribute drop list</a><span>, in § 2.3</span>
    <li><a href="#attribute-kind">attribute kind</a><span>, in § 3.4</span>
@@ -3460,7 +3494,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <ul>
     <li><a href="#ref-for-map-exists">3.1. API Implementation</a>
     <li><a href="#ref-for-map-exists①">3.3. Sanitization Algorithms</a>
-    <li><a href="#ref-for-map-exists②">3.4. Matching Against The Configuration</a> <a href="#ref-for-map-exists③">(2)</a> <a href="#ref-for-map-exists④">(3)</a>
+    <li><a href="#ref-for-map-exists②">3.4. Matching Against The Configuration</a> <a href="#ref-for-map-exists③">(2)</a> <a href="#ref-for-map-exists④">(3)</a> <a href="#ref-for-map-exists⑤">(4)</a> <a href="#ref-for-map-exists⑥">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-map-get">
@@ -3552,7 +3586,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="term-for-SecureContext">
    <a href="https://webidl.spec.whatwg.org/#SecureContext">https://webidl.spec.whatwg.org/#SecureContext</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-SecureContext">2.1. Sanitizer API</a>
+    <li><a href="#ref-for-SecureContext">2.1. Sanitizer API</a> <a href="#ref-for-SecureContext①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-exceptiondef-typeerror">
@@ -3564,7 +3598,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
    <a href="https://webidl.spec.whatwg.org/#idl-boolean">https://webidl.spec.whatwg.org/#idl-boolean</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-boolean①">(2)</a>
+    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-boolean①">(2)</a> <a href="#ref-for-idl-boolean②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-record">
@@ -3725,6 +3759,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
 <c- b>dictionary</c-> <a href="#dictdef-sethtmloptions"><code><c- g>SetHTMLOptions</c-></code></a> {
   <a data-link-type="idl-name" href="#sanitizer"><c- n>Sanitizer</c-></a> <a data-type="Sanitizer " href="#dom-sethtmloptions-sanitizer"><code><c- g>sanitizer</c-></code></a>;
 };
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://dom.spec.whatwg.org/#element"><c- g>Element</c-></a> {
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#dom-element-sethtml"><c- g>setHTML</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString"><c- b>DOMString</c-></a> <a href="#dom-element-sethtml-input-options-input"><code><c- g>input</c-></code></a>, <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sethtmloptions"><c- n>SetHTMLOptions</c-></a> <a href="#dom-element-sethtml-input-options-options"><code><c- g>options</c-></code></a> = {});
 };
@@ -3736,6 +3771,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <a data-type="AttributeMatchList " href="#dom-sanitizerconfig-allowattributes"><code><c- g>allowAttributes</c-></code></a>;
   <a data-link-type="idl-name" href="#typedefdef-attributematchlist"><c- n>AttributeMatchList</c-></a> <a data-type="AttributeMatchList " href="#dom-sanitizerconfig-dropattributes"><code><c- g>dropAttributes</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcustomelements"><code><c- g>allowCustomElements</c-></code></a>;
+  <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowunknownmarkup"><code><c- g>allowUnknownMarkup</c-></code></a>;
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a data-type="boolean " href="#dom-sanitizerconfig-allowcomments"><code><c- g>allowComments</c-></code></a>;
 };
 
@@ -3859,7 +3895,15 @@ Issue(145): Clarify capitalization and normalization. <a href="https://github.co
   <aside class="dfn-panel" data-for="dom-sanitizerconfig-allowcustomelements">
    <b><a href="#dom-sanitizerconfig-allowcustomelements">#dom-sanitizerconfig-allowcustomelements</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-sanitizerconfig-allowcustomelements">3.4. Matching Against The Configuration</a> <a href="#ref-for-dom-sanitizerconfig-allowcustomelements①">(2)</a>
+    <li><a href="#ref-for-dom-sanitizerconfig-allowcustomelements">2.3. The Configuration Dictionary</a>
+    <li><a href="#ref-for-dom-sanitizerconfig-allowcustomelements①">3.4. Matching Against The Configuration</a> <a href="#ref-for-dom-sanitizerconfig-allowcustomelements②">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-sanitizerconfig-allowunknownmarkup">
+   <b><a href="#dom-sanitizerconfig-allowunknownmarkup">#dom-sanitizerconfig-allowunknownmarkup</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup">2.3. The Configuration Dictionary</a>
+    <li><a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup①">3.4. Matching Against The Configuration</a> <a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup②">(2)</a> <a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup③">(3)</a> <a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup④">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-allow-list">
