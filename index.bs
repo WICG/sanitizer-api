@@ -740,8 +740,6 @@ To <dfn>normalize element name</dfn> |name|, run these steps:
   1. Return `null`.
 </div>
 
-  Issue(145): We need to make a decision about normalizing lowercase/uppercase for element names at all. Other APIs are also case-sensitive (e.g., MutationObserver).
-
 <div algorithm="sanitize">
 To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
 run these steps:
@@ -973,7 +971,6 @@ run these steps:
 </div>
 
 Issue(146): Whitespaces or colons?
-Issue(145): Clarify capitalization and normalization.
 
 <div algorithm="attribute matches an attribute match list">
 To determine whether an <dfn>|attribute| matches an [=attribute match
