@@ -42,10 +42,12 @@ If you wish to try out early Sanitizer implementations, the
 
 ## Explainer
 
-The core API of the Sanitizer is rather simple: There are `Sanitizer` objects,
-and they have a `.sanitize` method that produces a `DocumentFragment` from a
-given text string. Or from another `DocumentFragment`, or even from a whole
-`Document`.
+The core API of the Sanitizer is rather simple: There are `Sanitizer` objects
+which encapsulate the information of what the sanitizer is supposed to do,
+and there is an `Element.setHTML` method which takes a string and (optionally)
+an options dictionary with a `"sanitizer"` key and a `Sanitizer` instance as
+a value. `.setHTML` will parse and sanitize the string it receives, and will
+update the children of the Element it is called on with the result.
 
 Example:
 ```js
@@ -74,8 +76,8 @@ Example:
   // <em>Hello World!</em>
   const elem = document.querySelector( ...something... )
   elem.setHTML("<em>Hello World!</em>");
-  elem.setHTML(""<script src='https://example.org/'></script><em>Hello World!</em>");
-  elem.setHTML(""<em onlick='console.log(1)'>Hello World!</em>");
+  elem.setHTML("<script src='https://example.org/'></script><em>Hello World!</em>");
+  elem.setHTML("<em onlick='console.log(1)'>Hello World!</em>");
 ```
 
 Oftentimes, applications have additional &mdash; often stricter &mdash;
