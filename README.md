@@ -63,14 +63,19 @@ Example:
   // But what if want (some) markup? Then, sanitize it before use. The result
   // might be ugly, or contain curse words, but it won't contain any script:
   const sanitizer = new Sanitizer();
-  document.querySelector( ...something... ).replaceChildren(
-      sanitizer.sanitize(untrusted_input));
+  document.querySelector( ...something... ).setHTML(
+      untrusted_input, {sanitizer: sanitizer});
+
+  // Sanitizer is safe by default, so the default instance will already do the
+  // job:
+  document.querySelector( ...something... ).setHTML(untrusted_input);
 
   // All of these values for untrusted_input would have had the same result:
   // <em>Hello World!</em>
-  sanitizer.sanitize("<em>Hello World!</em>");
-  sanitizer.sanitize(""<script src='https://example.org/'></script><em>Hello World!</em>");
-  sanitizer.sanitize(""<em onlick='console.log(1)'>Hello World!</em>");
+  const elem = document.querySelector( ...something... )
+  elem.setHTML("<em>Hello World!</em>");
+  elem.setHTML(""<script src='https://example.org/'></script><em>Hello World!</em>");
+  elem.setHTML(""<em onlick='console.log(1)'>Hello World!</em>");
 ```
 
 Oftentimes, applications have additional &mdash; often stricter &mdash;
@@ -92,14 +97,19 @@ Example:
   });
 
   const untrusted_example = "Well, <em class=nonchalant onclick='alert(\'General Kenobi\');'><a href='https://obiwan.org/home.php'>hello there<a>!"
-  sanitizer.sanitize(untrusted_example);  // Well, <em class="nonchalant"><a href='https://obiwan.org/home.php'>hello there<a>!</em>
-  for_display.sanitize(untrusted_example);  // Well, <em class="nonchalant">hello there!</em>
+
+  // Well, <em class="nonchalant"><a href='https://obiwan.org/home.php'>hello there<a>!</em>
+  elem.setHTML(untrusted_example, {sanitizer: sanitizer});
+  elem.setHTML(untrusted_example);  // Same, since it uses a default instance.
+
+  // Well, <em class="nonchalant">hello there!</em>
+  elem.setHTML(untrusted_example, {sanitizer: for_display});
 
   // The following code will insert our untrusted_example into a block element
   // we have picked for this purpose. We can be sure that it won't contain
   // script, and we can also be sure that it contains no block-level markup
   // or more.
-  document.querySelector("p.out").replaceChildren(for_display.sanitize(untrusted_example));
+  document.querySelector("p.out").setHTML(untrusted_example, {sanitizer: for_display});
 ```
 
 It is the overarching design goal of the Sanitizer API to be safe and simple,
@@ -116,7 +126,8 @@ Example:
   });
 
   const untrusted_input = "<span onclick='2+2'>some</span><script>2+2</script>thing";
-  misconfigured.sanitize(untrusted_input);  // <span>some</span>thing
+  // <span>some</span>thing
+  elem.setHTML(untrusted_input, {sanitizer: misconfigured});
 ```
 
 ## Taking a Step Back: The Problem We're Solving
