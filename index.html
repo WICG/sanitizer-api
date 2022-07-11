@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="0bcced657dbf276b51eabbb9aba7bba7d23a61d0" name="document-revision">
+  <meta content="008c1e684322b366b3bb496451c95f0a8faed5b3" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1260,9 +1260,6 @@ is used as the configuration dictionary.</p>
   while <code>blockElements</code> and <code>dropElements</code> defaults to keeping unknown
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to <code>allowAttributes</code> and <code>dropAttributes</code>.</p>
-   <p class="note" role="note"><span>Note:</span> Element names are normalized, following the rules of the HTML Parser.
-  This means elements are usually lowercase, except for a small-ish number
-  of mixed case element names in non-HTML namespaces (SVG, MathML).</p>
    <div class="example" id="example-fe7e1384">
     <a class="self-link" href="#example-fe7e1384"></a> 
 <pre class="language-js highlight"><c- a>const</c-> sample <c- o>=</c-> to_node<c- p>(</c-><c- u>"Some text &lt;b>&lt;i>with&lt;/i>&lt;/b> &lt;blink>tags&lt;/blink>."</c-><c- p>);</c->
@@ -1295,8 +1292,8 @@ also options to configure some node or element types.</p>
 <c- ow>new</c-> Sanitizer<c- p>({</c->allowComments<c- o>:</c-> <c- kc>true</c-><c- p>}).</c->sanitize<c- p>(</c->comment<c- p>);</c->  <c- c1>// Same as comment.</c->
 </pre>
    <p>A sanitizer’s configuration can be queried using the <a data-link-type="dfn" href="#query-the-sanitizer-config" id="ref-for-query-the-sanitizer-config①">query the sanitizer config</a> method.</p>
-   <div class="example" id="example-1b212fa8">
-    <a class="self-link" href="#example-1b212fa8"></a> 
+   <div class="example" id="example-0c045ef2">
+    <a class="self-link" href="#example-0c045ef2"></a> 
 <pre class="language-js highlight"><c- c1>// Does the default config allow script elements?</c->
 Sanitizer<c- p>.</c->getDefaultConfiguration<c- p>().</c->allowElements<c- p>.</c->includes<c- p>(</c-><c- u>"script"</c-><c- p>)</c->  <c- c1>// false</c->
 
@@ -1321,9 +1318,6 @@ Object<c- p>.</c->keys<c- p>(</c-><c- ow>new</c-> Sanitizer<c- p>({</c->madeUpDi
 <c- c1>// (For illustration purposes only. There are better ways of implementing</c->
 <c- c1>// object equality in JavaScript.)</c->
 JSON<c- p>.</c->stringify<c- p>(</c->Sanitizer<c- p>.</c->getDefaultConfiguration<c- p>())</c-> <c- o>==</c-> JSON<c- p>.</c->stringify<c- p>(</c-><c- ow>new</c-> Sanitizer<c- p>().</c->getConfiguration<c- p>());</c->  <c- c1>// true</c->
-
-<c- c1>// Element names are normalized.</c->
-<c- ow>new</c-> Sanitizer<c- p>({</c->allowElements<c- o>:</c-> <c- p>[</c-><c- u>"EM"</c-><c- p>,</c-> <c- u>"sPAn"</c-><c- p>]}).</c->config<c- p>().</c->allowElements  <c- c1>// ["em", "span"]</c->
 </pre>
    </div>
    <h4 class="heading settled" data-level="2.3.1" id="attr-match-list"><span class="secno">2.3.1. </span><span class="content">Attribute Match Lists</span><a class="self-link" href="#attr-match-list"></a></h4>
@@ -1463,8 +1457,6 @@ these steps:
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="normalize-element-name">normalize element name</dfn> <var>name</var>, run these steps: 
     <ol>
      <li data-md>
-      <p>Convert <var>name</var> to <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ascii-lowercase" id="ref-for-ascii-lowercase">ASCII lowercase</a>.</p>
-     <li data-md>
       <p>Let <var>tokens</var> be the result of <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#strictly-split" id="ref-for-strictly-split">strictly splitting</a> <var>name</var> on the delimiter
  ":" (U+003A).</p>
      <li data-md>
@@ -1482,7 +1474,6 @@ these steps:
       <p>Return <code>null</code>.</p>
     </ol>
    </div>
-   <p class="issue" id="issue-e8524a23"><a class="self-link" href="#issue-e8524a23"></a> We need to make a decision about normalizing lowercase/uppercase for element names at all. Other APIs are also case-sensitive (e.g., MutationObserver). <a href="https://github.com/WICG/sanitizer-api/issues/145">[Issue #145]</a></p>
    <div class="algorithm" data-algorithm="sanitize">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> a given <var>input</var> of type <code>Document or DocumentFragment</code> run these steps: 
     <ol>
@@ -1774,24 +1765,23 @@ run these steps:
  ":" (U+003A).</p>
      <li data-md>
       <p>If <var>tokens</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size②">size</a> is 1,
- and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ascii-case-insensitive" id="ref-for-ascii-case-insensitive">ASCII case-insensitive</a> match for <var>tokens</var>[0]:
+ and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①">identical to</a> <var>tokens</var>[0]:
  Return <code>true</code>.</p>
      <li data-md>
       <p>If <var>tokens</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size③">size</a> is 2,
  and if [tokens|[0] is "svg"
- and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name②">local name</a> is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ascii-case-insensitive" id="ref-for-ascii-case-insensitive①">ASCII case-insensitive</a> match for <var>tokens</var>[1]:
+ and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name②">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is②">identical to</a> to <var>tokens</var>[1]:
  Return <code>true</code>.</p>
      <li data-md>
       <p>If <var>tokens</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size④">size</a> is 2,
  and if <var>tokens</var>[0] is "math"
- and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace②">MathML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name③">local name</a> is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ascii-case-insensitive" id="ref-for-ascii-case-insensitive②">ASCII case-insensitive</a> match for <var>tokens</var>[1]:
+ and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace②">MathML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name③">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is③">identical to</a> <var>tokens</var>[1]:
  Return <code>true</code>.</p>
      <li data-md>
       <p>Return <code>false</code>.</p>
     </ol>
    </div>
-   <p class="issue" id="issue-e5738974"><a class="self-link" href="#issue-e5738974"></a> Whitespaces or colons?
-Issue(145): Clarify capitalization and normalization. <a href="https://github.com/WICG/sanitizer-api/issues/146">[Issue #146]</a></p>
+   <p class="issue" id="issue-d7c2c132"><a class="self-link" href="#issue-d7c2c132"></a> Whitespaces or colons? <a href="https://github.com/WICG/sanitizer-api/issues/146">[Issue #146]</a></p>
    <div class="algorithm" data-algorithm="attribute matches an attribute match list">
      To determine whether an <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="attribute matches an attribute match list" data-noexport id="attribute-matches-an-attribute-match-list"><var>attribute</var> matches an <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list④">attribute match
 list</a></dfn> <var>list</var>, run these steps: 
@@ -1804,8 +1794,7 @@ list</a></dfn> <var>list</var>, run these steps:
      <li data-md>
       <p>Let <var>element name</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name④">local name</a>.</p>
      <li data-md>
-      <p>If <var>element</var> is a in either the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑤">SVG</a> or <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace③">MathML</a> namespaces (i.e., it’s a
- [foreign element][https://html.spec.whatwg.org/#foreign-elements]),
+      <p>If <var>element</var> is a in either the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑤">SVG</a> or <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace③">MathML</a> namespaces (i.e., it’s a <a href="https://html.spec.whatwg.org/#foreign-elements">foreign element</a>),
  then prefix <var>element name</var> with the appropriate <a href="#namespaces">namespace designator</a> plus a whitespace
  character.</p>
      <li data-md>
@@ -3465,18 +3454,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-valid-custom-element-name">3.4. Matching Against The Configuration</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-ascii-case-insensitive">
-   <a href="https://infra.spec.whatwg.org/#ascii-case-insensitive">https://infra.spec.whatwg.org/#ascii-case-insensitive</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ascii-case-insensitive">3.4. Matching Against The Configuration</a> <a href="#ref-for-ascii-case-insensitive①">(2)</a> <a href="#ref-for-ascii-case-insensitive②">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-ascii-lowercase">
-   <a href="https://infra.spec.whatwg.org/#ascii-lowercase">https://infra.spec.whatwg.org/#ascii-lowercase</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-ascii-lowercase">3.1. API Implementation</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-assert">
    <a href="https://infra.spec.whatwg.org/#assert">https://infra.spec.whatwg.org/#assert</a><b>Referenced in:</b>
    <ul>
@@ -3515,6 +3492,14 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <a href="https://infra.spec.whatwg.org/#string-is">https://infra.spec.whatwg.org/#string-is</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-string-is">3.1. API Implementation</a>
+    <li><a href="#ref-for-string-is①">3.4. Matching Against The Configuration</a> <a href="#ref-for-string-is②">(2)</a> <a href="#ref-for-string-is③">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-string-is">
+   <a href="https://infra.spec.whatwg.org/#string-is">https://infra.spec.whatwg.org/#string-is</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-string-is">3.1. API Implementation</a>
+    <li><a href="#ref-for-string-is①">3.4. Matching Against The Configuration</a> <a href="#ref-for-string-is②">(2)</a> <a href="#ref-for-string-is③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-list-iterate">
@@ -3682,14 +3667,13 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-ascii-case-insensitive">ascii case-insensitive</span>
-     <li><span class="dfn-paneled" id="term-for-ascii-lowercase">ascii lowercase</span>
      <li><span class="dfn-paneled" id="term-for-assert">assert</span>
      <li><span class="dfn-paneled" id="term-for-string-concatenate">concatenation</span>
      <li><span class="dfn-paneled" id="term-for-map-exists">exist</span>
      <li><span class="dfn-paneled" id="term-for-map-get">get</span>
      <li><span class="dfn-paneled" id="term-for-html-namespace">html namespace</span>
-     <li><span class="dfn-paneled" id="term-for-string-is">is</span>
+     <li><span class="dfn-paneled" id="term-for-string-is">identical to</span>
+     <li><span class="dfn-paneled" id="term-for-string-is①">is</span>
      <li><span class="dfn-paneled" id="term-for-list-iterate">iterate</span>
      <li><span class="dfn-paneled" id="term-for-list">list</span>
      <li><span class="dfn-paneled" id="term-for-mathml-namespace">mathml namespace</span>
@@ -3782,7 +3766,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <div style="counter-reset:issue">
    <div class="issue"> Is this how we specify a method on existing class "owned" by a different spe? <a class="issue-return" href="#issue-a1fbc017" title="Jump to section">↵</a></div>
    <div class="issue"> This should explicitly state the config’s properties in which element names are found and modify the config wih map operations. <a href="https://github.com/WICG/sanitizer-api/issues/148">[Issue #148]</a> <a class="issue-return" href="#issue-6f447953" title="Jump to section">↵</a></div>
-   <div class="issue"> We need to make a decision about normalizing lowercase/uppercase for element names at all. Other APIs are also case-sensitive (e.g., MutationObserver). <a href="https://github.com/WICG/sanitizer-api/issues/145">[Issue #145]</a> <a class="issue-return" href="#issue-e8524a23" title="Jump to section">↵</a></div>
    <div class="issue"> The sanitize algorithm does not need to run "create a document fragment". <a href="https://github.com/WICG/sanitizer-api/issues/149">[Issue #149]</a> <a class="issue-return" href="#issue-7d8b222c" title="Jump to section">↵</a></div>
    <div class="issue"> Does the <code>.sanitizeFor</code> element name require namespace-related processing? <a href="https://github.com/WICG/sanitizer-api/issues/140">[Issue #140]</a> <a class="issue-return" href="#issue-b45c400e" title="Jump to section">↵</a></div>
    <div class="issue"> IDL is taking care of most steps in "query the sanitizer config". Clean up. <a href="https://github.com/WICG/sanitizer-api/issues/150">[Issue #150]</a> <a class="issue-return" href="#issue-4f906162" title="Jump to section">↵</a></div>
@@ -3791,8 +3774,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
 Issue(153): consider creating an effective sanitizer config. Also, IDL guarantees that a config is ALWAYS given. The question is really whether the members exists. <a href="https://github.com/WICG/sanitizer-api/issues/151">[Issue #151]</a> <a class="issue-return" href="#issue-bf17aea7" title="Jump to section">↵</a></div>
    <div class="issue"> Do not use the interfaces as an abstraction.
 Issue(154): Export and refer funky element properties more precisely. <a href="https://github.com/WICG/sanitizer-api/issues/147">[Issue #147]</a> <a class="issue-return" href="#issue-603ab080" title="Jump to section">↵</a></div>
-   <div class="issue"> Whitespaces or colons?
-Issue(145): Clarify capitalization and normalization. <a href="https://github.com/WICG/sanitizer-api/issues/146">[Issue #146]</a> <a class="issue-return" href="#issue-e5738974" title="Jump to section">↵</a></div>
+   <div class="issue"> Whitespaces or colons? <a href="https://github.com/WICG/sanitizer-api/issues/146">[Issue #146]</a> <a class="issue-return" href="#issue-d7c2c132" title="Jump to section">↵</a></div>
    <div class="issue"> This algorithm is still using a whitespace. <a href="https://github.com/WICG/sanitizer-api/issues/146">[Issue #146]</a> <a class="issue-return" href="#issue-9bd4ab74" title="Jump to section">↵</a></div>
    <div class="issue"> We do not want to use the interface (e.g., "applet" and "blink" are HTMLUnknownElement) <a href="https://github.com/WICG/sanitizer-api/issues/147">[Issue #147]</a> <a class="issue-return" href="#issue-f3f3c0ed" title="Jump to section">↵</a></div>
    <div class="issue"> Again, this needs to be more specific. Historical, obsolete, conforming, non-conforming (e.g. bgcolor). It is desirable we make a sanitizer-specific list. <a href="https://github.com/WICG/sanitizer-api/issues/147">[Issue #147]</a> <a class="issue-return" href="#issue-a274fa37" title="Jump to section">↵</a></div>
