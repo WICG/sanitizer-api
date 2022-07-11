@@ -520,10 +520,6 @@ Note: `allowElements` creates a sanitizer that defaults to dropping elements,
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to `allowAttributes` and `dropAttributes`.
 
-Note: Element names are normalized, following the rules of the HTML Parser.
-  This means elements are usually lowercase, except for a small-ish number
-  of mixed case element names in non-HTML namespaces (SVG, MathML).
-
 <div class="example">
 ```js
   const sample = to_node("Some text <b><i>with</i></b> <blink>tags</blink>.");
@@ -588,9 +584,6 @@ A sanitizer's configuration can be queried using the
   // (For illustration purposes only. There are better ways of implementing
   // object equality in JavaScript.)
   JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
-
-  // Element names are normalized.
-  new Sanitizer({allowElements: ["EM", "sPAn"]}).config().allowElements  // ["em", "span"]
 ```
 </div>
 
@@ -733,7 +726,6 @@ Note: The configuration object contains element names in the
 
 <div algorithm="normalize element name">
 To <dfn>normalize element name</dfn> |name|, run these steps:
-  1. Convert |name| to [=ASCII lowercase=].
   1. Let |tokens| be the result of
      [=strictly split a string|strictly splitting=] |name| on the delimiter
      ":" (U+003A).
@@ -747,8 +739,6 @@ To <dfn>normalize element name</dfn> |name|, run these steps:
        &#x00AB;`|tokens|[0]`,`":"` (U+003A),`|tokens|[1]`&#x00BB;.
   1. Return `null`.
 </div>
-
-  Issue(145): We need to make a decision about normalizing lowercase/uppercase for element names at all. Other APIs are also case-sensitive (e.g., MutationObserver).
 
 <div algorithm="sanitize">
 To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
@@ -962,26 +952,25 @@ run these steps:
      ":" (U+003A).
   1. If |tokens|' [=list/size=] is 1,
      and if |element| is in the [=HTML namespace=]
-     and if |element|'s [=Element/local name=] is an
-     [=ASCII case-insensitive=] match for |tokens|[0]:
+     and if |element|'s [=Element/local name=] is
+     [=identical to=] |tokens|[0]:
      Return `true`.
   1. If |tokens|' [=list/size=] is 2,
      and if [tokens|[0] is "svg"
      and if |element| is in the [=SVG namespace=]
-     and if |element|'s [=Element/local name=] is an
-     [=ASCII case-insensitive=] match for |tokens|[1]:
+     and if |element|'s [=Element/local name=] is
+     [=identical to=] to |tokens|[1]:
      Return `true`.
   1. If |tokens|'s [=list/size=] is 2,
      and if |tokens|[0] is "math"
      and if |element| is in the [=MathML namespace=]
-     and if |element|'s [=Element/local name=] is an
-     [=ASCII case-insensitive=] match for |tokens|[1]:
+     and if |element|'s [=Element/local name=] is
+     [=identical to=] |tokens|[1]:
      Return `true`.
   1. Return `false`.
 </div>
 
 Issue(146): Whitespaces or colons?
-Issue(145): Clarify capitalization and normalization.
 
 <div algorithm="attribute matches an attribute match list">
 To determine whether an <dfn>|attribute| matches an [=attribute match
@@ -995,7 +984,7 @@ list=]</dfn> |list|, run these steps:
   1. Let |element name| be |element|'s [=Element/local name=].
   1. If |element| is a in either the [=SVG namespace|SVG=] or
      [=MathML namespace|MathML=] namespaces (i.e., it's a
-     [foreign element][https://html.spec.whatwg.org/#foreign-elements]),
+     [foreign element](https://html.spec.whatwg.org/#foreign-elements)),
      then prefix |element name| with the appropriate
      [[#namespaces|namespace designator]] plus a whitespace
      character.
