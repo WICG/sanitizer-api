@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="23ee2f1248ce1282eff85126ce5db2620582e847" name="document-revision">
+  <meta content="0bcced657dbf276b51eabbb9aba7bba7d23a61d0" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -726,7 +726,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-07-08">8 July 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-07-11">11 July 2022</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1546,7 +1546,7 @@ run these steps:
      <li data-md>
       <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a> with <var>this</var> as the <code>context node</code> and <var>value</var> as <code>markup</code>.</p>
      <li data-md>
-      <p>Run the steos if the <a data-link-type="dfn" href="#sanitize-a-document-fragment" id="ref-for-sanitize-a-document-fragment②">sanitize a document fragment</a> algorithm
+      <p>Run the steps if the <a data-link-type="dfn" href="#sanitize-a-document-fragment" id="ref-for-sanitize-a-document-fragment②">sanitize a document fragment</a> algorithm
  on <var>fragment</var>, using <var>sanitizer</var> as the current <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①">Sanitizer</a></code> instance.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">Replace all</a> with <var>fragment</var> as the <code>node</code> and <var>this</var> as the <code>parent</code>.</p>
@@ -1637,7 +1637,7 @@ run these steps:
        <li data-md>
         <p>If <var>m</var>[<var>node</var>] is <code>drop</code>, <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-remove" id="ref-for-concept-node-remove">remove</a> <var>node</var>.</p>
        <li data-md>
-        <p>If <var>m</var>[<var>node</var>] is <code>block</code>, <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace" id="ref-for-concept-node-replace">replace</a> <var>node</var> with all of its element and text node children from <var>fragment</var>.</p>
+        <p>If <var>m</var>[<var>node</var>] is <code>block</code>, invoke <a data-link-type="dfn">Replace with</a> with <var>node</var> as <var>this</var> and <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a> as <var>nodes</var>.</p>
        <li data-md>
         <p>If <var>m</var>[<var>node</var>] is <code>keep</code>, do nothing.</p>
       </ol>
@@ -3270,6 +3270,12 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
     <li><a href="#ref-for-concept-element-attribute">3.3. Sanitization Algorithms</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-tree-child">
+   <a href="https://dom.spec.whatwg.org/#concept-tree-child">https://dom.spec.whatwg.org/#concept-tree-child</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-tree-child">3.3. Sanitization Algorithms</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-clone">
    <a href="https://dom.spec.whatwg.org/#concept-node-clone">https://dom.spec.whatwg.org/#concept-node-clone</a><b>Referenced in:</b>
    <ul>
@@ -3330,12 +3336,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <a href="https://dom.spec.whatwg.org/#concept-element-attributes-remove">https://dom.spec.whatwg.org/#concept-element-attributes-remove</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-element-attributes-remove">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-replace">
-   <a href="https://dom.spec.whatwg.org/#concept-node-replace">https://dom.spec.whatwg.org/#concept-node-replace</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-replace">3.3. Sanitization Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-replace-all">
@@ -3642,6 +3642,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-text">Text</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-append">append</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-attribute">attribute list</span>
+     <li><span class="dfn-paneled" id="term-for-concept-tree-child">children</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-clone">clone a node</span>
      <li><span class="dfn-paneled" id="term-for-concept-create-element">creating an element</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-interface">element interface</span>
@@ -3652,7 +3653,6 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-concept-node">nodes</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-remove">remove</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-attributes-remove">remove an attribute</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-replace">replace</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-replace-all">replace all</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-order">tree order</span>
     </ul>
