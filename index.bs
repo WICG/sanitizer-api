@@ -515,8 +515,8 @@ is used as the configuration dictionary.
 :: The <dfn>allow comments option</dfn> determines whether HTML comments are
    allowed.
 
-Note: `allowElements` creates a sanitizer that defaults to dropping elements,
-  while `blockElements` and `dropElements` defaults to keeping unknown
+Note: `allowElements` creates a sanitizer that defaults to keeping elements,
+  while `blockElements` and `dropElements` defaults to dropping unknown
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to `allowAttributes` and `dropAttributes`.
 
