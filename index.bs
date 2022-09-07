@@ -891,24 +891,26 @@ algorithm collects these in one place.
 <div algorithm="handle funky elements">
 To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
 
-  1. If |element|'s [=element interface=] is {{HTMLTemplateElement}}:
+  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
+     the [=Element/local name=] [=is=] `"template"`:
     1. Run the steps of the [=sanitize a document fragment=] algorithm on
        |element|'s [=template contents=] attribute.
     1. Drop all child nodes of |element|.
-  1. If |element|'s [=element interface=] has a {{HTMLHyperlinkElementUtils}}
-     mixin, and if |element|'s `protocol` property is "javascript:":
+  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
+     the [=Element/local name=] [=is=] one of `"a"` or `"area"`,
+     and if |element|'s `protocol` property is "javascript:":
     1. Remove the `href` attribute from |element|.
-  1. if |element|'s [=element interface=] is {{HTMLFormElement}},
+  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
+     the [=Element/local name=] [=is=] `"form"`
      and if |element|'s `action` attribute is a [[URL]] with `javascript:`
      protocol:
     1. Remove the `action` attribute from |element|.
-  1. if |element|'s [=element interface=] is {{HTMLInputElement}}
-      or {{HTMLButtonElement}}, and if |element|'s `formaction` attribute is
-      a [[URL]] with `javascript:` protocol
+  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
+     the [=Element/local name=] [=is=] `"input"` or `"button"`,
+     and if |element|'s `formaction` attribute is a [[URL]] with `javascript:` protocol
     1. Remove the `formaction` attribute from |element|.
 </div>
 
-Issue(147): Do not use the interfaces as an abstraction.
 Issue(154): Export and refer funky element properties more precisely.
 
 
