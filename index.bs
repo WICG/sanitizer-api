@@ -24,6 +24,7 @@ WPT Path Prefix: /sanitizer-api/
 text: innerHTML; type: attribute; for: Element; url: https://dom.spec.whatwg.org/#widl-Element-innerHTML
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
+text: template contents; type: dfn; url: https://html.spec.whatwg.org/#template-contents
 </pre>
 <pre class="biblio">
 {
@@ -292,8 +293,8 @@ handle additional, application-specific use cases.
 
 * The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
     <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to run the [=create a sanitizer=] algorithm steps with |config| and <var ignore>this</var> as
-    parameter.
+    are to run the [=create a sanitizer=] algorithm steps on [=this=] with
+    |config| as parameter.
 * The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
     method steps are to return the result of running the [=sanitize=]
     algorithm on |input|,
@@ -710,12 +711,11 @@ sanitizer-names.https.html
 <div algorithm="create a sanitizer">
 To <dfn>create a Sanitizer</dfn> with an optional |config| parameter, run
 these steps:
-  1. Let |sanitizer| be a newly created Sanitizer instance.
   1. Create a copy of |config|.
   1. Normalize all element names in |config|'s copy by running the
      [=normalize element name=] algorithm on each of them.
   1. Remove all element names that were normalized to `null`.
-  1. Return |sanitizer|, with |config|'s copy as its [=configuration dictionary=].
+  1. Set |config| as [=this=]'s [=configuration dictionary=].
 
   Issue(148): This should explicitly state the config's properties in which element names are found and modify the config wih map operations.
 </div>
@@ -779,9 +779,9 @@ Issue(140): Does the `.sanitizeFor` element name require namespace-related proce
 
 <div algorithm="sanitizeAndSet">
 To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
-{{SetHTMLOptions}} |options| dictionary on an {{Element}} node |this|,
+{{SetHTMLOptions}} |options| dictionary on an {{Element}} node [=this=],
 run these steps:
-  1. If the [=element kind=] of |this| is `regular` and |this| does not
+  1. If the [=element kind=] of [=this=] is `regular` and [=this=]' [=Element/local name=] does not
      [=element matches an element name|match=] any name in the
      [=baseline element allow list=], then throw a {{TypeError}} and return.
   1. If the {{sanitizer}} member [=map/exists=] in the |options|
@@ -792,10 +792,10 @@ run these steps:
        algorithm without a `config` parameter.
   1. Let |fragment| be the result of invoking the
      [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
-     with |this| as the `context node` and |value| as `markup`.
+     with [=this=] as the `context node` and |value| as `markup`.
   1. Run the steps if the [=sanitize a document fragment=] algorithm
      on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
-  1. [=Replace all=] with |fragment| as the `node` and |this| as the `parent`.
+  1. [=Replace all=] with |fragment| as the `node` and [=this=] as the `parent`.
 <wpt>
   element-set-sanitized-html.https.html
 </wpt>
@@ -851,7 +851,7 @@ To <dfn>sanitize a document fragment</dfn> named |fragment| with a {{Sanitizer}}
     1. [=map/Set=] |m|[|node|] to |action|.
   1. [=list/iterate|For each=] |node| in |nodes|:
     1. If |m|[|node|] is `drop`, [=/remove=] |node|.
-    1. If |m|[|node|] is `block`, invoke [=Replace with=] with |node| as |this| and |node|'s [=tree/children=] as |nodes|.
+    1. If |m|[|node|] is `block`, invoke [=Replace with=] with |node| as [=this=] and |node|'s [=tree/children=] as |nodes|.
     1. If |m|[|node|] is `keep`, do nothing.
 </div>
 
