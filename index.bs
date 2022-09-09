@@ -943,6 +943,9 @@ To determine the <dfn>sanitize action for an |element|</dfn>, given a
   1. If |element| does not [=element matches an element name|match=] any name
      in |allow list|: Return `block`.
   1. Return `keep`.
+<wpt>
+sanitizer-unknown.https.html
+</wpt>
 </div>
 
 <div algorithm="element matches an element name">
