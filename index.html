@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="01ec1018d1e699253ffab2b2f173a0da4172b9ec" name="document-revision">
+  <meta content="da328f4e1fb5c69e755112064811a19f0b73ca41" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1047,8 +1047,7 @@ handle additional, application-specific use cases.</p>
    <ul>
     <li data-md>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(config)|constructor(config)|Sanitizer()|constructor()" id="dom-sanitizer-sanitizer"> <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-  are to run the <a data-link-type="dfn" href="#create-a-sanitizer" id="ref-for-create-a-sanitizer">create a sanitizer</a> algorithm steps with <var>config</var> and <var>this</var> as
-  parameter.</p>
+  are to run the <a data-link-type="dfn" href="#create-a-sanitizer" id="ref-for-create-a-sanitizer">create a sanitizer</a> algorithm steps on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a> with <var>config</var> as parameter.</p>
     <li data-md>
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="method" data-export id="dom-sanitizer-sanitize"><code>sanitize(<var>input</var>)</code></dfn> method steps are to return the result of running the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> algorithm on <var>input</var>,</p>
     <li data-md>
@@ -1072,7 +1071,7 @@ applies a string using a <code>Sanitizer</code> directly to an existing element 
 </pre>
    <ul>
     <li data-md>
-     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Element" data-dfn-type="method" data-export data-lt="setHTML(input, options)|setHTML(input)" id="dom-element-sethtml"><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn> method steps are to run the <a data-link-type="dfn" href="#sanitizeandset" id="ref-for-sanitizeandset">sanitizeAndSet</a> algorithm on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>, <var>input</var>, and <var>options</var>.</p>
+     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Element" data-dfn-type="method" data-export data-lt="setHTML(input, options)|setHTML(input)" id="dom-element-sethtml"><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn> method steps are to run the <a data-link-type="dfn" href="#sanitizeandset" id="ref-for-sanitizeandset">sanitizeAndSet</a> algorithm on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>, <var>input</var>, and <var>options</var>.</p>
    </ul>
    <details class="wpt-tests-block" dir="ltr" lang="en" open>
     <summary>Tests</summary>
@@ -1439,15 +1438,13 @@ This is valid, but probably not what you want.</p>
 these steps: 
     <ol>
      <li data-md>
-      <p>Let <var>sanitizer</var> be a newly created Sanitizer instance.</p>
-     <li data-md>
       <p>Create a copy of <var>config</var>.</p>
      <li data-md>
       <p>Normalize all element names in <var>config</var>’s copy by running the <a data-link-type="dfn" href="#normalize-element-name" id="ref-for-normalize-element-name">normalize element name</a> algorithm on each of them.</p>
      <li data-md>
       <p>Remove all element names that were normalized to <code>null</code>.</p>
      <li data-md>
-      <p>Return <var>sanitizer</var>, with <var>config</var>’s copy as its <a data-link-type="dfn" href="#configuration-dictionary" id="ref-for-configuration-dictionary③">configuration dictionary</a>.</p>
+      <p>Set <var>config</var> as <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a>'s <a data-link-type="dfn" href="#configuration-dictionary" id="ref-for-configuration-dictionary③">configuration dictionary</a>.</p>
     </ol>
     <p class="issue" id="issue-6f447953"><a class="self-link" href="#issue-6f447953"></a> This should explicitly state the config’s properties in which element names are found and modify the config wih map operations. <a href="https://github.com/WICG/sanitizer-api/issues/148">[Issue #148]</a></p>
    </div>
@@ -1520,11 +1517,11 @@ these steps:
    </div>
    <p class="issue" id="issue-b45c400e"><a class="self-link" href="#issue-b45c400e"></a> Does the <code>.sanitizeFor</code> element name require namespace-related processing? <a href="https://github.com/WICG/sanitizer-api/issues/140">[Issue #140]</a></p>
    <div class="algorithm" data-algorithm="sanitizeAndSet">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="sanitizeAndSet" data-noexport id="sanitizeandset">sanitize and set</dfn> a <var>value</var> using an <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmloptions" id="ref-for-dictdef-sethtmloptions①">SetHTMLOptions</a></code> <var>options</var> dictionary on an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> node <var>this</var>,
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="sanitizeAndSet" data-noexport id="sanitizeandset">sanitize and set</dfn> a <var>value</var> using an <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmloptions" id="ref-for-dictdef-sethtmloptions①">SetHTMLOptions</a></code> <var>options</var> dictionary on an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> node <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③">this</a>,
 run these steps: 
     <ol>
      <li data-md>
-      <p>If the <a data-link-type="dfn" href="#element-kind" id="ref-for-element-kind①">element kind</a> of <var>this</var> is <code>regular</code> and <var>this</var> does not <a data-link-type="dfn" href="#element-matches-an-element-name" id="ref-for-element-matches-an-element-name">match</a> any name in the <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>, then throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and return.</p>
+      <p>If the <a data-link-type="dfn" href="#element-kind" id="ref-for-element-kind①">element kind</a> of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④">this</a> is <code>regular</code> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤">this</a>' <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> does not <a data-link-type="dfn" href="#element-matches-an-element-name" id="ref-for-element-matches-an-element-name">match</a> any name in the <a data-link-type="dfn" href="#baseline-element-allow-list" id="ref-for-baseline-element-allow-list①">baseline element allow list</a>, then throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code> and return.</p>
      <li data-md>
       <p>If the <code class="idl"><a data-link-type="idl" href="#dom-sethtmloptions-sanitizer" id="ref-for-dom-sethtmloptions-sanitizer">sanitizer</a></code> member <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a> in the <var>options</var> <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmloptions" id="ref-for-dictdef-sethtmloptions②">SetHTMLOptions</a></code> dictionary,</p>
       <ol>
@@ -1535,12 +1532,12 @@ run these steps:
         <p>otherwise let <var>sanitizer</var> be the result of the <a data-link-type="dfn" href="#create-a-sanitizer" id="ref-for-create-a-sanitizer①">create a Sanitizer</a> algorithm without a <code>config</code> parameter.</p>
       </ol>
      <li data-md>
-      <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a> with <var>this</var> as the <code>context node</code> and <var>value</var> as <code>markup</code>.</p>
+      <p>Let <var>fragment</var> be the result of invoking the <a href="https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm">html fragment parsing algorithm</a> with <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥">this</a> as the <code>context node</code> and <var>value</var> as <code>markup</code>.</p>
      <li data-md>
       <p>Run the steps if the <a data-link-type="dfn" href="#sanitize-a-document-fragment" id="ref-for-sanitize-a-document-fragment②">sanitize a document fragment</a> algorithm
  on <var>fragment</var>, using <var>sanitizer</var> as the current <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①">Sanitizer</a></code> instance.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">Replace all</a> with <var>fragment</var> as the <code>node</code> and <var>this</var> as the <code>parent</code>.</p>
+      <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">Replace all</a> with <var>fragment</var> as the <code>node</code> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a> as the <code>parent</code>.</p>
     </ol>
     <details class="wpt-tests-block" dir="ltr" lang="en" open>
      <summary>Tests</summary>
@@ -1628,7 +1625,7 @@ run these steps:
        <li data-md>
         <p>If <var>m</var>[<var>node</var>] is <code>drop</code>, <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-remove" id="ref-for-concept-node-remove">remove</a> <var>node</var>.</p>
        <li data-md>
-        <p>If <var>m</var>[<var>node</var>] is <code>block</code>, invoke <a data-link-type="dfn">Replace with</a> with <var>node</var> as <var>this</var> and <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a> as <var>nodes</var>.</p>
+        <p>If <var>m</var>[<var>node</var>] is <code>block</code>, invoke <a data-link-type="dfn">Replace with</a> with <var>node</var> as <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧">this</a> and <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a> as <var>nodes</var>.</p>
        <li data-md>
         <p>If <var>m</var>[<var>node</var>] is <code>keep</code>, do nothing.</p>
       </ol>
@@ -1688,16 +1685,16 @@ algorithm collects these in one place.</p>
     <ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①">is</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML</a> and
- the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is②">is</a> <code>"template"</code>:</p>
+ the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name②">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is②">is</a> <code>"template"</code>:</p>
       <ol>
        <li data-md>
-        <p>Run the steps of the <a data-link-type="dfn" href="#sanitize-a-document-fragment" id="ref-for-sanitize-a-document-fragment③">sanitize a document fragment</a> algorithm on <var>element</var>’s <a data-link-type="dfn">template contents</a> attribute.</p>
+        <p>Run the steps of the <a data-link-type="dfn" href="#sanitize-a-document-fragment" id="ref-for-sanitize-a-document-fragment③">sanitize a document fragment</a> algorithm on <var>element</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/#template-contents" id="ref-for-template-contents">template contents</a> attribute.</p>
        <li data-md>
         <p>Drop all child nodes of <var>element</var>.</p>
       </ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace①">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is③">is</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑤">HTML</a> and
- the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name②">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is④">is</a> one of <code>"a"</code> or <code>"area"</code>,
+ the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name③">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is④">is</a> one of <code>"a"</code> or <code>"area"</code>,
  and if <var>element</var>’s <code>protocol</code> property is "javascript:":</p>
       <ol>
        <li data-md>
@@ -1705,14 +1702,14 @@ algorithm collects these in one place.</p>
       </ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace②">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑤">is</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑥">HTML</a> and
- the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name③">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑥">is</a> <code>"form"</code> and if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol:</p>
+ the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name④">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑥">is</a> <code>"form"</code> and if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol:</p>
       <ol>
        <li data-md>
         <p>Remove the <code>action</code> attribute from <var>element</var>.</p>
       </ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace③">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑦">is</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑦">HTML</a> and
- the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name④">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑧">is</a> <code>"input"</code> or <code>"button"</code>,
+ the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑤">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑧">is</a> <code>"input"</code> or <code>"button"</code>,
  and if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol</p>
       <ol>
        <li data-md>
@@ -1774,17 +1771,17 @@ run these steps:
  ":" (U+003A).</p>
      <li data-md>
       <p>If <var>tokens</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size②">size</a> is 1,
- and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑧">HTML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑤">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑨">identical to</a> <var>tokens</var>[0]:
+ and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑧">HTML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑥">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑨">identical to</a> <var>tokens</var>[0]:
  Return <code>true</code>.</p>
      <li data-md>
       <p>If <var>tokens</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size③">size</a> is 2,
  and if [tokens|[0] is "svg"
- and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑥">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①⓪">identical to</a> to <var>tokens</var>[1]:
+ and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑦">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①⓪">identical to</a> to <var>tokens</var>[1]:
  Return <code>true</code>.</p>
      <li data-md>
       <p>If <var>tokens</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size④">size</a> is 2,
  and if <var>tokens</var>[0] is "math"
- and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace②">MathML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑦">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①①">identical to</a> <var>tokens</var>[1]:
+ and if <var>element</var> is in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace②">MathML namespace</a> and if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑧">local name</a> is <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①①">identical to</a> <var>tokens</var>[1]:
  Return <code>true</code>.</p>
      <li data-md>
       <p>Return <code>false</code>.</p>
@@ -1801,7 +1798,7 @@ list</a></dfn> <var>list</var>, run these steps:
      <li data-md>
       <p>Let <var>element</var> be the <var>attribute</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑧">Element</a></code>.</p>
      <li data-md>
-      <p>Let <var>element name</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑧">local name</a>.</p>
+      <p>Let <var>element name</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑨">local name</a>.</p>
      <li data-md>
       <p>If <var>element</var> is a in either the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑤">SVG</a> or <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace③">MathML</a> namespaces (i.e., it’s a <a href="https://html.spec.whatwg.org/#foreign-elements">foreign element</a>),
  then prefix <var>element name</var> with the appropriate <a href="#namespaces">namespace designator</a> plus a whitespace
@@ -1814,7 +1811,7 @@ list</a></dfn> <var>list</var>, run these steps:
     </ol>
     <p class="issue" id="issue-9bd4ab74"><a class="self-link" href="#issue-9bd4ab74"></a> This algorithm is still using a whitespace. <a href="https://github.com/WICG/sanitizer-api/issues/146">[Issue #146]</a></p>
     <p class="note" role="note"><span>Note:</span> The element names in the Sanitizer configuration are normalized according
-  to normalization step in the HTML Parser, just like elements' <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑨">local names</a> are. Thus, the comparison is effectively case
+  to normalization step in the HTML Parser, just like elements' <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①⓪">local names</a> are. Thus, the comparison is effectively case
   insensitive.</p>
    </div>
    <div class="algorithm" data-algorithm="sanitize action for an attribute">
@@ -1851,9 +1848,9 @@ configuration dictionary <var>config</var>, run these steps:
 or <code>custom</code>. Let <var>element kind</var> be: 
     <ul>
      <li data-md>
-      <p><code>custom</code>, if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①⓪">local name</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" id="ref-for-valid-custom-element-name">valid custom element name</a>,</p>
+      <p><code>custom</code>, if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①①">local name</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" id="ref-for-valid-custom-element-name">valid custom element name</a>,</p>
      <li data-md>
-      <p><code>unknown</code>, if <var>element</var> is not in the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> namespace or if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①①">local name</a> denotes an unknown element — that is, if the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification assigns to it would
+      <p><code>unknown</code>, if <var>element</var> is not in the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> namespace or if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①②">local name</a> denotes an unknown element — that is, if the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification assigns to it would
  be <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement" id="ref-for-htmlunknownelement">HTMLUnknownElement</a></code>,</p>
     </ul>
     <p class="issue" id="issue-f3f3c0ed"><a class="self-link" href="#issue-f3f3c0ed"></a> We do not want to use the interface (e.g., "applet" and "blink" are HTMLUnknownElement) <a href="https://github.com/WICG/sanitizer-api/issues/147">[Issue #147]</a></p>
@@ -3302,8 +3299,9 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <a href="https://dom.spec.whatwg.org/#concept-element-local-name">https://dom.spec.whatwg.org/#concept-element-local-name</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-element-local-name">2.3.1. Attribute Match Lists</a>
-    <li><a href="#ref-for-concept-element-local-name①">3.3. Sanitization Algorithms</a> <a href="#ref-for-concept-element-local-name②">(2)</a> <a href="#ref-for-concept-element-local-name③">(3)</a> <a href="#ref-for-concept-element-local-name④">(4)</a>
-    <li><a href="#ref-for-concept-element-local-name⑤">3.4. Matching Against The Configuration</a> <a href="#ref-for-concept-element-local-name⑥">(2)</a> <a href="#ref-for-concept-element-local-name⑦">(3)</a> <a href="#ref-for-concept-element-local-name⑧">(4)</a> <a href="#ref-for-concept-element-local-name⑨">(5)</a> <a href="#ref-for-concept-element-local-name①⓪">(6)</a> <a href="#ref-for-concept-element-local-name①①">(7)</a>
+    <li><a href="#ref-for-concept-element-local-name①">3.1. API Implementation</a>
+    <li><a href="#ref-for-concept-element-local-name②">3.3. Sanitization Algorithms</a> <a href="#ref-for-concept-element-local-name③">(2)</a> <a href="#ref-for-concept-element-local-name④">(3)</a> <a href="#ref-for-concept-element-local-name⑤">(4)</a>
+    <li><a href="#ref-for-concept-element-local-name⑥">3.4. Matching Against The Configuration</a> <a href="#ref-for-concept-element-local-name⑦">(2)</a> <a href="#ref-for-concept-element-local-name⑧">(3)</a> <a href="#ref-for-concept-element-local-name⑨">(4)</a> <a href="#ref-for-concept-element-local-name①⓪">(5)</a> <a href="#ref-for-concept-element-local-name①①">(6)</a> <a href="#ref-for-concept-element-local-name①②">(7)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-element-namespace">
@@ -3596,7 +3594,9 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <aside class="dfn-panel" data-for="term-for-this">
    <a href="https://webidl.spec.whatwg.org/#this">https://webidl.spec.whatwg.org/#this</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-this">2.1. Sanitizer API</a>
+    <li><a href="#ref-for-this">2.1. Sanitizer API</a> <a href="#ref-for-this①">(2)</a>
+    <li><a href="#ref-for-this②">3.1. API Implementation</a> <a href="#ref-for-this③">(2)</a> <a href="#ref-for-this④">(3)</a> <a href="#ref-for-this⑤">(4)</a> <a href="#ref-for-this⑥">(5)</a> <a href="#ref-for-this⑦">(6)</a>
+    <li><a href="#ref-for-this⑧">3.3. Sanitization Algorithms</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-undefined">
