@@ -851,7 +851,9 @@ To <dfn>sanitize a document fragment</dfn> named |fragment| with a {{Sanitizer}}
     1. [=map/Set=] |m|[|node|] to |action|.
   1. [=list/iterate|For each=] |node| in |nodes|:
     1. If |m|[|node|] is `drop`, [=/remove=] |node|.
-    1. If |m|[|node|] is `block`, invoke [=Replace with=] with |node| as [=this=] and |node|'s [=tree/children=] as |nodes|.
+    1. If |m|[|node|] is `block`, create a {{DocumentFragment}} |fragment|,
+       [=/append=] all of |node|'s [=tree/children=] to |fragment|, and
+       [=/replace=] |node| within |node|'s [=tree/parent=] with |fragment|.
     1. If |m|[|node|] is `keep`, do nothing.
 </div>
 
