@@ -1,0 +1,26 @@
+# namespace:
+accent
+accentunder
+definitionURL
+depth
+display
+displaystyle
+encoding
+form
+height
+largeop
+linethickness
+lspace
+mathbackground
+mathcolor
+mathsize
+mathvariant
+maxsize
+minsize
+movablelimits
+rspace
+scriptlevel
+stretchy
+symmetric
+voffset
+width
