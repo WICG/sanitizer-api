@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
+  <meta content="Bikeshed version b0de3432c, updated Thu Oct 13 09:16:59 2022 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="a9f6a4bea81583229d084cbedf7975301e350e8e" name="document-revision">
+  <meta content="30015006e301cb746bb3f03c843a6931808bc810" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -726,7 +726,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-10-07">7 October 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-10-19">19 October 2022</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1940,7 +1940,7 @@ avoided.</p>
    <p>A more complete treatement of mXSS can be found in <a data-link-type="biblio" href="#biblio-mxss">[MXSS]</a>.</p>
    <h2 class="heading settled" data-level="5" id="ack"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
    <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
-describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="#https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">window.toStaticHTML()</a></code>.</p>
+describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="termref-for-">window.toStaticHTML()</a></code>.</p>
    <h2 class="heading settled" id="constants"><span class="content">Appendix A: Built-in Constants</span><a class="self-link" href="#constants"></a></h2>
    <p><em>This appendix is normative, except where explicitly noted otherwise.</em></p>
    <p>These constants define core behaviour of the Sanitizer algorithm.</p>
@@ -3196,6 +3196,24 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#dom-element-sethtml">setHTML(input, options)</a><span>, in § 2.1</span>
    <li><a href="#dictdef-sethtmloptions">SetHTMLOptions</a><span>, in § 2.1</span>
   </ul>
+  <aside class="dfn-panel" data-for="term-for-widl-Element-innerHTML">
+   <a href="https://dom.spec.whatwg.org/#widl-Element-innerHTML">https://dom.spec.whatwg.org/#widl-Element-innerHTML</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-widl-Element-innerHTML">1. Introduction</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-template-contents">
+   <a href="https://html.spec.whatwg.org/#template-contents">https://html.spec.whatwg.org/#template-contents</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-template-contents">3.3. Sanitization Algorithms</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-">
+   <a href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#termref-for-">5. Acknowledgements</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-attr">
    <a href="https://dom.spec.whatwg.org/#attr">https://dom.spec.whatwg.org/#attr</a><b>Referenced in:</b>
    <ul>
@@ -3294,6 +3312,13 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-tree-inclusive-descendant">3.3. Sanitization Algorithms</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-attribute-local-name">
+   <a href="https://dom.spec.whatwg.org/#concept-attribute-local-name">https://dom.spec.whatwg.org/#concept-attribute-local-name</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-attribute-local-name">2.3.1. Attribute Match Lists</a>
+    <li><a href="#ref-for-concept-attribute-local-name①">3.4. Matching Against The Configuration</a> <a href="#ref-for-concept-attribute-local-name②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-element-local-name">
@@ -3620,6 +3645,13 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
+    <a data-link-type="biblio">[]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-widl-Element-innerHTML">innerHTML</span>
+     <li><span class="dfn-paneled" id="term-for-template-contents">template contents</span>
+     <li><span class="dfn-paneled" id="term-for-">window.toStaticHTML()</span>
+    </ul>
+   <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-attr">Attr</span>
@@ -3637,6 +3669,7 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
      <li><span class="dfn-paneled" id="term-for-concept-create-element">creating an element</span>
      <li><span class="dfn-paneled" id="term-for-concept-element-interface">element interface</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-inclusive-descendant">inclusive descendant</span>
+     <li><span class="dfn-paneled" id="term-for-concept-attribute-local-name">local name <small>(for Attr)</small></span>
      <li><span class="dfn-paneled" id="term-for-concept-element-local-name">local name <small>(for Element)</small></span>
      <li><span class="dfn-paneled" id="term-for-concept-element-namespace">namespace</span>
      <li><span class="dfn-paneled" id="term-for-boundary-point-node">node</span>
