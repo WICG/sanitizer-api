@@ -870,6 +870,7 @@ Issue(146): Whitespaces or colons?
 To determine whether an <dfn>|attribute| matches an [=attribute match
 list=]</dfn> |list|, run these steps:
 
+  1. If |attribute|'s [=Attr/namespace=] is not `null`: Return `false`.
   1. If |attribute|'s [=Attr/local name=] does not match the
      [=attribute match list=] |list|'s
      [key](https://webidl.spec.whatwg.org/#idl-record) and if the key is
