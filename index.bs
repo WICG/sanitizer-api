@@ -596,11 +596,10 @@ A given |attribute| belonging to an |element| matches an
 [=attribute match list=], if the |attribute| is a key in the match list,
 and |element| or `"*"` are found in the |attribute|'s value list.
 
-For elements in the [[HTML namespace]] and non-namespaced attributes - i.e.,
-what one may think of as normal [[HTML]] elements and attributes - elements
-are named by their [=Element/local name=], and
-[=Attr/local name|attributes, too=]. For "foreign" elements and attributes,
-the rules are explained in the [[#namespaces]] chapter below.
+Element names are interpreted as names in the [[HTML namespace]] and
+non-namespaced attributes - i.e., what one may think of as normal [[HTML]]
+elements and attributes. Elements are named by their [=Element/local name=], and
+[=Attr/local name|attributes, too=].
 
 <pre class="idl">
   typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
@@ -628,82 +627,6 @@ Examples for attributes and attribute match lists:
 ```
 </div>
 
-## Namespaces ## {#namespaces}
-
-The [[HTML]] spec embeds [[HTML#svg-0|SVG]] and [[HTML#mathml|MathML]] content
-and supports several [[HTML#attributes-2|namespaced attributes]].
-To support these, the [=configuration dictionary=] supports
-namespaced element and attribute names in the [=attribute match lists=].
-
-The Sanitizer API uses the namespace model and namespace restrictions
-of the [[HTML]] specification, and to support exactly as much namespaced
-content as HTML does. When specifying element names, a set of fixed namespace
-designators can be used to designate elements in the non-default namespaces.
-Namespace designator and element names are seperated by a
-colon (`":"`, U+003A) character. The following namespace designators are
-recognized:
-* `svg`: designates elements in the [=SVG namespace=].
-* `math`: designates elements in the [=MathML namespace=].
-* All elements without namespace designator are in the [=HTML namespace=].
-
-No other namespace designators are valid.
-
-<div class="example">
-* `"p"`: The `p` element in the [=HTML namespace=].
-* `"svg:line"`: The `line` element in the [=SVG namespace=].
-* `"math:mfrac"`: The `mfrac` element in the [=MathML namespace=].
-* `"dc:contributor"`: Invalid. This does not designate an element, and
-  will not match anything.
-* `"svg"`: The `svg` element in the [=HTML namespace=].
-  <br>
-  Note the apparent
-  mismatch between the element name and the namespace it is in. This example
-  is valid, but is almost certainly not what the author intended. The
-  HTML parser has rules to translate the `<svg>` token into the `svg` element
-  in the [=SVG namespace=] (assuming a proper parsing context), while the
-  Sanitizer API does not.
-* `"svg:svg"`: The `svg` element in the [=SVG namespace=].
-
-</div>
-
-Note: The [[HTML]] specification solves the problem of distinguishing HTML
-  from "foreign" elements largely through the parse context. This distinction
-  isn't available to the Sanitizer [=configuration dictionary=], since there is no
-  hierarchy or other relationship between configuration items. Therefore,
-  we introduce the explicit namespace designator.
-
-Note: The colon (`":"`, U+003A) character is a valid character in
-  [[HTML#start-tags|HTML tag names]].
-  But because we use it here unconditionally
-  to designate namespaces, it is not possible to add a name with a colon in it
-  to an [=element allow list=]. Therefore all such elements would be blocked,
-  regardless of the configuration.
-
-Attributes follow the syntax of [[HTML#attributes-2|HTML]], specifically the
-table at the end of the subsection. The attribute names listed there will be
-recognized as being in the namespace also listed there. No other namespaced
-attributes will be recognized.
-
-<div class="example">
-* `lang`: An attribute named `lang`, which is not in any namespace.
-* `xml:lang`: An attribute named `lang` in the namespace
-  `"http://www.w3.org/XML/1998/namespace"`, commonly known as the
-  [=XML namespace=].
-* `my:lang`: An attribute `my:lang`, which is not in any namespace.
-  This is valid, but probably not what you want.
-
-</div>
-
-Note: This Sanitizer API makes no attempt at supporting arbitrary namespaces
-  or the [[XML-NAMES|Namespaces in XML]] specification in
-  general. We restrict notation and other support to the element and attribute
-  namespaces supported in the [[HTML]] specification, and there are no
-  recognized namespace designators other that the ones listed here.
-
-<wpt>
-sanitizer-names.https.html
-</wpt>
-
 # Algorithms # {#algorithms}
 
 ## API Implementation ## {#api-algorithms}
@@ -712,9 +635,6 @@ sanitizer-names.https.html
 To <dfn>create a Sanitizer</dfn> with an optional |config| parameter, run
 these steps:
   1. Create a copy of |config|.
-  1. Normalize all element names in |config|'s copy by running the
-     [=normalize element name=] algorithm on each of them.
-  1. Remove all element names that were normalized to `null`.
   1. Set |config| as [=this=]'s [=configuration dictionary=].
 
   Issue(148): This should explicitly state the config's properties in which element names are found and modify the config wih map operations.
@@ -723,22 +643,6 @@ these steps:
 Note: The configuration object contains element names in the
   [=element allow list=], [=element block list=], and [=element drop list=], and
   in the mapped values in the [=attribute allow list=] and [=attribute drop list=].
-
-<div algorithm="normalize element name">
-To <dfn>normalize element name</dfn> |name|, run these steps:
-  1. Let |tokens| be the result of
-     [=strictly split a string|strictly splitting=] |name| on the delimiter
-     ":" (U+003A).
-  1. If |tokens|' [=list/size=] is 1, then return |tokens|[0].
-  1. If |tokens|' [=list/size=] is 2 and
-     |tokens|[0] [=string/is=] either "svg" or "math", then:
-    1. Adjust |tokens|[1] as described in the "any other start tag"
-       branch of [the rules for parsing tokens in foreign content](https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign)
-       subchapter in the HTML parsing spec.
-    1. Return the [=concatenation=] of the [=/list=]
-       &#x00AB;`|tokens|[0]`,`":"` (U+003A),`|tokens|[1]`&#x00BB;.
-  1. Return `null`.
-</div>
 
 <div algorithm="sanitize">
 To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
@@ -954,26 +858,9 @@ sanitizer-unknown.https.html
 To determine whether an <dfn>|element| matches an element |name|</dfn>,
 run these steps:
 
-  1. Let |tokens| be the result of running the
-     [=strictly split a string=] algorithm on |name| with the delimiter
-     ":" (U+003A).
-  1. If |tokens|' [=list/size=] is 1,
-     and if |element| is in the [=HTML namespace=]
+  1. If |element| is in the [=HTML namespace=]
      and if |element|'s [=Element/local name=] is
-     [=identical to=] |tokens|[0]:
-     Return `true`.
-  1. If |tokens|' [=list/size=] is 2,
-     and if [tokens|[0] is "svg"
-     and if |element| is in the [=SVG namespace=]
-     and if |element|'s [=Element/local name=] is
-     [=identical to=] to |tokens|[1]:
-     Return `true`.
-  1. If |tokens|'s [=list/size=] is 2,
-     and if |tokens|[0] is "math"
-     and if |element| is in the [=MathML namespace=]
-     and if |element|'s [=Element/local name=] is
-     [=identical to=] |tokens|[1]:
-     Return `true`.
+     [=identical to=] |name|: Return `true`.
   1. Return `false`.
 </div>
 
@@ -983,29 +870,16 @@ Issue(146): Whitespaces or colons?
 To determine whether an <dfn>|attribute| matches an [=attribute match
 list=]</dfn> |list|, run these steps:
 
+  1. If |attribute|'s [=Attr/namespace=] is not `null`: Return `false`.
   1. If |attribute|'s [=Attr/local name=] does not match the
      [=attribute match list=] |list|'s
      [key](https://webidl.spec.whatwg.org/#idl-record) and if the key is
      not `"*"`: Return `false`.
   1. Let |element| be the |attribute|'s {{Element}}.
   1. Let |element name| be |element|'s [=Element/local name=].
-  1. If |element| is a in either the [=SVG namespace|SVG=] or
-     [=MathML namespace|MathML=] namespaces (i.e., it's a
-     [foreign element](https://html.spec.whatwg.org/#foreign-elements)),
-     then prefix |element name| with the appropriate
-     [[#namespaces|namespace designator]] plus a whitespace
-     character.
   1. If |list|'s [value](https://webidl.spec.whatwg.org/#idl-record) does not
      contain |element name| and value is not `["*"]`: Return `false`.
   1. Return `true`.
-
-Issue(146): This algorithm is still using a whitespace.
-
-Note: The element names in the Sanitizer configuration are normalized according
-  to normalization step in the HTML Parser, just like elements'
-  [=Element/local names=] are. Thus, the comparison is effectively case
-  insensitive.
-</div>
 
 <div algorithm="sanitize action for an attribute">
 To determine the <dfn>sanitize action for an |attribute|</dfn> given a Sanitizer
