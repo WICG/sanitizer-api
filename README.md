@@ -101,8 +101,8 @@ Example:
   // allows for character-level formatting elements, plus the class= attribute
   // on any element, but nothing else.
   const for_display = new Sanitizer({
-    allowElements: ['span', 'em', 'strong', 'b', 'i'],
-    allowAttributes: {'class': ['*']}
+    allowElements: ['span', 'em', 'strong', 'b', 'i', 'a'],
+    allowAttributes: {'class': ['*'], 'href': ['*']}
   });
 
   const untrusted_example = "Well, <em class=nonchalant onclick='alert(\'General Kenobi\');'><a href='https://obiwan.example/home.php'>hello there<a>!"
