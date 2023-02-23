@@ -797,6 +797,9 @@ algorithm collects these in one place.
 <div algorithm="handle funky elements">
 To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
 
+  1. If |element| is a [=shadow host=]:
+    1. Run the steps of [=sanitize a document fragment=] algorithm on
+       |element|'s [=Element/shadow root=].
   1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
      the [=Element/local name=] [=is=] `"template"`:
     1. Run the steps of the [=sanitize a document fragment=] algorithm on
