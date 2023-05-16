@@ -54,119 +54,72 @@ a general purpose library. These should continue to be able to use whichever
 library or mechanism they prefer. However, the library should play well with
 other enforcement mechanisms.
 
+## Proposed API
 
+*Context: Various disagreements over API details lead to a re-design of the
+Sanitizer API. This presents a new API proposal (April '23, based on #192):*
 
-## Proposal
+There is a 2x2 set of methods that parse and filter the resulting node tree:
+On one axis they differ in the parsing context and are analogous to `innerHTML`
+and `DOMParser`'s `parseFromString()`; on the other axis, they differ
+in whether they enforce an XSS-focused security baseline or not. These two
+aspects pair well and yield:
 
-Note: The proposal is being developed [here](https://wicg.github.io/sanitizer-api/).
+- `Element.setHTML(string, {options})` - Parses `string` using `this` as
+  context element, like assigning to `innerHTML` would; applies a filter,
+  while enforcing an XSS-focused baseline; and finally replaces the children
+  of `this` with the results.
+- `Element.setHTMLUnsafe(string, {options})` - Like above, but it does not
+  enforce a baseline. E.g. if the filter is configured to allow a `<script>`
+  element, then a `<script>` would be inserted. If no filter is configured
+  then no filtering takes place.
+- `Document.parseHTML(string, {options})` (static method) - Creates a new
+  Document instance, and parses `string` as its content, like
+  `DOMParser.parseFromString` would. Applies a filter, while enforcing an
+  XSS-focused baseline. Returns the document.
+- `Document.parseHTMLUnsafe(string, {options})` (static method) - Like
+  above, but it will not enforce a baseline or apply any filter by default.
 
+All variants take an options dictionary with a `filter` (naming TBD) key and a
+filter configuration. The options dictionary can be easily extended to accept
+whatever parsing parameters make sense.
 
-We want to develop an API that learns from the
-[DOMPurify](https://github.com/cure53/DOMPurify) library. In particular:
+The 'safe' methods may have some built-in anti-XSS behaviours that are not
+expressibleby the config, e.g. dropping `javascript:`-URLs in contexts
+that navigate.
 
-* The core API would be a single method which sanitizes a String and returns
-  a DocumentFragment.
+The 'unsafe' methods will not apply any filtering if no explicit config is
+supplied.
 
-  * `sanitize(DOMString value)` => `DocumentFragment`
+## Major differences to previously proposed APIs:
 
-  * Other input types  (e.g. Document or DocumentFragment) can also be
-    supported.
+The currently proposed API differs in a number of aspects:
 
-  * Other result types (e.g. String-to-String) can also be supported with
-    different methods. I.e., one method per supported output type.
+- Two sets of methods, `innerHTML`-like and `DOMParser`-like.
+- Since the 'sanitizer' config can now be used in both safe and unsafe ways,
+  it's arguably no longer a sanitizer config but a filter config.
+- Enforcement of a security baseline depends on the method. The filter/sanitizer
+  config can now be used differently, either in a guaranteed-secure way or in
+  use-config-as-written way.
 
-* To support different use cases and to keep the API extensible, the
-  sanitization should be configurable via an options dictionary.
+## Open questions:
 
-  * The default (without configuration) should provide safety against script
-    execution.
+- Defaults: If no filter is supplied, do the safe methods have any filtering
+  other than the baseline?
+- Defaults: All of these are new methods without legacy usage. Would DSD
+  parsing default to `true`? (Probably. Decision lies with WHATWG.)
+- Should the filter config be a separate object, or should it be a plain dictionary?
+  - Reasons pro dictionary:
+     - Simpler.
+  - Reasons pro object:
+     - Allows to pre-process the config and to amortize the cost over many calls.
+     - Allows adding other useful config operations, like introspection.
+- Exact filter options syntax. I'm assuming this will follow the discussion in
+  #181.
+- Naming is TBD. Here I'm trying to follow the preferences expressed in the
+  recent 'sync' meeting.
 
-* To make it easy to review and reason about sanitizer configs, there should
-  be sanitizer instances for a given configuration.
-
-  * DOMPurify supports per-call and a global "default" config. Global
-    configuration state can be awkward to use when different dependencies
-    have different ideas about what the global state should be. Likewise,
-    per-call configs can be error prone and hard to reason about, since every
-    call site might be a little different.
-
-* There seem to be a handful of common use cases. There should be sensible
-  default options for each of these.
-
-### Proposed API
-
-The basic API would be`.sanitize(value)` to produce a DocumentFragment.
-Sanitizers can be constructed with a dictionary of options.
-
+## Examples
+```js
+// TODO
 ```
-[
-  Exposed=Window,
-  SecureContext
-] interface Sanitizer {
-  constructor(optional SanitizerConfig config = {});
-  DocumentFragment sanitize(DOMString input);
-
-  DOMString sanitizeToString(DOMString input);
-  readonly attribute SanitizerConfig creationOptions;
-}
-```
-
-### Example usage
-
-A simple web app wishes to take a string (say: a name) and display it on
-the page:
-
-```
-const s = new Sanitizer();
-const node = document.getElementById("...");
-
-node.innerText = "";
-node.appendChild(s.sanitize(user_supplied_value));
-```
-
-
-### Roadmap
-
-* Sanitizer Specification 1.0
-  * Supports config-less sanitization;
-  * Supports customization of allowlists for elements and attributes;
-  * The core goal is the sanitization of any markup that can cause XSS.
-
-* Sanitizer Specification 2.0
-  * Supports additional configuration options, possibly stemming from DOMPurify;
-  * Supports custom callbacks and hooks to fine-tune sanitization results.
-
-## FAQ
-
-### Who would use this and why?
-* Web application developers who want to allow some - but not all - HTML. This could mean developers handling Wiki pages, message boards, crypto messengers, web mailers, etc.
-* Developers of browser extensions who want to secure their applications against malicious user-controlled, or even site-controlled, HTML.
-* Application developers who create Electron applications and comparable tools which interpret and display HTML and JavaScript.
-
-### Wouldn’t this be just a niche feature?
-* No, according to the statistics offered by the npm.js platform, libraries such as DOMPurify are downloaded over 200 thousand times every month . DOMPurify is furthermore used from within various CDN networks for which no metrics are available at this point.
-* Besides web applications, sanitizer libraries are also used in Electron applications, browser extensions and other applications making use of a browser engine.
-
-### But this can be done on the server, can’t it? Like in the “olden days”.
-* While this is correct, server-side sanitizers have a terrible track record for being bypassed. Using them is conducive to a Denial of Service on the server and one simply cannot know about the browser’s quirks without being highly knowledgeable in this particular realm.
-* As a golden rule, sanitization should happen where the sanitized result is used, so that the above noted knowledge gaps can be mitigated and various risks might be averted.
-
-### What are the key advantages of Sanitizing in the browser?
-* *Minimalistic Approach:* Various libraries, such as DOMPurify, currently need to work around browser-specific quirks. This would no longer matter had the implementations become directly embedded in the browser.
-* *Simplicity:* This approach does not aim to create any additional complexity, introduce new data types, labels or flags, it simply aims to provide an API that allows developers to take an untrusted string, remove anything that can lead to script execution or comparable and retuirn the sanitized result, again as a string (see also [#4](https://github.com/WICG/sanitizer-api/issues/4)).
-* *Bandwidth:* Sanitizer libraries are “heavy” and by reducing the need to pull them from a server by embedding them in the browser instead, bandwidth can be saved.
-* *Performance:* Sanitizing markup in C/C++ is faster than doing the same in JavaScript.
-* *Reusability:* Once the browser exposes a sanitizer in the DOM, it can be reused for potentially upcoming [SafeHTML](https://lists.w3.org/Archives/Public/public-webappsec/2016Jan/0113.html) implementations, [Trusted Types](https://github.com/WICG/trusted-types), secure elements and, if configurable, even be repurposed for other changes in the user-controlled HTML, for instance in connection with URL rewriting, removal of annoying UI elements and CSS sanitization.
-
-### What if someone wants to customize the sanitization rules?
-* It should be trivial to implement basic configuration options that allow customization of the default allowlist and enable developers to remove, add or completely rewrite the allowed elements and/or attributes.
-* The already mentioned browser's clipboard sanitizer already ships an allowlist, so the only task would be to make it configurable.
-
-### Isn’t building a sanitizer in the browser risky and difficult?
-* No, it may appear so but, in fact, the browsers already feature at least one sanitizer, for instance the one handling HTML clipboard content that is copied and pasted across origins. The existing puzzle pieces only need to be put correctly together in a slightly different way before they are then exposed in the DOM.
-* If there are any risks connected to the new process, then they are not new but rather already concern the handling of the user-generated HTML presently processed by the in-browser sanitizers. Aside for configuration parsing, which should be a trivial problem to solve, no added risks can be envisioned.
-
-### Wait, what does secure even mean in this context?
-* Calling the process secure means that a developer can expect that XSS attacks caused by user-controlled HTML, SVG, and MathML are eradicated.
-* The sanitizer would remove all elements that cause script execution from the string it receives and returns.
-
