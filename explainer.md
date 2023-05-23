@@ -66,7 +66,7 @@ in whether they enforce an XSS-focused security baseline or not. These two
 aspects pair well and yield:
 
 - `Element.setHTML(string, {options})` - Parses `string` using `this` as
-  context element, like assigning to `innerHTML` would; applies a filter,
+  context element, similar in spirit to `innerHTML`; applies a filter,
   while enforcing an XSS-focused baseline; and finally replaces the children
   of `this` with the results.
 - `Element.setHTMLUnsafe(string, {options})` - Like above, but it does not
@@ -74,11 +74,16 @@ aspects pair well and yield:
   element, then a `<script>` would be inserted. If no filter is configured
   then no filtering takes place.
 - `Document.parseHTML(string, {options})` (static method) - Creates a new
-  Document instance, and parses `string` as its content, like
+  Document instance, and parses `string` as its content similar to how
   `DOMParser.parseFromString` would. Applies a filter, while enforcing an
   XSS-focused baseline. Returns the document.
 - `Document.parseHTMLUnsafe(string, {options})` (static method) - Like
   above, but it will not enforce a baseline or apply any filter by default.
+
+Note that while these methods are similar to `innerHTML` and `DOMParser`'s
+`parseFromString`, we expect some differences in addition to HTML filtering:
+For example, these new methods should support declarative shadow DOM by default.
+They will not support creation of XML documents.
 
 All variants take an options dictionary with a `filter` (naming TBD) key and a
 filter configuration. The options dictionary can be easily extended to accept
@@ -105,15 +110,11 @@ The currently proposed API differs in a number of aspects:
 ## Open questions:
 
 - Defaults: If no filter is supplied, do the safe methods have any filtering
-  other than the baseline?
-- Defaults: All of these are new methods without legacy usage. Would DSD
-  parsing default to `true`? (Probably. Decision lies with WHATWG.)
-- Should the filter config be a separate object, or should it be a plain dictionary?
-  - Reasons pro dictionary:
-     - Simpler.
-  - Reasons pro object:
-     - Allows to pre-process the config and to amortize the cost over many calls.
-     - Allows adding other useful config operations, like introspection.
+  other than the baseline? (For further discussion, see #188.)
+- Should the filter config be a separate object, or should it be a plain
+  dictionary? (As-is, it should probably be a dictionary. An object would
+  require either compelling performance numbers, or a compelling operation that
+  would only work with a pre-processed dictionary.)
 - Exact filter options syntax. I'm assuming this will follow the discussion in
   #181.
 - Naming is TBD. Here I'm trying to follow the preferences expressed in the

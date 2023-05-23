@@ -10,6 +10,17 @@ Status:
   with the goal of bringing this to the [WHATWG](https://whatwg.org/).
 * The API is not finalized and still subject to change.
 
+Here you can find additional information:
+
+* Implementation Status:
+  * [Mozilla position](https://github.com/mozilla/standards-positions/issues/106),
+    [WebKit position](https://github.com/WebKit/standards-positions/issues/86),
+    [Chrome Status](https://www.chromestatus.com/feature/5786893650231296).
+  * [Can I use 'Sanitizer API'](https://caniuse.com/mdn-api_sanitizer)?
+  * [Web Platform Tests]( https://wpt.fyi/results/sanitizer-api?label=experimental&label=master&aligned)
+    ([test source](https://github.com/web-platform-tests/wpt/tree/master/sanitizer-api)).
+* An early [W3C TAG review](https://github.com/w3ctag/design-reviews/issues/619).
+
 ## Explainer
 
 The API is still being discussed. Please see the [explainer](explainer.md) for
