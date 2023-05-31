@@ -4,11 +4,10 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 63e66730b, updated Tue Oct 25 12:35:05 2022 -0700" name="generator">
+  <meta content="Bikeshed version 5fcd28d6d, updated Tue May 30 13:12:11 2023 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="b99d4b9675ce7ced051faf0fafac379d93fcaf28" name="document-revision">
-<style>/* style-autolinks */
-
+  <meta content="6dd06232b7b74330518bdf82f900547880fa5fc7" name="document-revision">
+<style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
     font-size: inherit;
@@ -68,8 +67,17 @@ pre .property::before, pre .property::after {
 
 [data-link-type=biblio] {
     white-space: pre;
-}</style>
-<style>/* style-colors */
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --selflink-text: black;
+        --selflink-bg: silver;
+        --selflink-hover-text: white;
+    }
+}
+</style>
+<style>/* Boilerplate: style-colors */
 
 /* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
 :root {
@@ -177,9 +185,121 @@ pre .property::before, pre .property::after {
     --outdated-shadow: red;
 
     --editedrec-bg: darkorange;
-}</style>
-<style>/* style-counters */
+}
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: #ddd;
+        --bg: black;
+
+        --unofficial-watermark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cg fill='%23100808' transform='translate(200 200) rotate(-45) translate(-200 -200)' stroke='%23100808' stroke-width='3'%3E%3Ctext x='50%25' y='220' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EUNOFFICIAL%3C/text%3E%3Ctext x='50%25' y='305' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EDRAFT%3C/text%3E%3C/g%3E%3C/svg%3E");
+
+        --logo-bg: #1a5e9a;
+        --logo-active-bg: #c00;
+        --logo-text: white;
+
+        --tocnav-normal-text: #999;
+        --tocnav-normal-bg: var(--bg);
+        --tocnav-hover-text: var(--tocnav-normal-text);
+        --tocnav-hover-bg: #080808;
+        --tocnav-active-text: #f44;
+        --tocnav-active-bg: var(--tocnav-normal-bg);
+
+        --tocsidebar-text: var(--text);
+        --tocsidebar-bg: #080808;
+        --tocsidebar-shadow: rgba(255,255,255,.1);
+        --tocsidebar-heading-text: hsla(203,20%,40%,.7);
+
+        --toclink-text: var(--text);
+        --toclink-underline: #6af;
+        --toclink-visited-text: var(--toclink-text);
+        --toclink-visited-underline: #054572;
+
+        --heading-text: #8af;
+
+        --hr-text: var(--text);
+
+        --algo-border: #456;
+
+        --del-text: #f44;
+        --del-bg: transparent;
+        --ins-text: #4a4;
+        --ins-bg: transparent;
+
+        --a-normal-text: #6af;
+        --a-normal-underline: #555;
+        --a-visited-text: var(--a-normal-text);
+        --a-visited-underline: var(--a-normal-underline);
+        --a-hover-bg: rgba(25%, 25%, 25%, .2);
+        --a-active-text: #f44;
+        --a-active-underline: var(--a-active-text);
+
+        --borderedblock-bg: rgba(255, 255, 255, .05);
+
+        --blockquote-border: silver;
+        --blockquote-bg: var(--borderedblock-bg);
+        --blockquote-text: currentcolor;
+
+        --issue-border: #e05252;
+        --issue-bg: var(--borderedblock-bg);
+        --issue-text: var(--text);
+        --issueheading-text: hsl(0deg, 70%, 70%);
+
+        --example-border: hsl(50deg, 90%, 60%);
+        --example-bg: var(--borderedblock-bg);
+        --example-text: var(--text);
+        --exampleheading-text: hsl(50deg, 70%, 70%);
+
+        --note-border: hsl(120deg, 100%, 35%);
+        --note-bg: var(--borderedblock-bg);
+        --note-text: var(--text);
+        --noteheading-text: hsl(120, 70%, 70%);
+        --notesummary-underline: silver;
+
+        --assertion-border: #444;
+        --assertion-bg: var(--borderedblock-bg);
+        --assertion-text: var(--text);
+
+        --advisement-border: orange;
+        --advisement-bg: #222218;
+        --advisement-text: var(--text);
+        --advisementheading-text: #f84;
+
+        --warning-border: red;
+        --warning-bg: hsla(40,100%,20%,0.95);
+        --warning-text: var(--text);
+
+        --amendment-border: #330099;
+        --amendment-bg: #080010;
+        --amendment-text: var(--text);
+        --amendmentheading-text: #cc00ff;
+
+        --def-border: #8ccbf2;
+        --def-bg: #080818;
+        --def-text: var(--text);
+        --defrow-border: #136;
+
+        --datacell-border: silver;
+
+        --indexinfo-text: #aaa;
+
+        --indextable-hover-text: var(--text);
+        --indextable-hover-bg: #181818;
+
+        --outdatedspec-bg: rgba(255, 255, 255, .5);
+        --outdatedspec-text: black;
+        --outdated-bg: maroon;
+        --outdated-text: white;
+        --outdated-shadow: red;
+
+        --editedrec-bg: darkorange;
+    }
+    /* In case a transparent-bg image doesn't expect to be on a dark bg,
+       which is quite common in practice... */
+    img { background: white; }
+}
+</style>
+<style>/* Boilerplate: style-counters */
 body {
     counter-reset: example figure issue;
 }
@@ -206,20 +326,25 @@ figcaption {
 }
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
-}</style>
-<style>/* style-dfn-panel */
-
+}
+</style>
+<style>/* Boilerplate: style-dfn-panel */
 :root {
     --dfnpanel-bg: #ddd;
     --dfnpanel-text: var(--text);
 }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
 .dfn-panel {
     position: absolute;
     z-index: 35;
+    width: 20em;
+    width: 300px;
     height: auto;
-    width: -webkit-fit-content;
-    width: fit-content;
-    max-width: 300px;
     max-height: 500px;
     overflow: auto;
     padding: 0.5em 0.75em;
@@ -227,6 +352,7 @@ figcaption:not(.no-marker)::before {
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
 }
 .dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
@@ -234,8 +360,15 @@ figcaption:not(.no-marker)::before {
 .dfn-panel a { color: var(--dfnpanel-text); }
 .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
 .dfn-panel > b + b { margin-top: 0.25em; }
-.dfn-panel ul { padding: 0; }
-.dfn-panel li { list-style: inside; }
+.dfn-panel ul { padding: 0 0 0 1em; list-style: none; }
+.dfn-panel li a {
+    white-space: pre;
+    display: inline-block;
+    max-width: calc(300px - 1.5em - 1em);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
@@ -246,10 +379,62 @@ figcaption:not(.no-marker)::before {
     max-height: 30vh;
 }
 
-.dfn-paneled { cursor: pointer; }
+.dfn-paneled[role="button"] { cursor: pointer; }
 </style>
-<style>/* style-issues */
+<style>/* Boilerplate: style-dfn-panel */
+:root {
+    --dfnpanel-bg: #ddd;
+    --dfnpanel-text: var(--text);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+.dfn-panel {
+    position: absolute;
+    z-index: 35;
+    width: 20em;
+    width: 300px;
+    height: auto;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.75em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: var(--dfnpanel-bg);
+    color: var(--dfnpanel-text);
+    border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
+}
+.dfn-panel:not(.on) { display: none; }
+.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
+.dfn-panel > b { display: block; }
+.dfn-panel a { color: var(--dfnpanel-text); }
+.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel > b + b { margin-top: 0.25em; }
+.dfn-panel ul { padding: 0 0 0 1em; list-style: none; }
+.dfn-panel li a {
+    white-space: pre;
+    display: inline-block;
+    max-width: calc(300px - 1.5em - 1em);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
+.dfn-panel.activated {
+    display: inline-block;
+    position: fixed;
+    left: .5em;
+    bottom: 2em;
+    margin: 0 auto;
+    max-width: calc(100vw - 1.5em - .4em - .5em);
+    max-height: 30vh;
+}
+
+.dfn-paneled[role="button"] { cursor: pointer; }
+</style>
+<style>/* Boilerplate: style-issues */
 a[href].issue-return {
     float: right;
     float: inline-end;
@@ -258,8 +443,7 @@ a[href].issue-return {
     text-decoration: none;
 }
 </style>
-<style>/* style-md-lists */
-
+<style>/* Boilerplate: style-md-lists */
 /* This is a weird hack for me not yet following the commonmark spec
    regarding paragraph and lists. */
 [data-md] > :first-child {
@@ -267,8 +451,9 @@ a[href].issue-return {
 }
 [data-md] > :last-child {
     margin-bottom: 0;
-}</style>
-<style>/* style-selflinks */
+}
+</style>
+<style>/* Boilerplate: style-selflinks */
 
 :root {
     --selflink-text: white;
@@ -328,12 +513,36 @@ a.self-link::before            { content: "¶"; }
 .heading > a.self-link::before { content: "§"; }
 dfn > a.self-link::before      { content: "#"; }
 </style>
-<style>/* style-syntax-highlighting */
+<style>/* Boilerplate: style-style-syntax-highlighting */
 
             pre.idl.highlight {
                 background: var(--borderedblock-bg, var(--def-bg));
             }
             
+</style>
+<style>/* Boilerplate: style-style-var-click-highlighting */
+/*
+Colors were chosen in Lab using https://nixsensor.com/free-color-converter/
+D50 2deg illuminant, L in [0,100], a and b in [-128, 128]
+0 = lab(85,0,85)
+1 = lab(85,80,30)
+2 = lab(85,-40,40)
+3 = lab(85,-50,0)
+4 = lab(85,5,15)
+5 = lab(85,-10,-50)
+6 = lab(85,35,-15)
+*/
+var { cursor: pointer; }
+var.selected0 { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
+var.selected1 { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
+var.selected2 { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
+var.selected3 { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
+var.selected4 { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
+var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
+var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
+</style>
+<style>/* Boilerplate: style-syntax-highlighting */
+
 code.highlight { padding: .1em; border-radius: .3em; }
 pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
 
@@ -390,20 +599,72 @@ c-[vc] { color: #0077aa } /* Name.Variable.Class */
 c-[vg] { color: #0077aa } /* Name.Variable.Global */
 c-[vi] { color: #0077aa } /* Name.Variable.Instance */
 c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
+
+
+@media (prefers-color-scheme: dark) {
+    .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
+
+    c-[a] { color: #d33682 } /* Keyword.Declaration */
+    c-[b] { color: #d33682 } /* Keyword.Type */
+    c-[c] { color: #2aa198 } /* Comment */
+    c-[d] { color: #2aa198 } /* Comment.Multiline */
+    c-[e] { color: #268bd2 } /* Name.Attribute */
+    c-[f] { color: #b58900 } /* Name.Tag */
+    c-[g] { color: #cb4b16 } /* Name.Variable */
+    c-[k] { color: #d33682 } /* Keyword */
+    c-[l] { color: #657b83 } /* Literal */
+    c-[m] { color: #657b83 } /* Literal.Number */
+    c-[n] { color: #268bd2 } /* Name */
+    c-[o] { color: #657b83 } /* Operator */
+    c-[p] { color: #657b83 } /* Punctuation */
+    c-[s] { color: #6c71c4 } /* Literal.String */
+    c-[t] { color: #6c71c4 } /* Literal.String.Single */
+    c-[u] { color: #6c71c4 } /* Literal.String.Double */
+    c-[ch] { color: #2aa198 } /* Comment.Hashbang */
+    c-[cp] { color: #2aa198 } /* Comment.Preproc */
+    c-[cpf] { color: #2aa198 } /* Comment.PreprocFile */
+    c-[c1] { color: #2aa198 } /* Comment.Single */
+    c-[cs] { color: #2aa198 } /* Comment.Special */
+    c-[kc] { color: #d33682 } /* Keyword.Constant */
+    c-[kn] { color: #d33682 } /* Keyword.Namespace */
+    c-[kp] { color: #d33682 } /* Keyword.Pseudo */
+    c-[kr] { color: #d33682 } /* Keyword.Reserved */
+    c-[ld] { color: #657b83 } /* Literal.Date */
+    c-[nc] { color: #268bd2 } /* Name.Class */
+    c-[no] { color: #268bd2 } /* Name.Constant */
+    c-[nd] { color: #268bd2 } /* Name.Decorator */
+    c-[ni] { color: #268bd2 } /* Name.Entity */
+    c-[ne] { color: #268bd2 } /* Name.Exception */
+    c-[nf] { color: #268bd2 } /* Name.Function */
+    c-[nl] { color: #268bd2 } /* Name.Label */
+    c-[nn] { color: #268bd2 } /* Name.Namespace */
+    c-[py] { color: #268bd2 } /* Name.Property */
+    c-[ow] { color: #657b83 } /* Operator.Word */
+    c-[mb] { color: #657b83 } /* Literal.Number.Bin */
+    c-[mf] { color: #657b83 } /* Literal.Number.Float */
+    c-[mh] { color: #657b83 } /* Literal.Number.Hex */
+    c-[mi] { color: #657b83 } /* Literal.Number.Integer */
+    c-[mo] { color: #657b83 } /* Literal.Number.Oct */
+    c-[sa] { color: #6c71c4 } /* Literal.String.Affix */
+    c-[sb] { color: #6c71c4 } /* Literal.String.Backtick */
+    c-[sc] { color: #6c71c4 } /* Literal.String.Char */
+    c-[dl] { color: #6c71c4 } /* Literal.String.Delimiter */
+    c-[sd] { color: #6c71c4 } /* Literal.String.Doc */
+    c-[se] { color: #6c71c4 } /* Literal.String.Escape */
+    c-[sh] { color: #6c71c4 } /* Literal.String.Heredoc */
+    c-[si] { color: #6c71c4 } /* Literal.String.Interpol */
+    c-[sx] { color: #6c71c4 } /* Literal.String.Other */
+    c-[sr] { color: #6c71c4 } /* Literal.String.Regex */
+    c-[ss] { color: #6c71c4 } /* Literal.String.Symbol */
+    c-[fm] { color: #268bd2 } /* Name.Function.Magic */
+    c-[vc] { color: #cb4b16 } /* Name.Variable.Class */
+    c-[vg] { color: #cb4b16 } /* Name.Variable.Global */
+    c-[vi] { color: #cb4b16 } /* Name.Variable.Instance */
+    c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
+    c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
+}
 </style>
-<style>/* style-var-click-highlighting */
-
-    var { cursor: pointer; }
-    var.selected0 { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
-    var.selected1 { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
-    var.selected2 { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
-    var.selected3 { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
-    var.selected4 { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
-    var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
-    var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
-    </style>
-<style>/* style-wpt */
-
+<style>/* Boilerplate: style-wpt */
 :root {
     --wpt-border: hsl(0, 0%, 60%);
     --wpt-bg: hsl(0, 0%, 95%);
@@ -540,201 +801,11 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
     position: relative;
 }
 </style>
-<style>/* style-darkmode */
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text: #ddd;
-        --bg: black;
-
-        --unofficial-watermark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cg fill='%23100808' transform='translate(200 200) rotate(-45) translate(-200 -200)' stroke='%23100808' stroke-width='3'%3E%3Ctext x='50%25' y='220' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EUNOFFICIAL%3C/text%3E%3Ctext x='50%25' y='305' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EDRAFT%3C/text%3E%3C/g%3E%3C/svg%3E");
-
-        --logo-bg: #1a5e9a;
-        --logo-active-bg: #c00;
-        --logo-text: white;
-
-        --tocnav-normal-text: #999;
-        --tocnav-normal-bg: var(--bg);
-        --tocnav-hover-text: var(--tocnav-normal-text);
-        --tocnav-hover-bg: #080808;
-        --tocnav-active-text: #f44;
-        --tocnav-active-bg: var(--tocnav-normal-bg);
-
-        --tocsidebar-text: var(--text);
-        --tocsidebar-bg: #080808;
-        --tocsidebar-shadow: rgba(255,255,255,.1);
-        --tocsidebar-heading-text: hsla(203,20%,40%,.7);
-
-        --toclink-text: var(--text);
-        --toclink-underline: #6af;
-        --toclink-visited-text: var(--toclink-text);
-        --toclink-visited-underline: #054572;
-
-        --heading-text: #8af;
-
-        --hr-text: var(--text);
-
-        --algo-border: #456;
-
-        --del-text: #f44;
-        --del-bg: transparent;
-        --ins-text: #4a4;
-        --ins-bg: transparent;
-
-        --a-normal-text: #6af;
-        --a-normal-underline: #555;
-        --a-visited-text: var(--a-normal-text);
-        --a-visited-underline: var(--a-normal-underline);
-        --a-hover-bg: rgba(25%, 25%, 25%, .2);
-        --a-active-text: #f44;
-        --a-active-underline: var(--a-active-text);
-
-        --borderedblock-bg: rgba(255, 255, 255, .05);
-
-        --blockquote-border: silver;
-        --blockquote-bg: var(--borderedblock-bg);
-        --blockquote-text: currentcolor;
-
-        --issue-border: #e05252;
-        --issue-bg: var(--borderedblock-bg);
-        --issue-text: var(--text);
-        --issueheading-text: hsl(0deg, 70%, 70%);
-
-        --example-border: hsl(50deg, 90%, 60%);
-        --example-bg: var(--borderedblock-bg);
-        --example-text: var(--text);
-        --exampleheading-text: hsl(50deg, 70%, 70%);
-
-        --note-border: hsl(120deg, 100%, 35%);
-        --note-bg: var(--borderedblock-bg);
-        --note-text: var(--text);
-        --noteheading-text: hsl(120, 70%, 70%);
-        --notesummary-underline: silver;
-
-        --assertion-border: #444;
-        --assertion-bg: var(--borderedblock-bg);
-        --assertion-text: var(--text);
-
-        --advisement-border: orange;
-        --advisement-bg: #222218;
-        --advisement-text: var(--text);
-        --advisementheading-text: #f84;
-
-        --warning-border: red;
-        --warning-bg: hsla(40,100%,20%,0.95);
-        --warning-text: var(--text);
-
-        --amendment-border: #330099;
-        --amendment-bg: #080010;
-        --amendment-text: var(--text);
-        --amendmentheading-text: #cc00ff;
-
-        --def-border: #8ccbf2;
-        --def-bg: #080818;
-        --def-text: var(--text);
-        --defrow-border: #136;
-
-        --datacell-border: silver;
-
-        --indexinfo-text: #aaa;
-
-        --indextable-hover-text: var(--text);
-        --indextable-hover-bg: #181818;
-
-        --outdatedspec-bg: rgba(255, 255, 255, .5);
-        --outdatedspec-text: black;
-        --outdated-bg: maroon;
-        --outdated-text: white;
-        --outdated-shadow: red;
-
-        --editedrec-bg: darkorange;
-    }
-    /* In case a transparent-bg image doesn't expect to be on a dark bg,
-       which is quite common in practice... */
-    img { background: white; }
-}
-@media (prefers-color-scheme: dark) {
-    :root {
-        --selflink-text: black;
-        --selflink-bg: silver;
-        --selflink-hover-text: white;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --dfnpanel-bg: #222;
-        --dfnpanel-text: var(--text);
-    }
-}
-@media (prefers-color-scheme: dark) {
-    .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
-
-    c-[a] { color: #d33682 } /* Keyword.Declaration */
-    c-[b] { color: #d33682 } /* Keyword.Type */
-    c-[c] { color: #2aa198 } /* Comment */
-    c-[d] { color: #2aa198 } /* Comment.Multiline */
-    c-[e] { color: #268bd2 } /* Name.Attribute */
-    c-[f] { color: #b58900 } /* Name.Tag */
-    c-[g] { color: #cb4b16 } /* Name.Variable */
-    c-[k] { color: #d33682 } /* Keyword */
-    c-[l] { color: #657b83 } /* Literal */
-    c-[m] { color: #657b83 } /* Literal.Number */
-    c-[n] { color: #268bd2 } /* Name */
-    c-[o] { color: #657b83 } /* Operator */
-    c-[p] { color: #657b83 } /* Punctuation */
-    c-[s] { color: #6c71c4 } /* Literal.String */
-    c-[t] { color: #6c71c4 } /* Literal.String.Single */
-    c-[u] { color: #6c71c4 } /* Literal.String.Double */
-    c-[ch] { color: #2aa198 } /* Comment.Hashbang */
-    c-[cp] { color: #2aa198 } /* Comment.Preproc */
-    c-[cpf] { color: #2aa198 } /* Comment.PreprocFile */
-    c-[c1] { color: #2aa198 } /* Comment.Single */
-    c-[cs] { color: #2aa198 } /* Comment.Special */
-    c-[kc] { color: #d33682 } /* Keyword.Constant */
-    c-[kn] { color: #d33682 } /* Keyword.Namespace */
-    c-[kp] { color: #d33682 } /* Keyword.Pseudo */
-    c-[kr] { color: #d33682 } /* Keyword.Reserved */
-    c-[ld] { color: #657b83 } /* Literal.Date */
-    c-[nc] { color: #268bd2 } /* Name.Class */
-    c-[no] { color: #268bd2 } /* Name.Constant */
-    c-[nd] { color: #268bd2 } /* Name.Decorator */
-    c-[ni] { color: #268bd2 } /* Name.Entity */
-    c-[ne] { color: #268bd2 } /* Name.Exception */
-    c-[nf] { color: #268bd2 } /* Name.Function */
-    c-[nl] { color: #268bd2 } /* Name.Label */
-    c-[nn] { color: #268bd2 } /* Name.Namespace */
-    c-[py] { color: #268bd2 } /* Name.Property */
-    c-[ow] { color: #657b83 } /* Operator.Word */
-    c-[mb] { color: #657b83 } /* Literal.Number.Bin */
-    c-[mf] { color: #657b83 } /* Literal.Number.Float */
-    c-[mh] { color: #657b83 } /* Literal.Number.Hex */
-    c-[mi] { color: #657b83 } /* Literal.Number.Integer */
-    c-[mo] { color: #657b83 } /* Literal.Number.Oct */
-    c-[sa] { color: #6c71c4 } /* Literal.String.Affix */
-    c-[sb] { color: #6c71c4 } /* Literal.String.Backtick */
-    c-[sc] { color: #6c71c4 } /* Literal.String.Char */
-    c-[dl] { color: #6c71c4 } /* Literal.String.Delimiter */
-    c-[sd] { color: #6c71c4 } /* Literal.String.Doc */
-    c-[se] { color: #6c71c4 } /* Literal.String.Escape */
-    c-[sh] { color: #6c71c4 } /* Literal.String.Heredoc */
-    c-[si] { color: #6c71c4 } /* Literal.String.Interpol */
-    c-[sx] { color: #6c71c4 } /* Literal.String.Other */
-    c-[sr] { color: #6c71c4 } /* Literal.String.Regex */
-    c-[ss] { color: #6c71c4 } /* Literal.String.Symbol */
-    c-[fm] { color: #268bd2 } /* Name.Function.Magic */
-    c-[vc] { color: #cb4b16 } /* Name.Variable.Class */
-    c-[vg] { color: #cb4b16 } /* Name.Variable.Global */
-    c-[vi] { color: #cb4b16 } /* Name.Variable.Instance */
-    c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
-    c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
-}
-</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2022-11-24">24 November 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-05-31">31 May 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -751,7 +822,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2022 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2023 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -853,7 +924,7 @@ rendering user generated content, etc. It is difficult to do so in a safe way.
 The naive approach of joining strings together and stuffing them into
 an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#widl-Element-innerHTML" id="ref-for-widl-Element-innerHTML">innerHTML</a></code> is fraught with risk, as it can cause
 JavaScript execution in a number of unexpected ways.</p>
-   <p>Libraries like <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> attempt to manage this problem by carefully
+   <p>Libraries like <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> attempt to manage this problem by carefully
 parsing and sanitizing strings before insertion, by constructing a DOM and
 filtering its members through an allow-list. This has proven to be a fragile
 approach, as the parsing APIs exposed to the web don’t always map in
@@ -934,7 +1005,7 @@ These attacks ultimately depend on confusions of the parsing context, for
 example when a developer will sanitize a string in one (parsing) context,
 while then applying the resulting string in a different context, where it will
 be interpreted differently.</p>
-   <div class="example" id="example-bdc06d64"><a class="self-link" href="#example-bdc06d64"></a> Two mXSS-style examples in real-world libraries can be found in <a data-link-type="biblio" href="#biblio-mxss1">[MXSS1]</a>] and <a data-link-type="biblio" href="#biblio-mxss2">[MXSS2]</a>. We’d like to stress that we picked these reports
+   <div class="example" id="example-bdc06d64"><a class="self-link" href="#example-bdc06d64"></a> Two mXSS-style examples in real-world libraries can be found in <a data-link-type="biblio" href="#biblio-mxss1" title="Mutation XSS via namespace confusion">[MXSS1]</a>] and <a data-link-type="biblio" href="#biblio-mxss2" title="CVE-2020-6802 Write-up">[MXSS2]</a>. We’d like to stress that we picked these reports
   for their ease of reading. There are similar reports for pretty much every
   other tools that deals with HTML parsing. </div>
    <p>Since this attack class depends on a particular usage of the string <em>after</em> the sanitization has occurred, the API itself has only limited capability
@@ -958,7 +1029,7 @@ a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#d
 <c- a>const</c-> sanitized <c- o>=</c-> sanitizer<c- p>.</c->sanitize<c- p>(</c->user_tree<c- p>);</c->
 </pre>
    </div>
-   <p class="note" role="note"><span>Note:</span> Parsing an HTML string can have various side-effects, like network
+   <p class="note" role="note"><span class="marker">Note:</span> Parsing an HTML string can have various side-effects, like network
   requests or executing scripts. Naively parsing these, e.g. by assigning a
   string to <code>.innerHTML</code> of an unconnected element, will not reliably prevent
   these. Therefore, if the user data to be sanitized is originally
@@ -1262,7 +1333,7 @@ is used as the configuration dictionary.</p>
      <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="allow-comments-option">allow comments option</dfn> determines whether HTML comments are
  allowed.</p>
    </dl>
-   <p class="note" role="note"><span>Note:</span> <code>allowElements</code> creates a sanitizer that defaults to dropping elements,
+   <p class="note" role="note"><span class="marker">Note:</span> <code>allowElements</code> creates a sanitizer that defaults to dropping elements,
   while <code>blockElements</code> and <code>dropElements</code> defaults to keeping unknown
   elements. Using both types is possible, but is probably of little practical
   use. The same applies to <code>allowAttributes</code> and <code>dropAttributes</code>.</p>
@@ -1332,7 +1403,7 @@ where the special name "*" stands for all attributes or elements.
 A given <var>attribute</var> belonging to an <var>element</var> matches an <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list②">attribute match list</a>, if the <var>attribute</var> is a key in the match list,
 and <var>element</var> or <code>"*"</code> are found in the <var>attribute</var>’s value list.</p>
    <p>Element names are interpreted as names in the [[HTML namespace]] and
-non-namespaced attributes - i.e., what one may think of as normal <a data-link-type="biblio" href="#biblio-html">[HTML]</a> elements and attributes. Elements are named by their <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name">local name</a>, and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name">attributes, too</a>.</p>
+non-namespaced attributes - i.e., what one may think of as normal <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> elements and attributes. Elements are named by their <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name">local name</a>, and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name">attributes, too</a>.</p>
 <pre class="idl highlight def"><c- b>typedef</c-> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-record" id="ref-for-idl-record"><c- b>record</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑥"><c- b>DOMString</c-></a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence" id="ref-for-idl-sequence③"><c- b>sequence</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a>>> <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-attributematchlist"><code><c- g>AttributeMatchList</c-></code></dfn>;
 </pre>
    <div class="example" id="example-1002d69f">
@@ -1368,7 +1439,7 @@ these steps:
     </ol>
     <p class="issue" id="issue-6f447953"><a class="self-link" href="#issue-6f447953"></a> This should explicitly state the config’s properties in which element names are found and modify the config wih map operations. <a href="https://github.com/WICG/sanitizer-api/issues/148">[Issue #148]</a></p>
    </div>
-   <p class="note" role="note"><span>Note:</span> The configuration object contains element names in the <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list">element allow list</a>, <a data-link-type="dfn" href="#element-block-list" id="ref-for-element-block-list">element block list</a>, and <a data-link-type="dfn" href="#element-drop-list" id="ref-for-element-drop-list">element drop list</a>, and
+   <p class="note" role="note"><span class="marker">Note:</span> The configuration object contains element names in the <a data-link-type="dfn" href="#element-allow-list" id="ref-for-element-allow-list">element allow list</a>, <a data-link-type="dfn" href="#element-block-list" id="ref-for-element-block-list">element block list</a>, and <a data-link-type="dfn" href="#element-drop-list" id="ref-for-element-drop-list">element drop list</a>, and
   in the mapped values in the <a data-link-type="dfn" href="#attribute-allow-list" id="ref-for-attribute-allow-list">attribute allow list</a> and <a data-link-type="dfn" href="#attribute-drop-list" id="ref-for-attribute-drop-list">attribute drop list</a>.</p>
    <div class="algorithm" data-algorithm="sanitize">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> a given <var>input</var> of type <code>Document or DocumentFragment</code> run these steps: 
@@ -1601,7 +1672,7 @@ algorithm collects these in one place.</p>
       </ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace②">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is④">is</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace③">HTML</a> and
- the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name④">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑤">is</a> <code>"form"</code> and if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol:</p>
+ the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name④">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑤">is</a> <code>"form"</code> and if <var>element</var>’s <code>action</code> attribute is a <a data-link-type="biblio" href="#biblio-url" title="URL Standard">[URL]</a> with <code>javascript:</code> protocol:</p>
       <ol>
        <li data-md>
         <p>Remove the <code>action</code> attribute from <var>element</var>.</p>
@@ -1609,7 +1680,7 @@ algorithm collects these in one place.</p>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace③">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑥">is</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML</a> and
  the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑤">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑦">is</a> <code>"input"</code> or <code>"button"</code>,
- and if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url">[URL]</a> with <code>javascript:</code> protocol</p>
+ and if <var>element</var>’s <code>formaction</code> attribute is a <a data-link-type="biblio" href="#biblio-url" title="URL Standard">[URL]</a> with <code>javascript:</code> protocol</p>
       <ol>
        <li data-md>
         <p>Remove the <code>formaction</code> attribute from <var>element</var>.</p>
@@ -1679,14 +1750,14 @@ list</a></dfn> <var>list</var>, run these steps:
      <li data-md>
       <p>If <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace">namespace</a> is not <code>null</code>: Return <code>false</code>.</p>
      <li data-md>
-      <p>If <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name①">local name</a> does not match the <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list④">attribute match list</a> <var>list</var>’s <a href="https://webidl.spec.whatwg.org/#idl-record" id="termref-for-idl-record">key</a> and if the key is
+      <p>If <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name①">local name</a> does not match the <a data-link-type="dfn" href="#attribute-match-list" id="ref-for-attribute-match-list④">attribute match list</a> <var>list</var>’s <a href="https://webidl.spec.whatwg.org/#idl-record" id="4041e4780">key</a> and if the key is
  not <code>"*"</code>: Return <code>false</code>.</p>
      <li data-md>
       <p>Let <var>element</var> be the <var>attribute</var>’s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑧">Element</a></code>.</p>
      <li data-md>
       <p>Let <var>element name</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑦">local name</a>.</p>
      <li data-md>
-      <p>If <var>list</var>’s <a href="https://webidl.spec.whatwg.org/#idl-record" id="termref-for-idl-record①">value</a> does not
+      <p>If <var>list</var>’s <a href="https://webidl.spec.whatwg.org/#idl-record" id="4041e4781">value</a> does not
  contain <var>element name</var> and value is not <code>["*"]</code>: Return <code>false</code>.</p>
      <li data-md>
       <p>Return <code>true</code>.</p>
@@ -1727,7 +1798,7 @@ or <code>custom</code>. Let <var>element kind</var> be:
       <li data-md>
        <p><code>custom</code>, if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑧">local name</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name" id="ref-for-valid-custom-element-name">valid custom element name</a>,</p>
       <li data-md>
-       <p><code>unknown</code>, if <var>element</var> is not in the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> namespace or if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑨">local name</a> denotes an unknown element — that is, if the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification assigns to it would
+       <p><code>unknown</code>, if <var>element</var> is not in the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> namespace or if <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name⑨">local name</a> denotes an unknown element — that is, if the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-interface" id="ref-for-concept-element-interface">element interface</a> the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> specification assigns to it would
  be <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement" id="ref-for-htmlunknownelement">HTMLUnknownElement</a></code>,</p>
      </ul>
      <p class="issue" id="issue-f3f3c0ed"><a class="self-link" href="#issue-f3f3c0ed"></a> We do not want to use the interface (e.g., "applet" and "blink" are HTMLUnknownElement) <a href="https://github.com/WICG/sanitizer-api/issues/147">[Issue #147]</a></p>
@@ -1740,7 +1811,7 @@ or <code>custom</code>. Let <var>element kind</var> be:
       Similarly, the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="attribute-kind">attribute kind</dfn> of an <var>attribute</var> is one of <code>regular</code> or <code>unknown</code>. Let <var>attribute kind</var> be: 
      <ul>
       <li data-md>
-       <p><code>unknown</code>, if the <a data-link-type="biblio" href="#biblio-html">[HTML]</a> specification does not assign any meaning to <var>attribute</var>’s name.</p>
+       <p><code>unknown</code>, if the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> specification does not assign any meaning to <var>attribute</var>’s name.</p>
      </ul>
      <p class="issue" id="issue-a274fa37"><a class="self-link" href="#issue-a274fa37"></a> Again, this needs to be more specific. Historical, obsolete, conforming, non-conforming (e.g. bgcolor). It is desirable we make a sanitizer-specific list. <a href="https://github.com/WICG/sanitizer-api/issues/147">[Issue #147]</a></p>
      <ul>
@@ -1814,21 +1885,21 @@ DocumentFragment and avoids risks that come with serialization and additional
 parsing. Directly operating on a fragment after sanitization also comes with a
 performance benefit, as the cost of additional serialization and parsing is
 avoided.</p>
-    <p>A more complete treatement of mXSS can be found in <a data-link-type="biblio" href="#biblio-mxss">[MXSS]</a>.</p>
+    <p>A more complete treatement of mXSS can be found in <a data-link-type="biblio" href="#biblio-mxss" title="mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations">[MXSS]</a>.</p>
     <h2 class="heading settled" data-level="5" id="ack"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
-    <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
-describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="termref-for-">window.toStaticHTML()</a></code>.</p>
+    <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
+describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-something">window.toStaticHTML()</a></code>.</p>
     <h2 class="heading settled" id="constants"><span class="content">Appendix A: Built-in Constants</span><a class="self-link" href="#constants"></a></h2>
     <p><em>This appendix is normative, except where explicitly noted otherwise.</em></p>
     <p>These constants define core behaviour of the Sanitizer algorithm.</p>
     <h3 class="heading settled" id="builtins-justification"><span class="content">Built-ins Justification</span><a class="self-link" href="#builtins-justification"></a></h3>
     <p><em>This subsection is super duper non-normative.</em></p>
-    <p class="note" role="note"><span>Note:</span> The normative values of these constants are found below. The derivation
-    of these are explained here, with an implementation in the <a data-link-type="biblio" href="#biblio-defaults">[DEFAULTS]</a> script. It is expected that these values will change before this
+    <p class="note" role="note"><span class="marker">Note:</span> The normative values of these constants are found below. The derivation
+    of these are explained here, with an implementation in the <a data-link-type="biblio" href="#biblio-defaults" title="Sanitizer API Defaults">[DEFAULTS]</a> script. It is expected that these values will change before this
     specification is finalized. Also, we expect these
     to be updated to include additional HTML elements as they are
     introduced in user agents.</p>
-    <p>For the purpose of this Sanitizer API, <a data-link-type="biblio" href="#biblio-html">[HTML]</a> constructs fall into one of
+    <p>For the purpose of this Sanitizer API, <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> constructs fall into one of
 four classes, where the first defines the baseline, and the first, second,
 plus the third define the default:</p>
     <ol>
@@ -1854,7 +1925,7 @@ content.</p>
        <li data-md>
         <p>The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement" id="ref-for-htmlscriptelement">HTMLScriptElement</a></code>, which proudly executes script as its sole purpose.</p>
        <li data-md>
-        <p>All <a href="(https://html.spec.whatwg.org/#event-handler-attributes">event handler attributes</a>,
+        <p>All [event handler attributes]((https://html.spec.whatwg.org/#event-handler-attributes),
 since these also execute script.</p>
        <li data-md>
         <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement" id="ref-for-htmliframeelement">HTMLIFrameElement</a></code>, which loads arbitrary HTML content and therefor also script.</p>
@@ -1880,9 +1951,9 @@ of other URLs.</p>
 contributed to mXSS-style attacks. This includes:</p>
         <ul>
          <li data-md>
-          <p><code>&lt;plaintext></code> (Which parses in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state" id="ref-for-plaintext-state">PLAINTEXT state</a>.)</p>
+          <p><code>&lt;plaintext></code> (Which parses in <a data-link-type="dfn">PLAINTEXT state</a>.)</p>
          <li data-md>
-          <p><code>&lt;title></code> and <code>&lt;textarea></code> (Which parse in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#rcdata-state" id="ref-for-rcdata-state">RCDATA state</a>.)</p>
+          <p><code>&lt;title></code> and <code>&lt;textarea></code> (Which parse in <a data-link-type="dfn">RCDATA state</a>.)</p>
          <li data-md>
           <p>The non-conforming [<code>&lt;xmp></code>](https://html.spec.whatwg.org/#xmp) element.</p>
         </ul>
@@ -3073,493 +3144,88 @@ by JavaScript, and its <code class="idl"><a data-link-type="idl" href="https://h
    <li><a href="#dom-element-sethtml">setHTML(input, options)</a><span>, in § 2.1</span>
    <li><a href="#dictdef-sethtmloptions">SetHTMLOptions</a><span>, in § 2.1</span>
   </ul>
-  <aside class="dfn-panel" data-for="term-for-widl-Element-innerHTML">
-   <a href="https://dom.spec.whatwg.org/#widl-Element-innerHTML">https://dom.spec.whatwg.org/#widl-Element-innerHTML</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-widl-Element-innerHTML">1. Introduction</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-template-contents">
-   <a href="https://html.spec.whatwg.org/#template-contents">https://html.spec.whatwg.org/#template-contents</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-template-contents">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-">
-   <a href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#termref-for-">5. Acknowledgements</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-attr">
-   <a href="https://dom.spec.whatwg.org/#attr">https://dom.spec.whatwg.org/#attr</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attr">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-comment">
-   <a href="https://dom.spec.whatwg.org/#comment">https://dom.spec.whatwg.org/#comment</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-comment">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-document">
-   <a href="https://dom.spec.whatwg.org/#document">https://dom.spec.whatwg.org/#document</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-document">1.3.1. Case 1: Sanitizing With Nodes, Only.</a>
-    <li><a href="#ref-for-document①">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-document②">3.2. Helper Definitions</a>
-    <li><a href="#ref-for-document③">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-documentfragment">
-   <a href="https://dom.spec.whatwg.org/#documentfragment">https://dom.spec.whatwg.org/#documentfragment</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-documentfragment">2.1. Sanitizer API</a> <a href="#ref-for-documentfragment①">(2)</a>
-    <li><a href="#ref-for-documentfragment②">3.2. Helper Definitions</a> <a href="#ref-for-documentfragment③">(2)</a>
-    <li><a href="#ref-for-documentfragment④">3.3. Sanitization Algorithms</a> <a href="#ref-for-documentfragment⑤">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-documenttype">
-   <a href="https://dom.spec.whatwg.org/#documenttype">https://dom.spec.whatwg.org/#documenttype</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-documenttype">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-element">
-   <a href="https://dom.spec.whatwg.org/#element">https://dom.spec.whatwg.org/#element</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-element">1. Introduction</a>
-    <li><a href="#ref-for-element①">2.1. Sanitizer API</a> <a href="#ref-for-element②">(2)</a> <a href="#ref-for-element③">(3)</a>
-    <li><a href="#ref-for-element④">2.2. String Handling</a> <a href="#ref-for-element⑤">(2)</a> <a href="#ref-for-element⑥">(3)</a>
-    <li><a href="#ref-for-element⑦">3.1. API Implementation</a>
-    <li><a href="#ref-for-element⑧">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-processinginstruction">
-   <a href="https://dom.spec.whatwg.org/#processinginstruction">https://dom.spec.whatwg.org/#processinginstruction</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-processinginstruction">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-text">
-   <a href="https://dom.spec.whatwg.org/#text">https://dom.spec.whatwg.org/#text</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-text">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-append">
-   <a href="https://dom.spec.whatwg.org/#concept-node-append">https://dom.spec.whatwg.org/#concept-node-append</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-append">3.2. Helper Definitions</a>
-    <li><a href="#ref-for-concept-node-append①">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-element-attribute">
-   <a href="https://dom.spec.whatwg.org/#concept-element-attribute">https://dom.spec.whatwg.org/#concept-element-attribute</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-element-attribute">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-tree-child">
-   <a href="https://dom.spec.whatwg.org/#concept-tree-child">https://dom.spec.whatwg.org/#concept-tree-child</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-tree-child">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-clone">
-   <a href="https://dom.spec.whatwg.org/#concept-node-clone">https://dom.spec.whatwg.org/#concept-node-clone</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-clone">3.2. Helper Definitions</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-create-element">
-   <a href="https://dom.spec.whatwg.org/#concept-create-element">https://dom.spec.whatwg.org/#concept-create-element</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-create-element">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-element-interface">
-   <a href="https://dom.spec.whatwg.org/#concept-element-interface">https://dom.spec.whatwg.org/#concept-element-interface</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-element-interface">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-tree-inclusive-descendant">
-   <a href="https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant">https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-tree-inclusive-descendant">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-attribute-local-name">
-   <a href="https://dom.spec.whatwg.org/#concept-attribute-local-name">https://dom.spec.whatwg.org/#concept-attribute-local-name</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-attribute-local-name">2.3.1. Attribute Match Lists</a>
-    <li><a href="#ref-for-concept-attribute-local-name①">3.4. Matching Against The Configuration</a> <a href="#ref-for-concept-attribute-local-name②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-element-local-name">
-   <a href="https://dom.spec.whatwg.org/#concept-element-local-name">https://dom.spec.whatwg.org/#concept-element-local-name</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-element-local-name">2.3.1. Attribute Match Lists</a>
-    <li><a href="#ref-for-concept-element-local-name①">3.1. API Implementation</a>
-    <li><a href="#ref-for-concept-element-local-name②">3.3. Sanitization Algorithms</a> <a href="#ref-for-concept-element-local-name③">(2)</a> <a href="#ref-for-concept-element-local-name④">(3)</a> <a href="#ref-for-concept-element-local-name⑤">(4)</a>
-    <li><a href="#ref-for-concept-element-local-name⑥">3.4. Matching Against The Configuration</a> <a href="#ref-for-concept-element-local-name⑦">(2)</a> <a href="#ref-for-concept-element-local-name⑧">(3)</a> <a href="#ref-for-concept-element-local-name⑨">(4)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-attribute-namespace">
-   <a href="https://dom.spec.whatwg.org/#concept-attribute-namespace">https://dom.spec.whatwg.org/#concept-attribute-namespace</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-attribute-namespace">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-element-namespace">
-   <a href="https://dom.spec.whatwg.org/#concept-element-namespace">https://dom.spec.whatwg.org/#concept-element-namespace</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-element-namespace">3.3. Sanitization Algorithms</a> <a href="#ref-for-concept-element-namespace①">(2)</a> <a href="#ref-for-concept-element-namespace②">(3)</a> <a href="#ref-for-concept-element-namespace③">(4)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-boundary-point-node">
-   <a href="https://dom.spec.whatwg.org/#boundary-point-node">https://dom.spec.whatwg.org/#boundary-point-node</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-boundary-point-node">3.3. Sanitization Algorithms</a> <a href="#ref-for-boundary-point-node①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-document">
-   <a href="https://dom.spec.whatwg.org/#concept-node-document">https://dom.spec.whatwg.org/#concept-node-document</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-document">3.2. Helper Definitions</a> <a href="#ref-for-concept-node-document①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node">
-   <a href="https://dom.spec.whatwg.org/#concept-node">https://dom.spec.whatwg.org/#concept-node</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-tree-parent">
-   <a href="https://dom.spec.whatwg.org/#concept-tree-parent">https://dom.spec.whatwg.org/#concept-tree-parent</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-tree-parent">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-remove">
-   <a href="https://dom.spec.whatwg.org/#concept-node-remove">https://dom.spec.whatwg.org/#concept-node-remove</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-remove">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-element-attributes-remove">
-   <a href="https://dom.spec.whatwg.org/#concept-element-attributes-remove">https://dom.spec.whatwg.org/#concept-element-attributes-remove</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-element-attributes-remove">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-replace">
-   <a href="https://dom.spec.whatwg.org/#concept-node-replace">https://dom.spec.whatwg.org/#concept-node-replace</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-replace">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-replace-all">
-   <a href="https://dom.spec.whatwg.org/#concept-node-replace-all">https://dom.spec.whatwg.org/#concept-node-replace-all</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-replace-all">3.1. API Implementation</a> <a href="#ref-for-concept-node-replace-all①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-tree-order">
-   <a href="https://dom.spec.whatwg.org/#concept-tree-order">https://dom.spec.whatwg.org/#concept-tree-order</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-tree-order">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlbaseelement">
-   <a href="https://html.spec.whatwg.org/multipage/semantics.html#htmlbaseelement">https://html.spec.whatwg.org/multipage/semantics.html#htmlbaseelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlbaseelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmldataelement">
-   <a href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmldataelement">https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmldataelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmldataelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlembedelement">
-   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlembedelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmliframeelement">
-   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmliframeelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlobjectelement">
-   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlobjectelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlparamelement">
-   <a href="https://html.spec.whatwg.org/multipage/obsolete.html#htmlparamelement">https://html.spec.whatwg.org/multipage/obsolete.html#htmlparamelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlparamelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlscriptelement">
-   <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement">https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlscriptelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlslotelement">
-   <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmlslotelement">https://html.spec.whatwg.org/multipage/scripting.html#htmlslotelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlslotelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmltemplateelement">
-   <a href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement">https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmltemplateelement">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-htmlunknownelement">
-   <a href="https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement">https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-htmlunknownelement">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-custom-element">
-   <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element">https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-custom-element">2.3. The Configuration Dictionary</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-html-parser">
-   <a href="https://html.spec.whatwg.org/multipage/parsing.html#html-parser">https://html.spec.whatwg.org/multipage/parsing.html#html-parser</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-html-parser">2.2. String Handling</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-plaintext-state">
-   <a href="https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state">https://html.spec.whatwg.org/multipage/parsing.html#plaintext-state</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-plaintext-state">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-rcdata-state">
-   <a href="https://html.spec.whatwg.org/multipage/parsing.html#rcdata-state">https://html.spec.whatwg.org/multipage/parsing.html#rcdata-state</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-rcdata-state">Built-ins Justification</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-valid-custom-element-name">
-   <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name">https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-valid-custom-element-name">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-assert">
-   <a href="https://infra.spec.whatwg.org/#assert">https://infra.spec.whatwg.org/#assert</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-assert">3.3. Sanitization Algorithms</a> <a href="#ref-for-assert①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-map-exists">
-   <a href="https://infra.spec.whatwg.org/#map-exists">https://infra.spec.whatwg.org/#map-exists</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-map-exists">3.1. API Implementation</a>
-    <li><a href="#ref-for-map-exists①">3.3. Sanitization Algorithms</a>
-    <li><a href="#ref-for-map-exists②">3.4. Matching Against The Configuration</a> <a href="#ref-for-map-exists③">(2)</a> <a href="#ref-for-map-exists④">(3)</a> <a href="#ref-for-map-exists⑤">(4)</a> <a href="#ref-for-map-exists⑥">(5)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-map-get">
-   <a href="https://infra.spec.whatwg.org/#map-get">https://infra.spec.whatwg.org/#map-get</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-map-get">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-html-namespace">
-   <a href="https://infra.spec.whatwg.org/#html-namespace">https://infra.spec.whatwg.org/#html-namespace</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-html-namespace">3.1. API Implementation</a>
-    <li><a href="#ref-for-html-namespace①">3.3. Sanitization Algorithms</a> <a href="#ref-for-html-namespace②">(2)</a> <a href="#ref-for-html-namespace③">(3)</a> <a href="#ref-for-html-namespace④">(4)</a>
-    <li><a href="#ref-for-html-namespace⑤">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-string-is">
-   <a href="https://infra.spec.whatwg.org/#string-is">https://infra.spec.whatwg.org/#string-is</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-string-is">3.3. Sanitization Algorithms</a> <a href="#ref-for-string-is①">(2)</a> <a href="#ref-for-string-is②">(3)</a> <a href="#ref-for-string-is③">(4)</a> <a href="#ref-for-string-is④">(5)</a> <a href="#ref-for-string-is⑤">(6)</a> <a href="#ref-for-string-is⑥">(7)</a> <a href="#ref-for-string-is⑦">(8)</a>
-    <li><a href="#ref-for-string-is⑧">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-string-is">
-   <a href="https://infra.spec.whatwg.org/#string-is">https://infra.spec.whatwg.org/#string-is</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-string-is">3.3. Sanitization Algorithms</a> <a href="#ref-for-string-is①">(2)</a> <a href="#ref-for-string-is②">(3)</a> <a href="#ref-for-string-is③">(4)</a> <a href="#ref-for-string-is④">(5)</a> <a href="#ref-for-string-is⑤">(6)</a> <a href="#ref-for-string-is⑥">(7)</a> <a href="#ref-for-string-is⑦">(8)</a>
-    <li><a href="#ref-for-string-is⑧">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-list-iterate">
-   <a href="https://infra.spec.whatwg.org/#list-iterate">https://infra.spec.whatwg.org/#list-iterate</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-list-iterate">3.3. Sanitization Algorithms</a> <a href="#ref-for-list-iterate①">(2)</a> <a href="#ref-for-list-iterate②">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-map-set">
-   <a href="https://infra.spec.whatwg.org/#map-set">https://infra.spec.whatwg.org/#map-set</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-map-set">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-idl-DOMString">
-   <a href="https://webidl.spec.whatwg.org/#idl-DOMString">https://webidl.spec.whatwg.org/#idl-DOMString</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-idl-DOMString">2.1. Sanitizer API</a> <a href="#ref-for-idl-DOMString①">(2)</a> <a href="#ref-for-idl-DOMString②">(3)</a>
-    <li><a href="#ref-for-idl-DOMString③">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-DOMString④">(2)</a> <a href="#ref-for-idl-DOMString⑤">(3)</a>
-    <li><a href="#ref-for-idl-DOMString⑥">2.3.1. Attribute Match Lists</a> <a href="#ref-for-idl-DOMString⑦">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-Exposed">
-   <a href="https://webidl.spec.whatwg.org/#Exposed">https://webidl.spec.whatwg.org/#Exposed</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-Exposed">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-SecureContext">
-   <a href="https://webidl.spec.whatwg.org/#SecureContext">https://webidl.spec.whatwg.org/#SecureContext</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-SecureContext">2.1. Sanitizer API</a> <a href="#ref-for-SecureContext①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-exceptiondef-typeerror">
-   <a href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror">https://webidl.spec.whatwg.org/#exceptiondef-typeerror</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-exceptiondef-typeerror">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-idl-boolean">
-   <a href="https://webidl.spec.whatwg.org/#idl-boolean">https://webidl.spec.whatwg.org/#idl-boolean</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-idl-boolean">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-boolean①">(2)</a> <a href="#ref-for-idl-boolean②">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-idl-record">
-   <a href="https://webidl.spec.whatwg.org/#idl-record">https://webidl.spec.whatwg.org/#idl-record</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-idl-record">2.3.1. Attribute Match Lists</a>
-    <li><a href="#termref-for-idl-record">3.4. Matching Against The Configuration</a> <a href="#termref-for-idl-record">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-idl-sequence">
-   <a href="https://webidl.spec.whatwg.org/#idl-sequence">https://webidl.spec.whatwg.org/#idl-sequence</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-idl-sequence">2.3. The Configuration Dictionary</a> <a href="#ref-for-idl-sequence①">(2)</a> <a href="#ref-for-idl-sequence②">(3)</a>
-    <li><a href="#ref-for-idl-sequence③">2.3.1. Attribute Match Lists</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-this">
-   <a href="https://webidl.spec.whatwg.org/#this">https://webidl.spec.whatwg.org/#this</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-this">2.1. Sanitizer API</a> <a href="#ref-for-this①">(2)</a>
-    <li><a href="#ref-for-this②">3.1. API Implementation</a> <a href="#ref-for-this③">(2)</a> <a href="#ref-for-this④">(3)</a> <a href="#ref-for-this⑤">(4)</a> <a href="#ref-for-this⑥">(5)</a> <a href="#ref-for-this⑦">(6)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-idl-undefined">
-   <a href="https://webidl.spec.whatwg.org/#idl-undefined">https://webidl.spec.whatwg.org/#idl-undefined</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-idl-undefined">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
     <a data-link-type="biblio">[]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-widl-Element-innerHTML">innerHTML</span>
-     <li><span class="dfn-paneled" id="term-for-template-contents">template contents</span>
-     <li><span class="dfn-paneled" id="term-for-">window.toStaticHTML()</span>
+     <li><span class="dfn-paneled" id="9c72363f">innerHTML</span>
+     <li><span class="dfn-paneled" id="b159e2cd">template contents</span>
+     <li><span class="dfn-paneled" id="d354f084">window.toStaticHTML()</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-attr">Attr</span>
-     <li><span class="dfn-paneled" id="term-for-comment">Comment</span>
-     <li><span class="dfn-paneled" id="term-for-document">Document</span>
-     <li><span class="dfn-paneled" id="term-for-documentfragment">DocumentFragment</span>
-     <li><span class="dfn-paneled" id="term-for-documenttype">DocumentType</span>
-     <li><span class="dfn-paneled" id="term-for-element">Element</span>
-     <li><span class="dfn-paneled" id="term-for-processinginstruction">ProcessingInstruction</span>
-     <li><span class="dfn-paneled" id="term-for-text">Text</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-append">append</span>
-     <li><span class="dfn-paneled" id="term-for-concept-element-attribute">attribute list</span>
-     <li><span class="dfn-paneled" id="term-for-concept-tree-child">children</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-clone">clone a node</span>
-     <li><span class="dfn-paneled" id="term-for-concept-create-element">creating an element</span>
-     <li><span class="dfn-paneled" id="term-for-concept-element-interface">element interface</span>
-     <li><span class="dfn-paneled" id="term-for-concept-tree-inclusive-descendant">inclusive descendant</span>
-     <li><span class="dfn-paneled" id="term-for-concept-attribute-local-name">local name <small>(for Attr)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-element-local-name">local name <small>(for Element)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-attribute-namespace">namespace <small>(for Attr)</small></span>
-     <li><span class="dfn-paneled" id="term-for-concept-element-namespace">namespace <small>(for Element)</small></span>
-     <li><span class="dfn-paneled" id="term-for-boundary-point-node">node</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-document">node document</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node">nodes</span>
-     <li><span class="dfn-paneled" id="term-for-concept-tree-parent">parent</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-remove">remove</span>
-     <li><span class="dfn-paneled" id="term-for-concept-element-attributes-remove">remove an attribute</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-replace">replace</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-replace-all">replace all</span>
-     <li><span class="dfn-paneled" id="term-for-concept-tree-order">tree order</span>
+     <li><span class="dfn-paneled" id="99573380">Attr</span>
+     <li><span class="dfn-paneled" id="a0647283">Comment</span>
+     <li><span class="dfn-paneled" id="85394472">Document</span>
+     <li><span class="dfn-paneled" id="49a2843d">DocumentFragment</span>
+     <li><span class="dfn-paneled" id="9011c821">DocumentType</span>
+     <li><span class="dfn-paneled" id="296f3551">Element</span>
+     <li><span class="dfn-paneled" id="c095490e">ProcessingInstruction</span>
+     <li><span class="dfn-paneled" id="597088f0">Text</span>
+     <li><span class="dfn-paneled" id="543878fa">append</span>
+     <li><span class="dfn-paneled" id="77211728">attribute list</span>
+     <li><span class="dfn-paneled" id="92b2d7da">children</span>
+     <li><span class="dfn-paneled" id="44a7f1a1">clone a node</span>
+     <li><span class="dfn-paneled" id="3c307af9">creating an element</span>
+     <li><span class="dfn-paneled" id="f20f4175">element interface</span>
+     <li><span class="dfn-paneled" id="f9d909f7">inclusive descendant</span>
+     <li><span class="dfn-paneled" id="e240317a">local name <small>(for Attr)</small></span>
+     <li><span class="dfn-paneled" id="83ca4a87">local name <small>(for Element)</small></span>
+     <li><span class="dfn-paneled" id="b3955a25">namespace <small>(for Attr)</small></span>
+     <li><span class="dfn-paneled" id="746cc3ba">namespace <small>(for Element)</small></span>
+     <li><span class="dfn-paneled" id="d462b34f">node</span>
+     <li><span class="dfn-paneled" id="5216e1a0">node document</span>
+     <li><span class="dfn-paneled" id="2ef14d2e">nodes</span>
+     <li><span class="dfn-paneled" id="d729a9ff">parent</span>
+     <li><span class="dfn-paneled" id="0e0b900e">remove</span>
+     <li><span class="dfn-paneled" id="414d5b08">remove an attribute</span>
+     <li><span class="dfn-paneled" id="51561373">replace</span>
+     <li><span class="dfn-paneled" id="4fd7ca14">replace all</span>
+     <li><span class="dfn-paneled" id="25538777">tree order</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-htmlbaseelement">HTMLBaseElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmldataelement">HTMLDataElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmlembedelement">HTMLEmbedElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmliframeelement">HTMLIFrameElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmlobjectelement">HTMLObjectElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmlparamelement">HTMLParamElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmlscriptelement">HTMLScriptElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmlslotelement">HTMLSlotElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmltemplateelement">HTMLTemplateElement</span>
-     <li><span class="dfn-paneled" id="term-for-htmlunknownelement">HTMLUnknownElement</span>
-     <li><span class="dfn-paneled" id="term-for-custom-element">custom element</span>
-     <li><span class="dfn-paneled" id="term-for-html-parser">html parser</span>
-     <li><span class="dfn-paneled" id="term-for-plaintext-state">plaintext state</span>
-     <li><span class="dfn-paneled" id="term-for-rcdata-state">rcdata state</span>
-     <li><span class="dfn-paneled" id="term-for-valid-custom-element-name">valid custom element name</span>
+     <li><span class="dfn-paneled" id="71b7b22f">HTMLBaseElement</span>
+     <li><span class="dfn-paneled" id="4b427f10">HTMLDataElement</span>
+     <li><span class="dfn-paneled" id="e901a0fc">HTMLEmbedElement</span>
+     <li><span class="dfn-paneled" id="10e25f42">HTMLIFrameElement</span>
+     <li><span class="dfn-paneled" id="59ce5887">HTMLObjectElement</span>
+     <li><span class="dfn-paneled" id="4cf758d8">HTMLParamElement</span>
+     <li><span class="dfn-paneled" id="ec4838d8">HTMLScriptElement</span>
+     <li><span class="dfn-paneled" id="6e159bbe">HTMLSlotElement</span>
+     <li><span class="dfn-paneled" id="f099a38d">HTMLTemplateElement</span>
+     <li><span class="dfn-paneled" id="a0be88cd">HTMLUnknownElement</span>
+     <li><span class="dfn-paneled" id="b6fb7a51">custom element</span>
+     <li><span class="dfn-paneled" id="1e02be0a">html parser</span>
+     <li><span class="dfn-paneled" id="15c9cf79">valid custom element name</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-assert">assert</span>
-     <li><span class="dfn-paneled" id="term-for-map-exists">exist</span>
-     <li><span class="dfn-paneled" id="term-for-map-get">get</span>
-     <li><span class="dfn-paneled" id="term-for-html-namespace">html namespace</span>
-     <li><span class="dfn-paneled" id="term-for-string-is">identical to</span>
-     <li><span class="dfn-paneled" id="term-for-string-is①">is</span>
-     <li><span class="dfn-paneled" id="term-for-list-iterate">iterate</span>
-     <li><span class="dfn-paneled" id="term-for-map-set">set</span>
+     <li><span class="dfn-paneled" id="77b4c09a">assert</span>
+     <li><span class="dfn-paneled" id="1243a891">exist</span>
+     <li><span class="dfn-paneled" id="527b10aa">get</span>
+     <li><span class="dfn-paneled" id="f052b1ea">html namespace</span>
+     <li><span class="dfn-paneled" id="91c016b5">identical to</span>
+     <li><span class="dfn-paneled" id="7a87d819">is</span>
+     <li><span class="dfn-paneled" id="f02cd417">iterate</span>
+     <li><span class="dfn-paneled" id="0e6b2056">set</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
-     <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
-     <li><span class="dfn-paneled" id="term-for-SecureContext">SecureContext</span>
-     <li><span class="dfn-paneled" id="term-for-exceptiondef-typeerror">TypeError</span>
-     <li><span class="dfn-paneled" id="term-for-idl-boolean">boolean</span>
-     <li><span class="dfn-paneled" id="term-for-idl-record">record</span>
-     <li><span class="dfn-paneled" id="term-for-idl-sequence">sequence</span>
-     <li><span class="dfn-paneled" id="term-for-this">this</span>
-     <li><span class="dfn-paneled" id="term-for-idl-undefined">undefined</span>
+     <li><span class="dfn-paneled" id="8855a9aa">DOMString</span>
+     <li><span class="dfn-paneled" id="889e932f">Exposed</span>
+     <li><span class="dfn-paneled" id="b75bb3bd">SecureContext</span>
+     <li><span class="dfn-paneled" id="82ca3efc">TypeError</span>
+     <li><span class="dfn-paneled" id="5372cca8">boolean</span>
+     <li><span class="dfn-paneled" id="7787d359">record</span>
+     <li><span class="dfn-paneled" id="9cce47fd">sequence</span>
+     <li><span class="dfn-paneled" id="4013a022">this</span>
+     <li><span class="dfn-paneled" id="5f90bbfb">undefined</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -3643,432 +3309,714 @@ Issue(153): consider creating an effective sanitizer config. Also, IDL guarantee
     are still under discussion. The values below are for illustrative
     purposes only. <a class="issue-return" href="#issue-53c87d03" title="Jump to section">↵</a></div>
   </div>
-  <aside class="dfn-panel" data-for="sanitizer">
-   <b><a href="#sanitizer">#sanitizer</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitizer">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-sanitizer①">3.1. API Implementation</a>
-    <li><a href="#ref-for-sanitizer②">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-sanitizer">
-   <b><a href="#dom-sanitizer-sanitizer">#dom-sanitizer-sanitizer</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizer-sanitizer">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-sanitize">
-   <b><a href="#dom-sanitizer-sanitize">#dom-sanitizer-sanitize</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizer-sanitize">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-sanitizefor">
-   <b><a href="#dom-sanitizer-sanitizefor">#dom-sanitizer-sanitizefor</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizer-sanitizefor">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-getconfiguration">
-   <b><a href="#dom-sanitizer-getconfiguration">#dom-sanitizer-getconfiguration</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizer-getconfiguration">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizer-getdefaultconfiguration">
-   <b><a href="#dom-sanitizer-getdefaultconfiguration">#dom-sanitizer-getdefaultconfiguration</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizer-getdefaultconfiguration">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dictdef-sethtmloptions">
-   <b><a href="#dictdef-sethtmloptions">#dictdef-sethtmloptions</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dictdef-sethtmloptions">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-dictdef-sethtmloptions①">3.1. API Implementation</a> <a href="#ref-for-dictdef-sethtmloptions②">(2)</a> <a href="#ref-for-dictdef-sethtmloptions③">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sethtmloptions-sanitizer">
-   <b><a href="#dom-sethtmloptions-sanitizer">#dom-sethtmloptions-sanitizer</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sethtmloptions-sanitizer">3.1. API Implementation</a> <a href="#ref-for-dom-sethtmloptions-sanitizer①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-element-sethtml">
-   <b><a href="#dom-element-sethtml">#dom-element-sethtml</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-element-sethtml">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="configuration-dictionary">
-   <b><a href="#configuration-dictionary">#configuration-dictionary</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-configuration-dictionary">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-configuration-dictionary①">3.1. API Implementation</a> <a href="#ref-for-configuration-dictionary②">(2)</a> <a href="#ref-for-configuration-dictionary③">(3)</a>
-    <li><a href="#ref-for-configuration-dictionary④">3.3. Sanitization Algorithms</a> <a href="#ref-for-configuration-dictionary⑤">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dictdef-sanitizerconfig">
-   <b><a href="#dictdef-sanitizerconfig">#dictdef-sanitizerconfig</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dictdef-sanitizerconfig">2.1. Sanitizer API</a> <a href="#ref-for-dictdef-sanitizerconfig①">(2)</a> <a href="#ref-for-dictdef-sanitizerconfig②">(3)</a>
-    <li><a href="#ref-for-dictdef-sanitizerconfig③">3.1. API Implementation</a> <a href="#ref-for-dictdef-sanitizerconfig④">(2)</a>
-    <li><a href="#ref-for-dictdef-sanitizerconfig⑤">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizerconfig-allowelements">
-   <b><a href="#dom-sanitizerconfig-allowelements">#dom-sanitizerconfig-allowelements</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizerconfig-allowelements">3.4. Matching Against The Configuration</a> <a href="#ref-for-dom-sanitizerconfig-allowelements①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizerconfig-blockelements">
-   <b><a href="#dom-sanitizerconfig-blockelements">#dom-sanitizerconfig-blockelements</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizerconfig-blockelements">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizerconfig-dropelements">
-   <b><a href="#dom-sanitizerconfig-dropelements">#dom-sanitizerconfig-dropelements</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizerconfig-dropelements">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizerconfig-allowcustomelements">
-   <b><a href="#dom-sanitizerconfig-allowcustomelements">#dom-sanitizerconfig-allowcustomelements</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizerconfig-allowcustomelements">2.3. The Configuration Dictionary</a>
-    <li><a href="#ref-for-dom-sanitizerconfig-allowcustomelements①">3.4. Matching Against The Configuration</a> <a href="#ref-for-dom-sanitizerconfig-allowcustomelements②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-sanitizerconfig-allowunknownmarkup">
-   <b><a href="#dom-sanitizerconfig-allowunknownmarkup">#dom-sanitizerconfig-allowunknownmarkup</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup">2.3. The Configuration Dictionary</a>
-    <li><a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup①">3.4. Matching Against The Configuration</a> <a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup②">(2)</a> <a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup③">(3)</a> <a href="#ref-for-dom-sanitizerconfig-allowunknownmarkup④">(4)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="element-allow-list">
-   <b><a href="#element-allow-list">#element-allow-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-element-allow-list">3.1. API Implementation</a>
-    <li><a href="#ref-for-element-allow-list①">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="element-block-list">
-   <b><a href="#element-block-list">#element-block-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-element-block-list">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="element-drop-list">
-   <b><a href="#element-drop-list">#element-drop-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-element-drop-list">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="attribute-allow-list">
-   <b><a href="#attribute-allow-list">#attribute-allow-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attribute-allow-list">3.1. API Implementation</a>
-    <li><a href="#ref-for-attribute-allow-list①">3.4. Matching Against The Configuration</a> <a href="#ref-for-attribute-allow-list②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="attribute-drop-list">
-   <b><a href="#attribute-drop-list">#attribute-drop-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attribute-drop-list">3.1. API Implementation</a>
-    <li><a href="#ref-for-attribute-drop-list①">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="allow-comments-option">
-   <b><a href="#allow-comments-option">#allow-comments-option</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-allow-comments-option">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="attribute-match-list">
-   <b><a href="#attribute-match-list">#attribute-match-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attribute-match-list">2.3. The Configuration Dictionary</a> <a href="#ref-for-attribute-match-list①">(2)</a>
-    <li><a href="#ref-for-attribute-match-list②">2.3.1. Attribute Match Lists</a>
-    <li><a href="#ref-for-attribute-match-list③">3.4. Matching Against The Configuration</a> <a href="#ref-for-attribute-match-list④">(2)</a> <a href="#ref-for-attribute-match-list⑤">(3)</a> <a href="#ref-for-attribute-match-list⑥">(4)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="typedefdef-attributematchlist">
-   <b><a href="#typedefdef-attributematchlist">#typedefdef-attributematchlist</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-typedefdef-attributematchlist">2.3. The Configuration Dictionary</a> <a href="#ref-for-typedefdef-attributematchlist①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="create-a-sanitizer">
-   <b><a href="#create-a-sanitizer">#create-a-sanitizer</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-create-a-sanitizer">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-create-a-sanitizer①">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize">
-   <b><a href="#sanitize">#sanitize</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitizefor">
-   <b><a href="#sanitizefor">#sanitizefor</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitizefor">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitizeandset">
-   <b><a href="#sanitizeandset">#sanitizeandset</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitizeandset">2.1. Sanitizer API</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="query-the-sanitizer-config">
-   <b><a href="#query-the-sanitizer-config">#query-the-sanitizer-config</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-query-the-sanitizer-config">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-query-the-sanitizer-config①">2.3. The Configuration Dictionary</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="create-a-document-fragment">
-   <b><a href="#create-a-document-fragment">#create-a-document-fragment</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-create-a-document-fragment">3.1. API Implementation</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-a-document-fragment">
-   <b><a href="#sanitize-a-document-fragment">#sanitize-a-document-fragment</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-a-document-fragment">3.1. API Implementation</a> <a href="#ref-for-sanitize-a-document-fragment①">(2)</a> <a href="#ref-for-sanitize-a-document-fragment②">(3)</a>
-    <li><a href="#ref-for-sanitize-a-document-fragment③">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-a-node">
-   <b><a href="#sanitize-a-node">#sanitize-a-node</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-a-node">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="handle-funky-elements">
-   <b><a href="#handle-funky-elements">#handle-funky-elements</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-handle-funky-elements">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-action">
-   <b><a href="#sanitize-action">#sanitize-action</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-action">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-action-for-an-element">
-   <b><a href="#sanitize-action-for-an-element">#sanitize-action-for-an-element</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-action-for-an-element">3.3. Sanitization Algorithms</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="element-matches-an-element-name">
-   <b><a href="#element-matches-an-element-name">#element-matches-an-element-name</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-element-matches-an-element-name">3.1. API Implementation</a>
-    <li><a href="#ref-for-element-matches-an-element-name①">3.4. Matching Against The Configuration</a> <a href="#ref-for-element-matches-an-element-name②">(2)</a> <a href="#ref-for-element-matches-an-element-name③">(3)</a> <a href="#ref-for-element-matches-an-element-name④">(4)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="attribute-matches-an-attribute-match-list">
-   <b><a href="#attribute-matches-an-attribute-match-list">#attribute-matches-an-attribute-match-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attribute-matches-an-attribute-match-list">3.4. Matching Against The Configuration</a> <a href="#ref-for-attribute-matches-an-attribute-match-list①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="sanitize-action-for-an-attribute">
-   <b><a href="#sanitize-action-for-an-attribute">#sanitize-action-for-an-attribute</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-sanitize-action-for-an-attribute">3.3. Sanitization Algorithms</a> <a href="#ref-for-sanitize-action-for-an-attribute①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="element-kind">
-   <b><a href="#element-kind">#element-kind</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-element-kind">3.1. API Implementation</a> <a href="#ref-for-element-kind①">(2)</a>
-    <li><a href="#ref-for-element-kind②">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="attribute-kind">
-   <b><a href="#attribute-kind">#attribute-kind</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-attribute-kind">3.4. Matching Against The Configuration</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="baseline-element-allow-list">
-   <b><a href="#baseline-element-allow-list">#baseline-element-allow-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-baseline-element-allow-list">3.1. API Implementation</a> <a href="#ref-for-baseline-element-allow-list①">(2)</a>
-    <li><a href="#ref-for-baseline-element-allow-list②">3.4. Matching Against The Configuration</a>
-    <li><a href="#ref-for-baseline-element-allow-list③">3.5. Baseline and Defaults</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="baseline-attribute-allow-list">
-   <b><a href="#baseline-attribute-allow-list">#baseline-attribute-allow-list</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-baseline-attribute-allow-list">3.4. Matching Against The Configuration</a>
-    <li><a href="#ref-for-baseline-attribute-allow-list①">3.5. Baseline and Defaults</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="default-configuration">
-   <b><a href="#default-configuration">#default-configuration</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-default-configuration">2.1. Sanitizer API</a>
-    <li><a href="#ref-for-default-configuration①">2.3. The Configuration Dictionary</a>
-    <li><a href="#ref-for-default-configuration②">3.1. API Implementation</a>
-    <li><a href="#ref-for-default-configuration③">3.3. Sanitization Algorithms</a>
-    <li><a href="#ref-for-default-configuration④">3.4. Matching Against The Configuration</a> <a href="#ref-for-default-configuration⑤">(2)</a>
-    <li><a href="#ref-for-default-configuration⑥">3.5. Baseline and Defaults</a> <a href="#ref-for-default-configuration⑦">(2)</a>
-   </ul>
-  </aside>
-<script>/* script-dfn-panel */
+<script>/* Boilerplate: script-dfn-panel */
+"use strict";
+{
+    const dfnsJson = window.dfnsJson || {};
 
-document.body.addEventListener("click", function(e) {
-    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
-    // Find the dfn element or panel, if any, that was clicked on.
-    var el = e.target;
-    var target;
-    var hitALink = false;
-    while(el.parentElement) {
-        if(el.tagName == "A") {
-            // Clicking on a link in a <dfn> shouldn't summon the panel
-            hitALink = true;
-        }
-        if(el.classList.contains("dfn-paneled")) {
-            target = "dfn";
-            break;
-        }
-        if(el.classList.contains("dfn-panel")) {
-            target = "dfn-panel";
-            break;
-        }
-        el = el.parentElement;
+    function genDfnPanel({dfnID, url, dfnText, refSections, external}) {
+        return mk.aside({
+            class: "dfn-panel",
+            id: `infopanel-for-${dfnID}`,
+            "data-for": dfnID,
+            "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+            },
+            mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
+                `Info about the '${dfnText}' ${external?"external":""} reference.`),
+            mk.a({href:url}, url),
+            mk.b({}, "Referenced in:"),
+            mk.ul({},
+                ...refSections.map(section=>
+                    mk.li({},
+                        ...section.refs.map((ref, refI)=>
+                            [
+                                mk.a({
+                                    href: `#${ref.id}`
+                                    },
+                                    (refI == 0) ? section.title : `(${refI + 1})`
+                                ),
+                                " ",
+                            ]
+                        ),
+                    ),
+                ),
+            ),
+        );
     }
-    if(target != "dfn-panel") {
-        // Turn off any currently "on" or "activated" panels.
-        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
-            el.classList.remove("on");
-            el.classList.remove("activated");
-        });
-    }
-    if(target == "dfn" && !hitALink) {
-        // open the panel
-        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
-        if(dfnPanel) {
-            dfnPanel.classList.add("on");
-            var rect = el.getBoundingClientRect();
-            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
-            dfnPanel.style.top = window.scrollY + rect.top + "px";
-            var panelRect = dfnPanel.getBoundingClientRect();
-            var panelWidth = panelRect.right - panelRect.left;
-            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
-                // Reposition, because the panel is overflowing
-                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+
+    function genAllDfnPanels() {
+        for(const panelData of Object.values(window.dfnpanelData)) {
+            const dfnID = panelData.dfnID;
+            const dfn = document.getElementById(dfnID);
+            if(!dfn) {
+                console.log(`Can't find dfn#${dfnID}.`, panelData);
+            } else {
+                const panel = genDfnPanel(panelData);
+                append(document.body, panel);
+                insertDfnPopupAction(dfn, panel)
             }
-        } else {
-            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
         }
-    } else if(target == "dfn-panel") {
-        // Switch it to "activated" state, which pins it.
-        el.classList.add("activated");
-        el.style.left = null;
-        el.style.top = null;
     }
 
-});
-</script>
-<script>/* script-var-click-highlighting */
+    document.addEventListener("DOMContentLoaded", ()=>{
+        genAllDfnPanels();
 
+        // Add popup behavior to all dfns to show the corresponding dfn-panel.
+        var dfns = queryAll('.dfn-paneled');
+        for(let dfn of dfns) { ; }
+
+        document.body.addEventListener("click", (e) => {
+            // If not handled already, just hide all dfn panels.
+            hideAllDfnPanels();
+        });
+    })
+
+
+    function hideAllDfnPanels() {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
+    }
+
+    function showDfnPanel(dfnPanel, dfn) {
+        hideAllDfnPanels(); // Only display one at this time.
+        dfn.setAttribute("aria-expanded", "true");
+        dfnPanel.classList.add("on");
+        dfnPanel.style.left = "5px";
+        dfnPanel.style.top = "0px";
+        const panelRect = dfnPanel.getBoundingClientRect();
+        const panelWidth = panelRect.right - panelRect.left;
+        if (panelRect.right > document.body.scrollWidth) {
+            // Panel's overflowing the screen.
+            // Just drop it below the dfn and flip it rightward instead.
+            // This still wont' fix things if the screen is *really* wide,
+            // but fixing that's a lot harder without 'anchor()'.
+            dfnPanel.style.top = "1.5em";
+            dfnPanel.style.left = "auto";
+            dfnPanel.style.right = "0px";
+        }
+    }
+
+    function pinDfnPanel(dfnPanel) {
+        // Switch it to "activated" state, which pins it.
+        dfnPanel.classList.add("activated");
+        dfnPanel.style.left = null;
+        dfnPanel.style.top = null;
+    }
+
+    function hideDfnPanel(dfnPanel, dfn) {
+        if(!dfn) {
+            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
+        }
+        dfn.setAttribute("aria-expanded", "false")
+        dfnPanel.classList.remove("on");
+        dfnPanel.classList.remove("activated");
+    }
+
+    function toggleDfnPanel(dfnPanel, dfn) {
+        if(dfnPanel.classList.contains("on")) {
+            hideDfnPanel(dfnPanel, dfn);
+        } else {
+            showDfnPanel(dfnPanel, dfn);
+        }
+    }
+
+    function insertDfnPopupAction(dfn, dfnPanel) {
+        // Find dfn panel
+        const panelWrapper = document.createElement('span');
+        panelWrapper.appendChild(dfnPanel);
+        panelWrapper.style.position = "relative";
+        panelWrapper.style.height = "0px";
+        dfn.insertAdjacentElement("afterend", panelWrapper);
+        dfn.setAttribute('role', 'button');
+        dfn.setAttribute('aria-expanded', 'false')
+        dfn.tabIndex = 0;
+        dfn.classList.add('has-dfn-panel');
+        dfn.addEventListener('click', (event) => {
+            showDfnPanel(dfnPanel, dfn);
+            event.stopPropagation();
+        });
+        dfn.addEventListener('keypress', (event) => {
+            const kc = event.keyCode;
+            // 32->Space, 13->Enter
+            if(kc == 32 || kc == 13) {
+                toggleDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        });
+
+        dfnPanel.addEventListener('click', (event) => {
+            if (event.target.nodeName == 'A') {
+                pinDfnPanel(dfnPanel);
+            }
+            event.stopPropagation();
+        });
+
+        dfnPanel.addEventListener('keydown', (event) => {
+            if(event.keyCode == 27) { // Escape key
+                hideDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        })
+    }
+}
+</script>
+<script>/* Boilerplate: script-dfn-panel */
+"use strict";
+{
+    const dfnsJson = window.dfnsJson || {};
+
+    function genDfnPanel({dfnID, url, dfnText, refSections, external}) {
+        return mk.aside({
+            class: "dfn-panel",
+            id: `infopanel-for-${dfnID}`,
+            "data-for": dfnID,
+            "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+            },
+            mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
+                `Info about the '${dfnText}' ${external?"external":""} reference.`),
+            mk.a({href:url}, url),
+            mk.b({}, "Referenced in:"),
+            mk.ul({},
+                ...refSections.map(section=>
+                    mk.li({},
+                        ...section.refs.map((ref, refI)=>
+                            [
+                                mk.a({
+                                    href: `#${ref.id}`
+                                    },
+                                    (refI == 0) ? section.title : `(${refI + 1})`
+                                ),
+                                " ",
+                            ]
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+
+    function genAllDfnPanels() {
+        for(const panelData of Object.values(window.dfnpanelData)) {
+            const dfnID = panelData.dfnID;
+            const dfn = document.getElementById(dfnID);
+            if(!dfn) {
+                console.log(`Can't find dfn#${dfnID}.`, panelData);
+            } else {
+                const panel = genDfnPanel(panelData);
+                append(document.body, panel);
+                insertDfnPopupAction(dfn, panel)
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+        genAllDfnPanels();
+
+        // Add popup behavior to all dfns to show the corresponding dfn-panel.
+        var dfns = queryAll('.dfn-paneled');
+        for(let dfn of dfns) { ; }
+
+        document.body.addEventListener("click", (e) => {
+            // If not handled already, just hide all dfn panels.
+            hideAllDfnPanels();
+        });
+    })
+
+
+    function hideAllDfnPanels() {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>hideDfnPanel(el));
+    }
+
+    function showDfnPanel(dfnPanel, dfn) {
+        hideAllDfnPanels(); // Only display one at this time.
+        dfn.setAttribute("aria-expanded", "true");
+        dfnPanel.classList.add("on");
+        dfnPanel.style.left = "5px";
+        dfnPanel.style.top = "0px";
+        const panelRect = dfnPanel.getBoundingClientRect();
+        const panelWidth = panelRect.right - panelRect.left;
+        if (panelRect.right > document.body.scrollWidth) {
+            // Panel's overflowing the screen.
+            // Just drop it below the dfn and flip it rightward instead.
+            // This still wont' fix things if the screen is *really* wide,
+            // but fixing that's a lot harder without 'anchor()'.
+            dfnPanel.style.top = "1.5em";
+            dfnPanel.style.left = "auto";
+            dfnPanel.style.right = "0px";
+        }
+    }
+
+    function pinDfnPanel(dfnPanel) {
+        // Switch it to "activated" state, which pins it.
+        dfnPanel.classList.add("activated");
+        dfnPanel.style.left = null;
+        dfnPanel.style.top = null;
+    }
+
+    function hideDfnPanel(dfnPanel, dfn) {
+        if(!dfn) {
+            dfn = document.getElementById(dfnPanel.getAttribute("data-for"));
+        }
+        dfn.setAttribute("aria-expanded", "false")
+        dfnPanel.classList.remove("on");
+        dfnPanel.classList.remove("activated");
+    }
+
+    function toggleDfnPanel(dfnPanel, dfn) {
+        if(dfnPanel.classList.contains("on")) {
+            hideDfnPanel(dfnPanel, dfn);
+        } else {
+            showDfnPanel(dfnPanel, dfn);
+        }
+    }
+
+    function insertDfnPopupAction(dfn, dfnPanel) {
+        // Find dfn panel
+        const panelWrapper = document.createElement('span');
+        panelWrapper.appendChild(dfnPanel);
+        panelWrapper.style.position = "relative";
+        panelWrapper.style.height = "0px";
+        dfn.insertAdjacentElement("afterend", panelWrapper);
+        dfn.setAttribute('role', 'button');
+        dfn.setAttribute('aria-expanded', 'false')
+        dfn.tabIndex = 0;
+        dfn.classList.add('has-dfn-panel');
+        dfn.addEventListener('click', (event) => {
+            showDfnPanel(dfnPanel, dfn);
+            event.stopPropagation();
+        });
+        dfn.addEventListener('keypress', (event) => {
+            const kc = event.keyCode;
+            // 32->Space, 13->Enter
+            if(kc == 32 || kc == 13) {
+                toggleDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        });
+
+        dfnPanel.addEventListener('click', (event) => {
+            if (event.target.nodeName == 'A') {
+                pinDfnPanel(dfnPanel);
+            }
+            event.stopPropagation();
+        });
+
+        dfnPanel.addEventListener('keydown', (event) => {
+            if(event.keyCode == 27) { // Escape key
+                hideDfnPanel(dfnPanel, dfn);
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        })
+    }
+}
+</script>
+<script>/* Boilerplate: script-dfn-panel-json */
+window.dfnpanelData = {};
+window.dfnpanelData['9c72363f'] = {"dfnID": "9c72363f", "url": "https://dom.spec.whatwg.org/#widl-Element-innerHTML", "dfnText": "innerHTML", "refSections": [{"refs": [{"id": "ref-for-widl-Element-innerHTML"}], "title": "1. Introduction"}], "external": true};
+window.dfnpanelData['b159e2cd'] = {"dfnID": "b159e2cd", "url": "https://html.spec.whatwg.org/#template-contents", "dfnText": "template contents", "refSections": [{"refs": [{"id": "ref-for-template-contents"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['d354f084'] = {"dfnID": "d354f084", "url": "https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx", "dfnText": "window.toStaticHTML()", "refSections": [{"refs": [{"id": "ref-for-something"}], "title": "5. Acknowledgements"}], "external": true};
+window.dfnpanelData['99573380'] = {"dfnID": "99573380", "url": "https://dom.spec.whatwg.org/#attr", "dfnText": "Attr", "refSections": [{"refs": [{"id": "ref-for-attr"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['a0647283'] = {"dfnID": "a0647283", "url": "https://dom.spec.whatwg.org/#comment", "dfnText": "Comment", "refSections": [{"refs": [{"id": "ref-for-comment"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['85394472'] = {"dfnID": "85394472", "url": "https://dom.spec.whatwg.org/#document", "dfnText": "Document", "refSections": [{"refs": [{"id": "ref-for-document"}], "title": "1.3.1. Case 1: Sanitizing With Nodes, Only."}, {"refs": [{"id": "ref-for-document\u2460"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-document\u2461"}], "title": "3.2. Helper Definitions"}, {"refs": [{"id": "ref-for-document\u2462"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['49a2843d'] = {"dfnID": "49a2843d", "url": "https://dom.spec.whatwg.org/#documentfragment", "dfnText": "DocumentFragment", "refSections": [{"refs": [{"id": "ref-for-documentfragment"}, {"id": "ref-for-documentfragment\u2460"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-documentfragment\u2461"}, {"id": "ref-for-documentfragment\u2462"}], "title": "3.2. Helper Definitions"}, {"refs": [{"id": "ref-for-documentfragment\u2463"}, {"id": "ref-for-documentfragment\u2464"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['9011c821'] = {"dfnID": "9011c821", "url": "https://dom.spec.whatwg.org/#documenttype", "dfnText": "DocumentType", "refSections": [{"refs": [{"id": "ref-for-documenttype"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['296f3551'] = {"dfnID": "296f3551", "url": "https://dom.spec.whatwg.org/#element", "dfnText": "Element", "refSections": [{"refs": [{"id": "ref-for-element"}], "title": "1. Introduction"}, {"refs": [{"id": "ref-for-element\u2460"}, {"id": "ref-for-element\u2461"}, {"id": "ref-for-element\u2462"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-element\u2463"}, {"id": "ref-for-element\u2464"}, {"id": "ref-for-element\u2465"}], "title": "2.2. String Handling"}, {"refs": [{"id": "ref-for-element\u2466"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-element\u2467"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['c095490e'] = {"dfnID": "c095490e", "url": "https://dom.spec.whatwg.org/#processinginstruction", "dfnText": "ProcessingInstruction", "refSections": [{"refs": [{"id": "ref-for-processinginstruction"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['597088f0'] = {"dfnID": "597088f0", "url": "https://dom.spec.whatwg.org/#text", "dfnText": "Text", "refSections": [{"refs": [{"id": "ref-for-text"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['543878fa'] = {"dfnID": "543878fa", "url": "https://dom.spec.whatwg.org/#concept-node-append", "dfnText": "append", "refSections": [{"refs": [{"id": "ref-for-concept-node-append"}], "title": "3.2. Helper Definitions"}, {"refs": [{"id": "ref-for-concept-node-append\u2460"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['77211728'] = {"dfnID": "77211728", "url": "https://dom.spec.whatwg.org/#concept-element-attribute", "dfnText": "attribute list", "refSections": [{"refs": [{"id": "ref-for-concept-element-attribute"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['92b2d7da'] = {"dfnID": "92b2d7da", "url": "https://dom.spec.whatwg.org/#concept-tree-child", "dfnText": "children", "refSections": [{"refs": [{"id": "ref-for-concept-tree-child"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['44a7f1a1'] = {"dfnID": "44a7f1a1", "url": "https://dom.spec.whatwg.org/#concept-node-clone", "dfnText": "clone a node", "refSections": [{"refs": [{"id": "ref-for-concept-node-clone"}], "title": "3.2. Helper Definitions"}], "external": true};
+window.dfnpanelData['3c307af9'] = {"dfnID": "3c307af9", "url": "https://dom.spec.whatwg.org/#concept-create-element", "dfnText": "creating an element", "refSections": [{"refs": [{"id": "ref-for-concept-create-element"}], "title": "3.1. API Implementation"}], "external": true};
+window.dfnpanelData['f20f4175'] = {"dfnID": "f20f4175", "url": "https://dom.spec.whatwg.org/#concept-element-interface", "dfnText": "element interface", "refSections": [{"refs": [{"id": "ref-for-concept-element-interface"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['f9d909f7'] = {"dfnID": "f9d909f7", "url": "https://dom.spec.whatwg.org/#concept-tree-inclusive-descendant", "dfnText": "inclusive descendant", "refSections": [{"refs": [{"id": "ref-for-concept-tree-inclusive-descendant"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['e240317a'] = {"dfnID": "e240317a", "url": "https://dom.spec.whatwg.org/#concept-attribute-local-name", "dfnText": "local name (for Attr)", "refSections": [{"refs": [{"id": "ref-for-concept-attribute-local-name"}], "title": "2.3.1. Attribute Match Lists"}, {"refs": [{"id": "ref-for-concept-attribute-local-name\u2460"}, {"id": "ref-for-concept-attribute-local-name\u2461"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['83ca4a87'] = {"dfnID": "83ca4a87", "url": "https://dom.spec.whatwg.org/#concept-element-local-name", "dfnText": "local name (for Element)", "refSections": [{"refs": [{"id": "ref-for-concept-element-local-name"}], "title": "2.3.1. Attribute Match Lists"}, {"refs": [{"id": "ref-for-concept-element-local-name\u2460"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-concept-element-local-name\u2461"}, {"id": "ref-for-concept-element-local-name\u2462"}, {"id": "ref-for-concept-element-local-name\u2463"}, {"id": "ref-for-concept-element-local-name\u2464"}], "title": "3.3. Sanitization Algorithms"}, {"refs": [{"id": "ref-for-concept-element-local-name\u2465"}, {"id": "ref-for-concept-element-local-name\u2466"}, {"id": "ref-for-concept-element-local-name\u2467"}, {"id": "ref-for-concept-element-local-name\u2468"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['b3955a25'] = {"dfnID": "b3955a25", "url": "https://dom.spec.whatwg.org/#concept-attribute-namespace", "dfnText": "namespace (for Attr)", "refSections": [{"refs": [{"id": "ref-for-concept-attribute-namespace"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['746cc3ba'] = {"dfnID": "746cc3ba", "url": "https://dom.spec.whatwg.org/#concept-element-namespace", "dfnText": "namespace (for Element)", "refSections": [{"refs": [{"id": "ref-for-concept-element-namespace"}, {"id": "ref-for-concept-element-namespace\u2460"}, {"id": "ref-for-concept-element-namespace\u2461"}, {"id": "ref-for-concept-element-namespace\u2462"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['d462b34f'] = {"dfnID": "d462b34f", "url": "https://dom.spec.whatwg.org/#boundary-point-node", "dfnText": "node", "refSections": [{"refs": [{"id": "ref-for-boundary-point-node"}, {"id": "ref-for-boundary-point-node\u2460"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['5216e1a0'] = {"dfnID": "5216e1a0", "url": "https://dom.spec.whatwg.org/#concept-node-document", "dfnText": "node document", "refSections": [{"refs": [{"id": "ref-for-concept-node-document"}, {"id": "ref-for-concept-node-document\u2460"}], "title": "3.2. Helper Definitions"}], "external": true};
+window.dfnpanelData['2ef14d2e'] = {"dfnID": "2ef14d2e", "url": "https://dom.spec.whatwg.org/#concept-node", "dfnText": "nodes", "refSections": [{"refs": [{"id": "ref-for-concept-node"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['d729a9ff'] = {"dfnID": "d729a9ff", "url": "https://dom.spec.whatwg.org/#concept-tree-parent", "dfnText": "parent", "refSections": [{"refs": [{"id": "ref-for-concept-tree-parent"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['0e0b900e'] = {"dfnID": "0e0b900e", "url": "https://dom.spec.whatwg.org/#concept-node-remove", "dfnText": "remove", "refSections": [{"refs": [{"id": "ref-for-concept-node-remove"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['414d5b08'] = {"dfnID": "414d5b08", "url": "https://dom.spec.whatwg.org/#concept-element-attributes-remove", "dfnText": "remove an attribute", "refSections": [{"refs": [{"id": "ref-for-concept-element-attributes-remove"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['51561373'] = {"dfnID": "51561373", "url": "https://dom.spec.whatwg.org/#concept-node-replace", "dfnText": "replace", "refSections": [{"refs": [{"id": "ref-for-concept-node-replace"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['4fd7ca14'] = {"dfnID": "4fd7ca14", "url": "https://dom.spec.whatwg.org/#concept-node-replace-all", "dfnText": "replace all", "refSections": [{"refs": [{"id": "ref-for-concept-node-replace-all"}, {"id": "ref-for-concept-node-replace-all\u2460"}], "title": "3.1. API Implementation"}], "external": true};
+window.dfnpanelData['25538777'] = {"dfnID": "25538777", "url": "https://dom.spec.whatwg.org/#concept-tree-order", "dfnText": "tree order", "refSections": [{"refs": [{"id": "ref-for-concept-tree-order"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['71b7b22f'] = {"dfnID": "71b7b22f", "url": "https://html.spec.whatwg.org/multipage/semantics.html#htmlbaseelement", "dfnText": "HTMLBaseElement", "refSections": [{"refs": [{"id": "ref-for-htmlbaseelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['4b427f10'] = {"dfnID": "4b427f10", "url": "https://html.spec.whatwg.org/multipage/text-level-semantics.html#htmldataelement", "dfnText": "HTMLDataElement", "refSections": [{"refs": [{"id": "ref-for-htmldataelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['e901a0fc'] = {"dfnID": "e901a0fc", "url": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement", "dfnText": "HTMLEmbedElement", "refSections": [{"refs": [{"id": "ref-for-htmlembedelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['10e25f42'] = {"dfnID": "10e25f42", "url": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement", "dfnText": "HTMLIFrameElement", "refSections": [{"refs": [{"id": "ref-for-htmliframeelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['59ce5887'] = {"dfnID": "59ce5887", "url": "https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement", "dfnText": "HTMLObjectElement", "refSections": [{"refs": [{"id": "ref-for-htmlobjectelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['4cf758d8'] = {"dfnID": "4cf758d8", "url": "https://html.spec.whatwg.org/multipage/obsolete.html#htmlparamelement", "dfnText": "HTMLParamElement", "refSections": [{"refs": [{"id": "ref-for-htmlparamelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['ec4838d8'] = {"dfnID": "ec4838d8", "url": "https://html.spec.whatwg.org/multipage/scripting.html#htmlscriptelement", "dfnText": "HTMLScriptElement", "refSections": [{"refs": [{"id": "ref-for-htmlscriptelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['6e159bbe'] = {"dfnID": "6e159bbe", "url": "https://html.spec.whatwg.org/multipage/scripting.html#htmlslotelement", "dfnText": "HTMLSlotElement", "refSections": [{"refs": [{"id": "ref-for-htmlslotelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['f099a38d'] = {"dfnID": "f099a38d", "url": "https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement", "dfnText": "HTMLTemplateElement", "refSections": [{"refs": [{"id": "ref-for-htmltemplateelement"}], "title": "Built-ins Justification"}], "external": true};
+window.dfnpanelData['a0be88cd'] = {"dfnID": "a0be88cd", "url": "https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement", "dfnText": "HTMLUnknownElement", "refSections": [{"refs": [{"id": "ref-for-htmlunknownelement"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['b6fb7a51'] = {"dfnID": "b6fb7a51", "url": "https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element", "dfnText": "custom element", "refSections": [{"refs": [{"id": "ref-for-custom-element"}], "title": "2.3. The Configuration Dictionary"}], "external": true};
+window.dfnpanelData['1e02be0a'] = {"dfnID": "1e02be0a", "url": "https://html.spec.whatwg.org/multipage/parsing.html#html-parser", "dfnText": "html parser", "refSections": [{"refs": [{"id": "ref-for-html-parser"}], "title": "2.2. String Handling"}], "external": true};
+window.dfnpanelData['15c9cf79'] = {"dfnID": "15c9cf79", "url": "https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name", "dfnText": "valid custom element name", "refSections": [{"refs": [{"id": "ref-for-valid-custom-element-name"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['77b4c09a'] = {"dfnID": "77b4c09a", "url": "https://infra.spec.whatwg.org/#assert", "dfnText": "assert", "refSections": [{"refs": [{"id": "ref-for-assert"}, {"id": "ref-for-assert\u2460"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['1243a891'] = {"dfnID": "1243a891", "url": "https://infra.spec.whatwg.org/#map-exists", "dfnText": "exist", "refSections": [{"refs": [{"id": "ref-for-map-exists"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-map-exists\u2460"}], "title": "3.3. Sanitization Algorithms"}, {"refs": [{"id": "ref-for-map-exists\u2461"}, {"id": "ref-for-map-exists\u2462"}, {"id": "ref-for-map-exists\u2463"}, {"id": "ref-for-map-exists\u2464"}, {"id": "ref-for-map-exists\u2465"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['527b10aa'] = {"dfnID": "527b10aa", "url": "https://infra.spec.whatwg.org/#map-get", "dfnText": "get", "refSections": [{"refs": [{"id": "ref-for-map-get"}], "title": "3.1. API Implementation"}], "external": true};
+window.dfnpanelData['f052b1ea'] = {"dfnID": "f052b1ea", "url": "https://infra.spec.whatwg.org/#html-namespace", "dfnText": "html namespace", "refSections": [{"refs": [{"id": "ref-for-html-namespace"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-html-namespace\u2460"}, {"id": "ref-for-html-namespace\u2461"}, {"id": "ref-for-html-namespace\u2462"}, {"id": "ref-for-html-namespace\u2463"}], "title": "3.3. Sanitization Algorithms"}, {"refs": [{"id": "ref-for-html-namespace\u2464"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['91c016b5'] = {"dfnID": "91c016b5", "url": "https://infra.spec.whatwg.org/#string-is", "dfnText": "identical to", "refSections": [{"refs": [{"id": "ref-for-string-is"}, {"id": "ref-for-string-is\u2460"}, {"id": "ref-for-string-is\u2461"}, {"id": "ref-for-string-is\u2462"}, {"id": "ref-for-string-is\u2463"}, {"id": "ref-for-string-is\u2464"}, {"id": "ref-for-string-is\u2465"}, {"id": "ref-for-string-is\u2466"}], "title": "3.3. Sanitization Algorithms"}, {"refs": [{"id": "ref-for-string-is\u2467"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['7a87d819'] = {"dfnID": "7a87d819", "url": "https://infra.spec.whatwg.org/#string-is", "dfnText": "is", "refSections": [{"refs": [{"id": "ref-for-string-is"}, {"id": "ref-for-string-is\u2460"}, {"id": "ref-for-string-is\u2461"}, {"id": "ref-for-string-is\u2462"}, {"id": "ref-for-string-is\u2463"}, {"id": "ref-for-string-is\u2464"}, {"id": "ref-for-string-is\u2465"}, {"id": "ref-for-string-is\u2466"}], "title": "3.3. Sanitization Algorithms"}, {"refs": [{"id": "ref-for-string-is\u2467"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['f02cd417'] = {"dfnID": "f02cd417", "url": "https://infra.spec.whatwg.org/#list-iterate", "dfnText": "iterate", "refSections": [{"refs": [{"id": "ref-for-list-iterate"}, {"id": "ref-for-list-iterate\u2460"}, {"id": "ref-for-list-iterate\u2461"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['0e6b2056'] = {"dfnID": "0e6b2056", "url": "https://infra.spec.whatwg.org/#map-set", "dfnText": "set", "refSections": [{"refs": [{"id": "ref-for-map-set"}], "title": "3.3. Sanitization Algorithms"}], "external": true};
+window.dfnpanelData['8855a9aa'] = {"dfnID": "8855a9aa", "url": "https://webidl.spec.whatwg.org/#idl-DOMString", "dfnText": "DOMString", "refSections": [{"refs": [{"id": "ref-for-idl-DOMString"}, {"id": "ref-for-idl-DOMString\u2460"}, {"id": "ref-for-idl-DOMString\u2461"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-idl-DOMString\u2462"}, {"id": "ref-for-idl-DOMString\u2463"}, {"id": "ref-for-idl-DOMString\u2464"}], "title": "2.3. The Configuration Dictionary"}, {"refs": [{"id": "ref-for-idl-DOMString\u2465"}, {"id": "ref-for-idl-DOMString\u2466"}], "title": "2.3.1. Attribute Match Lists"}], "external": true};
+window.dfnpanelData['889e932f'] = {"dfnID": "889e932f", "url": "https://webidl.spec.whatwg.org/#Exposed", "dfnText": "Exposed", "refSections": [{"refs": [{"id": "ref-for-Exposed"}], "title": "2.1. Sanitizer API"}], "external": true};
+window.dfnpanelData['b75bb3bd'] = {"dfnID": "b75bb3bd", "url": "https://webidl.spec.whatwg.org/#SecureContext", "dfnText": "SecureContext", "refSections": [{"refs": [{"id": "ref-for-SecureContext"}, {"id": "ref-for-SecureContext\u2460"}], "title": "2.1. Sanitizer API"}], "external": true};
+window.dfnpanelData['82ca3efc'] = {"dfnID": "82ca3efc", "url": "https://webidl.spec.whatwg.org/#exceptiondef-typeerror", "dfnText": "TypeError", "refSections": [{"refs": [{"id": "ref-for-exceptiondef-typeerror"}], "title": "3.1. API Implementation"}], "external": true};
+window.dfnpanelData['5372cca8'] = {"dfnID": "5372cca8", "url": "https://webidl.spec.whatwg.org/#idl-boolean", "dfnText": "boolean", "refSections": [{"refs": [{"id": "ref-for-idl-boolean"}, {"id": "ref-for-idl-boolean\u2460"}, {"id": "ref-for-idl-boolean\u2461"}], "title": "2.3. The Configuration Dictionary"}], "external": true};
+window.dfnpanelData['7787d359'] = {"dfnID": "7787d359", "url": "https://webidl.spec.whatwg.org/#idl-record", "dfnText": "record", "refSections": [{"refs": [{"id": "ref-for-idl-record"}], "title": "2.3.1. Attribute Match Lists"}, {"refs": [{"id": "4041e4780"}, {"id": "4041e4781"}], "title": "3.4. Matching Against The Configuration"}], "external": true};
+window.dfnpanelData['9cce47fd'] = {"dfnID": "9cce47fd", "url": "https://webidl.spec.whatwg.org/#idl-sequence", "dfnText": "sequence", "refSections": [{"refs": [{"id": "ref-for-idl-sequence"}, {"id": "ref-for-idl-sequence\u2460"}, {"id": "ref-for-idl-sequence\u2461"}], "title": "2.3. The Configuration Dictionary"}, {"refs": [{"id": "ref-for-idl-sequence\u2462"}], "title": "2.3.1. Attribute Match Lists"}], "external": true};
+window.dfnpanelData['4013a022'] = {"dfnID": "4013a022", "url": "https://webidl.spec.whatwg.org/#this", "dfnText": "this", "refSections": [{"refs": [{"id": "ref-for-this"}, {"id": "ref-for-this\u2460"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-this\u2461"}, {"id": "ref-for-this\u2462"}, {"id": "ref-for-this\u2463"}, {"id": "ref-for-this\u2464"}, {"id": "ref-for-this\u2465"}, {"id": "ref-for-this\u2466"}], "title": "3.1. API Implementation"}], "external": true};
+window.dfnpanelData['5f90bbfb'] = {"dfnID": "5f90bbfb", "url": "https://webidl.spec.whatwg.org/#idl-undefined", "dfnText": "undefined", "refSections": [{"refs": [{"id": "ref-for-idl-undefined"}], "title": "2.1. Sanitizer API"}], "external": true};
+window.dfnpanelData['sanitizer'] = {"dfnID": "sanitizer", "url": "#sanitizer", "dfnText": "Sanitizer", "refSections": [{"refs": [{"id": "ref-for-sanitizer"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-sanitizer\u2460"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-sanitizer\u2461"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['dom-sanitizer-sanitizer'] = {"dfnID": "dom-sanitizer-sanitizer", "url": "#dom-sanitizer-sanitizer", "dfnText": "\n  new Sanitizer(config)", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizer-sanitizer"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['dom-sanitizer-sanitize'] = {"dfnID": "dom-sanitizer-sanitize", "url": "#dom-sanitizer-sanitize", "dfnText": "sanitize(input)", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizer-sanitize"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['dom-sanitizer-sanitizefor'] = {"dfnID": "dom-sanitizer-sanitizefor", "url": "#dom-sanitizer-sanitizefor", "dfnText": "sanitizeFor(element, input)", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizer-sanitizefor"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['dom-sanitizer-getconfiguration'] = {"dfnID": "dom-sanitizer-getconfiguration", "url": "#dom-sanitizer-getconfiguration", "dfnText": "getConfiguration()", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizer-getconfiguration"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['dom-sanitizer-getdefaultconfiguration'] = {"dfnID": "dom-sanitizer-getdefaultconfiguration", "url": "#dom-sanitizer-getdefaultconfiguration", "dfnText": "getDefaultConfiguration()", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizer-getdefaultconfiguration"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['dictdef-sethtmloptions'] = {"dfnID": "dictdef-sethtmloptions", "url": "#dictdef-sethtmloptions", "dfnText": "SetHTMLOptions", "refSections": [{"refs": [{"id": "ref-for-dictdef-sethtmloptions"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-dictdef-sethtmloptions\u2460"}, {"id": "ref-for-dictdef-sethtmloptions\u2461"}, {"id": "ref-for-dictdef-sethtmloptions\u2462"}], "title": "3.1. API Implementation"}], "external": false};
+window.dfnpanelData['dom-sethtmloptions-sanitizer'] = {"dfnID": "dom-sethtmloptions-sanitizer", "url": "#dom-sethtmloptions-sanitizer", "dfnText": "sanitizer", "refSections": [{"refs": [{"id": "ref-for-dom-sethtmloptions-sanitizer"}, {"id": "ref-for-dom-sethtmloptions-sanitizer\u2460"}], "title": "3.1. API Implementation"}], "external": false};
+window.dfnpanelData['dom-element-sethtml'] = {"dfnID": "dom-element-sethtml", "url": "#dom-element-sethtml", "dfnText": "setHTML(input, options)", "refSections": [{"refs": [{"id": "ref-for-dom-element-sethtml"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['configuration-dictionary'] = {"dfnID": "configuration-dictionary", "url": "#configuration-dictionary", "dfnText": "configuration dictionary", "refSections": [{"refs": [{"id": "ref-for-configuration-dictionary"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-configuration-dictionary\u2460"}, {"id": "ref-for-configuration-dictionary\u2461"}, {"id": "ref-for-configuration-dictionary\u2462"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-configuration-dictionary\u2463"}, {"id": "ref-for-configuration-dictionary\u2464"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['dictdef-sanitizerconfig'] = {"dfnID": "dictdef-sanitizerconfig", "url": "#dictdef-sanitizerconfig", "dfnText": "SanitizerConfig", "refSections": [{"refs": [{"id": "ref-for-dictdef-sanitizerconfig"}, {"id": "ref-for-dictdef-sanitizerconfig\u2460"}, {"id": "ref-for-dictdef-sanitizerconfig\u2461"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-dictdef-sanitizerconfig\u2462"}, {"id": "ref-for-dictdef-sanitizerconfig\u2463"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-dictdef-sanitizerconfig\u2464"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['dom-sanitizerconfig-allowelements'] = {"dfnID": "dom-sanitizerconfig-allowelements", "url": "#dom-sanitizerconfig-allowelements", "dfnText": "allowElements", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizerconfig-allowelements"}, {"id": "ref-for-dom-sanitizerconfig-allowelements\u2460"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['dom-sanitizerconfig-blockelements'] = {"dfnID": "dom-sanitizerconfig-blockelements", "url": "#dom-sanitizerconfig-blockelements", "dfnText": "blockElements", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizerconfig-blockelements"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['dom-sanitizerconfig-dropelements'] = {"dfnID": "dom-sanitizerconfig-dropelements", "url": "#dom-sanitizerconfig-dropelements", "dfnText": "dropElements", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizerconfig-dropelements"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['dom-sanitizerconfig-allowcustomelements'] = {"dfnID": "dom-sanitizerconfig-allowcustomelements", "url": "#dom-sanitizerconfig-allowcustomelements", "dfnText": "allowCustomElements", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizerconfig-allowcustomelements"}], "title": "2.3. The Configuration Dictionary"}, {"refs": [{"id": "ref-for-dom-sanitizerconfig-allowcustomelements\u2460"}, {"id": "ref-for-dom-sanitizerconfig-allowcustomelements\u2461"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['dom-sanitizerconfig-allowunknownmarkup'] = {"dfnID": "dom-sanitizerconfig-allowunknownmarkup", "url": "#dom-sanitizerconfig-allowunknownmarkup", "dfnText": "allowUnknownMarkup", "refSections": [{"refs": [{"id": "ref-for-dom-sanitizerconfig-allowunknownmarkup"}], "title": "2.3. The Configuration Dictionary"}, {"refs": [{"id": "ref-for-dom-sanitizerconfig-allowunknownmarkup\u2460"}, {"id": "ref-for-dom-sanitizerconfig-allowunknownmarkup\u2461"}, {"id": "ref-for-dom-sanitizerconfig-allowunknownmarkup\u2462"}, {"id": "ref-for-dom-sanitizerconfig-allowunknownmarkup\u2463"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['element-allow-list'] = {"dfnID": "element-allow-list", "url": "#element-allow-list", "dfnText": "element allow list", "refSections": [{"refs": [{"id": "ref-for-element-allow-list"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-element-allow-list\u2460"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['element-block-list'] = {"dfnID": "element-block-list", "url": "#element-block-list", "dfnText": "element block list", "refSections": [{"refs": [{"id": "ref-for-element-block-list"}], "title": "3.1. API Implementation"}], "external": false};
+window.dfnpanelData['element-drop-list'] = {"dfnID": "element-drop-list", "url": "#element-drop-list", "dfnText": "element drop list", "refSections": [{"refs": [{"id": "ref-for-element-drop-list"}], "title": "3.1. API Implementation"}], "external": false};
+window.dfnpanelData['attribute-allow-list'] = {"dfnID": "attribute-allow-list", "url": "#attribute-allow-list", "dfnText": "attribute allow list", "refSections": [{"refs": [{"id": "ref-for-attribute-allow-list"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-attribute-allow-list\u2460"}, {"id": "ref-for-attribute-allow-list\u2461"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['attribute-drop-list'] = {"dfnID": "attribute-drop-list", "url": "#attribute-drop-list", "dfnText": "attribute drop list", "refSections": [{"refs": [{"id": "ref-for-attribute-drop-list"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-attribute-drop-list\u2460"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['allow-comments-option'] = {"dfnID": "allow-comments-option", "url": "#allow-comments-option", "dfnText": "allow comments option", "refSections": [{"refs": [{"id": "ref-for-allow-comments-option"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['attribute-match-list'] = {"dfnID": "attribute-match-list", "url": "#attribute-match-list", "dfnText": "attribute match list", "refSections": [{"refs": [{"id": "ref-for-attribute-match-list"}, {"id": "ref-for-attribute-match-list\u2460"}], "title": "2.3. The Configuration Dictionary"}, {"refs": [{"id": "ref-for-attribute-match-list\u2461"}], "title": "2.3.1. Attribute Match Lists"}, {"refs": [{"id": "ref-for-attribute-match-list\u2462"}, {"id": "ref-for-attribute-match-list\u2463"}, {"id": "ref-for-attribute-match-list\u2464"}, {"id": "ref-for-attribute-match-list\u2465"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['typedefdef-attributematchlist'] = {"dfnID": "typedefdef-attributematchlist", "url": "#typedefdef-attributematchlist", "dfnText": "AttributeMatchList", "refSections": [{"refs": [{"id": "ref-for-typedefdef-attributematchlist"}, {"id": "ref-for-typedefdef-attributematchlist\u2460"}], "title": "2.3. The Configuration Dictionary"}], "external": false};
+window.dfnpanelData['create-a-sanitizer'] = {"dfnID": "create-a-sanitizer", "url": "#create-a-sanitizer", "dfnText": "create a Sanitizer", "refSections": [{"refs": [{"id": "ref-for-create-a-sanitizer"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-create-a-sanitizer\u2460"}], "title": "3.1. API Implementation"}], "external": false};
+window.dfnpanelData['sanitize'] = {"dfnID": "sanitize", "url": "#sanitize", "dfnText": "sanitize", "refSections": [{"refs": [{"id": "ref-for-sanitize"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['sanitizefor'] = {"dfnID": "sanitizefor", "url": "#sanitizefor", "dfnText": "sanitize for", "refSections": [{"refs": [{"id": "ref-for-sanitizefor"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['sanitizeandset'] = {"dfnID": "sanitizeandset", "url": "#sanitizeandset", "dfnText": "sanitize and set", "refSections": [{"refs": [{"id": "ref-for-sanitizeandset"}], "title": "2.1. Sanitizer API"}], "external": false};
+window.dfnpanelData['query-the-sanitizer-config'] = {"dfnID": "query-the-sanitizer-config", "url": "#query-the-sanitizer-config", "dfnText": "query the sanitizer config", "refSections": [{"refs": [{"id": "ref-for-query-the-sanitizer-config"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-query-the-sanitizer-config\u2460"}], "title": "2.3. The Configuration Dictionary"}], "external": false};
+window.dfnpanelData['create-a-document-fragment'] = {"dfnID": "create-a-document-fragment", "url": "#create-a-document-fragment", "dfnText": "create a document fragment", "refSections": [{"refs": [{"id": "ref-for-create-a-document-fragment"}], "title": "3.1. API Implementation"}], "external": false};
+window.dfnpanelData['sanitize-a-document-fragment'] = {"dfnID": "sanitize-a-document-fragment", "url": "#sanitize-a-document-fragment", "dfnText": "sanitize a document fragment", "refSections": [{"refs": [{"id": "ref-for-sanitize-a-document-fragment"}, {"id": "ref-for-sanitize-a-document-fragment\u2460"}, {"id": "ref-for-sanitize-a-document-fragment\u2461"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-sanitize-a-document-fragment\u2462"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['sanitize-a-node'] = {"dfnID": "sanitize-a-node", "url": "#sanitize-a-node", "dfnText": "sanitize a node", "refSections": [{"refs": [{"id": "ref-for-sanitize-a-node"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['handle-funky-elements'] = {"dfnID": "handle-funky-elements", "url": "#handle-funky-elements", "dfnText": "handle funky elements", "refSections": [{"refs": [{"id": "ref-for-handle-funky-elements"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['sanitize-action'] = {"dfnID": "sanitize-action", "url": "#sanitize-action", "dfnText": "sanitize action", "refSections": [{"refs": [{"id": "ref-for-sanitize-action"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['sanitize-action-for-an-element'] = {"dfnID": "sanitize-action-for-an-element", "url": "#sanitize-action-for-an-element", "dfnText": "sanitize action for an element", "refSections": [{"refs": [{"id": "ref-for-sanitize-action-for-an-element"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['element-matches-an-element-name'] = {"dfnID": "element-matches-an-element-name", "url": "#element-matches-an-element-name", "dfnText": "element matches an element name", "refSections": [{"refs": [{"id": "ref-for-element-matches-an-element-name"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-element-matches-an-element-name\u2460"}, {"id": "ref-for-element-matches-an-element-name\u2461"}, {"id": "ref-for-element-matches-an-element-name\u2462"}, {"id": "ref-for-element-matches-an-element-name\u2463"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['attribute-matches-an-attribute-match-list'] = {"dfnID": "attribute-matches-an-attribute-match-list", "url": "#attribute-matches-an-attribute-match-list", "dfnText": "attribute matches an attribute match\nlist", "refSections": [{"refs": [{"id": "ref-for-attribute-matches-an-attribute-match-list"}, {"id": "ref-for-attribute-matches-an-attribute-match-list\u2460"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['sanitize-action-for-an-attribute'] = {"dfnID": "sanitize-action-for-an-attribute", "url": "#sanitize-action-for-an-attribute", "dfnText": "sanitize action for an attribute", "refSections": [{"refs": [{"id": "ref-for-sanitize-action-for-an-attribute"}, {"id": "ref-for-sanitize-action-for-an-attribute\u2460"}], "title": "3.3. Sanitization Algorithms"}], "external": false};
+window.dfnpanelData['element-kind'] = {"dfnID": "element-kind", "url": "#element-kind", "dfnText": "element kind", "refSections": [{"refs": [{"id": "ref-for-element-kind"}, {"id": "ref-for-element-kind\u2460"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-element-kind\u2461"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['attribute-kind'] = {"dfnID": "attribute-kind", "url": "#attribute-kind", "dfnText": "attribute kind", "refSections": [{"refs": [{"id": "ref-for-attribute-kind"}], "title": "3.4. Matching Against The Configuration"}], "external": false};
+window.dfnpanelData['baseline-element-allow-list'] = {"dfnID": "baseline-element-allow-list", "url": "#baseline-element-allow-list", "dfnText": "baseline element allow list", "refSections": [{"refs": [{"id": "ref-for-baseline-element-allow-list"}, {"id": "ref-for-baseline-element-allow-list\u2460"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-baseline-element-allow-list\u2461"}], "title": "3.4. Matching Against The Configuration"}, {"refs": [{"id": "ref-for-baseline-element-allow-list\u2462"}], "title": "3.5. Baseline and Defaults"}], "external": false};
+window.dfnpanelData['baseline-attribute-allow-list'] = {"dfnID": "baseline-attribute-allow-list", "url": "#baseline-attribute-allow-list", "dfnText": "baseline attribute allow list", "refSections": [{"refs": [{"id": "ref-for-baseline-attribute-allow-list"}], "title": "3.4. Matching Against The Configuration"}, {"refs": [{"id": "ref-for-baseline-attribute-allow-list\u2460"}], "title": "3.5. Baseline and Defaults"}], "external": false};
+window.dfnpanelData['default-configuration'] = {"dfnID": "default-configuration", "url": "#default-configuration", "dfnText": "default configuration", "refSections": [{"refs": [{"id": "ref-for-default-configuration"}], "title": "2.1. Sanitizer API"}, {"refs": [{"id": "ref-for-default-configuration\u2460"}], "title": "2.3. The Configuration Dictionary"}, {"refs": [{"id": "ref-for-default-configuration\u2461"}], "title": "3.1. API Implementation"}, {"refs": [{"id": "ref-for-default-configuration\u2462"}], "title": "3.3. Sanitization Algorithms"}, {"refs": [{"id": "ref-for-default-configuration\u2463"}, {"id": "ref-for-default-configuration\u2464"}], "title": "3.4. Matching Against The Configuration"}, {"refs": [{"id": "ref-for-default-configuration\u2465"}, {"id": "ref-for-default-configuration\u2466"}], "title": "3.5. Baseline and Defaults"}], "external": false};
+</script>
+<script>/* Boilerplate: script-dom-helper */
+function query(sel) { return document.querySelector(sel); }
+
+function queryAll(sel) { return [...document.querySelectorAll(sel)]; }
+
+function iter(obj) {
+	if(!obj) return [];
+	var it = obj[Symbol.iterator];
+	if(it) return it;
+	return Object.entries(obj);
+}
+
+function mk(tagname, attrs, ...children) {
+	const el = document.createElement(tagname);
+	for(const [k,v] of iter(attrs)) {
+		if(k.slice(0,3) == "_on") {
+			const eventName = k.slice(3);
+			el.addEventListener(eventName, v);
+		} else if(k[0] == "_") {
+			// property, not attribute
+			el[k.slice(1)] = v;
+		} else {
+			if(v === false || v == null) {
+        continue;
+      } else if(v === true) {
+        el.setAttribute(k, "");
+        continue;
+      } else {
+  			el.setAttribute(k, v);
+      }
+		}
+	}
+	append(el, children);
+	return el;
+}
+
+/* Create shortcuts for every known HTML element */
+[
+  "a",
+  "abbr",
+  "acronym",
+  "address",
+  "applet",
+  "area",
+  "article",
+  "aside",
+  "audio",
+  "b",
+  "base",
+  "basefont",
+  "bdo",
+  "big",
+  "blockquote",
+  "body",
+  "br",
+  "button",
+  "canvas",
+  "caption",
+  "center",
+  "cite",
+  "code",
+  "col",
+  "colgroup",
+  "datalist",
+  "dd",
+  "del",
+  "details",
+  "dfn",
+  "dialog",
+  "div",
+  "dl",
+  "dt",
+  "em",
+  "embed",
+  "fieldset",
+  "figcaption",
+  "figure",
+  "font",
+  "footer",
+  "form",
+  "frame",
+  "frameset",
+  "head",
+  "header",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "html",
+  "i",
+  "iframe",
+  "img",
+  "input",
+  "ins",
+  "kbd",
+  "label",
+  "legend",
+  "li",
+  "link",
+  "main",
+  "map",
+  "mark",
+  "meta",
+  "meter",
+  "nav",
+  "nobr",
+  "noscript",
+  "object",
+  "ol",
+  "optgroup",
+  "option",
+  "output",
+  "p",
+  "param",
+  "pre",
+  "progress",
+  "q",
+  "s",
+  "samp",
+  "script",
+  "section",
+  "select",
+  "small",
+  "source",
+  "span",
+  "strike",
+  "strong",
+  "style",
+  "sub",
+  "summary",
+  "sup",
+  "table",
+  "tbody",
+  "td",
+  "template",
+  "textarea",
+  "tfoot",
+  "th",
+  "thead",
+  "time",
+  "title",
+  "tr",
+  "u",
+  "ul",
+  "var",
+  "video",
+  "wbr",
+  "xmp",
+].forEach(tagname=>{
+	mk[tagname] = (...args) => mk(tagname, ...args);
+});
+
+function* nodesFromChildList(children) {
+	for(const child of children.flat(Infinity)) {
+		if(child instanceof Node) {
+			yield child;
+		} else {
+			yield new Text(child);
+		}
+	}
+}
+function append(el, ...children) {
+	for(const child of nodesFromChildList(children)) {
+		if(el instanceof Node) el.appendChild(child);
+		else el.push(child);
+	}
+	return el;
+}
+
+function insertAfter(el, ...children) {
+	for(const child of nodesFromChildList(children)) {
+		el.parentNode.insertBefore(child, el.nextSibling);
+	}
+	return el;
+}
+
+function clearContents(el) {
+	el.innerHTML = "";
+	return el;
+}
+
+function parseHTML(markup) {
+	if(markup.toLowerCase().trim().indexOf('<!doctype') === 0) {
+		const doc = document.implementation.createHTMLDocument("");
+		doc.documentElement.innerHTML = markup;
+		return doc;
+	} else {
+		const el = mk.template({});
+		el.innerHTML = markup;
+		return el.content;
+	}
+}
+</script>
+<script>/* Boilerplate: script-var-click-highlighting */
+/*
+Color-choosing design:
+
+Colors are ordered by goodness.
+Each color has a usage count (initially zero).
+Each variable has a last-used color.
+
+* If the var has a last-used color, and that color's usage is 0,
+    return that color.
+* Otherwise, return the lowest-indexed color with the lowest usage.
+    Increment the color's usage and set it as the last-used color
+    for that var.
+* On unclicking, decrement usage of the color.
+*/
+"use strict";
+{
     document.addEventListener("click", e=>{
         if(e.target.nodeName == "VAR") {
             highlightSameAlgoVars(e.target);
         }
     });
-    {
-        const indexCounts = new Map();
-        const indexNames = new Map();
-        function highlightSameAlgoVars(v) {
-            // Find the algorithm container.
-            let algoContainer = null;
-            let searchEl = v;
-            while(algoContainer == null && searchEl != document.body) {
-                searchEl = searchEl.parentNode;
-                if(searchEl.hasAttribute("data-algorithm")) {
-                    algoContainer = searchEl;
-                }
-            }
-
-            // Not highlighting document-global vars,
-            // too likely to be unrelated.
-            if(algoContainer == null) return;
-
-            const algoName = algoContainer.getAttribute("data-algorithm");
-            const varName = getVarName(v);
-            const addClass = !v.classList.contains("selected");
-            let highlightClass = null;
-            if(addClass) {
-                const index = chooseHighlightIndex(algoName, varName);
-                indexCounts.get(algoName)[index] += 1;
-                indexNames.set(algoName+"///"+varName, index);
-                highlightClass = nameFromIndex(index);
-            } else {
-                const index = previousHighlightIndex(algoName, varName);
-                indexCounts.get(algoName)[index] -= 1;
-                highlightClass = nameFromIndex(index);
-            }
-
-            // Find all same-name vars, and toggle their class appropriately.
-            for(const el of algoContainer.querySelectorAll("var")) {
-                if(getVarName(el) == varName) {
-                    el.classList.toggle("selected", addClass);
-                    el.classList.toggle(highlightClass, addClass);
-                }
+    const indexCounts = new Map();
+    const indexNames = new Map();
+    function highlightSameAlgoVars(v) {
+        // Find the algorithm container.
+        let algoContainer = null;
+        let searchEl = v;
+        while(algoContainer == null && searchEl != document.body) {
+            searchEl = searchEl.parentNode;
+            if(searchEl.hasAttribute("data-algorithm")) {
+                algoContainer = searchEl;
             }
         }
-        function getVarName(el) {
-            return el.textContent.replace(/(\s|\xa0)+/, " ").trim();
-        }
-        function chooseHighlightIndex(algoName, varName) {
-            let indexes = null;
-            if(indexCounts.has(algoName)) {
-                indexes = indexCounts.get(algoName);
-            } else {
-                // 7 classes right now
-                indexes = [0,0,0,0,0,0,0];
-                indexCounts.set(algoName, indexes);
-            }
 
-            // If the element was recently unclicked,
-            // *and* that color is still unclaimed,
-            // give it back the same color.
-            const lastIndex = previousHighlightIndex(algoName, varName);
-            if(indexes[lastIndex] === 0) return lastIndex;
+        // Not highlighting document-global vars,
+        // too likely to be unrelated.
+        if(algoContainer == null) return;
 
-            // Find the earliest index with the lowest count.
-            const minCount = Math.min.apply(null, indexes);
-            let index = null;
-            for(var i = 0; i < indexes.length; i++) {
-                if(indexes[i] == minCount) {
-                    return i;
-                }
+        const algoName = algoContainer.getAttribute("data-algorithm");
+        const varName = getVarName(v);
+        const addClass = !v.classList.contains("selected");
+        let highlightClass = null;
+        if(addClass) {
+            const index = chooseHighlightIndex(algoName, varName);
+            indexCounts.get(algoName)[index] += 1;
+            indexNames.set(algoName+"///"+varName, index);
+            highlightClass = nameFromIndex(index);
+        } else {
+            const index = previousHighlightIndex(algoName, varName);
+            indexCounts.get(algoName)[index] -= 1;
+            highlightClass = nameFromIndex(index);
+        }
+
+        // Find all same-name vars, and toggle their class appropriately.
+        for(const el of algoContainer.querySelectorAll("var")) {
+            if(getVarName(el) == varName) {
+                el.classList.toggle("selected", addClass);
+                el.classList.toggle(highlightClass, addClass);
             }
-        }
-        function previousHighlightIndex(algoName, varName) {
-            return indexNames.get(algoName+"///"+varName);
-        }
-        function nameFromIndex(index) {
-            return "selected" + index;
         }
     }
-    </script>
-<script>/* script-wpt */
+    function getVarName(el) {
+        return el.textContent.replace(/(\s|\xa0)+/, " ").trim();
+    }
+    function chooseHighlightIndex(algoName, varName) {
+        let indexes = null;
+        if(indexCounts.has(algoName)) {
+            indexes = indexCounts.get(algoName);
+        } else {
+            // 7 classes right now
+            indexes = [0,0,0,0,0,0,0];
+            indexCounts.set(algoName, indexes);
+        }
+
+        // If the element was recently unclicked,
+        // *and* that color is still unclaimed,
+        // give it back the same color.
+        const lastIndex = previousHighlightIndex(algoName, varName);
+        if(indexes[lastIndex] === 0) return lastIndex;
+
+        // Find the earliest index with the lowest count.
+        const minCount = Math.min.apply(null, indexes);
+        let index = null;
+        for(var i = 0; i < indexes.length; i++) {
+            if(indexes[i] == minCount) {
+                return i;
+            }
+        }
+    }
+    function previousHighlightIndex(algoName, varName) {
+        return indexNames.get(algoName+"///"+varName);
+    }
+    function nameFromIndex(index) {
+        return "selected" + index;
+    }
+}
+</script>
+<script>/* Boilerplate: script-wpt */
 let wptPath = "/sanitizer-api/";
 "use strict";
 
