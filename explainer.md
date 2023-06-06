@@ -215,7 +215,7 @@ defaults.
 
 ```js
 const config_allow = {
-  allowElements: [ "div", "p", "em", "b" ]  // Allows those four elements.
+  allowElements: [ "div", "p", "em", "b" ]  // Allows only those four elements.
       // Output with "safe" and "unsafe" methods should be the same.
 };
 const config_block = {
