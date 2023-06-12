@@ -143,8 +143,7 @@ const table = document.createElement("table");
 
 element.setHTML(example_tr);  // <div>A table row.</div>
 table.setHTML(example_tr);  // <table><tbody><tr><td>A table row.</td></tr></tbody></table>
-Document.parseHTML(example_tr);  // <html><body>A table row.</body></html>
-                                 // (Left out <head> for clarity.)
+Document.parseHTML(example_tr);  // <html><head></head><body>A table row.</body></html>
 ```
 All of these would have had identical results if the "unsafe" variants had
 been used.
@@ -152,12 +151,12 @@ been used.
 Parsing follows HTML parsing rules, unlike `innerHTML`, where it depends on the
 document type:
 ```js
-const element_xml = new DOMParser().parseFromString("<html><body><div/></body></html>", "application/xhtml+xml").getElementsByTagName("div")[0];
+const element_xml = new DOMParser().parseFromString("<html xmlns='http://www.w3.org/1999/xhtml'><body><div/></body></html>", "application/xhtml+xml").getElementsByTagName("div")[0];
 const example_not_xml = "<bLoCkQuOtE>bla";
 
-element_xml.getRootNode().contentType;  // 'application/xhtml+xml'
+element_xml.getRootNode().contentType;  // application/xhtml+xml
 element_xml.innerHTML = example_not_xml;  // Throws.
-element_xml.setHTML(example_not_xml);  // <div><blockquote>bla</blockquote></div>
+element_xml.setHTML(example_not_xml);  // <div xmlns="http://www.w3.org/1999/xhtml"><blockquote>bla</blockquote></div>
                                        // Note case and closing elements.
 element.setHTML(example_not_xml);  // Same as above.
 ```
@@ -182,9 +181,9 @@ element.setHTML("<script>", { sanitizer: an_unsafe_config });  // <div></div>
 element.setHTMLUnsafe("<script>", { sanitizer: an_unsafe_config });  // You now have a script. Congrats.
 ```
 
-For elements, the HTML namespace is default. For attributes, the empty namespace.
+For elements, the HTML namespace is default. For attributes, the null namespace.
 Other namespaces can be supported. A string entry stands for a dictionary with
-only the name, in the HTML/empty namespace (for elements/attributes,
+only the name, in the HTML/null namespace (for elements/attributes,
 respectively).
 ``` js
 const config_with_namespaces = {
