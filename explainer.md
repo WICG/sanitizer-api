@@ -121,6 +121,105 @@ The currently proposed API differs in a number of aspects:
   recent 'sync' meeting.
 
 ## Examples
+
+The new APIs, in their most basic form:
 ```js
-// TODO
+const example = `<b onclick="alert(1)">hello world</b>`;
+const element = document.createElement("div");
+
+// Modify element:
+element.setHTML(example);  // <div><b>hello world</b></div>
+element.setHTMLUnsafe(example);  // <div><b onclick="alert(1)">hello world</b></div>
+
+// Return a Document instance:
+Document.parseHTML(example);  // <html><head></head><body><b>hello world</b></body></html>
+Document.parseHTMLUnsafe(example);  // <html><head></head><body><b onclick="alert(1)">hello world</b></body></html>
+```
+
+Parsing observes its contexts:
+```js
+const example_tr = `<tr><td>A table row.</td></tr>`;
+const table = document.createElement("table");
+
+element.setHTML(example_tr);  // <div>A table row.</div>
+table.setHTML(example_tr);  // <table><tbody><tr><td>A table row.</td></tr></tbody></table>
+Document.parseHTML(example_tr);  // <html><head></head><body>A table row.</body></html>
+```
+All of these would have had identical results if the "unsafe" variants had
+been used.
+
+Parsing follows HTML parsing rules, unlike `innerHTML`, where it depends on the
+document type:
+```js
+const element_xml = new DOMParser().parseFromString("<html xmlns='http://www.w3.org/1999/xhtml'><body><div/></body></html>", "application/xhtml+xml").getElementsByTagName("div")[0];
+const example_not_xml = "<bLoCkQuOtE>bla";
+
+element_xml.getRootNode().contentType;  // application/xhtml+xml
+element_xml.innerHTML = example_not_xml;  // Throws.
+element_xml.setHTML(example_not_xml);  // <div xmlns="http://www.w3.org/1999/xhtml"><blockquote>bla</blockquote></div>
+                                       // Note case and closing elements.
+element.setHTML(example_not_xml);  // Same as above.
+```
+
+The "safe" methods remove all script-y content defined by the platform and
+let the rest pass:
+```js
+element.setHTML(`<a href=about:blank onclick=alert(1) onload=alert(2) id=myid class=something><script>alert(3);</script>`);
+// <div><a href="about:blank" id="myid" class="something"></a></div>
+```
+
+The operation of the built-in sanitizer can be configured to suit your
+applications' needs. Both "safe" and "unsafe" versions can take a configuration.
+(Please note that naming and structure here is rather preliminary,
+but we expect these capabilities to be in the final standard.)
+
+The "safe" version will ignore configuration items that break its security
+guarantees:
+```js
+const an_unsafe_config = { 'allowElements': [ { name: 'script' } ] };
+element.setHTML("<script>", { sanitizer: an_unsafe_config });  // <div></div>
+element.setHTMLUnsafe("<script>", { sanitizer: an_unsafe_config });  // You now have a script. Congrats.
+```
+
+For elements, the HTML namespace is default. For attributes, the null namespace.
+Other namespaces can be supported. A string entry stands for a dictionary with
+only the name, in the HTML/null namespace (for elements/attributes,
+respectively).
+``` js
+const config_with_namespaces = {
+  allowElements: [
+    'a',  // The HTML anchor element.
+    { name: 'a' },  // Also the HTML anchor element.
+    { name: 'a', namespace: 'http://www.w3.org/1999/xhtml' },  // Another one.
+    { name: 'a', namespace: 'http://www.w3.org/2000/svg' }  // SVG's anchor element
+  ],
+  allowAttributes: [
+    'href',  // An href attribute. The one you'd expect on an HTML anchor.
+    { name: 'href' },  // The very same.
+    { name: 'href', namespace: '' },  // There it is again.
+    { name: 'href', namespace: 'http://www.w3.org/1999/xlink' },  // xlink:href. SVG sometimes uses this.
+    { name: 'href', namespace: 'http://www.w3.org/1999/xhtml' }  // This isn't a thing.
+        // It won't match any HTML-defined href attributes. Probably the config
+        // author made an error.
+  ]
+};
+```
+
+There are two ways you can build up a config: Specify the elements & attributes
+you wish to allow. This is easy to read and makes it easy to understand what
+to expect in the sanitizer output. Or you can specify what elements & attributes
+you wish to block. This effectively specifies the sanitizer output relative to
+the built-in list. This can be useful if you wish to mostly retain the built-in
+defaults.
+
+```js
+const config_allow = {
+  allowElements: [ "div", "p", "em", "b" ]  // Allows only those four elements.
+      // Output with "safe" and "unsafe" methods should be the same.
+};
+const config_block = {
+  blockElements: [ "style" ]  // Allows a lot of things. But not <style>.
+      // And not XSS-y stuff, either, if used with a "safe" method.
+      // Output with "safe" and "unsafe" methods might be quite different.
+};
 ```
