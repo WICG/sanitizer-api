@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 5fcd28d6d, updated Tue May 30 13:12:11 2023 -0700" name="generator">
+  <meta content="Bikeshed version b06c00b8e, updated Tue Jul 11 13:41:16 2023 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="a38c8ed39cbcbd42833569b3c2b1f806957f9140" name="document-revision">
+  <meta content="1e158b43c8542819a1434d3bf09db38fabe0a5b9" name="document-revision">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -513,33 +513,12 @@ a.self-link::before            { content: "¶"; }
 .heading > a.self-link::before { content: "§"; }
 dfn > a.self-link::before      { content: "#"; }
 </style>
-<style>/* Boilerplate: style-style-syntax-highlighting */
+<style>/* Boilerplate: style-syntax-highlighting */
 
             pre.idl.highlight {
                 background: var(--borderedblock-bg, var(--def-bg));
             }
             
-</style>
-<style>/* Boilerplate: style-style-var-click-highlighting */
-/*
-Colors were chosen in Lab using https://nixsensor.com/free-color-converter/
-D50 2deg illuminant, L in [0,100], a and b in [-128, 128]
-0 = lab(85,0,85)
-1 = lab(85,80,30)
-2 = lab(85,-40,40)
-3 = lab(85,-50,0)
-4 = lab(85,5,15)
-5 = lab(85,-10,-50)
-6 = lab(85,35,-15)
-*/
-var { cursor: pointer; }
-var.selected0 { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
-var.selected1 { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
-var.selected2 { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
-var.selected3 { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
-var.selected4 { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
-var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
-var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
 </style>
 <style>/* Boilerplate: style-syntax-highlighting */
 
@@ -663,6 +642,27 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
     c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
 }
+</style>
+<style>/* Boilerplate: style-var-click-highlighting */
+/*
+Colors were chosen in Lab using https://nixsensor.com/free-color-converter/
+D50 2deg illuminant, L in [0,100], a and b in [-128, 128]
+0 = lab(85,0,85)
+1 = lab(85,80,30)
+2 = lab(85,-40,40)
+3 = lab(85,-50,0)
+4 = lab(85,5,15)
+5 = lab(85,-10,-50)
+6 = lab(85,35,-15)
+*/
+var { cursor: pointer; }
+var.selected0 { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
+var.selected1 { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
+var.selected2 { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
+var.selected3 { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
+var.selected4 { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
+var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
+var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
 </style>
 <style>/* Boilerplate: style-wpt */
 :root {
@@ -805,7 +805,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-06-14">14 June 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2023-07-18">18 July 2023</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -952,8 +952,8 @@ API which aims to do just that.</p>
   Adding certain elements and attributes can prevent <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a> attacks.</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="api-summary"><span class="secno">1.2. </span><span class="content">API Summary</span><a class="self-link" href="#api-summary"></a></h3>
-   <div class="example" id="example-19897f75">
-    <a class="self-link" href="#example-19897f75"></a> 
+   <div class="example" id="example-9f5cf633">
+    <a class="self-link" href="#example-9f5cf633"></a> 
 <pre class="language-js highlight"><c- a>let</c-> s <c- o>=</c-> <c- ow>new</c-> Sanitizer<c- p>();</c->
 
 <c- c1>// Case: The input data is available as a tree of DOM nodes.</c->
@@ -970,7 +970,7 @@ element<c- p>.</c->setHTML<c- p>(</c->userControlledInput<c- p>,</c-> <c- p>{</c
 <c- c1>// insertion now:</c->
 <c- a>let</c-> forDiv <c- o>=</c-> s<c- p>.</c->sanitizeFor<c- p>(</c-><c- u>"div"</c-><c- p>,</c-> userControlledInput<c- p>);</c->
 <c- c1>// Later:</c->
-document<c- p>.</c->querySelector<c- p>(</c-><c- sb>`</c-><c- si>${</c->forDiv<c- p>.</c->localName<c- si>}</c-><c- sb>#target`</c-><c- p>).</c->replaceChildren<c- p>(...</c->forDiv<c- p>.</c->childNodes<c- p>);</c->
+document<c- p>.</c->querySelector<c- p>(</c->\<c- sb>`</c-><c- si>${</c->forDiv<c- p>.</c->localName<c- si>}</c-><c- sb>#target\`).replaceChildren(...forDiv.childNodes);</c->
 </pre>
    </div>
    <h3 class="heading settled" data-level="1.3" id="strings"><span class="secno">1.3. </span><span class="content">The Trouble With Strings</span><a class="self-link" href="#strings"></a></h3>
@@ -1931,7 +1931,7 @@ since these also execute script.</p>
         <p><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmliframeelement" id="ref-for-htmliframeelement">HTMLIFrameElement</a></code>, which loads arbitrary HTML content and therefor also script.</p>
        <li data-md>
         <p>The legacy <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlobjectelement" id="ref-for-htmlobjectelement">HTMLObjectElement</a></code> and <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#htmlembedelement" id="ref-for-htmlembedelement">HTMLEmbedElement</a></code>, which load
-non-HTML active content. Also, <code>&lt;object></code>'s side-kick <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/obsolete.html#htmlparamelement" id="ref-for-htmlparamelement">HTMLParamElement</a></code>.</p>
+non-HTML active content. Also, <code>&lt;object></code>’s side-kick <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/obsolete.html#htmlparamelement" id="ref-for-htmlparamelement">HTMLParamElement</a></code>.</p>
        <li data-md>
         <p>The <a href="https://html.spec.whatwg.org/#non-conforming-features">no-longer conforming</a> <code>&lt;frame></code>, <code>&lt;frameset></code>, and <code>&lt;applet></code> tags, which are
 outdated versions companions of several elements listed above.</p>
