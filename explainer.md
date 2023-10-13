@@ -242,18 +242,34 @@ chiefly useful to remove unwanted formatting from user input, while
 preserving its textual content.
 
 ```js
-const config_that_removes_elements_but_preserves_their_text_content = {
+const config_that_removes_elements_but_preserves_their_children = {
  flattenElements: ["span", "em", "u", "s", "i", "b"]
 };
 
 element.setHTML(
   "Fancy <b>text</b> with <span style='color:blue'>pizzazz</span>.",
-  { sanitizer: config_that_removes_elements_but_preserves_their_text_content });
+  { sanitizer: config_that_removes_elements_but_preserves_their_children });
   // <div>Fancy text with pizzazz.</div>
 ```
 
 There is no `flattenAttribute` because attribute nodes do not have children.
 
+Flatten applies to its immediate children, i.e. to one level. Combining
+`allowElements` with `flattenElements` lets you keep some formatting, but all
+the text content:
+
+```js
+const config_flatten_spans = {
+  allowElements: ["b", "i"],
+  flattenElements: ["span"]
+};
+
+// <div>Fancy text with <b>pizzazz</b>.</div>
+element.setHTML(
+  "Fancy <span style='color:blue'>text with <b>pizzazz</b></span>.",
+  { sanitizer: config_flatten_spans}
+);
+```
 
 ### Configuring attributes per element
 
@@ -290,57 +306,15 @@ Note that the `removeAttributes` key is on an allowed element, since removing
 the element itself would also remove all the attributes that are part of that
 element.
 
-### Matching any or no attribute on a given element
-
-For an element that allows any of the default-allowed attributes, you can
-use the special string `"*"`.
-
-```js
-const config_div_without_anything = {
-  elements: [ { name: "div", attributes: [] } ]
-};
-const config_div_with_everything = {
-  elements: [ { name: "div", attributes: "*" } ]
-};
-
-// I guess one could also write `removeAttributes: []`. Not sure if that's nicer.
-```
-
 ### Comments
 
 Handling of HTML comment nodes can be controlled by an option. Setting
-`allowComments` to `true` allows them:
+`comments` to `true` allows them:
 
 ```js
-const config_comments: { allow_comments: true };
+const config_comments: { comments: true };
 element.setHTML("XXX<!-- Hello world! -->XXX", {sanitizer: config_comments});
 // <div>XXX<!-- Hello world! -->XXX</div>
-```
-
-### Shadow Roots
-
-Declarative Shadow Roots are an HTML parser feature that parses `<template>`
-elements with `shadowrootmode` attributes and attaches the result as a
-shadow root to its parent elements. If this is not desired the
-`allowShadowRoots` attribute can be set to `false`. In either case, filtering
-rules will apply to the shadow roots as well.
-
-```js
-const example_with_shadow_root = "<template shadowrootmode=open><b onlick='alert(1)'>In the shadows.</b></template>";
-
-element.setHTML(example_with_shadow_root);
-//<div>
-//  #shadow-root: <b>In the shadows.</b>
-
-element.setHTMLUnsafe(example_with_shadow_root);
-//<div>
-//  #shadow-root: <b onlick='alert(1)'>In the shadows.</b>
-
-element.setHTML(example_with_shadow_root, {sanitizer: {allowShadowRoot: false}});
-// <div>
-
-element.setHTMLUnsafe(example_with_shadow_root, {sanitizer: {allowShadowRoot: false}});
-// <div>
 ```
 
 ### Configuration Errors
@@ -357,18 +331,17 @@ the configuration. A well-formed configuration has the following properties:
   * Note that any config with both, an allow-list and remove-list, can be
     rewritten by removing the remove-list items from the allow-list and then
     droping the remove-list entirely.
-  * A config with an allow-list and a flatten-list makes sense since the items
-    in the flatten list preserve their child contents, while the allow-list does
-    not.
-* Any allow-, remove-, or flatten-list should contain each name at most once.
+  * Both allow-lists and remove-lists can be combined with flatten-lists.
+* The action for any name - allow, remove, or flatten - should be specified
+  only once. E.g. an element-name should neither appear twice in an allow-list,
+  nor should it appear in both an allow-list and a flatten-list.
   * This would apply to short forms as well.
     E.g., `["div", { name: "div", namespace: "http://www.w3.org/1999/xhtml" }]`
     contains the same name twice and would thus throw.
   * While lists with duplicate element or attribute names could be coalesced,
     it is ambiguous what the meaning of duplicate elements with different
     element-dependent attribute lists would be.
-* The name must be set. If an `attributes` or `removeAttributes` key is present,
-  it must be non-empty. It may contain an empty list, though.
+* The name must be set.
 
 ```js
 // Mixing allow and block lists throws.
@@ -400,16 +373,12 @@ const config_with_dupes2 = {
     { name: "div", attributes: ["style"] }
   ] };
 element.setHTML("bla", config_with_dupes2);  // throws.
-
-// Undefined attributes. What does it mean?
-const config_with_undefined = { elements: [ { name: "div", attributes: undefined } ] };
-element.setHTML("bla", {sanitizer: config_with_undefined});  // throws.
 ```
 
 Listing an attribute in the "global" allow-list and in an element specific one
 is allowed. In this case, the specific action takes precedence.
 
-```
+```js
 const config_with_local_and_global_attributes = {
   elements: [ "span", { name: "b", removeAttributes: [ "class" ] } ],
   attributes: ["class"]
