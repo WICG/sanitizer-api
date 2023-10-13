@@ -255,12 +255,12 @@ element.setHTML(
 There is no `flattenAttribute` because attribute nodes do not have children.
 
 Flatten applies to its immediate children, i.e. to one level. Combining
-`allowElements` with `flattenElements` lets you keep some formatting, but all
+`elements` with `flattenElements` lets you keep some formatting, but all
 the text content:
 
 ```js
 const config_flatten_spans = {
-  allowElements: ["b", "i"],
+  elements: ["b", "i"],
   flattenElements: ["span"]
 };
 
