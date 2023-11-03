@@ -1066,7 +1066,7 @@ Specifically:
 
 1. Script-ish constructs:
   - The {{HTMLScriptElement}}, which proudly executes script as its sole purpose.
-  - All [event handler attributes]((https://html.spec.whatwg.org/#event-handler-attributes),
+  - All [event handler attributes](https://html.spec.whatwg.org/#event-handler-attributes),
     since these also execute script.
   - {{HTMLIFrameElement}}, which loads arbitrary HTML content and therefor also script.
   - The legacy {{HTMLObjectElement}} and {{HTMLEmbedElement}}, which load
