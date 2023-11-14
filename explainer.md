@@ -147,10 +147,11 @@ Document.parseHTML(example_tr);  // <html><head></head><body>A table row.</body>
 All of these would have had identical results if the "unsafe" variants had
 been used.
 
-### Parsing XML
+### Parsing in XML documents
 
 Parsing follows HTML parsing rules, unlike `innerHTML`, where it depends on the
 document type:
+
 ```js
 const element_xml = new DOMParser().parseFromString("<html xmlns='http://www.w3.org/1999/xhtml'><body><div/></body></html>", "application/xhtml+xml").getElementsByTagName("div")[0];
 const example_not_xml = "<bLoCkQuOtE>bla";
@@ -169,6 +170,49 @@ let the rest pass:
 ```js
 element.setHTML(`<a href=about:blank onclick=alert(1) onload=alert(2) id=myid class=something><script>alert(3);</script>`);
 // <div><a href="about:blank" id="myid" class="something"></a></div>
+```
+
+Note that the context node might also be a script element. In this case adding
+plain text to it creates new script content:
+
+```js
+const sneaky = document.createElement("script");
+sneaky.setHTMLUnsafe("alert('Surprise!');");
+```
+
+OPTION #1:
+
+The context node is not only observed when parsing. It is also takken into
+account when sanitizing:
+
+```js
+element.setHTML("alert('Surprise!');");
+// <div>alert('Surprise!');</div>
+sneaky.setHTML("alert('Surprise!');");
+// <script></script>.  The text node has been removed, as in this context it
+would have been script-y.
+```
+
+OPTION #2:
+
+While the context node is observed when parsing, it has no bearing on the
+sanitization. Since a text node is not script-y by itself the safe version will
+insert it. It's up to the developer to ensure this will not happen in unexpected
+places.
+
+```js
+sneaky.setHTML("alert('Surprise!');");
+// <script>alert('Surprise!');</script>.  Surprise occurs when inserted into a live document.
+```
+
+OPTION #3:
+
+The safe version maintains the contract to remove script-y content defined by
+the platform. Since adding text to an existing script element would violate
+this contract, the 'safe' versions will throw an exception:
+
+```js
+sneaky.setHTML("alert('Surprise!');");  // Throws. sneaky will not be modified.
 ```
 
 ### Configuration Options: Basic use and namespaces
