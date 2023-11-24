@@ -96,6 +96,8 @@ that navigate.
 The 'unsafe' methods will not apply any filtering if no explicit config is
 supplied.
 
+> [!Note] The 'unsafe' methods are being worked on here: https://github.com/whatwg/html/pull/9538
+
 ## Major differences to previously proposed APIs:
 
 The currently proposed API differs in a number of aspects:
@@ -106,6 +108,7 @@ The currently proposed API differs in a number of aspects:
 - Enforcement of a security baseline depends on the method. The filter/sanitizer
   config can now be used differently, either in a guaranteed-secure way or in
   use-config-as-written way.
+- The configuration dictionary differs substantially in syntax.
 
 ## Open questions:
 
@@ -115,10 +118,6 @@ The currently proposed API differs in a number of aspects:
   dictionary? (As-is, it should probably be a dictionary. An object would
   require either compelling performance numbers, or a compelling operation that
   would only work with a pre-processed dictionary.)
-- Exact filter options syntax. I'm assuming this will follow the discussion in
-  #181.
-- Naming is TBD. Here I'm trying to follow the preferences expressed in the
-  recent 'sync' meeting.
 
 ## Examples
 
@@ -148,8 +147,11 @@ Document.parseHTML(example_tr);  // <html><head></head><body>A table row.</body>
 All of these would have had identical results if the "unsafe" variants had
 been used.
 
+### Parsing in XML documents
+
 Parsing follows HTML parsing rules, unlike `innerHTML`, where it depends on the
 document type:
+
 ```js
 const element_xml = new DOMParser().parseFromString("<html xmlns='http://www.w3.org/1999/xhtml'><body><div/></body></html>", "application/xhtml+xml").getElementsByTagName("div")[0];
 const example_not_xml = "<bLoCkQuOtE>bla";
@@ -161,39 +163,60 @@ element_xml.setHTML(example_not_xml);  // <div xmlns="http://www.w3.org/1999/xht
 element.setHTML(example_not_xml);  // Same as above.
 ```
 
+### Safe vs Unsafe methods
+
 The "safe" methods remove all script-y content defined by the platform and
 let the rest pass:
+
 ```js
 element.setHTML(`<a href=about:blank onclick=alert(1) onload=alert(2) id=myid class=something><script>alert(3);</script>`);
 // <div><a href="about:blank" id="myid" class="something"></a></div>
 ```
 
+Note that the context node might also be a script element. In this case adding
+plain text to it creates new script content:
+
+```js
+const sneaky = document.createElement("script");
+sneaky.setHTMLUnsafe("alert('Surprise!');");
+// <script>alert('Surprise!');</script>
+```
+
+For the "safe" versions this case will be treated specially. `setHTML` checks
+the context element and calling it on a `<script>` element is a no-op.
+
+```js
+sneaky.setHTMLUnsafe("boring();");  // <script>boring();</script>
+sneaky.setHTML("alert('Surprise!');");  // <script>boring();</script>
+```
+
+### Configuration Options: Basic use and namespaces
+
 The operation of the built-in sanitizer can be configured to suit your
 applications' needs. Both "safe" and "unsafe" versions can take a configuration.
-(Please note that naming and structure here is rather preliminary,
-but we expect these capabilities to be in the final standard.)
 
 The "safe" version will ignore configuration items that break its security
 guarantees:
 ```js
-const an_unsafe_config = { 'allowElements': [ { name: 'script' } ] };
+const an_unsafe_config = { 'elements': [ { name: 'script' } ] };
 element.setHTML("<script>", { sanitizer: an_unsafe_config });  // <div></div>
 element.setHTMLUnsafe("<script>", { sanitizer: an_unsafe_config });  // You now have a script. Congrats.
 ```
 
-For elements, the HTML namespace is default. For attributes, the null namespace.
+For elements the HTML namespace is default. For attributes, the null namespace.
 Other namespaces can be supported. A string entry stands for a dictionary with
 only the name, in the HTML/null namespace (for elements/attributes,
 respectively).
+
 ``` js
 const config_with_namespaces = {
-  allowElements: [
+  elements: [
     'a',  // The HTML anchor element.
     { name: 'a' },  // Also the HTML anchor element.
     { name: 'a', namespace: 'http://www.w3.org/1999/xhtml' },  // Another one.
     { name: 'a', namespace: 'http://www.w3.org/2000/svg' }  // SVG's anchor element
   ],
-  allowAttributes: [
+  attributes: [
     'href',  // An href attribute. The one you'd expect on an HTML anchor.
     { name: 'href' },  // The very same.
     { name: 'href', namespace: '' },  // There it is again.
@@ -205,21 +228,185 @@ const config_with_namespaces = {
 };
 ```
 
+> [!NOTE]
+> The `config_with_namespaces` example contains multiple entries for the same
+> element or attribute, to illustrate the syntax. Note that this isn't actually
+> allowed.
+
+### Configuration Options: Allowing or removing elements or attributes
+
 There are two ways you can build up a config: Specify the elements & attributes
 you wish to allow. This is easy to read and makes it easy to understand what
 to expect in the sanitizer output. Or you can specify what elements & attributes
-you wish to block. This effectively specifies the sanitizer output relative to
-the built-in list. This can be useful if you wish to mostly retain the built-in
-defaults.
+you wish to remove. Or to block, as other sanitizer libraries might call it.
+This effectively specifies the sanitizer output relative to the built-in list.
+This can be useful if you wish to mostly retain the built-in defaults.
 
 ```js
-const config_allow = {
-  allowElements: [ "div", "p", "em", "b" ]  // Allows only those four elements.
-      // Output with "safe" and "unsafe" methods should be the same.
+const config_allow_some_formatting = {
+  elements: [ "div", "p", "em", "b", "img" ],  // Allows only 5 elements.
+  attributes: [ "class" ]  // Allows only class attributes.
+      // Output with "safe" and "unsafe" methods are the same for this config.
 };
-const config_block = {
-  blockElements: [ "style" ]  // Allows a lot of things. But not <style>.
+const config_disallow_style_definitions = {
+  removeElements: [ "style" ],  // Allows the defaults, but without <style>.
+  removeAttributes: [ "class", "style" ]  // No style or class attribute either.
       // And not XSS-y stuff, either, if used with a "safe" method.
       // Output with "safe" and "unsafe" methods might be quite different.
 };
+```
+
+You may also wish to remove elements, but retain their children. This is
+chiefly useful to remove unwanted formatting from user input, while
+preserving its textual content.
+
+```js
+const config_that_removes_elements_but_preserves_their_children = {
+ replaceWithChildrenElements: ["span", "em", "u", "s", "i", "b"]
+};
+
+element.setHTML(
+  "Fancy <b>text</b> with <span style='color:blue'>pizzazz</span>.",
+  { sanitizer: config_that_removes_elements_but_preserves_their_children });
+  // <div>Fancy text with pizzazz.</div>
+```
+
+There is no `replaceWithChildrenAttributes` because attribute nodes do not have
+children.
+
+`replaceWithChildrenElements` applies to its immediate children, i.e. to one
+level. Combining `elements` with `replaceWithChildrenElements` lets you keep
+some formatting, but all the text content:
+
+```js
+const config_replace_spans = {
+  elements: ["b", "i"],
+  replaceWithChildrenElements: ["span"]
+};
+
+// <div>Fancy text with <b>pizzazz</b>.</div>
+element.setHTML(
+  "Fancy <span style='color:blue'>text with <b>pizzazz</b></span>.",
+  { sanitizer: config_replace_spans}
+);
+```
+
+### Configuring attributes per element
+
+A common use case is to allow or remove all instances of a given attribute,
+but this isn't always sufficient. Attribute interpretation depends on the
+element they are attached to, and so one may also want to act on attributes
+on specific elements.
+
+In the example `config_allow_some_formatting` in the previous chapter
+we have allowed the `class` attribute on any of allowed elements.
+If one wanted to allow `class` everywhere, but `src` only on `<img>`, the
+following would do:
+
+```js
+const config_with_element_specific_attributes = {
+  elements: [
+    "div", "p","em", "b",
+    { name: "img", attributes: [ "src" ] }
+  ],
+  attributes: ["class"],
+};
+```
+
+If you want to remove `src` attributes from `<input>` elements but retain them
+elsewhere, you can use:
+
+```js
+const remove_src_attribute_from_input = {
+  elements: [{ name: "input", removeAttributes: ["src"]}],
+}
+```
+
+Note that the `removeAttributes` key is on an allowed element, since removing
+the element itself would also remove all the attributes that are part of that
+element.
+
+### Comments
+
+Handling of HTML comment nodes can be controlled by an option. Setting
+`comments` to `true` allows them:
+
+```js
+const config_comments: { comments: true };
+element.setHTML("XXX<!-- Hello world! -->XXX", {sanitizer: config_comments});
+// <div>XXX<!-- Hello world! -->XXX</div>
+```
+
+### Configuration Errors
+
+The configuration allows expressing redundant or even contradictory options.
+For example, allowing and removing the same element. In cases where the
+meaning of a configuration dictionary isn't clear, we will
+throw a `TypeError` instead of making a best effort attempt at interpreting
+the configuration. A well-formed configuration has the following properties:
+
+
+* It contains either an allow-list or a remove-list, but not both.
+  * This applies to both element and attribute lists, seperately.
+  * Note that any config with both, an allow-list and remove-list, can be
+    rewritten by removing the remove-list items from the allow-list and then
+    droping the remove-list entirely.
+  * Both allow-lists and remove-lists can be combined with
+    replace-with-children-lists.
+* The action for any name - allow, remove, or replaceWithChildren - should be
+  specified only once. E.g. an element name should neither appear twice in an
+  allow-list, nor should it appear in both an allow-list and a
+  replace-with-children-list.
+  * This would apply to short forms as well.
+    E.g., `["div", { name: "div", namespace: "http://www.w3.org/1999/xhtml" }]`
+    contains the same name twice and would thus throw.
+  * While lists with duplicate element or attribute names could be coalesced,
+    it is ambiguous what the meaning of duplicate elements with different
+    element-dependent attribute lists would be.
+* The name must be set.
+
+```js
+// Mixing allow and block lists throws.
+const config_that_mixes_allow_and_block_lists = {
+    elements: ["i", "u"],
+    removeElements: ["u", "s"],
+};
+element.setHTML("bla", {sanitizer: config_that_mixes_allow_and_block_lists}); // throws
+
+// Mixing allow and replace with children lists works.
+const config_that_retains_simple_styling_but_most_text = {
+  elements: ["p", "b", "i"],
+  replaceWithChildrenElements: ["div", "span", "em", "u", "s", "li"],
+};
+const styled_text = "<p>Some <span style='color: blue'>colourful</span> <u>styled</u> <b>text</b>";
+
+// <div><p>Some colourful styled <b>text</b></p></div>
+element.setHTML(styled_text, {sanitizer: config_that_retains_simple_styling_but_most_text});
+
+// Duplicate entries throw.
+const config_with_dupes = {
+  elements: [ "div", { name: "div", namespace: "http://www.w3.org/1999/xhtml" } ]
+};
+element.setHTML("bla", {sanitizer: config_with_dupes});  // throws.
+
+const config_with_dupes2 = {
+  elements: [
+    { name: "div", attributes: ["class"] },
+    { name: "div", attributes: ["style"] }
+  ] };
+element.setHTML("bla", config_with_dupes2);  // throws.
+```
+
+Listing an attribute in the "global" allow-list and in an element specific one
+is allowed. In this case, the specific action takes precedence.
+
+```js
+const config_with_local_and_global_attributes = {
+  elements: [ "span", { name: "b", removeAttributes: [ "class" ] } ],
+  attributes: ["class"]
+};
+
+// <div><span class="a">abc</span> <b>def</b></div>
+element.setHTML("<span class='a'>abc</span> <b class='b'>def</b>",
+                {sanitizer: config_with_local_and_global_attributes});
 ```
