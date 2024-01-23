@@ -84,9 +84,324 @@ API which aims to do just that.
 
 ## API Summary ## {#api-summary}
 
+The Sanitizer API offers functionality to parse a string containing HTML into
+a DOM tree, and to filter the resulting tree according to a user-supplied
+configuration. The methods come in two by two flavours:
+
+* Safe and unsafe: The "safe" methods will not generate any markup that executes
+  script. That is, they should be safe from XSS. The "unsafe" methods will parse
+  and filter whatever they're supposed to.
+* Context: Methods are defined on {{Element}} and {{ShadowRoot}} and will
+  replace these {{Node}}'s children, and are largely analogous to {{innerHTML}}.
+  There are also static methods on the {{Document}}, which parse an entire
+  document are are largely analogous to {{DOMParser}}.{{parseFromString()}}.
+
+
 # Framework # {#framework}
 
+## Sanitizer API ## {#sanitizer-api}
+
+The {{Element}} interface defines two methods, {{Element/setHTML()}} and
+{{Element/setHTMLUnsafe()}}. Both of these take a {{DOMString}} with HTML
+markup, and an optional configuration.
+
+<pre class=idl>
+partial interface Element {
+  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config);
+  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config);
+};
+</pre>
+
+<div algorithm="DOM-Element-setHTMLUnsafe" export>
+{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
+
+1. Let |target| be |this|'s [=template contents=] if [=this=] is {{HTMLTemplateElement|template}} element; otherwise |this|.
+1. [=Unsafely set HTML=] given |target|, [=this=], |html|, and |options|.
+
+</div>
+
+<div algorithm="DOM-Element-setHTML" export>
+{{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|?) method steps are:
+
+1. Let |target| be |this|'s [=template contents=] if [=this=] is a
+   {{HTMLTemplateElement|template}}; otherwise |this|.
+1. [=Safely set HTML=] given |target|, [=this=], |html|, and |options|.
+
+</div>
+
+<pre class=idl>
+partial interface ShadowRoot {
+  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config);
+  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config);
+};
+</pre>
+
+These methods are mirrored on the {{ShadowRoot}}:
+
+<div algorithm="ShadowRoot-setHTMLUnsafe" export>
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
+
+1. [=Unsafely set HTML=] using [=this=], |html|, and |options|.
+
+</div>
+
+<div algorithm="ShadowRoot-setHTML" export>
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTML</dfn>(|html|, |options|?)</dfn> method steps are:
+
+1. [=Safely set HTML=] using [=this=], |html|, and |options|.
+
+</div>
+
+The {{Document}} interface gains two new methods which parse an entire {{Document}}:
+
+<pre class=idl>
+partial interface Document {
+  static Document parseHTMLUnsafe(DOMString html, optional SanitizerConfig config);
+  static Document parseHTML(DOMString html, optional SanitizerConfig config);
+};
+</pre>
+
+<div algorithm="parseHTMLUnsafe" export>
+The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
+
+1. Let |document| be a new {{Document}}, whose [=content type=] is "text/html".
+   Note: Since document does not have a browsing context, scripting is disabled.
+1. Set |document|'s [=allow declarative shadow roots=] to `true`.
+1. [=Parse HTML=] from a string given |document| and |html|.
+1. If |options| is set:
+   1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |options|.
+1. Return |document|.
+
+</div>
+
+
+<div algorithm="parseHTML" export>
+The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|?) method steps are:
+
+1. Let |document| be a new {{Document}}, whose [=content type=] is "text/html".
+   Note: Since document does not have a browsing context, scripting is disabled.
+1. Set |document|'s [=allow declarative shadow roots=] to `true`.
+1. [=Parse HTML=] from a string given |document| and |html|.
+1. Run [=sanitize=] on |document|'s [=tree/root|root node=] with |options|.
+1. Run [=sanitize=] on |document|'s [=tree/root|root node=] using the
+   [=built-in default config=], and with `allow-unknown` set to `true`.
+1. Return |document|.
+
+NOTE: An actual implementation would presumably merge the two [=sanitize=] calls.
+</div>
+
+
+
+## The Configuration Dictionary ## {#config}
+
+<pre class=idl>
+dictionary SanitizerElementNamespace {
+  required DOMString name;
+  DOMString? _namespace = "http://www.w3.org/1999/xhtml";
+};
+
+// Used by "elements"
+dictionary SanitizerElementNamespaceWithAttributes : SanitizerElementNamespace {
+  sequence&lt;SanitizerAttribute> attributes;
+  sequence&lt;SanitizerAttribute> removeAttributes;
+};
+
+typedef (DOMString or SanitizerElementNamespace) SanitizerElement;
+typedef (DOMString or SanitizerElementNamespaceWithAttributes) SanitizerElementWithAttributes;
+
+dictionary SanitizerAttributeNamespace {
+  required DOMString name;
+  DOMString? _namespace = null;
+};
+typedef (DOMString or SanitizerAttributeNamespace) SanitizerAttribute;
+
+dictionary SanitizerConfig {
+  sequence&lt;SanitizerElementWithAttributes> elements;
+  sequence&lt;SanitizerElement> removeElements;
+  sequence&lt;SanitizerElement> replaceWithChildrenElements;
+
+  sequence&lt;SanitizerAttribute> attributes;
+  sequence&lt;SanitizerAttribute> removeAttributes;
+
+  boolean customElements;
+  boolean comments;
+};
+</pre>
+
+## Canonical Configuration ## {#config-canonical}
+
+For the purpose of specifying these algorithms, we define a <dfn>canonical
+configuration</dfn>. This canonical configuration removes redundant ways of
+expressing the same configuration and resolves the built-in defaults. This
+allows us to specify the core filtering operations in two steps: Deriving
+a [=canonical configuration=] from the user-supplied {{SanitizerConfig}},
+and then the actual filtering algorithms based on the
+[=canonical configuration=].
+
+<pre class=idl>
+dictionary CanonicalConfigName {
+  DOMString name;
+  DOMString _namespace;
+};
+dictionary CanonicalConfigNameMap {
+  CanonicalConfigName name;
+  sequence&lt;CanonicalConfigName> attributes;
+};
+// TODO: Should these be sets and a map?
+dictionary CanonicalConfig {
+  sequence&lt;CanonicalConfigName> globalElements;
+  sequence&lt;CanonicalConfigName> globalReplaceElements;
+  sequence&lt;CanonicalConfigName> globalAttributes;
+  sequence&lt;CanonicalConfigNameMap> perElement;
+  boolean globalAllowComments;
+  // TODO: globalAllowCustomElements ?
+};
+</pre>
+
 # Algorithms # {#algorithms}
+
+<div algorithm="unsafely set HTML">
+To <dfn>unsafely set HTML</dfn>, given an {{Element}} or {{DocumentFragment}} |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a [=dictionary=] |options|:
+
+1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
+   given |contextElement|, |html|, and `true`.
+1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
+1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] node to |fragment|.
+1. If |options| is set:
+  1. Run [=sanitize=] on |node| using |options|.
+1. [=Replace all=] with |fragment| within |target|.
+
+</div>
+
+<div algorithm="safely set HTML">
+To <dfn>safely set HTML</dfn>, given an {{Element}} or {{DocumentFragment}} |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a [=dictionary=] |options|:
+
+1. If |target| is a {{HTMLScriptElement}} or {{SVGScriptElement}}, return.
+1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
+   given |contextElement|, |html|, and `true`.
+1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
+1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
+1. Run [=sanitize=] on |fragment| using |options|.
+1. Run [=sanitize=] on |fragment| using the [=built-in default config=], with `allow-unknown` set to `true`.
+1. [=Replace all=] with |fragment| within |target|.
+
+Note: An actual implementation would presumably merge the two [=sanitize=]
+calls into one.
+</div>
+
+## Sanitization Algorithms ## {#sanitization}
+
+<div algorithm="sanitize">
+The main <dfn>sanitize</dfn> operation, using a {{ParentNode}} node, a {{SanitizerConfig}} |config|, and an optional boolean |allow-unknown|:
+
+Note: |allow-unknown| is not exposed to the user. It's merely a specification
+      tool, so that we can re-use this algorithm for the handling of
+      default filtering.
+
+1. Let |cconfig| be the result of running [=canonicalize a configuration=]
+   on |config|.
+1. [=list/iterate|For each=] |child| in |current|'s [=tree/children=]:
+  1. [=Assert=]: |child| is none of:
+    1. {{ATTRIBUTE_NODE}}, {{DOCUMENT_NODE}}, {{DOCUMENT_TYPE_NODE}},
+       {{DOCUMENT_FRAGMENT_NODE}}.
+    1. {{CDATA_SECTION_NODE}} or {{PROCESSING_INSTRUCTION_NODE}}.
+       (These should not occur in a node tree parsed as HTML.)
+    1. {{ENTITY_REFERENCE_NODE}}, {{ENTITY_NODE}}, or {{NOTATION_NODE}}.
+       (These are legacy node types.)
+  1. if |child| is a {{TEXT_NODE}}:
+    1. do nothing.
+  1. else if |child| is a {{COMMENT_NODE}}:
+    1. if |cconfig|'s {{globalAllowComments}} is not `true`:
+      1. {{Node/removeChild()}} |child| from |current|.
+  1. else if |child| is an {{ELEMENT_NODE}}:
+    1. Let |element-name| be a {{CanonicalConfigName}} with |child|'s
+       [=Element/local name=] and [=Element/namespace=].
+    1. if |cconfig|'s {{globalElements}} [=list/contains=] |element-name|, or
+       if |allow-unknown| is `true` and |child| is not an element defined by
+       the [[HTML]] specification:
+      1. [=list/iterate|For each=] |attr| in |current|'s [=Element/attribute list=]:
+        1. Let |attr-name| be a {{CanonicalConfigName}} with |attr|'s
+           [=Attr/local name=] and [=Attr/namespace=].
+        1. Let |per-element-attrs| be |cconfig|'s {{perElement}} entry with
+           the `name` equals |element-name|. TODO: I don't think this works.
+        1. If neither {{globalAttributes}} or |per-element-attrs| [=list/contains=]
+           contains |attr-name|, then remove |attr| from |child|.
+      1. If |child| is a [=Element/shadow host=]:
+         1. Call [=sanitize=] on |child|'s [=Element/shadow root=], using
+            |config| and |allow-unknown|.
+    1. else if |cconfig|'s {{globalReplaceElements}} [=list/contains=] |element-name|:
+      1. Call [=sanitize=] on |child| with |config| and |allow-unknown|.
+      1. Call {{ParentNode/replaceChildren()}} on |child| with |child|'s [=tree/children=] as arguments.
+    1. else:
+      1. Call {{Node/removeChild()}} on |child|.
+  1. else:
+    1. Call {{Node/removeChild()}} on |child|.
+
+TODO: Add "funky elements" / handling of `javascript:`-URLs back in.
+
+</div>
+
+## Configuration Processing ## {#configuration-processing}
+
+<div algorithm>
+In order to <dfn>validate</dfn> a |config|, run these steps:
+
+1. If |config| has {{removeElements}} and either {{elements}} or
+   {{replaceWithChildrenElements}}, then return `false`.
+1. If |config| has {{SanitizerConfig/removeAttributes}} and {{SanitizerConfig/attributes}}, then return `false`.
+1. TODO: ... more checks ...
+1. Return `true`.
+
+</div>
+
+
+<div algorithm>
+In order to <dfn>canonicalize a configuration</dfn> |config|, run the following steps:
+
+1. If |config| does not [=validate=], then [=throw=] a {{TypeError}}.
+1. Let |cconfig| be a new [=dictionary=].
+1. If |config| has {{SanitizerConfig/removeElements}} set, then:
+  1. Set |cconfig|.{{CanonicalConfig/globalElements}} to [=built-in default config=].{{SanitizerConfig/elements}}.
+  1. [=list/iterate|For each=] item in
+     |config|.{{SanitizerConfig/removeElements}}, call
+     [=canonicalize a sanitizer name=], and [=set/remove=] the result from
+     |cconfig|.{{CanonicalConfig/globalElements}}.
+1. If |config| has {{SanitizerConfig/elements}} set, then:
+  1. [=list/iterate|For each=] item in
+     |config|.{{SanitizerConfig/elements}}, call
+     [=canonicalize a sanitizer name=], and [=list/append=] the result to
+     |cconfig|.{{CanonicalConfig/globalElements}}.
+1. If |config| has {{SanitizerConfig/replaceWithChildrenElements}} set, then:
+  1. [=list/iterate|For each=] item in
+     |config|.{{SanitizerConfig/replaceWithChildrenElements}}, call
+     [=canonicalize a sanitizer name=], and [=list/append=] the result to
+     |cconfig|.{{CanonicalConfig/globalReplaceElements}}.
+1. TODO: Add all the others.
+
+</div>
+
+<div algorithm>
+In order to <dfn>canonicalize a sanitizer name</dfn> |name|, run the following
+steps:
+
+1. Let |cname| be an empty dictionary.
+1. TODO: Map |name| (DOMString or dictionary) to canonicalized name/namespace dictionary.
+1. Return |cname|.
+
+</div>
+
+## Defaults ## {#sanitization-defaults}
+
+The <dfn>built-in default config</dfn> is as follows:
+```
+{
+  elements: [....],
+  attributes: [....],
+  comments: true,
+  customElements: true
+}
+```
+
 
 # Security Considerations # {#security-considerations}
 
