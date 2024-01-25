@@ -116,7 +116,7 @@ partial interface Element {
 {{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
 
 1. Let |target| be |this|'s [=template contents=] if [=this=] is {{HTMLTemplateElement|template}} element; otherwise |this|.
-1. [=Unsafely set HTML=] given |target|, [=this=], |html|, and |options|.
+1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and `safe` set to `false`.
 
 </div>
 
@@ -125,7 +125,7 @@ partial interface Element {
 
 1. Let |target| be |this|'s [=template contents=] if [=this=] is a
    {{HTMLTemplateElement|template}}; otherwise |this|.
-1. [=Safely set HTML=] given |target|, [=this=], |html|, and |options|.
+1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and `safe` set to `true`.
 
 </div>
 
@@ -141,14 +141,18 @@ These methods are mirrored on the {{ShadowRoot}}:
 <div algorithm="ShadowRoot-setHTMLUnsafe" export>
 {{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
 
-1. [=Unsafely set HTML=] using [=this=], |html|, and |options|.
+1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
+   |html|, |options|, and `safe` set to `false`.
+
+TODO: Is this the correct context and target for a shadow root?
 
 </div>
 
 <div algorithm="ShadowRoot-setHTML" export>
 {{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTML</dfn>(|html|, |options|?)</dfn> method steps are:
 
-1. [=Safely set HTML=] using [=this=], |html|, and |options|.
+1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
+   |html|, |options|, and `safe` set to `true`.
 
 </div>
 
@@ -189,10 +193,7 @@ The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|?) method steps are
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
 
-NOTE: An actual implementation would presumably merge the two [=sanitize=] calls.
 </div>
-
-
 
 ## The Configuration Dictionary ## {#config}
 
@@ -226,69 +227,22 @@ dictionary SanitizerConfig {
   sequence&lt;SanitizerAttribute> removeAttributes;
 
   boolean comments;
+  boolean dataAttributes;
 };
 </pre>
 
-## Canonical Configuration ## {#config-canonical}
-
-For the purpose of specifying these algorithms, we define a <dfn>canonical
-configuration</dfn>. These [=canonical configurations=] are meant to be a subset
-of allowed configurations, that eliminate redundant ways to express the same thing.
-
-For example, the regular configuration allows element or attributes to be described
-by string containing its name (in a default namespace); by a dictionary with a
-name string and an implied namespace,
-or by a dictionary with both name and namespace given explicitly. The canonical
-configuration allows only the latter form, a dictionary with explicit name and
-namespaces.
-
-The [=canonical configuration=] is chiefly a specification tool that users
-do not need to concern themselves with. But it allows us to specify the
-Sanitizer operation in two steps: First canonicalize the configuration, and then
-have a (simpler) algorithm that will do the actual sanitization.
-
-<pre class=idl>
-dictionary CanonicalSanitizerName {
-  required DOMString name;
-  required DOMString _namespace;
-};
-dictionary CanonicalSanitizerNameWithAttributes : CanonicalSanitizerName {
-  sequence&lt;CanonicalSanitizerName> attributes;
-  sequence&lt;CanonicalSanitizerName> removeAttributes;
-};
-dictionary CanonicalSanitizerConfig {
-  sequence&lt;CanonicalSanitizerNameWithAttributes> elements;
-  sequence&lt;CanonicalSanitizerName> removeElements;
-  sequence&lt;CanonicalSanitizerName> replaceWithChildrenElements;
-  sequence&lt;CanonicalSanitizerName> attributes;
-  sequence&lt;CanonicalSanitizerName> removeAttributes;
-  required boolean comments;
-};
-</pre>
+TODO: The functionality for {{SanitizerConfig/dataAttributes}} was agreed, but
+not the name.
 
 # Algorithms # {#algorithms}
 
 <div algorithm>
-To <dfn>unsafely set HTML</dfn>, given an {{Element}} or {{DocumentFragment}} |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a [=dictionary=] |options|:
+To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
+|target|, an {{Element}} |contextElement|, a [=string=] |html|, and a
+[=dictionary=] |options|, and a [=boolean=] flag |safe|, run these steps:
 
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|[`"sanitizer"`] and `false`.
-1. Run [=set and filter HTML=] on |target|, |contextElement|, |html|, and |config|.
-
-</div>
-
-<div algorithm>
-To <dfn>safely set HTML</dfn>, given an {{Element}} or {{DocumentFragment}} |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a [=dictionary=] |options|:
-
-1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|[`"sanitizer"`] and `true`.
-1. Run [=set and filter HTML=] on |target|, |contextElement|, |html|, and |config|.
-
-</div>
-
-<div algorithm>
-To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}} |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a [=canonical=] |config|, run these steps:
-
+   |options|[`"sanitizer"`] and |safe|.
 1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
    given |contextElement|, |html|, and `true`.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
@@ -302,9 +256,9 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}} 
 
 <div algorithm="sanitize">
 For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
-[=canonical=] {{SanitizerConfig}} |config|, run these steps:
+[=SanitizerConfig/canonical=] {{SanitizerConfig}} |config|, run these steps:
 
-1. [=Assert=]: |config| is [=canonical=].
+1. [=Assert=]: |config| is [=SanitizerConfig/canonical=].
 1. Initialize |current| with |node|.
 1. [=list/iterate|For each=] |child| in |current|'s [=tree/children=]:
   1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
@@ -315,106 +269,196 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
   1. If |child| [=implements=] {{Text}}:
     1. Do nothing.
   1. else if |child| [=implements=] {{Comment}}:
-    1. If |config|'s {{CanonicalSanitizerConfig/comments}} is not `true`:
-      1. {{Node/removeChild()}} |child| from |current|.
+    1. If |config|'s {{SanitizerConfig/comments}} is not `true`:
+      1. [=/remove=] |child|.
   1. else if |child| [=implements=] {{Element}}:
-    1. Let |element-name| be a {{CanonicalSanitizerName}} with |child|'s
+    1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
-    1. If |config|[{{CanonicalSanitizerConfig/elements}}] exists and
-       |config|[{{CanonicalSanitizerConfig/elements}}] does not [=list/contain=]
-       [|element-name|]:
-       1. Call {{Node/removeChild()}} on |child|.
-    1. else if |config|[{{CanonicalSanitizerConfig/removeElements}}] exists and
-       |config|[{{CanonicalSanitizerConfig/removeElements}}] [=list/contains=]
-       [|element-name|]:
-       1. Call {{Node/removeChild()}} on |child|.
-    1. If |config|[{{CanonicalSanitizerConfig/replaceWithChildrenElements}}] exists and |config|[{{CanonicalSanitizerConfig/replaceWithChildrenElements}}] [=list/contains=] |element-name|:
+    1. If |config|["{{SanitizerConfig/elements}}"] exists and
+       |config|["{{SanitizerConfig/elements}}"] does not [=list/contain=]
+       [|elementName|]:
+       1. [=/remove=] |child|.
+    1. else if |config|["{{SanitizerConfig/removeElements}}"] exists and
+       |config|["{{SanitizerConfig/removeElements}}"] [=list/contains=]
+       [|elementName|]:
+       1. [=/remove=] |child|.
+    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] exists and |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=list/contains=] |elementName|:
       1. Call [=sanitize=] on |child| with |config|.
-      1. Call {{ParentNode/replaceChildren()}} on |child| with |child|'s
-         [=tree/children=] as arguments.
+      1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
+    1. If |elementName| [=equals=] &laquo;[ `"name"` &rightarrow; `"template"`,
+       `"namespace"` &rightarrow; [=HTML namespace=] ]&raquo;
+      1. Then call [=sanitize=] on |child|'s [=template contents=] with |config|.
+    1. If |child| is a [=shadow host=]:
+      1. Then call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
     1. [=list/iterate|For each=] |attr| in |current|'s [=Element/attribute list=]:
-      1. Let |attr-name| be a {{CanonicalSanitizerName}} with |attr|'s
+      1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attr|'s
          [=Attr/local name=] and [=Attr/namespace=].
-      1. If |config|[{{CanonicalSanitizerConfig/attributes}}] exists and
-         |config|[{{CanonicalSanitizerConfig/attributes}}] does not [=list/contain=]
-         [attr-name|:
+      1. If |config|["{{SanitizerConfig/attributes}}"] exists and
+         |config|["{{SanitizerConfig/attributes}}"] does not [=list/contain=]
+         |attrName|:
+         1. If "data-" is a [=code unit prefix=] of [=Attr/local name=] and
+            if [=Attr/namespace=] is "" and
+            if |config|["{{SanitizerConfig/attributes}}"] exists and
+            if |config|["{{SanitizerConfig/dataAttributes}}"] exists and is `true`:
+            1. Do nothing.
+         1. Else:
+            1. Remove |attr| from |child|.
+      1. else if |config|["{{SanitizerConfig/removeAttributes}}"] exists and
+         |config|["{{SanitizerConfig/removeAttributes}}"] [=list/contains=]
+         |attrName|:
          1. Remove |attr| from |child|.
-      1. else if |config|[{{CanonicalSanitizerConfig/removeAttributes}}] exists and
-         |config|[{{CanonicalSanitizerConfig/removeAttributes}}] [=list/contains=]
-         [attr-name|:
-         1. Remove |attr| from |child|.
-      1. If |config|[{{CanonicalSanitizerConfig/elements}}][|element-name|] exists,
+      1. If |config|["{{SanitizerConfig/elements}}"][|elementName|] exists,
          and if
-         |config|[{{CanonicalSanitizerConfig/elements}}][|element-name|][{{CanonicalSanitizerNameWithAttributes/attributes}}]
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
          exists, and if
-         |config|[{{CanonicalSanitizerConfig/elements}}][|element-name|][{{CanonicalSanitizerNameWithAttributes/attributes}}]
-         does not [=list/contain=] |attr-name|:
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+         does not [=list/contain=] |attrName|:
          1. Remove |attr| from |child|.
-      1. If |config|[{{CanonicalSanitizerConfig/elements}}][|element-name|] exists,
+      1. If |config|["{{SanitizerConfig/elements}}"][|elementName|] exists,
          and if
-         |config|[{{CanonicalSanitizerConfig/elements}}][|element-name|][{{CanonicalSanitizerNameWithAttributes/removeAttributes}}]
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
          exists, and if
-         |config|[{{CanonicalSanitizerConfig/elements}}][|element-name|][{{CanonicalSanitizerNameWithAttributes/removeAttributes}}]
-         [=list/contains=] |attr-name|:
-    1. If |child| is a [=Element/shadow host=]:
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+         [=list/contains=] |attrName|:
+         1. Remove |attr| from |child|.
+      1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
+         [=navigating URL attributes list=], and if |attr|'s [=protocol=] is
+         `"javascript:"`:
+         1. Then remove |attr| from |child|.
        1. Call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
     1. else:
-      1. Call {{Node/removeChild()}} on |child|.
+      1. [=/remove=] |child|.
   1. else:
     1. [=Assert=]: We shouldn't reach this branch.
-
-TODO: Add "funky elements" / handling of `javascript:`-URLs back in.
 
 </div>
 
 ## Configuration Processing ## {#configuration-processing}
 
 <div algorithm>
-A |config| is <dfn>valid</dfn> if all these conditions are met:
+A |config| is <dfn for="SanitizerConfig">valid</dfn> if all these conditions are met:
 
-1. |config| [=conforms=] to {{SanitizerConfig}}.
-1. |config| [=map/keys=] contains either {{SanitizerConfig/elements}} or
-   {{SanitizerConfig/removeElements}}, or neither of them, but not both.
-1. |config| [=map/keys=] contains either {{SanitizerConfig/removeAttributes}}
-   or {{SanitizerConfig/attributes}}, or neither, but not both.
-1. If |config|[{{SanitizerConfig/elements}}] exists, then none of its members'
-   [=map/keys=] contains both {{SanitizerElementNamespaceWithAttributes/attributes}}
-   and {{SanitizerElementNamespaceWithAttributes/removeAttributes}}.
-1. TODO: check that name dictionaries must contain "name"
+1. |config| is a [=dictionary=]
+1. |config|'s [=map/keys|key set=] does not contain both
+   "{{SanitizerConfig/elements}}" and "{{SanitizerConfig/removeElements}}"
+1. |config|'s [=map/keys|key set=] does not contain both
+   "{{SanitizerConfig/removeAttributes}}" and "{{SanitizerConfig/attributes}}".
+1. [=list/iterate|For any=] |key| of &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}",
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}"
+    ]&raquo; where |config|[|key|] [=map/exists=]:
+   1. |config|[|key|] is [=SanitizerNameList/valid=].
+1. If |config|["{{SanitizerConfig/elements}}"] exists, then
+   [=list/iterate|for any=] |element| in |config|[|key|] that is a [=dictionary=]:
+   1. |element| does not contain both
+      "{{SanitizerElementNamespaceWithAttributes/attributes}}" and
+      "{{SanitizerElementNamespaceWithAttributes/removeAttributes}}".
+   1. If either |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+      or |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+      [=map/exists=], then it is [=SanitizerNameList/valid=].
 
 </div>
 
 <div algorithm>
-A |config| is <dfn>canonical</dfn> if all these conditions are met:
+A |list| of names is <dfn for="SanitizerNameList">valid</dfn> if all these
+conditions are met:
 
-1. |config| is [=valid=].
-1. |config| [=strictly conforms=] to {{CanonicalSanitizerConfig}}.
-1. |config|'s [=map/keys|key set=] [=set/equals=] any of:
-   1. &laquo;
-      {{SanitizerConfig/elements}},
-      {{SanitizerConfig/attributes}},
-      {{SanitizerConfig/comments}}
-      &raquo;
-   1. &laquo;
-      {{SanitizerConfig/elements}},
-      {{SanitizerConfig/replaceWithChildrenElements}},
-      {{SanitizerConfig/attributes}},
-      {{SanitizerConfig/comments}}
-      &raquo;
-   1. &laquo;
-      {{SanitizerConfig/removeElements}},
-      {{SanitizerConfig/removeAttributes}},
-      {{SanitizerConfig/comments}}
-      &raquo;
-   1. &laquo;
-      {{SanitizerConfig/removeElements}},
-      {{SanitizerConfig/removeAttributes}},
-      {{SanitizerConfig/replaceWithChildrenElements}},
-      {{SanitizerConfig/comments}}
-      &raquo;
-1. TODO: Elements with attributes
+1. |list| is a [=/list=].
+1. [=list/iterate|For all=] of its members |name|:
+   1. |name| is a {{string}} or a [=dictionary=].
+   1. If |name| is a [=dictionary=]:
+      1. |name|["{{SanitizerElementNamespace/name}}"] [=map/exists=] and is a {{string}}.
 
 </div>
+
+<div algorithm>
+A |config| is <dfn for="SanitizerConfig">canonical</dfn> if all these conditions are met:
+
+1. |config| is [=SanitizerConfig/valid=].
+1. |config|'s [=map/keys|key set=] is a [=set/subset=] of
+   &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}",
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}",
+   "{{SanitizerConfig/comments}}",
+   "{{SanitizerConfig/dataAttributes}}",
+   "safe"
+   ]&raquo;
+1. |config|'s [=map/keys|key set=] contains either:
+   1. both "{{SanitizerConfig/elements}}" and "{{SanitizerConfig/attributes}}",
+      but neither of
+      "{{SanitizerConfig/removeElements}}" or "{{SanitizerConfig/removeAttributes}}".
+   1. or both
+      "{{SanitizerConfig/removeElements}}" and "{{SanitizerConfig/removeAttributes}}",
+      but neither of
+      "{{SanitizerConfig/elements}}" or "{{SanitizerConfig/attributes}}".
+1. For any |key| of &laquo;[
+      "{{SanitizerConfig/replaceWithChildrenElements}}",
+      "{{SanitizerConfig/removeElements}}",
+      "{{SanitizerConfig/attributes}}",
+      "{{SanitizerConfig/removeAttributes}}"
+      ]&raquo; where |config|[|key|] [=map/exists=]:
+   1. |config|[|key|] is [=SanitizerNameList/canonical=].
+1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+   1. |config|["{{SanitizerConfig/elements}}"] is [=SanitizerNameWithAttributesList/canonical=].
+1. For any |key| of &laquo;[
+   "{{SanitizerConfig/comments}}",
+   "{{SanitizerConfig/dataAttributes}}",
+   "safe"
+   ]&raquo;:
+   1. if |config|[|key|] [=map/exists=], |config|[|key|] is a {{boolean}}.
+
+</div>
+
+<div algorithm>
+A |list| of names is <dfn for="SanitizerNameList">canonical</dfn> if all these
+conditions are met:
+
+1. |list|[|key|] is a [=/list=].
+1. [=list/iterate|For all=] of its |list|[|key|]'s members |name|:
+   1. |name| is a [=dictionary=].
+   1. |name|'s [=map/keys|key set=] [=set/equals=] &laquo;[
+    "{{SanitizerElementNamespace/name}}", "{{SanitizerElementNamespace/namespace}}"
+     ]&raquo;
+  1. |name|'s [=map/values=] are [=string=]s.
+
+</div>
+
+<div algorithm>
+A |list| of names is <dfn for="SanitizerNameWithAttributesList">canonical</dfn>
+if all these conditions are met:
+
+1. |list|[|key|] is a [=/list=].
+1. [=list/iterate|For all=] of its |list|[|key|]'s members |name|:
+   1. |name| is a [=dictionary=].
+   1. |name|'s [=map/keys|key set=] [=set/equals=] one of:
+      1. &laquo;[
+         "{{SanitizerElementNamespace/name}}",
+         "{{SanitizerElementNamespace/namespace}}"
+         ]&raquo;
+      1. &laquo;[
+         "{{SanitizerElementNamespace/name}}",
+         "{{SanitizerElementNamespace/namespace}}",
+         "{{SanitizerElementNamespaceWithAttributes/attributes}}"
+         ]&raquo;
+      1. &laquo;[
+         "{{SanitizerElementNamespace/name}}",
+         "{{SanitizerElementNamespace/namespace}}",
+         "{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"
+         ]&raquo;
+   1. |name|["{{SanitizerElementNamespace/name}}"] and
+      |name|["{{SanitizerElementNamespace/namespace}}"] are [=string=]s.
+   1. |name|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
+      |name|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+      are [=SanitizerNameList/canonical=] if they [=map/exist=].
+
+</div>
+
 
 <div algorithm>
 In order to <dfn>canonicalize a configuration</dfn> |config| with a boolean
@@ -422,88 +466,85 @@ parameter |safe|, run the following steps:
 
 TODO: Handle empty |config|.
 
-1. If |config| is not [=valid=], then [=throw=] a {{TypeError}}.
+1. If |config| is not [=SanitizerConfig/valid=], then [=throw=] a {{TypeError}}.
 1. Let |result| be a new [=dictionary=].
-1. For each |key| of
-   {{SanitizerConfig/elements}},
-   {{SanitizerConfig/removeElements}},
-   {{SanitizerConfig/replaceWithChildrenElements}}:
+1. For each |key| of &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}" ]&raquo;:
   1. If |config|[|key|] exists, set |result|[|key|] to the result of running
      [=canonicalize a sanitizer element list=] on |config|[|key|] with
      [=HTML namespace=] as the default namespace.
-1. For each |key| of
-   {{SanitizerConfig/attributes}},
-   {{SanitizerConfig/removeAttributes}}:
+1. For each |key| of &laquo;[
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}" ]&raquo;:
   1. If |config|[|key|] exists, set |result|[|key|] to the result of running
      [=canonicalize a sanitizer element list=] on |config|[|key|] with `""` as
      the default namespace.
-1. Set |result|[{{SanitizerConfig/comments}}] to
-   |config|[{{SanitizerConfig/comments}}].
+1. Set |result|["{{SanitizerConfig/comments}}"] to
+   |config|["{{SanitizerConfig/comments}}"].
 1. Let |default| be the result of [=canonicalizing a configuration=] for the
    [=built-in default config=].
 1. If |safe|:
-   1. Let |known elements| be an [=ordered set=] of all elements known to the
-      [[HTML]] specification, where the set members [=strictly conform=] to
-      {{CanonicalSanitizerName}}.
-   1. Let |known attributes| be an [=ordered set=] of all attributes known to the
-      [[HTML]] specification, where the set members [=strictly conform=] to
-      {{CanonicalSanitizerName}}.
-   1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
-      1. Set |result|[{{SanitizerConfig/elements}}] to the
-         [=intersection complement=] of |result|[{{SanitizerConfig/elements}}] and
-         the [=intersection complement=] of |known elements| and
-         |default|[{{SanitizerConfig/elements}}].
+   1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+      1. Let |elementBlockList| be the [=set/difference=] between
+         [=known elements=] |default|["{{SanitizerConfig/elements}}"].
 
-         Note: This sounds more complicated than it is. This the same as the
-               [=set/intersection=] of |result|[{{SanitizerConfig/elements}}] and
-               |default|[{{SanitizerConfig/elements}}], except that it also
-               preserves unknown HTML elements, which a plain [=set/intersection=]
-               would remove.
-   1. If |config|[{{SanitizerConfig/removeElements}}] [=map/exists=]:
-       1. Set |result|[{{SanitizerConfig/elements}}] to the
-          [=intersection complement=] of |default|[{{SanitizerConfig/elements}}]
-          and |result|[{{SanitizerConfig/removeElements}}].
-       1. [=set/Remove=] {{SanitizerConfig/removeElements}} from |result|.
-   1. If neither |config|[{{SanitizerConfig/elements}}] nor
-      |config|[{{SanitizerConfig/removeElements}}] [=map/exist=]:
-      1. Set |result|[{{SanitizerConfig/elements}}] to
-         |default|[{{SanitizerConfig/elements}}].
-   1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
-      1. Set |result|[{{SanitizerConfig/attributes}}] to the
-         [=intersection complement=] of |result|[{{SanitizerConfig/attributes}}] and
-         the [=intersection complement=] attributes |known attributes| and
-         |default|[{{SanitizerConfig/attributes}}].
-   1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
-       1. Set |result|[{{SanitizerConfig/attributes}}] to the
-          [=intersection complement=] of |default|[{{SanitizerConfig/attributes}}]
-          and |result|[{{SanitizerConfig/removeAttributes}}].
-       1. [=set/Remove=] {{SanitizerConfig/removeAttributes}} from |result|.
-   1. If neither |config|[{{SanitizerConfig/attributes}}] nor
-      |config|[{{SanitizerConfig/removeAttributes}}] [=map/exist=]:
-      1. Set |result|[{{SanitizerConfig/attributes}}] to
-         |default|[{{SanitizerConfig/attributes}}].
+         Note: The "natural" way to enforce the default element list would be
+               to intersect with it. But that would also eliminate any unknown
+               (i.e., non-HTML supplied element, like &lt;foo&gt;). So we
+               construct this helper to be able to use it to subtract any "unsafe"
+               elements.
+      1. Set |result|["{{SanitizerConfig/elements}}"] to the
+         [=set/difference=] of |result|["{{SanitizerConfig/elements}}"] and
+         |elementBlockList|.
+   1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+       1. Set |result|["{{SanitizerConfig/elements}}"] to the
+          [=set/difference=] of |default|["{{SanitizerConfig/elements}}"]
+          and |result|["{{SanitizerConfig/removeElements}}"].
+       1. [=set/Remove=] "{{SanitizerConfig/removeElements}}" from |result|.
+   1. If neither |config|["{{SanitizerConfig/elements}}"] nor
+      |config|["{{SanitizerConfig/removeElements}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/elements}}"] to
+         |default|["{{SanitizerConfig/elements}}"].
+   1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+      1. Let |attributeBlockList| be the [=set/difference=] between
+         [=known attributes=] and |default|["{{SanitizerConfig/attributes}}"];
+      1. Set |result|["{{SanitizerConfig/attributes}}"] to the
+         [=set/difference=] of |result|["{{SanitizerConfig/attributes}}"] and
+         |attributeBlockList|.
+   1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+       1. Set |result|["{{SanitizerConfig/attributes}}"] to the
+          [=set/difference=] of |default|["{{SanitizerConfig/attributes}}"]
+          and |result|["{{SanitizerConfig/removeAttributes}}"].
+       1. [=set/Remove=] "{{SanitizerConfig/removeAttributes}}" from |result|.
+   1. If neither |config|["{{SanitizerConfig/attributes}}"] nor
+      |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/attributes}}"] to
+         |default|["{{SanitizerConfig/attributes}}"].
 1. Else (if not |safe|):
-   1. If neither  |config|[{{SanitizerConfig/elements}}] nor
-      |config|[{{SanitizerConfig/removeElements}} [=map/exist=]:
-      1. Set |result|[{{SanitizerConfig/elements}}] to
-         |default|[{{SanitizerConfig/elements}}].
-   1. If neither  |config|[{{SanitizerConfig/attributes}}] nor
-      |config|[{{SanitizerConfig/removeAttributes}} [=map/exist=]:
-      1. Set |result|[{{SanitizerConfig/attributes}}] to
-         |default|[{{SanitizerConfig/attributes}}].
-1. [=Assert=]: |result| is [=valid=].
-1. [=Assert=]: |result| is [=canonical=].
+   1. If neither  |config|["{{SanitizerConfig/elements}}"] nor
+      |config|["{{SanitizerConfig/removeElements}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/elements}}"] to
+         |default|["{{SanitizerConfig/elements}}"].
+   1. If neither  |config|["{{SanitizerConfig/attributes}}"] nor
+      |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/attributes}}"] to
+         |default|["{{SanitizerConfig/attributes}}"].
+1. Set |result|["safe"] to |safe|.
+1. [=Assert=]: |result| is [=SanitizerConfig/valid=].
+1. [=Assert=]: |result| is [=SanitizerConfig/canonical=].
 1. Return |result|.
 
 </div>
 
 <div algorithm>
 In order to <dfn>canonicalize a sanitizer element list</dfn> |list|, with a
-default namespace |default namespace|, run the following steps:
+default namespace |defaultNamespace|, run the following steps:
 
 1. Let |result| be a new [=ordered set=].
 2. [=list/iterate|For each=] |name| in |list|, call
-   [=canonicalize a sanitizer name=] on |name| with |default namespace| and
+   [=canonicalize a sanitizer name=] on |name| with |defaultNamespace| and
    [=set/append=] to |result|.
 3. Return |result|.
 
@@ -511,62 +552,42 @@ default namespace |default namespace|, run the following steps:
 
 <div algorithm>
 In order to <dfn>canonicalize a sanitizer name</dfn> |name|, with a default
-namespace |default namespace|, run the following steps:
+namespace |defaultNamespace|, run the following steps:
 
 1. [=Assert=]: |name| is either a {{DOMString}} or a [=dictionary=].
 1. If |name| is a {{DOMString}}:
-  1. Return &laquo;[ `"name"` &rightarrow; |name|, `"namespace"` &rightarrow; |default namespace|]&raquo;.
+  1. Return &laquo;[ `"name"` &rightarrow; |name|, `"namespace"` &rightarrow; |defaultNamespace|]&raquo;.
 1. [=Assert=]: |name| is a [=dictionary=] and |name|["name"] [=map/exists=].
 1. Return &laquo;[ <br>
   `"name"` &rightarrow; |name|["name"], <br>
-  `"namespace"` &rightarrow; |name|["namespace"] if it [=map/exists=], otherwise |default namespace| <br>
+  `"namespace"` &rightarrow; |name|["namespace"] if it [=map/exists=], otherwise |defaultNamespace| <br>
   ]&raquo;.
 
 </div>
 
 ## Supporting Algorithms ## {#alg-support}
 
-<div algorithm>
-The <dfn>intersection complement</dfn> of two [=ordered sets=] |A| and |B|, is
-the result of creating a new [=ordered set=] |set| and, [=list/iterate|for each=]
-|item| of |A|, if |B| does not [=set/contain=] item, [=set/appending=] |item| to
-|set|.
+Set difference (or set subtraction) is a clone of a set A, but with all members
+removed that occur in a set B.
 
-Note: [=intersection complement=] is the same as [=set/intersection=], but with the
-      complement of parameter |B|.
+<div algorithm>
+To compute the <dfn for="set">difference</dfn> of two [=ordered sets=] |A| and |B|:
+
+1. Let |set| be a new [=ordered set=].
+1. [=list/iterate|For each=] |item| of |A|:
+   1. If |B| does not [=set/contain=] |item|, then [=set/append=] |item|
+      to |set|.
+1. Return |set|.
+
 </div>
 
-<div algorithm>
-[=Ordered sets=] |A| and |B| are <dfn for=set>equal</dfn> if both |A| is a [=superset=] of
-|B| and |B| is a [=superset=] of |A|.
-
-Note: Equality for [=ordered sets=] is equality of its members, but without
+Equality for [=ordered sets=] is equality of its members, but without
 regard to order.
-</div>
 
 <div algorithm>
-A value |D| <dfn>conforms</dfn> to a
-[=dictionary|dictionary definition=] if |D| is a [=map=] and all of |D|'s [=map/entries=]
-corrspond to [=dictionary members=], as long as those entries have the correct
-types, and there are [=map/entries=] present for any [=dictionary member/required=] or
-[=dictionary member/default value|defaulted=] dictionary members, and any [=dictionary=]-typed values [=conform=] to their [=dictionary member=]'s type.
-
-Note: This largely corresponds to language in [=dictionary=], but re-words this
-as a predicate.
+[=Ordered sets=] |A| and |B| are <dfn for=set>equal</dfn> if both |A| is a
+[=superset=] of |B| and |B| is a [=superset=] of |A|.
 </div>
-
-<div algorithm>
-A value |D| <dfn>strictly conforms</dfn> to a
-[=dictionary|dictionary definition=] if
-
-1. |D| [=conforms=] to the definition,
-1. there are no [=map/entries=] present that do not have a corresponding
-   [=dictionary member=], and
-1. [=dictionary=]-valued members [=strictly conform=] to their
-   [=dictionary member=]'s type.
-
-</div>
-
 
 ## Defaults ## {#sanitization-defaults}
 
@@ -576,8 +597,72 @@ The <dfn>built-in default config</dfn> is as follows:
   elements: [....],
   attributes: [....],
   comments: true,
+  safe: true,
 }
 ```
+
+The <dfn>known elements</dfn> are as follows:
+```
+[
+  { name: "div", namespace: "http://www.w3.org/1999/xhtml"" },
+  ...
+]
+```
+
+The <dfn>known attributes</dfn> are as follows:
+```
+[
+  { name: "class", namespace: "" },
+  ...
+]
+```
+
+1. [=Assert=]: [=built-in default config=] is [=SanitizerConfig/canonical=]
+1. [=Assert=]: [=built-in default config=]["elements"] is a [=subset=] of [=known elements=].
+1. [=Assert=]: [=built-in default config=]["attributes"] is a [=subset=] of [=known attributes=].
+1. [=Assert=]: &laquo;[
+   "elements" &rightarrow; [=known elements=],
+   "attributes" &rightarrow; [=known attributes=],
+   "safe" &rightarrow; `false`,
+   ]&raquo; is [=SanitizerConfig/canonical=].
+
+Note: The [=known elements=] and [=known attributes=] should be derived from the
+      HTML5 specification, rather than being explicitly listed here. Currently,
+      there are no mechanics to do so.
+
+<div>
+The <dfn>navigating URL attributes list</dfn>, for which "`javascript:`"
+navigations are unsafe, are as follows:
+
+&laquo;[
+  <br>
+  [
+    { `"name"` &rightarrow; `"a"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
+    { `"name"` &rightarrow; `"href"`, `"namespace"` &rightarrow; "" }
+  ],
+  <br>
+  [
+    { `"name"` &rightarrow; `"area"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
+    { `"name"` &rightarrow; `"href"`, `"namespace"` &rightarrow; "" }
+  ],
+  <br>
+  [
+    { `"name"` &rightarrow; `"form"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
+    { `"name"` &rightarrow; `"action"`, `"namespace"` &rightarrow; "" }
+  ],
+  <br>
+  [
+    { `"name"` &rightarrow; `"input"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
+    { `"name"` &rightarrow; `"formaction"`, `"namespace"` &rightarrow; "" }
+  ],
+  <br>
+  [
+    { `"name"` &rightarrow; `"button"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
+    { `"name"` &rightarrow; `"formaction"`, `"namespace"` &rightarrow; "" }
+  ],
+  <br>
+]&raquo;
+</div>
 
 
 # Security Considerations # {#security-considerations}
