@@ -359,6 +359,40 @@ A |config| is <dfn for="SanitizerConfig">valid</dfn> if all these conditions are
    1. If either |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
       or |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
       [=map/exists=], then it is [=SanitizerNameList/valid=].
+1. Let |tmp| be a [=dictionary=], and for any |key| &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}",
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}"
+    ]&raquo; |tmp|[|key|] is set to the result of [=canonicalize a sanitizer
+    element list=] called on |config|[|key|], and [=HTML namespace=] as default
+    namespace for the element lists, and "" as default namespace for the
+    attributes lists.
+
+    Given theses canonlicalized name lists, all of the following conditions hold:
+
+    1. The [=set/intersection=] between
+       |tmp|["{{SanitizerConfig/elements}}"] and
+       |tmp|["{{SanitizerConfig/removeElements}}"]
+       is empty.
+    1. The [=set/intersection=] between
+       |tmp|["{{SanitizerConfig/removeElements}}"]
+       |tmp|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+       is empty.
+    1. The [=set/intersection=] between
+       |tmp|["{{SanitizerConfig/replaceWithChildrenElements}}"] and
+       |tmp|["{{SanitizerConfig/elements}}"]
+       is empty.
+    1. The [=set/intersection=] between
+       |tmp|["{{SanitizerConfig/attributes}}"] and
+       |tmp|["{{SanitizerConfig/removeAttributes}}"]
+       is empty.
+
+     Note: The intent here is to detect duplicates, but without regard of
+           whether the string shortcut syntax or the explicit dictionary
+           syntax is used. An implementation might well do this without
+           explicitly canonicalizing the lists at this point.
 
 </div>
 
