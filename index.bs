@@ -174,7 +174,7 @@ The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|?) method ste
 1. [=Parse HTML=] from a string given |document| and |html|.
 1. If |options| is set:
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|[`"sanitizer"`] and `false`.
+   |options|["`sanitizer`"] and `false`.
 1. If |config| exists:
    1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
@@ -190,7 +190,7 @@ The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|?) method steps are
 1. Set |document|'s [=allow declarative shadow roots=] to `true`.
 1. [=Parse HTML=] from a string given |document| and |html|.
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|[`"sanitizer"`] and `true`.
+   |options|["`sanitizer`"] and `true`.
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
 
@@ -242,12 +242,12 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a
 [=dictionary=] |options|, and a [=boolean=] flag |safe|, run these steps:
 
-1. If |safe| and |contextElement|'s [=Element/local name=] is `"script"` and
+1. If |safe| and |contextElement|'s [=Element/local name=] is "`script`" and
    |contextElement|'s [=Element/namespace=] is the [=HTML namespace=] or the
    [=SVG namespace=]:
    1. Return.
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|[`"sanitizer"`] and |safe|.
+   |options|["`sanitizer`"] and |safe|.
 1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
    given |contextElement|, |html|, and `true`.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
@@ -292,8 +292,8 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
     1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] exists and |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize=] on |child| with |config|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
-    1. If |elementName| [=equals=] &laquo;[ `"name"` &rightarrow; `"template"`,
-       `"namespace"` &rightarrow; [=HTML namespace=] ]&raquo;
+    1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
+       "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;
       1. Then call [=sanitize=] on |child|'s [=template contents=] with |config|.
     1. If |child| is a [=shadow host=]:
       1. Then call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
@@ -330,7 +330,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          1. Remove |attr| from |child|.
       1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
          [=navigating URL attributes list=], and if |attr|'s [=protocol=] is
-         `"javascript:"`:
+         "`javascript:`":
          1. Then remove |attr| from |child|.
        1. Call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
     1. else:
@@ -613,11 +613,11 @@ namespace |defaultNamespace|, run the following steps:
 
 1. [=Assert=]: |name| is either a {{DOMString}} or a [=dictionary=].
 1. If |name| is a {{DOMString}}:
-  1. Return &laquo;[ `"name"` &rightarrow; |name|, `"namespace"` &rightarrow; |defaultNamespace|]&raquo;.
+  1. Return &laquo;[ "`name`" &rightarrow; |name|, "`namespace`" &rightarrow; |defaultNamespace|]&raquo;.
 1. [=Assert=]: |name| is a [=dictionary=] and |name|["name"] [=map/exists=].
 1. Return &laquo;[ <br>
-  `"name"` &rightarrow; |name|["name"], <br>
-  `"namespace"` &rightarrow; |name|["namespace"] if it [=map/exists=], otherwise |defaultNamespace| <br>
+  "`name`" &rightarrow; |name|["name"], <br>
+  "`namespace`" &rightarrow; |name|["namespace"] if it [=map/exists=], otherwise |defaultNamespace| <br>
   ]&raquo;.
 
 </div>
@@ -627,7 +627,7 @@ namespace |defaultNamespace|, run the following steps:
 <div algorithm>
 For the [=canonicalize a sanitizer name|canonicalized=]
 {{SanitizerElementNamespace|element}} and {{SanitizerAttributeNamespace|attribute name}} lists
-used in this spec, list membership is based on matching both `"name"` and `"namespace"`
+used in this spec, list membership is based on matching both "`name`" and "`namespace`"
 entries:
 A Sanitizer name |list| <dfn for="SanitizerConfig">contains</dfn> an |item|
 if there exists an |entry| of |list| that is an [=ordered map=], and where
@@ -699,28 +699,28 @@ navigations are unsafe, are as follows:
 &laquo;[
   <br>
   [
-    { `"name"` &rightarrow; `"a"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
-    { `"name"` &rightarrow; `"href"`, `"namespace"` &rightarrow; `null` }
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { `"name"` &rightarrow; `"area"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
-    { `"name"` &rightarrow; `"href"`, `"namespace"` &rightarrow; `null` }
+    { "`name`" &rightarrow; "`area`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { `"name"` &rightarrow; `"form"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
-    { `"name"` &rightarrow; `"action"`, `"namespace"` &rightarrow; `null` }
+    { "`name`" &rightarrow; "`form`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`action`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { `"name"` &rightarrow; `"input"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
-    { `"name"` &rightarrow; `"formaction"`, `"namespace"` &rightarrow; `null` }
+    { "`name`" &rightarrow; "`input`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { `"name"` &rightarrow; `"button"`, `"namespace"` &rightarrow; "[=HTML namespace=]" },
-    { `"name"` &rightarrow; `"formaction"`, `"namespace"` &rightarrow; `null` }
+    { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
 ]&raquo;
