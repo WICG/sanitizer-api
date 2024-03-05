@@ -232,9 +232,6 @@ dictionary SanitizerConfig {
 };
 </pre>
 
-TODO: The functionality for {{SanitizerConfig/dataAttributes}} was agreed, but
-not the name.
-
 # Algorithms # {#algorithms}
 
 <div algorithm>
@@ -668,7 +665,6 @@ The <dfn>built-in default config</dfn> is as follows:
   elements: [....],
   attributes: [....],
   comments: true,
-  safe: true,
 }
 ```
 
