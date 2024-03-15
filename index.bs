@@ -113,19 +113,19 @@ partial interface Element {
 </pre>
 
 <div algorithm="DOM-Element-setHTMLUnsafe" export>
-{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
+{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. Let |target| be |this|'s [=template contents=] if [=this=] is {{HTMLTemplateElement|template}} element; otherwise |this|.
-1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and `safe` set to `false`.
+1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and false.
 
 </div>
 
 <div algorithm="DOM-Element-setHTML" export>
-{{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|?) method steps are:
+{{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|) method steps are:
 
 1. Let |target| be |this|'s [=template contents=] if [=this=] is a
    {{HTMLTemplateElement|template}}; otherwise |this|.
-1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and `safe` set to `true`.
+1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and true.
 
 </div>
 
@@ -139,20 +139,19 @@ partial interface ShadowRoot {
 These methods are mirrored on the {{ShadowRoot}}:
 
 <div algorithm="ShadowRoot-setHTMLUnsafe" export>
-{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
-1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
-   |html|, |options|, and `safe` set to `false`.
-
-TODO: Is this the correct context and target for a shadow root?
+1. [=Set and filter HTML=] using [=this=],
+   [=this=]'s [=shadow host=] (as context element),
+   |html|, |options|, and false.
 
 </div>
 
 <div algorithm="ShadowRoot-setHTML" export>
-{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTML</dfn>(|html|, |options|?)</dfn> method steps are:
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTML</dfn>(|html|, |options|)</dfn> method steps are:
 
 1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
-   |html|, |options|, and `safe` set to `true`.
+   |html|, |options|, and true.
 
 </div>
 
@@ -166,15 +165,14 @@ partial interface Document {
 </pre>
 
 <div algorithm="parseHTMLUnsafe" export>
-The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|?) method steps are:
+The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
    Note: Since document does not have a browsing context, scripting is disabled.
-1. Set |document|'s [=allow declarative shadow roots=] to `true`.
+1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML=] from a string given |document| and |html|.
-1. If |options| is set:
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|["`sanitizer`"] and `false`.
+   |options|["`sanitizer`"] and false.
 1. If |config| exists:
    1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
@@ -183,14 +181,14 @@ The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|?) method ste
 
 
 <div algorithm="parseHTML" export>
-The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|?) method steps are:
+The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
    Note: Since document does not have a browsing context, scripting is disabled.
-1. Set |document|'s [=allow declarative shadow roots=] to `true`.
+1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML=] from a string given |document| and |html|.
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|["`sanitizer`"] and `true`.
+   |options|["`sanitizer`"] and true.
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
 
@@ -246,7 +244,7 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
    |options|["`sanitizer`"] and |safe|.
 1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
-   given |contextElement|, |html|, and `true`.
+   given |contextElement|, |html|, and true.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
 1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
 1. If |config| exists:
@@ -262,7 +260,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
 [=SanitizerConfig/canonical=] {{SanitizerConfig}} |config|, run these steps:
 
 1. [=Assert=]: |config| is [=SanitizerConfig/canonical=].
-1. Initialize |current| with |node|.
+1. Let |current| be |node|.
 1. [=list/iterate|For each=] |child| in |current|'s [=tree/children=]:
   1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
 
@@ -271,9 +269,9 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
            this algorithm will be used in different contexts, this assumption
            needs to be re-examined.
   1. If |child| [=implements=] {{Text}}:
-    1. Do nothing.
+    1. [=continue=].
   1. else if |child| [=implements=] {{Comment}}:
-    1. If |config|'s {{SanitizerConfig/comments}} is not `true`:
+    1. If |config|'s {{SanitizerConfig/comments}} is not true:
       1. [=/remove=] |child|.
   1. else:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
@@ -302,10 +300,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          |attrName|:
          1. If "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             if [=Attr/namespace=] is `null` and
-            if |config|["{{SanitizerConfig/attributes}}"] exists and
-            if |config|["{{SanitizerConfig/dataAttributes}}"] exists and is `true`:
-            1. Do nothing.
-         1. Else:
+            if |config|["{{SanitizerConfig/dataAttributes}}"] exists and is false:
             1. Remove |attr| from |child|.
       1. else if |config|["{{SanitizerConfig/removeAttributes}}"] exists and
          |config|["{{SanitizerConfig/removeAttributes}}"] [=SanitizerConfig/contains=]
