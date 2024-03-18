@@ -107,8 +107,8 @@ markup, and an optional configuration.
 
 <pre class=idl>
 partial interface Element {
-  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config);
-  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config);
+  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
 };
 </pre>
 
@@ -131,8 +131,8 @@ partial interface Element {
 
 <pre class=idl>
 partial interface ShadowRoot {
-  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config);
-  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config);
+  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
 };
 </pre>
 
@@ -159,8 +159,8 @@ The {{Document}} interface gains two new methods which parse an entire {{Documen
 
 <pre class=idl>
 partial interface Document {
-  static Document parseHTMLUnsafe(DOMString html, optional SanitizerConfig config);
-  static Document parseHTML(DOMString html, optional SanitizerConfig config);
+  static Document parseHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  static Document parseHTML(DOMString html, optional SanitizerConfig config = {});
 };
 </pre>
 
