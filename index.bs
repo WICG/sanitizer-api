@@ -168,13 +168,14 @@ partial interface Document {
 The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
-   Note: Since document does not have a browsing context, scripting is disabled.
+
+   Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML=] from a string given |document| and |html|.
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
    |options|["`sanitizer`"] and false.
-1. If |config| exists:
-   1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
+1. If |config| is not [=list/empty=],
+   then call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
 
 </div>
@@ -184,7 +185,8 @@ The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method step
 The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
-   Note: Since document does not have a browsing context, scripting is disabled.
+
+   Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML=] from a string given |document| and |html|.
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
@@ -235,20 +237,18 @@ dictionary SanitizerConfig {
 <div algorithm>
 To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 |target|, an {{Element}} |contextElement|, a [=string=] |html|, and a
-[=dictionary=] |options|, and a [=boolean=] flag |safe|, run these steps:
+[=dictionary=] |options|, and a [=boolean=] |safe|:
 
 1. If |safe| and |contextElement|'s [=Element/local name=] is "`script`" and
    |contextElement|'s [=Element/namespace=] is the [=HTML namespace=] or the
-   [=SVG namespace=]:
-   1. Return.
+   [=SVG namespace=], then return.
 1. Let |config| be the result of calling [=canonicalize a configuration=] on
    |options|["`sanitizer`"] and |safe|.
 1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
    given |contextElement|, |html|, and true.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
 1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
-1. If |config| exists:
-   1. Run [=sanitize=] on |fragment| using |config|.
+1. If |config| is not [=list/empty=], then run [=sanitize=] on |fragment| using |config|.
 1. [=Replace all=] with |fragment| within |target|.
 
 </div>
@@ -378,19 +378,19 @@ A |config| is <dfn for="SanitizerConfig">valid</dfn> if all these conditions are
         1. The [=set/intersection=] between
            |tmp|["{{SanitizerConfig/elements}}"] and
            |tmp|["{{SanitizerConfig/removeElements}}"]
-           is empty.
+           is [=set/empty=].
         1. The [=set/intersection=] between
            |tmp|["{{SanitizerConfig/removeElements}}"]
            |tmp|["{{SanitizerConfig/replaceWithChildrenElements}}"]
-           is empty.
+           is [=set/empty=].
         1. The [=set/intersection=] between
            |tmp|["{{SanitizerConfig/replaceWithChildrenElements}}"] and
            |tmp|["{{SanitizerConfig/elements}}"]
-           is empty.
+           is [=set/empty=].
         1. The [=set/intersection=] between
            |tmp|["{{SanitizerConfig/attributes}}"] and
            |tmp|["{{SanitizerConfig/removeAttributes}}"]
-           is empty.
+           is [=set/empty=].
 
     1. Let |tmpattrs| be |tmp|["{{SanitizerConfig/attributes}}"] if it exists,
        and otherwise [=built-in default config=]["{{SanitizerConfig/attributes}}"].
@@ -398,7 +398,7 @@ A |config| is <dfn for="SanitizerConfig">valid</dfn> if all these conditions are
        1. If either |item|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
           or |item|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
           exists:
-          1. Then the [=set/difference=] between it and |tmpattrs| is empty.
+          1. Then the [=set/difference=] between it and |tmpattrs| is [=set/empty=].
 
 </div>
 
@@ -499,8 +499,7 @@ if all these conditions are met:
 
 
 <div algorithm>
-In order to <dfn>canonicalize a configuration</dfn> |config| with a boolean
-parameter |safe|, run the following steps:
+To <dfn>canonicalize a configuration</dfn> |config| with a [=boolean=] |safe|:
 
 Note: The initial set of [=assert=]s assert properties of the built-in
       constants, like the [=built-in default config|defaults=] and
@@ -514,8 +513,7 @@ Note: The initial set of [=assert=]s assert properties of the built-in
    "elements" &rightarrow; [=known elements=],
    "attributes" &rightarrow; [=known attributes=],
    ]&raquo; is [=SanitizerConfig/canonical=].
-1. If |config| is empty is not |safe|:
-   1. Return.
+1. If |config| is [=list/empty=] and not |safe|, then return &laquo;[]&raquo;
 1. If |config| is not [=SanitizerConfig/valid=], then [=throw=] a {{TypeError}}.
 1. Let |result| be a new [=dictionary=].
 1. For each |key| of &laquo;[
@@ -604,8 +602,7 @@ In order to <dfn>canonicalize a sanitizer name</dfn> |name|, with a default
 namespace |defaultNamespace|, run the following steps:
 
 1. [=Assert=]: |name| is either a {{DOMString}} or a [=dictionary=].
-1. If |name| is a {{DOMString}}:
-  1. Return &laquo;[ "`name`" &rightarrow; |name|, "`namespace`" &rightarrow; |defaultNamespace|]&raquo;.
+1. If |name| is a {{DOMString}}, then return &laquo;[ "`name`" &rightarrow; |name|, "`namespace`" &rightarrow; |defaultNamespace|]&raquo;.
 1. [=Assert=]: |name| is a [=dictionary=] and |name|["name"] [=map/exists=].
 1. Return &laquo;[ <br>
   "`name`" &rightarrow; |name|["name"], <br>
