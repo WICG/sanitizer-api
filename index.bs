@@ -37,18 +37,6 @@ text: template contents; type: dfn; url: https://html.spec.whatwg.org/#template-
     "href": "https://cure53.de/fp170.pdf",
     "title": "mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations",
     "publisher": "Ruhr-Universität Bochum"
-  },
-  "MXSS1": {
-    "href": "https://research.securitum.com/mutation-xss-via-mathml-mutation-dompurify-2-0-17-bypass/",
-    "title": "Mutation XSS via namespace confusion"
-  },
-  "MXSS2": {
-    "href": "https://www.checkmarx.com/blog/technical-blog/vulnerabilities-discovered-in-mozilla-bleach/",
-    "title": "CVE-2020-6802 Write-up"
-  },
-  "DEFAULTS": {
-    "href": "https://github.com/WICG/sanitizer-api/blob/main/resources/defaults-derivation.html",
-    "title": "Sanitizer API Defaults"
   }
 }
 </pre>
@@ -96,855 +84,635 @@ API which aims to do just that.
 
 ## API Summary ## {#api-summary}
 
-<div class="example">
-```js
-let s = new Sanitizer();
+The Sanitizer API offers functionality to parse a string containing HTML into
+a DOM tree, and to filter the resulting tree according to a user-supplied
+configuration. The methods come in two by two flavours:
 
-// Case: The input data is available as a tree of DOM nodes.
-let userControlledTree = ...;
-element.replaceChildren(s.sanitize(userControlledTree));
+* Safe and unsafe: The "safe" methods will not generate any markup that executes
+  script. That is, they should be safe from XSS. The "unsafe" methods will parse
+  and filter whatever they're supposed to.
+* Context: Methods are defined on {{Element}} and {{ShadowRoot}} and will
+  replace these {{Node}}'s children, and are largely analogous to {{innerHTML}}.
+  There are also static methods on the {{Document}}, which parse an entire
+  document are are largely analogous to {{DOMParser}}.{{parseFromString()}}.
 
-// Case: The input is available as a string, and we know the element to insert
-// it into:
-let userControlledInput = "&lt;img src=x onerror=alert(1)//&gt;";
-element.setHTML(userControlledInput, {sanitizer: s});
-
-// Case: The input is available as a string, and we know which type of element
-// we will eventually insert it to, but can't or don't want to perform the
-// insertion now:
-let forDiv = s.sanitizeFor("div", userControlledInput);
-// Later:
-document.querySelector(\`${forDiv.localName}#target\`).replaceChildren(...forDiv.childNodes);
-```
-</div>
-
-## The Trouble With Strings ## {#strings}
-
-Many HTML sanitizer libraries are based on string-to-string APIs, while this
-API does not offer such a method. This sub-section explains the reasons and
-implications for the Sanitizer API.
-
-To convert a string into a tree of nodes (or a fragment), it needs to be parsed.
-The [HTML parsing algorithm](https://html.spec.whatwg.org/multipage/parsing.html#parsing)
-carefully specifies how parsing HTML works. This parsing algorithm is dependent
-on the current node as its parsing context. That is, the same string parsed
-in the context of different HTML nodes will yield different parse trees.
-
-<div class="example">
-The string `<em>bla` in `<div>` and `<textarea>` context.
-  * `<div><em>bla</div>` &#8680; `<div><em>bla</em></div>`
-  * `<textarea><em>bla</textarea>` &#8680; `<textarea>&lt;em&gt;bla</textarea>`
-</div>
-
-<div class="example">
-A table cell in `<table>` and non-table (`<div>`) context.
-  * `<table><td>text</table>` &#8680; `<table><td>text</table>`
-  * `<div><td>text</div>`  &#8680; `<div>text</div>`
-</div>
-
-These differences can allow bugs to creep into a site's sanitization strategy,
-which can (and have been) exploited by a class of XSS-style attacks called mXSS.
-These attacks ultimately depend on confusions of the parsing context, for
-example when a developer will sanitize a string in one (parsing) context,
-while then applying the resulting string in a different context, where it will
-be interpreted differently.
-
-<div class="example">
-  Two mXSS-style examples in real-world libraries can be found in
-  [[MXSS1]]] and [[MXSS2]]. We'd like to stress that we picked these reports
-  for their ease of reading. There are similar reports for pretty much every
-  other tools that deals with HTML parsing.
-</div>
-
-Since this attack class depends on a particular usage of the string *after*
-the sanitization has occurred, the API itself has only limited capability
-to protect its users. As a result, the Sanitizer API follows the following
-principle:
-
-Whenever the Sanitzer API parses or unparses a DOM (sub-)tree to or from a
-string, it will either do so in a fashion where the correct parse context is
-implied by the operation; or it will require a parse context to be supplied by
-the developer and will retain the given context in the resulting argument.
-In other words, the Sanitzer API will never assume a parsing context, or
-disappear a parsing context that has been supplied earlier.
-
-### Case 1: Sanitizing With Nodes, Only. ### {#string-context-case-1}
-
-If the user data in question is already available as DOM nodes - for example
-a {{Document}} instance in a frame - then the Sanitizer can be easily used:
-
-<div class="example">
-```js
-const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
-
-// There is an iframe with id "userFrame" whose content we are interested in.
-const user_tree = document.getElementById("userFrame").contentWindow.document;
-const sanitized = sanitizer.sanitize(user_tree);
-```
-</div>
-
-Note: Parsing an HTML string can have various side-effects, like network
-  requests or executing scripts. Naively parsing these, e.g. by assigning a
-  string to `.innerHTML` of an unconnected element, will not reliably prevent
-  these. Therefore, if the user data to be sanitized is originally
-  in string form, we recommend to go with one of the following cases.
-
-### Case 2: Sanitizing a String with Implied Context. ### {#string-context-case-2}
-
-If the user data is available in string form and we wish to
-directly insert the sanitized subtree into the DOM, we can do so as follows:
-
-<div class="example">
-```js
-const user_string = "...";  // The user string.
-const sanitizer = new Sanitizer( ... );  // Our Sanitizer;
-
-// We want to insert the HTML in user_string into a target element with id
-// target. That is, we want the equivalent of target.innerHTML = value, except
-// without the XSS risks.
-document.getElementById("target").setHTML(user_string, {sanitizer: sanitizer});
-```
-</div>
-
-### Case 3: Sanitizing a String with a Given Context. ### {#string-context-case-3}
-
-If the user data is available in string form and the developer wishes to
-sanitize it now, but apply the result to the DOM later, then the Sanitizer
-must be informed about the context that it will be used. To prevent context
-confusion the result is wrapper a container that contains both the
-result and also the parse context. Conveniently, this container already
-exists, and it is the node itself!
-
-<div class="example">
-```js
-// A certain piece of user input is meant to be used repeatedly, to insert
-// it in multiple elements on the page. All these elements will be <div>
-// elements.
-const user_string = "...";  // The user string.
-const sanitizer = new Sanitizer( ... );  // Our Sanitizer.
-
-const sanitized = sanitizer.sanitizeFor("div", user_string);
-sanitized instanceof HTMLDivElement  // true. The Sanitizer has given us a node.
-
-// ... later, in the same program ...
-for (let elem = ... of ...) {
-  // All of our "elem" instances should be of the same type used in the
-  // .sanitizeFor call above. With an assertion library, this could look as
-  // follows:
-  assert_true(elem instanceof sanitized.constructor);  // Assuming assert_true, like in WPT tests.
-  elem.replaceChildren(...sanitized.childNodes);
-}
-
-// Instead of:
-elem.replaceChildren(...sanitized.childNodes);
-// one could write:
-elem.innerHTML = sanitized.innerHTML;
-// This should have the same effect, except be slower, since this will trigger
-// un-parsing and then re-parsing the node tree which we already have
-// available as a node tree. So we recommend to stick with the former version.
-```
-</div>
-
-### The Other Case ### {#string-context-case-other}
-
-What if neither of these cases works with a given application structure, and a
-string-to-string operation is required? In this case, the developer is free to
-take the sanitization result and remove it from its context. In this case, the
-responsibility to prevent mXSS-class attacks that stem from mis-applying those
-strings in an inappropriate context remains with the developer.
-
-<div class="example">
-```js
-const user_string = "...";  // The user string.
-const sanitizer = new Sanitizer( ... );  // Our Sanitizer.
-
-// The developer plans to insert this string into a <div> element, but has to
-// keep this around as a string (instead of an element). It's important that
-// the developer remembers the parsing context and MUST NOT use this in a
-// different parsing context in order to prevent mXSS attacks.
-const sanitized_for_div = sanitizer.sanitizeFor("div", user_string).innerHTML;
-```
-</div>
 
 # Framework # {#framework}
 
 ## Sanitizer API ## {#sanitizer-api}
 
-The core API is the `Sanitizer` object and the sanitize method. Sanitizers can
-be instantiated using an optional `SanitizerConfig` dictionary for options.
-The most common use-case - preventing XSS - is handled by default,
-so that creating a Sanitizer with a custom config is necessary only to
-handle additional, application-specific use cases.
+The {{Element}} interface defines two methods, {{Element/setHTML()}} and
+{{Element/setHTMLUnsafe()}}. Both of these take a {{DOMString}} with HTML
+markup, and an optional configuration.
 
-<pre class="idl">
-  [
-    Exposed=(Window),
-    SecureContext
-  ] interface Sanitizer {
-    constructor(optional SanitizerConfig config = {});
-
-    DocumentFragment sanitize((Document or DocumentFragment) input);
-    Element? sanitizeFor(DOMString element, DOMString input);
-
-    SanitizerConfig getConfiguration();
-    static SanitizerConfig getDefaultConfiguration();
-  };
+<pre class=idl>
+partial interface Element {
+  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
+};
 </pre>
 
-* The <dfn constructor for=Sanitizer lt="Sanitizer(config)">
-    <code>new Sanitizer(<var>config</var>)</code></dfn> constructor steps
-    are to run the [=create a sanitizer=] algorithm steps on [=this=] with
-    |config| as parameter.
-* The <dfn method for=Sanitizer><code>sanitize(<var>input</var>)</code></dfn>
-    method steps are to return the result of running the [=sanitize=]
-    algorithm on |input|,
-* The <dfn method for=Sanitizer><code>sanitizeFor(<var>element</var>, <var>input</var>)</code></dfn>
-    method steps are to return the result of running [=sanitizeFor=]
-    algorithm on |element| and |input|.
-* The <dfn method for=Sanitizer><code>getConfiguration()</code></dfn> method steps are
-    to return the result of running the [=query the sanitizer config=]
-    algorithm. It essentially returns a copy of the Sanitizer's
-    [=configuration dictionary=], with some degree of normalization.
-* The value of the static
-    <dfn method for=Sanitizer><code>getDefaultConfiguration()</code></dfn> method steps
-    are to return the value of the [=default configuration=] object.
+<div algorithm="DOM-Element-setHTMLUnsafe" export>
+{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
-The {{Element}} interface gains an additional method, `setHTML` which
-applies a string using a `Sanitizer` directly to an existing element node.
+1. Let |target| be |this|'s [=template contents=] if [=this=] is {{HTMLTemplateElement|template}} element; otherwise |this|.
+1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and false.
 
-<pre class="idl">
-  dictionary SetHTMLOptions {
-    Sanitizer sanitizer;
-  };
-  [SecureContext]
-  partial interface Element {
-    undefined setHTML(DOMString input, optional SetHTMLOptions options = {});
-  };
+</div>
+
+<div algorithm="DOM-Element-setHTML" export>
+{{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|) method steps are:
+
+1. Let |target| be |this|'s [=template contents=] if [=this=] is a
+   {{HTMLTemplateElement|template}}; otherwise |this|.
+1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and true.
+
+</div>
+
+<pre class=idl>
+partial interface ShadowRoot {
+  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
+};
 </pre>
 
-* The <dfn method for=Element><code>setHTML(<var>input</var>, <var>options</var>)</code></dfn>
-  method steps are to run the [=sanitizeAndSet=] algorithm on [=this=], |input|, and
-  |options|.
+These methods are mirrored on the {{ShadowRoot}}:
 
-<wpt>
-sanitizer-secure-context.https.html
-sanitizer-insecure-context.html
-idlharness.https.window.js
-</wpt>
+<div algorithm="ShadowRoot-setHTMLUnsafe" export>
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
-Issue: Is this how we specify a method on existing class "owned" by a different spe?
+1. [=Set and filter HTML=] using [=this=],
+   [=this=]'s [=shadow host=] (as context element),
+   |html|, |options|, and false.
 
-<div class="example">
-```js
-  // To make our examples easy to follow, we'll need a way create DOM nodes.
-  // The following is hacky way to accomplish this, for illustration only,
-  // that you shall pretty please not use in practice. This parsing method can
-  // cause side-effects based on the string being parsed, which is insecure.
-  // In fact, this very API exists for the sole purpose of preventing the
-  // problems that this approach has.
-  //
-  // But... for our examples we'll need something that is quick and easy, since
-  // we cannot use our own Sanitizer API to explain our own Sanitizer API.
-  const to_node = str => document.createRange().createContextualFragment(str);
-
-  // The core API of the Sanitizer is the .sanitize method:
-  let untrusted_input = to_node("Hello!");
-  const sanitizer = new Sanitizer();
-  sanitizer.sanitize(untrusted_input);  // DocumentFragment w/ a text node, "Hello!"
-
-  // Probably we want to put this somewhere in our DOM:
-  element.replaceChildren(sanitizer.sanitize(untrusted_input));
-
-  // If our input contains markup it'll be mostly preserved, except for
-  // script-y markup:
-  untrusted_input = to_node("<em onclick='alert(1);'>Hello!</em>");
-  sanitizer.sanitize(untrusted_input);  // <em>Hello!</em>
-  element.replaceChildren(sanitizer.sanitize(untrusted_input));  // No alert!
-
-  // The .sanitize method is the primary API, and returns a DocumentFragment.
-  // The .sanitizeFor method accepts and parses a string and returns an HTML
-  // element node.
-  const hello = to_node("hello");
-  (sanitizer.sanitize(hello)) instanceof DocumentFragment;  // true
-  (sanitizer.sanitizeFor("template", "hello")) instanceof HTMLTemplateElement;  // true
-```
 </div>
 
-## String Handling ## {#api-string-handling}
+<div algorithm="ShadowRoot-setHTML" export>
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTML</dfn>(|html|, |options|)</dfn> method steps are:
 
-Parsing (and unparsing) strings to (or from) HTML requires a context element.
-Thus, the `sanitizeFor` method requires us to pass in a context, which the
-implementation can then hand over to the HTML Parser.
+1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
+   |html|, |options|, and true.
 
-Additionally, the {{Element}} interface gains a `setHTML` method, which
-always knows the correct context, because it is applied to a given {{Element}}
-instance. This {{Element}} is the correct context for both parsing and
-unparsing its own content.
-
-One way to conceptualize this is to view string sanitization as a three step
-operation: 1, parsing the string; 2, sanitizing the resulting node tree;
-and 3, grafting the resulting subtree onto our live DOM.
-`Sanitizer.sanitize` is the middle step.
-`Sanitizer.sanitizeFor` performs the first and second steps, but leaves the
-third to the developer. `Element.setHTML` does all three. Which to use
-depends on the structure of your application, whether you can do all three
-steps simultaneously, or whether maybe the sanitization is removed (in either
-code structure or point in time) from the eventual modification of the DOM.
-
-<div class="example">
-```js
-  // If the markup to be sanitized is already available as a tree, for example
-  // from an embedded frame, one can use sanitize:
-  document.getElementById("target").replaceChildren(
-    sanitizer.sanitize(
-      document.querySelector("iframe#myframe").contentWindow.document));
-
-  // If the markup to be sanitized is present in string form, but we already
-  // have the element we want to insert in available:
-  const untrusted_input = "....";
-  document.getElementById("someelement").setHTML(
-    untrusted_input, {sanitizer: sanitizer});
-
-  // Same as above, but using the default Sanitizer configuration:
-  document.getElementById("somelement").setHTML(untrusted_input);
-
-  // If the markup to be sanitized is present in string form, but we don't want
-  // to do the DOM insertion now:
-  let no_xss = sanitizer.sanitizeFor("div", untrusted_input);
-  // ... much later ...
-  document.querySelector("div#targetdiv").replaceChildren(...no_xss.childNodes);
-
-  // Note that parsing HTML depends on the current context in many ways, some
-  // subtle, some not so much. Supplying a different context than what the
-  // result will eventually be used in has both security and functional risks.
-  // It's up to the developer to handle this safely.
-  //
-  // Example: Most, many parsing contexts disallow table  data (<td>) without
-  //          an enclosing table.
-  sanitizer.sanitizeFor("div", "<td>data</td>").innerHTML  // "data"
-  sanitizer.sanitizeFor("table", "<td>data</td>").innerHTML  // "<td>data</td>"
-```
 </div>
 
-<div class="note">
-Note: Sanitizing a string will use the [=HTML Parser=] to parse the input,
-which will perform some degree of normalization. So even
-if no sanitization steps are taken on a particular input, it cannot be
-guaranteed that the output of `.sanitizeFor` will be character-for-character
-identical to the input.
+The {{Document}} interface gains two new methods which parse an entire {{Document}}:
 
-<div class="example">
-    ```js
-    sanitizer.sanitizeFor("div", "Stra&szlig;e")  // Straße
-    sanitizer.sanitizeFor("div", "<image>")  // <img>
-    ```
+<pre class=idl>
+partial interface Document {
+  static Document parseHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  static Document parseHTML(DOMString html, optional SanitizerConfig config = {});
+};
+</pre>
+
+<div algorithm="parseHTMLUnsafe" export>
+The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+
+1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
+
+   Note: Since |document| does not have a browsing context, scripting is disabled.
+1. Set |document|'s [=allow declarative shadow roots=] to true.
+1. [=Parse HTML=] from a string given |document| and |html|.
+1. Let |config| be the result of calling [=canonicalize a configuration=] on
+   |options|["`sanitizer`"] and false.
+1. If |config| is not [=list/empty=],
+   then call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
+1. Return |document|.
+
 </div>
-</div>
 
-<div class="note">
-Note: `Sanitizer.sanitizeFor` and `Element.setHTML` can replace the
-    respective other. Both are provided since they support different use cases.
 
-<div class="example">
-    ```js
-    // sanitizeFor, based on SetInnerHTML.
-    function sanitizeFor(element, input) {
-      const elem = document.createElement(element);
-      elem.setHTML(input, {sanitizer: this});
-      return elem;
-    }
+<div algorithm="parseHTML" export>
+The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
 
-    // setHTML, based on sanitizeFor.
-    function setHTML(input, options) {
-      const sanitizer = options?.sanitizer ?? new Sanitizer();
-      this.replaceChildren(...sanitizer.sanitizeFor(this.localName, input).childNodes);
-    }
-    ```
-</div>
+1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
+
+   Note: Since |document| does not have a browsing context, scripting is disabled.
+1. Set |document|'s [=allow declarative shadow roots=] to true.
+1. [=Parse HTML=] from a string given |document| and |html|.
+1. Let |config| be the result of calling [=canonicalize a configuration=] on
+   |options|["`sanitizer`"] and true.
+1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
+1. Return |document|.
+
 </div>
 
 ## The Configuration Dictionary ## {#config}
 
-The Sanitizer's <dfn>configuration dictionary</dfn> is a dictionary which
-describes modifications to the sanitize operation. If a Sanitizer has
-not received an explicit configuration, for example when being
-constructed without any parameters, then the [=default configuration=] value
-is used as the configuration dictionary.
+<pre class=idl>
+dictionary SanitizerElementNamespace {
+  required DOMString name;
+  DOMString? _namespace = "http://www.w3.org/1999/xhtml";
+};
 
-<pre class="idl">
-  dictionary SanitizerConfig {
-    sequence&lt;DOMString> allowElements;
-    sequence&lt;DOMString> blockElements;
-    sequence&lt;DOMString> dropElements;
-    AttributeMatchList allowAttributes;
-    AttributeMatchList dropAttributes;
-    boolean allowCustomElements;
-    boolean allowUnknownMarkup;
-    boolean allowComments;
-  };
+// Used by "elements"
+dictionary SanitizerElementNamespaceWithAttributes : SanitizerElementNamespace {
+  sequence&lt;SanitizerAttribute> attributes;
+  sequence&lt;SanitizerAttribute> removeAttributes;
+};
+
+typedef (DOMString or SanitizerElementNamespace) SanitizerElement;
+typedef (DOMString or SanitizerElementNamespaceWithAttributes) SanitizerElementWithAttributes;
+
+dictionary SanitizerAttributeNamespace {
+  required DOMString name;
+  DOMString? _namespace = null;
+};
+typedef (DOMString or SanitizerAttributeNamespace) SanitizerAttribute;
+
+dictionary SanitizerConfig {
+  sequence&lt;SanitizerElementWithAttributes> elements;
+  sequence&lt;SanitizerElement> removeElements;
+  sequence&lt;SanitizerElement> replaceWithChildrenElements;
+
+  sequence&lt;SanitizerAttribute> attributes;
+  sequence&lt;SanitizerAttribute> removeAttributes;
+
+  boolean comments;
+  boolean dataAttributes;
+};
 </pre>
-
-: allowElements
-:: The <dfn>element allow list</dfn> is a sequence of strings with
-    elements that the sanitizer should retain in the input.
-: blockElements
-:: The <dfn>element block list</dfn> is a sequence of strings with elements
-   where the sanitizer should remove the elements from the input, but retain
-   their children.
-: dropElements
-:: The <dfn>element drop list</dfn> is a sequence of strings with elements
-   that the sanitizer should remove from the input, including its children.
-: allowAttributes
-:: The <dfn>attribute allow list</dfn> is an [=attribute match list=], which
-   determines whether an attribute (on a given element) should be allowed.
-: dropAttributes
-:: The <dfn>attribute drop list</dfn>  is an [=attribute match list=], which
-   determines whether an attribute (on a given element) should be dropped.
-: allowCustomElements
-:: The {{SanitizerConfig/allowCustomElements|allow custom elements}} option
-   determines whether
-   [=custom elements=] are to be considered. The default is to drop them.
-   If this option is true, custom elements will still be checked against all
-   other built-in or configured checks.
-: allowUnknownMarkup
-:: The {{SanitizerConfig/allowUnknownMarkup|allow unknown markup}} option
-   determines whether unknown HTML elements are to be considered. The default
-   is to drop them.
-   If this option is true, unkown HTML elements will still be checked against
-   all other built-in or configured checks.
-: allowComments
-:: The <dfn>allow comments option</dfn> determines whether HTML comments are
-   allowed.
-
-Note: `allowElements` creates a sanitizer that defaults to dropping elements,
-  while `blockElements` and `dropElements` defaults to keeping unknown
-  elements. Using both types is possible, but is probably of little practical
-  use. The same applies to `allowAttributes` and `dropAttributes`.
-
-<div class="example">
-```js
-  const sample = to_node("Some text <b><i>with</i></b> <blink>tags</blink>.");
-  const script_sample = to_node("abc <script>alert(1)</script> def");
-
-  // Some text <b>with</b> text tags.
-  new Sanitizer({allowElements: [ "b" ]}).sanitize(sample);
-
-  // Some text <i>with</i> <blink>tags</blink>.
-  new Sanitizer({blockElements: [ "b" ]}).sanitize(sample);
-
-  // Some text <blink>tags</blink>.
-  new Sanitizer({dropElements: [ "b" ]}).sanitize(sample);
-
-  // Note: The default configuration handles XSS-relevant input:
-
-  // Non-scripting input will be passed through:
-  new Sanitizer().sanitize(sample);  // Will output sample unmodified.
-
-  // Scripts will be blocked: "abc alert(1) def"
-  new Sanitizer().sanitize(script_sample);
-```
-</div>
-
-In addition to allow and block lists for elements and attributes, there are
-also options to configure some node or element types.
-
-Examples:
-```js
-  // Comments will be dropped by default.
-  const comment = to_node("Hello <!-- comment --> World!");
-  new Sanitizer().sanitize(comment);  // "Hello  World!"
-  new Sanitizer({allowComments: true}).sanitize(comment);  // Same as comment.
-```
-
-A sanitizer's configuration can be queried using the
-[=query the sanitizer config=] method.
-
-<div class="example">
-```js
-  // Does the default config allow script elements?
-  Sanitizer.getDefaultConfiguration().allowElements.includes("script")  // false
-
-  // We found a Sanitizer instance. Does it have an allow-list configured?
-  const a_sanitizer = ...;
-  !!a_sanitizer.getConfiguration().allowElements // true, if an allowElements list is configured
-
-  // If it does have an allow elements list, does it include the <div> element?
-  a_sanitizer.getConfiguration().allowElements.includes("div")  // true, if "div" is in allowElements.
-
-  // Note that the getConfiguration method might do some normalization. E.g., it won't
-  // contain key/value pairs that are not declare in the IDL.
-  Object.keys(new Sanitizer({madeUpDictionaryKey: "Hello"}).getConfiguration())  // []
-
-  // As a Sanitizer's config describes its operation, a new sanitizer with
-  // another instance's configuration should behave identically.
-  // (For illustration purposes only. It would make more sense to just use a directly.)
-  const a = /* ... a Sanitizer we found somewhere ... */;
-  const b = new Sanitizer(a.getConfiguration());  // b should behave the same as a.
-
-  // getDefaultConfiguration() and new Sanitizer().getConfiguration should be the same.
-  // (For illustration purposes only. There are better ways of implementing
-  // object equality in JavaScript.)
-  JSON.stringify(Sanitizer.getDefaultConfiguration()) == JSON.stringify(new Sanitizer().getConfiguration());  // true
-```
-</div>
-
-### Attribute Match Lists ### {#attr-match-list}
-
-An <dfn>attribute match list</dfn> is a map of attributes to elements,
-where the special name "*" stands for all attributes or elements.
-A given |attribute| belonging to an |element| matches an
-[=attribute match list=], if the |attribute| is a key in the match list,
-and |element| or `"*"` are found in the |attribute|'s value list.
-
-Element names are interpreted as names in the [[HTML namespace]] and
-non-namespaced attributes - i.e., what one may think of as normal [[HTML]]
-elements and attributes. Elements are named by their [=Element/local name=], and
-[=Attr/local name|attributes, too=].
-
-<pre class="idl">
-  typedef record&lt;DOMString, sequence&lt;DOMString>> AttributeMatchList;
-</pre>
-
-<div class="example">
-Examples for attributes and attribute match lists:
-```js
-  const sample = to_node("<span id='span1' class='theclass' style='font-weight: bold'>hello</span>");
-
-  // Allow only <span style>: <span style='font-weight: bold'>...</span>
-  new Sanitizer({allowAttributes: {"style": ["span"]}}).sanitize(sample);
-
-  // Allow style, but not on span: <span>...</span>
-  new Sanitizer({allowAttributes: {"style": ["div"]}}).sanitize(sample);
-
-  // Allow style on any elements: <span style='font-weight: bold'>...</span>
-  new Sanitizer({allowAttributes: {"style": ["*"]}}).sanitize(sample);
-
-  // Drop <span id>: <span class='theclass' style='font-weight: bold'>...</span>
-  new Sanitizer({dropAttributes: {"id": ["span"]}}).sanitize(sample);
-
-  // Drop id, everywhere: <span class='theclass' style='font-weight: bold'>...</span>
-  new Sanitizer({dropAttributes: {"id": ["*"]}}).sanitize(sample);
-```
-</div>
 
 # Algorithms # {#algorithms}
 
-## API Implementation ## {#api-algorithms}
+<div algorithm>
+To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
+|target|, an {{Element}} |contextElement|, a [=string=] |html|, and a
+[=dictionary=] |options|, and a [=boolean=] |safe|:
 
-<div algorithm="create a sanitizer">
-To <dfn>create a Sanitizer</dfn> with an optional |config| parameter, run
-these steps:
-  1. Create a copy of |config|.
-  1. Set |config| as [=this=]'s [=configuration dictionary=].
+1. If |safe| and |contextElement|'s [=Element/local name=] is "`script`" and
+   |contextElement|'s [=Element/namespace=] is the [=HTML namespace=] or the
+   [=SVG namespace=], then return.
+1. Let |config| be the result of calling [=canonicalize a configuration=] on
+   |options|["`sanitizer`"] and |safe|.
+1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
+   given |contextElement|, |html|, and true.
+1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
+1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
+1. If |config| is not [=list/empty=], then run [=sanitize=] on |fragment| using |config|.
+1. [=Replace all=] with |fragment| within |target|.
 
-  Issue(148): This should explicitly state the config's properties in which element names are found and modify the config wih map operations.
 </div>
 
-Note: The configuration object contains element names in the
-  [=element allow list=], [=element block list=], and [=element drop list=], and
-  in the mapped values in the [=attribute allow list=] and [=attribute drop list=].
+## Sanitization Algorithms ## {#sanitization}
 
 <div algorithm="sanitize">
-To <dfn>sanitize</dfn> a given |input| of type `Document or DocumentFragment`
-run these steps:
-  1. Let |fragment| be the result of running the [=create a document fragment=]
-     algorithm on |input|.
-  1. Run the [=sanitize a document fragment=] algorithm on |fragment|.
-  1. Return |fragment|.
-<wpt>
-  sanitizer-sanitize.https.tentative.html
-</wpt>
+For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
+[=SanitizerConfig/canonical=] {{SanitizerConfig}} |config|, run these steps:
+
+1. [=Assert=]: |config| is [=SanitizerConfig/canonical=].
+1. Let |current| be |node|.
+1. [=list/iterate|For each=] |child| in |current|'s [=tree/children=]:
+  1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
+
+     Note: Currently, this algorithm is only be called on output of the HTML
+           parser for which this assertion should hold. If in the future
+           this algorithm will be used in different contexts, this assumption
+           needs to be re-examined.
+  1. If |child| [=implements=] {{Text}}:
+    1. [=continue=].
+  1. else if |child| [=implements=] {{Comment}}:
+    1. If |config|'s {{SanitizerConfig/comments}} is not true:
+      1. [=/remove=] |child|.
+  1. else:
+    1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
+       [=Element/local name=] and [=Element/namespace=].
+    1. If |config|["{{SanitizerConfig/elements}}"] exists and
+       |config|["{{SanitizerConfig/elements}}"] does not [=SanitizerConfig/contain=]
+       [|elementName|]:
+       1. [=/remove=] |child|.
+    1. else if |config|["{{SanitizerConfig/removeElements}}"] exists and
+       |config|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=]
+       [|elementName|]:
+       1. [=/remove=] |child|.
+    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] exists and |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
+      1. Call [=sanitize=] on |child| with |config|.
+      1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
+    1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
+       "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;
+      1. Then call [=sanitize=] on |child|'s [=template contents=] with |config|.
+    1. If |child| is a [=shadow host=]:
+      1. Then call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
+    1. [=list/iterate|For each=] |attr| in |current|'s [=Element/attribute list=]:
+      1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attr|'s
+         [=Attr/local name=] and [=Attr/namespace=].
+      1. If |config|["{{SanitizerConfig/attributes}}"] exists and
+         |config|["{{SanitizerConfig/attributes}}"] does not [=SanitizerConfig/contain=]
+         |attrName|:
+         1. If "data-" is a [=code unit prefix=] of [=Attr/local name=] and
+            if [=Attr/namespace=] is `null` and
+            if |config|["{{SanitizerConfig/dataAttributes}}"] exists and is false:
+            1. Remove |attr| from |child|.
+      1. else if |config|["{{SanitizerConfig/removeAttributes}}"] exists and
+         |config|["{{SanitizerConfig/removeAttributes}}"] [=SanitizerConfig/contains=]
+         |attrName|:
+         1. Remove |attr| from |child|.
+      1. If |config|["{{SanitizerConfig/elements}}"][|elementName|] exists,
+         and if
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+         exists, and if
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+         does not [=SanitizerConfig/contain=] |attrName|:
+         1. Remove |attr| from |child|.
+      1. If |config|["{{SanitizerConfig/elements}}"][|elementName|] exists,
+         and if
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+         exists, and if
+         |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+         [=SanitizerConfig/contains=] |attrName|:
+         1. Remove |attr| from |child|.
+      1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
+         [=navigating URL attributes list=], and if |attr|'s [=protocol=] is
+         "`javascript:`":
+         1. Then remove |attr| from |child|.
+       1. Call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
+    1. else:
+      1. [=/remove=] |child|.
+
 </div>
 
-Issue(149): The sanitize algorithm does not need to run "create a document fragment".
+## Configuration Processing ## {#configuration-processing}
 
-<div algorithm="sanitizeFor">
-To <dfn lt="sanitizeFor">sanitize for</dfn> an |element name| of type
-|DOMString| and a given |input| of type |DOMString| run these steps:
-  1. Let |element| be an HTML element created by running the steps
-     of the [=creating an element=] algorithm with the current document,
-     |element name|, the [=HTML namespace=], and no optional parameters.
-  1. If the [=element kind=] of |element| is `regular` and if the
-     [=baseline element allow list=] does not contain |element name|,
-     then return `null`.
-  1. Let |fragment| be the result of invoking the
-     [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm),
-     with |element| as the `context element` and |input| as `markup`.
-  1. Run the steps of the [=sanitize a document fragment=] algorithm on |fragment|.
-  1. [=Replace all=] with |fragment| as the `node` and |element| as the
-     `parent`.
-  1. Return |element|.
-<wpt>
-  sanitizer-sanitizeFor.https.tentative.html
-</wpt>
+<div algorithm>
+A |config| is <dfn for="SanitizerConfig">valid</dfn> if all these conditions are met:
+
+1. |config| is a [=dictionary=]
+1. |config|'s [=map/keys|key set=] does not [=list/contain=] both
+   "{{SanitizerConfig/elements}}" and "{{SanitizerConfig/removeElements}}"
+1. |config|'s [=map/keys|key set=] does not [=list/contain=] both
+   "{{SanitizerConfig/removeAttributes}}" and "{{SanitizerConfig/attributes}}".
+1. [=list/iterate|For any=] |key| of &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}",
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}"
+    ]&raquo; where |config|[|key|] [=map/exists=]:
+   1. |config|[|key|] is [=SanitizerNameList/valid=].
+1. If |config|["{{SanitizerConfig/elements}}"] exists, then
+   [=list/iterate|for any=] |element| in |config|[|key|] that is a [=dictionary=]:
+   1. |element| does not [=list/contain=] both
+      "{{SanitizerElementNamespaceWithAttributes/attributes}}" and
+      "{{SanitizerElementNamespaceWithAttributes/removeAttributes}}".
+   1. If either |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+      or |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+      [=map/exists=], then it is [=SanitizerNameList/valid=].
+   1. Let |tmp| be a [=dictionary=], and for any |key| &laquo;[
+      "{{SanitizerConfig/elements}}",
+      "{{SanitizerConfig/removeElements}}",
+      "{{SanitizerConfig/replaceWithChildrenElements}}",
+      "{{SanitizerConfig/attributes}}",
+      "{{SanitizerConfig/removeAttributes}}"
+      ]&raquo; |tmp|[|key|] is set to the result of [=canonicalize a sanitizer
+      element list=] called on |config|[|key|], and [=HTML namespace=] as default
+      namespace for the element lists, and `null` as default namespace for the
+      attributes lists.
+
+      Note: The intent here is to assert about list erlements, but without regard
+            of whether the string shortcut syntax or the explicit dictionary
+            syntax is used. For example, having "img" in `elements` and
+            `{ name: "img" }` in `removeElements`. An implementation might well
+            do this without explicitly canonicalizing the lists at this point.
+
+      1. Given theses canonlicalized name lists, all of the following conditions hold:
+
+        1. The [=set/intersection=] between
+           |tmp|["{{SanitizerConfig/elements}}"] and
+           |tmp|["{{SanitizerConfig/removeElements}}"]
+           is [=set/empty=].
+        1. The [=set/intersection=] between
+           |tmp|["{{SanitizerConfig/removeElements}}"]
+           |tmp|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+           is [=set/empty=].
+        1. The [=set/intersection=] between
+           |tmp|["{{SanitizerConfig/replaceWithChildrenElements}}"] and
+           |tmp|["{{SanitizerConfig/elements}}"]
+           is [=set/empty=].
+        1. The [=set/intersection=] between
+           |tmp|["{{SanitizerConfig/attributes}}"] and
+           |tmp|["{{SanitizerConfig/removeAttributes}}"]
+           is [=set/empty=].
+
+    1. Let |tmpattrs| be |tmp|["{{SanitizerConfig/attributes}}"] if it exists,
+       and otherwise [=built-in default config=]["{{SanitizerConfig/attributes}}"].
+    1. [=list/iterate|For any=] |item| in |tmp|["{{SanitizerConfig/elements}}"]:
+       1. If either |item|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+          or |item|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+          exists:
+          1. Then the [=set/difference=] between it and |tmpattrs| is [=set/empty=].
+
 </div>
 
-Issue(140): Does the `.sanitizeFor` element name require namespace-related processing?
+<div algorithm>
+A |list| of names is <dfn for="SanitizerNameList">valid</dfn> if all these
+conditions are met:
 
-<div algorithm="sanitizeAndSet">
-To <dfn lt="sanitizeAndSet">sanitize and set</dfn> a |value| using an
-{{SetHTMLOptions}} |options| dictionary on an {{Element}} node [=this=],
-run these steps:
-  1. If the [=element kind=] of [=this=] is `regular` and [=this=]' [=Element/local name=] does not
-     [=element matches an element name|match=] any name in the
-     [=baseline element allow list=], then throw a {{TypeError}} and return.
-  1. If the {{sanitizer}} member [=map/exists=] in the |options|
-     {{SetHTMLOptions}} dictionary,
-    1. then let |sanitizer| be [=map/get|the value=] of the {{sanitizer}} member
-       of the |options| {{SetHTMLOptions}} dictionary,
-    1. otherwise let |sanitizer| be the result of the [=create a Sanitizer=]
-       algorithm without a `config` parameter.
-  1. Let |fragment| be the result of invoking the
-     [html fragment parsing algorithm](https://w3c.github.io/DOM-Parsing/#dfn-fragment-parsing-algorithm)
-     with [=this=] as the `context node` and |value| as `markup`.
-  1. Run the steps if the [=sanitize a document fragment=] algorithm
-     on |fragment|, using |sanitizer| as the current {{Sanitizer}} instance.
-  1. [=Replace all=] with |fragment| as the `node` and [=this=] as the `parent`.
-<wpt>
-  element-set-sanitized-html.https.html
-</wpt>
+1. |list| is a [=/list=].
+1. [=list/iterate|For all=] of its members |name|:
+   1. |name| is a {{string}} or a [=dictionary=].
+   1. If |name| is a [=dictionary=]:
+      1. |name|["{{SanitizerElementNamespace/name}}"] [=map/exists=] and is a {{string}}.
+
 </div>
 
-<div algorithm="query the sanitizer config">
-To <dfn>query the sanitizer config</dfn> of a given sanitizer instance,
-run these steps:
-  1. Let |sanitizer| be the current Sanitizer.
-  1. Let |config| be |sanitizer|'s [=configuration dictionary=], or the
-     [=default configuration=] if no [=configuration dictionary=] was given.
-  1. Let |result| be a newly constructed {{SanitizerConfig}} dictionary.
-  1. For any non-empty member of |config| whose key is declared in
-     {{SanitizerConfig}}, copy the value to |result|.
-  1. Return |result|.
-<wpt>
-  sanitizer-config.https.html
-  sanitizer-query-config.https.html
-</wpt>
+<div algorithm>
+A |config| is <dfn for="SanitizerConfig">canonical</dfn> if all these conditions are met:
+
+1. |config| is [=SanitizerConfig/valid=].
+1. |config|'s [=map/keys|key set=] is a [=set/subset=] of
+   &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}",
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}",
+   "{{SanitizerConfig/comments}}",
+   "{{SanitizerConfig/dataAttributes}}"
+   ]&raquo;
+1. |config|'s [=map/keys|key set=] [=list/contains=] either:
+   1. both "{{SanitizerConfig/elements}}" and "{{SanitizerConfig/attributes}}",
+      but neither of
+      "{{SanitizerConfig/removeElements}}" or "{{SanitizerConfig/removeAttributes}}".
+   1. or both
+      "{{SanitizerConfig/removeElements}}" and "{{SanitizerConfig/removeAttributes}}",
+      but neither of
+      "{{SanitizerConfig/elements}}" or "{{SanitizerConfig/attributes}}".
+1. For any |key| of &laquo;[
+      "{{SanitizerConfig/replaceWithChildrenElements}}",
+      "{{SanitizerConfig/removeElements}}",
+      "{{SanitizerConfig/attributes}}",
+      "{{SanitizerConfig/removeAttributes}}"
+      ]&raquo; where |config|[|key|] [=map/exists=]:
+   1. |config|[|key|] is [=SanitizerNameList/canonical=].
+1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+   1. |config|["{{SanitizerConfig/elements}}"] is [=SanitizerNameWithAttributesList/canonical=].
+1. For any |key| of &laquo;[
+   "{{SanitizerConfig/comments}}",
+   "{{SanitizerConfig/dataAttributes}}"
+   ]&raquo;:
+   1. if |config|[|key|] [=map/exists=], |config|[|key|] is a {{boolean}}.
+
 </div>
 
-Issue(150): IDL is taking care of most steps in "query the sanitizer config". Clean up.
+<div algorithm>
+A |list| of names is <dfn for="SanitizerNameList">canonical</dfn> if all these
+conditions are met:
 
-## Helper Definitions ## {#helper-algorithms}
+1. |list|[|key|] is a [=/list=].
+1. [=list/iterate|For all=] of its |list|[|key|]'s members |name|:
+   1. |name| is a [=dictionary=].
+   1. |name|'s [=map/keys|key set=] [=set/equals=] &laquo;[
+    "{{SanitizerElementNamespace/name}}", "{{SanitizerElementNamespace/namespace}}"
+     ]&raquo;
+  1. |name|'s [=map/values=] are [=string=]s.
 
-<div algorithm="create a document fragment">
-To <dfn>create a document fragment</dfn> named |fragment| from an
-|input| of type `Document or DocumentFragment`, run these steps:
-
-  1. Let |node| be null.
-  1. Switch based on |input|'s type:
-    1. If |input| is of type {{DocumentFragment}}, then:
-      1. Set |node| to |input|.
-    1. If |input| is of type {{Document}}, then:
-      1. Set |node| to |input|'s `documentElement`.
-  1. Let |clone| be the result of running [=clone a node=] on |node| with the
-     <i>clone children flag</i> set.
-  1. Let |fragment| be a new {{DocumentFragment}} whose [=Node/node document=] is |node|'s [=Node/node document=].
-  1. [=/Append=] the node |clone| to |fragment|.
-  1. Return |fragment|.
 </div>
 
-## Sanitization Algorithms ## {#sanitizer-algorithms}
+<div algorithm>
+A |list| of names is <dfn for="SanitizerNameWithAttributesList">canonical</dfn>
+if all these conditions are met:
 
-<div algorithm="sanitize a document fragment">
-To <dfn>sanitize a document fragment</dfn> named |fragment| with a {{Sanitizer}} |sanitizer| run these steps:
-  1. Let |m| be a map that maps nodes to a [=sanitize action=].
-  1. Let |nodes| be a list containing the [=inclusive descendants=] of
-     |fragment|, in [=tree order=].
-  1. [=list/iterate|For each=] |node| in |nodes|:
-    1. Let |action| be the result of running the [=sanitize a node=] algorithm
-       on |node| with |sanitizer|.
-    1. [=map/Set=] |m|[|node|] to |action|.
-  1. [=list/iterate|For each=] |node| in |nodes|:
-    1. If |m|[|node|] is `drop`, [=/remove=] |node|.
-    1. If |m|[|node|] is `block`, create a {{DocumentFragment}} |fragment|,
-       [=/append=] all of |node|'s [=tree/children=] to |fragment|, and
-       [=/replace=] |node| within |node|'s [=tree/parent=] with |fragment|.
-    1. If |m|[|node|] is `keep`, do nothing.
-</div>
+1. |list|[|key|] is a [=/list=].
+1. [=list/iterate|For all=] of its |list|[|key|]'s members |name|:
+   1. |name| is a [=dictionary=].
+   1. |name|'s [=map/keys|key set=] [=set/equals=] one of:
+      1. &laquo;[
+         "{{SanitizerElementNamespace/name}}",
+         "{{SanitizerElementNamespace/namespace}}"
+         ]&raquo;
+      1. &laquo;[
+         "{{SanitizerElementNamespace/name}}",
+         "{{SanitizerElementNamespace/namespace}}",
+         "{{SanitizerElementNamespaceWithAttributes/attributes}}"
+         ]&raquo;
+      1. &laquo;[
+         "{{SanitizerElementNamespace/name}}",
+         "{{SanitizerElementNamespace/namespace}}",
+         "{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"
+         ]&raquo;
+   1. |name|["{{SanitizerElementNamespace/name}}"] and
+      |name|["{{SanitizerElementNamespace/namespace}}"] are [=string=]s.
+   1. |name|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
+      |name|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+      are [=SanitizerNameList/canonical=] if they [=map/exist=].
 
-Issue(156): The step above needs to explicitly iterate over the children and insert into parent. It could collect them in a variable or do things in place, but this is a bit too imprecise.
-
-<div algorithm="sanitize a node">
-To <dfn>sanitize a node</dfn> named |node| with |sanitizer| run these steps:
-  1. [=Assert=]: |node| is not a {{Document}} or {{DocumentFragment}} or {{Attr}} or {{DocumentType}} [=/node=].
-  1. If |node| is an element node:
-    1. Let |element| be |node|.
-    1. [=list/iterate|For each=] |attr| in |element|'s
-       [=Element/attribute list=]:
-      1. Let |attr action| be the result of running the
-         [=sanitize action for an attribute=] algorithm on |attr| and |element|.
-      1. If |attr action| is different from `keep`, [=remove an attribute=] supplying |attr|.
-    1. Run the steps to [=handle funky elements=] on |element|.
-    1. Let |action| be the result of running the
-       [=sanitize action for an element=] on |element|.
-    1. Return |action|.
-  1. If |node| is a {{Comment}} [=node=]:
-    1. Let |config| be |sanitizer|'s [=configuration dictionary=], or the
-       [=default configuration=] if no [=configuration dictionary=] was given.
-    1. If |config|'s [=allow comments option=] [=map/exists=] and `|config|[allowComments]` is `true`: Return `keep`.
-    1. Return `drop`.
-  1. If |node| is a {{Text}} [=node=]: Return `keep`.
-  1. [=Assert=]: |node| is a {{ProcessingInstruction}}
-  1. Return `drop`.
-</div>
-
-Issue(151): The [=sanitize action for an attribute=] algorithm parameters do not match.
-Issue(153): consider creating an effective sanitizer config. Also, IDL guarantees that a config is ALWAYS given. The question is really whether the members exists.
-
-Some HTML elements require special treatment in a way that can't be easily
-expressed in terms of configuration options or other algorithms. The following
-algorithm collects these in one place.
-
-<div algorithm="handle funky elements">
-To <dfn>handle funky elements</dfn> on a given |element|, run these steps:
-
-  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
-     the [=Element/local name=] [=is=] `"template"`:
-    1. Run the steps of the [=sanitize a document fragment=] algorithm on
-       |element|'s [=template contents=] attribute.
-    1. Drop all child nodes of |element|.
-  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
-     the [=Element/local name=] [=is=] one of `"a"` or `"area"`,
-     and if |element|'s `protocol` property is "javascript:":
-    1. Remove the `href` attribute from |element|.
-  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
-     the [=Element/local name=] [=is=] `"form"`
-     and if |element|'s `action` attribute is a [[URL]] with `javascript:`
-     protocol:
-    1. Remove the `action` attribute from |element|.
-  1. If |element|'s [=Element/namespace=] [=is=] [=HTML namespace|HTML=] and
-     the [=Element/local name=] [=is=] `"input"` or `"button"`,
-     and if |element|'s `formaction` attribute is a [[URL]] with `javascript:` protocol
-    1. Remove the `formaction` attribute from |element|.
-</div>
-
-Issue(154): Export and refer funky element properties more precisely.
-
-
-## Matching Against The Configuration ## {#configuration}
-
-A <dfn>sanitize action</dfn> is `keep`, `drop`, or `block`.
-
-<div algorithm="sanitize action for an element">
-To determine the <dfn>sanitize action for an |element|</dfn>, given a
-{{SanitizerConfig}} |config|, run these steps:
-
-  1. Let |kind| be |element|'s [=element kind=].
-  1. If |kind| is `regular` and |element| does not
-     [=element matches an element name|match=] any name in the
-     [=baseline element allow list=]: Return `drop`.
-  1. If |kind| is `custom` and if |config|["{{SanitizerConfig/allowCustomElements}}"] does not [=map/exist=] or if
-     |config|["{{SanitizerConfig/allowCustomElements}}"] is `false`: Return `drop`.
-  1. If |kind| is `unknown` and if |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
-     does not [=map/exist=] or it |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
-     is `false`: Return `drop`.
-  1. If |element| [=element matches an element name|matches=] any name
-     in |config|["{{SanitizerConfig/dropElements}}"]: Return `drop`.
-  1. If |element| [=element matches an element name|matches=] any name
-     in |config|["{{SanitizerConfig/blockElements}}"]: Return `block`.
-  1. Let |allow list| be null.
-  1. If "{{SanitizerConfig/allowElements}}" [=map/exists=] in |config|:
-     1. Then : Set |allow list| to |config|["{{SanitizerConfig/allowElements}}"].
-     1. Otherwise: Set |allow list| to the [=default configuration=]'s
-        [=element allow list=].
-  1. If |element| does not [=element matches an element name|match=] any name
-     in |allow list|: Return `block`.
-  1. Return `keep`.
-<wpt>
-sanitizer-unknown.https.html
-</wpt>
-</div>
-
-<div algorithm="element matches an element name">
-To determine whether an <dfn>|element| matches an element |name|</dfn>,
-run these steps:
-
-  1. If |element| is in the [=HTML namespace=]
-     and if |element|'s [=Element/local name=] is
-     [=identical to=] |name|: Return `true`.
-  1. Return `false`.
-</div>
-
-Issue(146): Whitespaces or colons?
-
-<div algorithm="attribute matches an attribute match list">
-To determine whether an <dfn>|attribute| matches an [=attribute match
-list=]</dfn> |list|, run these steps:
-
-  1. If |attribute|'s [=Attr/namespace=] is not `null`: Return `false`.
-  1. If |attribute|'s [=Attr/local name=] does not match the
-     [=attribute match list=] |list|'s
-     [key](https://webidl.spec.whatwg.org/#idl-record) and if the key is
-     not `"*"`: Return `false`.
-  1. Let |element| be the |attribute|'s {{Element}}.
-  1. Let |element name| be |element|'s [=Element/local name=].
-  1. If |list|'s [value](https://webidl.spec.whatwg.org/#idl-record) does not
-     contain |element name| and value is not `["*"]`: Return `false`.
-  1. Return `true`.
-
-<div algorithm="sanitize action for an attribute">
-To determine the <dfn>sanitize action for an |attribute|</dfn> given a Sanitizer
-configuration dictionary |config|, run these steps:
-
-  1. Let |kind| be |attribute|'s [=attribute kind=].
-  1. If |kind| is `unknown` and if |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
-     does not [=map/exist=] or it |config|["{{SanitizerConfig/allowUnknownMarkup}}"]
-     is `false`: Return `drop`.
-  1. If |kind| is `regular` and |attribute|'s [=Attr/local name=] does not match any
-     name in the [=baseline attribute allow list=]: Return `drop`.
-  1. If |attribute| [=attribute matches an attribute match list|matches=] any
-     [=attribute match list=] in |config|'s [=attribute drop list=]: Return
-     `drop`.
-  1. If [=attribute allow list=] [=map/exists=] in |config|:
-     1. Then let |allow list| be `|config|["allowAttributes"]`.
-     1. Otherwise: Let |allow list| be the [=default configuration=]'s
-        [=attribute allow list=].
-  1. If |attribute| does not
-     [=attribute matches an attribute match list|match=] any
-     [=attribute match list=] in |allow list|: Return `drop`.
-  1. Return `keep`.
-</div>
-
-<div algorithm="element kind">
-The <dfn>element kind</dfn> of an |element| is one of `regular`, `unknown`,
-or `custom`. Let <var ignore>element kind</var> be:
-  - `custom`, if |element|'s [=Element/local name=] is a
-     [=valid custom element name=],
-  - `unknown`, if |element| is not in the [[HTML]] namespace or if |element|'s
-     [=Element/local name=] denotes an unknown element &mdash; that is, if the
-     [=element interface=] the [[HTML]] specification assigns to it would
-     be {{HTMLUnknownElement}},
-
-Issue(147): We do not want to use the interface (e.g., "applet" and "blink" are HTMLUnknownElement)
-
-  - `regular`, otherwise.
-</div>
-
-<div algorithm="attribute kind">
-Similarly, the <dfn>attribute kind</dfn> of an |attribute| is one of `regular`
-or `unknown`. Let <var ignore>attribute kind</var> be:
-  - `unknown`, if the [[HTML]] specification does not assign any meaning to
-     |attribute|'s name.
-
-  Issue(147): Again, this needs to be more specific. Historical, obsolete, conforming, non-conforming (e.g. bgcolor). It is desirable we make a sanitizer-specific list.
-
-  - `regular`, otherwise.
 </div>
 
 
-## Baseline and Defaults ## {#defaults}
+<div algorithm>
+To <dfn>canonicalize a configuration</dfn> |config| with a [=boolean=] |safe|:
 
-Issue: The sanitizer baseline and defaults need to be carefully vetted, and
-    are still under discussion. The values below are for illustrative
-    purposes only.
+Note: The initial set of [=assert=]s assert properties of the built-in
+      constants, like the [=built-in default config|defaults=] and
+      the lists of known [=known elements|elements=] and
+      [=known attributes|attributes=].
 
-The sanitizer has a built-in [=default configuration=], which is stricter than
-the baseline and aims to eliminate any script-injection possibility, as well
-as legacy or unusual constructs.
+1. [=Assert=]: [=built-in default config=] is [=SanitizerConfig/canonical=].
+1. [=Assert=]: [=built-in default config=]["elements"] is a [=subset=] of [=known elements=].
+1. [=Assert=]: [=built-in default config=]["attributes"] is a [=subset=] of [=known attributes=].
+1. [=Assert=]: &laquo;[
+   "elements" &rightarrow; [=known elements=],
+   "attributes" &rightarrow; [=known attributes=],
+   ]&raquo; is [=SanitizerConfig/canonical=].
+1. If |config| is [=list/empty=] and not |safe|, then return &laquo;[]&raquo;
+1. If |config| is not [=SanitizerConfig/valid=], then [=throw=] a {{TypeError}}.
+1. Let |result| be a new [=dictionary=].
+1. For each |key| of &laquo;[
+   "{{SanitizerConfig/elements}}",
+   "{{SanitizerConfig/removeElements}}",
+   "{{SanitizerConfig/replaceWithChildrenElements}}" ]&raquo;:
+  1. If |config|[|key|] exists, set |result|[|key|] to the result of running
+     [=canonicalize a sanitizer element list=] on |config|[|key|] with
+     [=HTML namespace=] as the default namespace.
+1. For each |key| of &laquo;[
+   "{{SanitizerConfig/attributes}}",
+   "{{SanitizerConfig/removeAttributes}}" ]&raquo;:
+  1. If |config|[|key|] exists, set |result|[|key|] to the result of running
+     [=canonicalize a sanitizer element list=] on |config|[|key|] with `null` as
+     the default namespace.
+1. Set |result|["{{SanitizerConfig/comments}}"] to
+   |config|["{{SanitizerConfig/comments}}"].
+1. Let |default| be the result of [=canonicalizing a configuration=] for the
+   [=built-in default config=].
+1. If |safe|:
+   1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+      1. Let |elementBlockList| be the [=set/difference=] between
+         [=known elements=] |default|["{{SanitizerConfig/elements}}"].
 
-The defaults and baseline are defined by three JSON constants,
-[=baseline element allow list=], [=baseline attribute allow list=],
-[=default configuration=]. For better readability, these have been moved to
-an <a href=#constants>appendix A</a>.
+         Note: The "natural" way to enforce the default element list would be
+               to intersect with it. But that would also eliminate any unknown
+               (i.e., non-HTML supplied element, like &lt;foo&gt;). So we
+               construct this helper to be able to use it to subtract any "unsafe"
+               elements.
+      1. Set |result|["{{SanitizerConfig/elements}}"] to the
+         [=set/difference=] of |result|["{{SanitizerConfig/elements}}"] and
+         |elementBlockList|.
+   1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+       1. Set |result|["{{SanitizerConfig/elements}}"] to the
+          [=set/difference=] of |default|["{{SanitizerConfig/elements}}"]
+          and |result|["{{SanitizerConfig/removeElements}}"].
+       1. [=set/Remove=] "{{SanitizerConfig/removeElements}}" from |result|.
+   1. If neither |config|["{{SanitizerConfig/elements}}"] nor
+      |config|["{{SanitizerConfig/removeElements}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/elements}}"] to
+         |default|["{{SanitizerConfig/elements}}"].
+   1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+      1. Let |attributeBlockList| be the [=set/difference=] between
+         [=known attributes=] and |default|["{{SanitizerConfig/attributes}}"];
+      1. Set |result|["{{SanitizerConfig/attributes}}"] to the
+         [=set/difference=] of |result|["{{SanitizerConfig/attributes}}"] and
+         |attributeBlockList|.
+   1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+       1. Set |result|["{{SanitizerConfig/attributes}}"] to the
+          [=set/difference=] of |default|["{{SanitizerConfig/attributes}}"]
+          and |result|["{{SanitizerConfig/removeAttributes}}"].
+       1. [=set/Remove=] "{{SanitizerConfig/removeAttributes}}" from |result|.
+   1. If neither |config|["{{SanitizerConfig/attributes}}"] nor
+      |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/attributes}}"] to
+         |default|["{{SanitizerConfig/attributes}}"].
+1. Else (if not |safe|):
+   1. If neither  |config|["{{SanitizerConfig/elements}}"] nor
+      |config|["{{SanitizerConfig/removeElements}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/elements}}"] to
+         |default|["{{SanitizerConfig/elements}}"].
+   1. If neither  |config|["{{SanitizerConfig/attributes}}"] nor
+      |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=]:
+      1. Set |result|["{{SanitizerConfig/attributes}}"] to
+         |default|["{{SanitizerConfig/attributes}}"].
+1. [=Assert=]: |result| is [=SanitizerConfig/valid=].
+1. [=Assert=]: |result| is [=SanitizerConfig/canonical=].
+1. Return |result|.
+
+</div>
+
+<div algorithm>
+In order to <dfn>canonicalize a sanitizer element list</dfn> |list|, with a
+default namespace |defaultNamespace|, run the following steps:
+
+1. Let |result| be a new [=ordered set=].
+2. [=list/iterate|For each=] |name| in |list|, call
+   [=canonicalize a sanitizer name=] on |name| with |defaultNamespace| and
+   [=set/append=] to |result|.
+3. Return |result|.
+
+</div>
+
+<div algorithm>
+In order to <dfn>canonicalize a sanitizer name</dfn> |name|, with a default
+namespace |defaultNamespace|, run the following steps:
+
+1. [=Assert=]: |name| is either a {{DOMString}} or a [=dictionary=].
+1. If |name| is a {{DOMString}}, then return &laquo;[ "`name`" &rightarrow; |name|, "`namespace`" &rightarrow; |defaultNamespace|]&raquo;.
+1. [=Assert=]: |name| is a [=dictionary=] and |name|["name"] [=map/exists=].
+1. Return &laquo;[ <br>
+  "`name`" &rightarrow; |name|["name"], <br>
+  "`namespace`" &rightarrow; |name|["namespace"] if it [=map/exists=], otherwise |defaultNamespace| <br>
+  ]&raquo;.
+
+</div>
+
+## Supporting Algorithms ## {#alg-support}
+
+<div algorithm>
+For the [=canonicalize a sanitizer name|canonicalized=]
+{{SanitizerElementNamespace|element}} and {{SanitizerAttributeNamespace|attribute name}} lists
+used in this spec, list membership is based on matching both "`name`" and "`namespace`"
+entries:
+A Sanitizer name |list| <dfn for="SanitizerConfig">contains</dfn> an |item|
+if there exists an |entry| of |list| that is an [=ordered map=], and where
+|item|["name"] [=equals=] |entry|["name"] and
+|item|["namespace"] [=equals=] |entry|["namespace"].
+
+</div>
+
+<div algorithm>
+Set difference (or set subtraction) is a clone of a set A, but with all members
+removed that occur in a set B:
+To compute the <dfn for="set">difference</dfn> of two [=ordered sets=] |A| and |B|:
+
+1. Let |set| be a new [=ordered set=].
+1. [=list/iterate|For each=] |item| of |A|:
+   1. If |B| does not [=set/contain=] |item|, then [=set/append=] |item|
+      to |set|.
+1. Return |set|.
+
+</div>
+
+<div algorithm>
+Equality for [=ordered sets=] is equality of its members, but without
+regard to order:
+[=Ordered sets=] |A| and |B| are <dfn for=set>equal</dfn> if both |A| is a
+[=superset=] of |B| and |B| is a [=superset=] of |A|.
+
+</div>
+
+## Defaults ## {#sanitization-defaults}
+
+Note: The defaults should follow a certain form, which is checked for at the
+      beginning of [=canonicalize a configuration=].
+
+The <dfn>built-in default config</dfn> is as follows:
+```
+{
+  elements: [....],
+  attributes: [....],
+  comments: true,
+}
+```
+
+The <dfn>known elements</dfn> are as follows:
+```
+[
+  { name: "div", namespace: "http://www.w3.org/1999/xhtml" },
+  ...
+]
+```
+
+The <dfn>known attributes</dfn> are as follows:
+```
+[
+  { name: "class", namespace: null },
+  ...
+]
+```
+
+Note: The [=known elements=] and [=known attributes=] should be derived from the
+      HTML5 specification, rather than being explicitly listed here. Currently,
+      there are no mechanics to do so.
+
+<div>
+The <dfn>navigating URL attributes list</dfn>, for which "`javascript:`"
+navigations are unsafe, are as follows:
+
+&laquo;[
+  <br>
+  [
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`area`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`form`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`action`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`input`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+]&raquo;
+</div>
 
 
 # Security Considerations # {#security-considerations}
@@ -1031,95 +799,4 @@ A more complete treatement of mXSS can be found in [[MXSS]].
 Cure53's [[DOMPURIFY]] is a clear inspiration for the API this document
 describes, as is Internet Explorer's {{window.toStaticHTML()}}.
 
-# Appendix A: Built-in Constants # {#constants}
 
-<em>This appendix is normative, except where explicitly noted otherwise.</em>
-
-These constants define core behaviour of the Sanitizer algorithm.
-
-## Built-ins Justification ## {#builtins-justification}
-
-<em>This subsection is super duper non-normative.</em>
-
-Note: The normative values of these constants are found below. The derivation
-    of these are explained here, with an implementation in the [[DEFAULTS]]
-    script. It is expected that these values will change before this
-    specification is finalized. Also, we expect these
-    to be updated to include additional HTML elements as they are
-    introduced in user agents.
-
-For the purpose of this Sanitizer API, [[HTML]] constructs fall into one of
-four classes, where the first defines the baseline, and the first, second,
-plus the third define the default:
-
-1. Elements and attributes that (directly) execute script.
-   In other words, elements and attributes that are unconditionally script-ish.
-1. Legacy and "difficult" elements and attributes.
-  Examples are the `<plaintext>` `<xmp>` and elements, which have special
-  parsing rules attached to them. These are not dangerous _per se_, but they
-  have contributed to existing vulnerability.
-1. Elements and attributes that we feel rarely make sense in user-supplied
-  content.
-1. All the rest.
-
-Specifically:
-
-1. Script-ish constructs:
-  - The {{HTMLScriptElement}}, which proudly executes script as its sole purpose.
-  - All [event handler attributes](https://html.spec.whatwg.org/#event-handler-attributes),
-    since these also execute script.
-  - {{HTMLIFrameElement}}, which loads arbitrary HTML content and therefor also script.
-  - The legacy {{HTMLObjectElement}} and {{HTMLEmbedElement}}, which load
-    non-HTML active content. Also, `<object>`'s side-kick {{HTMLParamElement}}.
-  - The [no-longer conforming](https://html.spec.whatwg.org/#non-conforming-features)
-    `<frame>`, `<frameset>`, and `<applet>` tags, which are
-    outdated versions companions of several elements listed above.
-  - The `<noscript>`, `<noframes>`, `<noembed>`, and `<nolayer>` elements.
-    These, by themselves, are arguably not script-ish, but they are companions
-    to elements listed above, and make no sense on their own.
-  - Also, the {{HTMLBaseElement}}, as this effectively modifies interpretation
-    of other URLs.
-
-1. Legacy and "difficult" elements.
-  - Special parsing behaviour. This is not dangerous in its own right, but has
-    contributed to mXSS-style attacks. This includes:
-      - `<plaintext>` (Which parses in [=PLAINTEXT state=].)
-      - `<title>` and `<textarea>` (Which parse in [=RCDATA state=].)
-      - The non-conforming [`<xmp>`](https://html.spec.whatwg.org/#xmp) element.
-  - Legacy elements:
-      - `<image>` ([which is parsed as `<img>`](https://html.spec.whatwg.org/#parsing-main-inbody)).
-      - `<basefont>`
-
-1. Constructs unlikely to be beneficial in user-supplied content:
-  - The {{HTMLTemplateElement}}, which introduces a new template to be used
-    by JavaScript, and its {{HTMLSlotElement}} accomplice.
-  - The frame-like [HTMLPortalElement](https://wicg.github.io/portals/).
-  - {{HTMLDataElement}},
-  - The (deprecated) [allowpaymentrequest](https://www.w3.org/TR/payment-request/) attribute.
-
-## The Baseline Element Allow List ## {#baseline-elements}
-
-The built-in <dfn>baseline element allow list</dfn> has the following value:
-
-<pre class=include-code>
-path: resources/baseline-element-allow-list.json
-highlight: js
-</pre>
-
-## The Baseline Attribute Allow List ## {#baseline-attributes}
-
-The <dfn>baseline attribute allow list</dfn> has the following value:
-
-<pre class=include-code>
-path: resources/baseline-attribute-allow-list.json
-highlight: js
-</pre>
-
-## The Default Configuration Dictionary ## {#default-configuration-dictionary}
-
-The built-in <dfn>default configuration</dfn> has the following value:
-
-<pre class=include-code>
-path: resources/default-configuration.json
-highlight: js
-</pre>
