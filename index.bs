@@ -102,18 +102,22 @@ configuration. The methods come in two by two flavours:
 ## Sanitizer API ## {#sanitizer-api}
 
 The {{Element}} interface defines two methods, {{Element/setHTML()}} and
-{{Element/setHTMLUnsafe()}}. Both of these take a {{DOMString}} with HTML
+{{Element/setHTMLUnsafe__TO_BE_MERGED()}}. Both of these take a {{DOMString}} with HTML
 markup, and an optional configuration.
 
 <pre class=idl>
 partial interface Element {
-  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTMLUnsafe__TO_BE_MERGED(DOMString html, optional SanitizerConfig config = {});
   [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
 };
 </pre>
 
-<div algorithm="DOM-Element-setHTMLUnsafe" export>
-{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+Note: The `setHTMLUnsafe` method is meant to be merged with [[HTML]]'s
+setHTMLUnsafe. To prevent tooling errors about overloaded methods
+we'll rename them here by appending `__TO_BE_MERGED` to those names.
+
+<div algorithm="DOM-Element-setHTMLUnsafe__TO_BE_MERGED" export>
+{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe__TO_BE_MERGED</dfn>(|html|, |options|) method steps are:
 
 1. Let |target| be |this|'s [=template contents=] if [=this=] is {{HTMLTemplateElement|template}} element; otherwise |this|.
 1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and false.
@@ -131,15 +135,15 @@ partial interface Element {
 
 <pre class=idl>
 partial interface ShadowRoot {
-  [CEReactions] undefined setHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTMLUnsafe__TO_BE_MERGED(DOMString html, optional SanitizerConfig config = {});
   [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
 };
 </pre>
 
 These methods are mirrored on the {{ShadowRoot}}:
 
-<div algorithm="ShadowRoot-setHTMLUnsafe" export>
-{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+<div algorithm="ShadowRoot-setHTMLUnsafe__TO_BE_MERGED" export>
+{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe__TO_BE_MERGED</dfn>(|html|, |options|) method steps are:
 
 1. [=Set and filter HTML=] using [=this=],
    [=this=]'s [=shadow host=] (as context element),
@@ -159,13 +163,13 @@ The {{Document}} interface gains two new methods which parse an entire {{Documen
 
 <pre class=idl>
 partial interface Document {
-  static Document parseHTMLUnsafe(DOMString html, optional SanitizerConfig config = {});
+  static Document parseHTMLUnsafe__TO_BE_MERGED(DOMString html, optional SanitizerConfig config = {});
   static Document parseHTML(DOMString html, optional SanitizerConfig config = {});
 };
 </pre>
 
-<div algorithm="parseHTMLUnsafe" export>
-The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+<div algorithm="parseHTMLUnsafe__TO_BE_MERGED" export>
+The <dfn for="DOM/Document">parseHTMLUnsafe__TO_BE_MERGED</dfn>(|html|, |options|) method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
 
