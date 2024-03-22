@@ -221,6 +221,7 @@ page to query and predict what effect a given configuration will have, or
 to build a new configuration based on an existing one.
 
 <pre class=idl>
+[Exposed=Window,Worker]
 interface Sanitizer {
   constructor(optional SanitizerConfig config = {});
   SanitizerConfig get();
