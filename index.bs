@@ -273,21 +273,21 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
            this algorithm will be used in different contexts, this assumption
            needs to be re-examined.
   1. If |child| [=implements=] {{Text}}:
-    1. [=continue=].
+    1. Then [=continue=].
   1. else if |child| [=implements=] {{Comment}}:
     1. If |config|'s {{SanitizerConfig/comments}} is not true:
-      1. [=/remove=] |child|.
+      1. Then [=/remove=] |child|.
   1. else:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
     1. If |config|["{{SanitizerConfig/elements}}"] exists and
        |config|["{{SanitizerConfig/elements}}"] does not [=SanitizerConfig/contain=]
        [|elementName|]:
-       1. [=/remove=] |child|.
+       1. Then [=/remove=] |child|.
     1. else if |config|["{{SanitizerConfig/removeElements}}"] exists and
        |config|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=]
        [|elementName|]:
-       1. [=/remove=] |child|.
+       1. Then [=/remove=] |child|.
     1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] exists and |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize=] on |child| with |config|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
@@ -305,32 +305,39 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          1. If "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             if [=Attr/namespace=] is `null` and
             if |config|["{{SanitizerConfig/dataAttributes}}"] exists and is false:
-            1. Remove |attr| from |child|.
+            1. Then [=remove an attribute|remove=] |attr||.
       1. else if |config|["{{SanitizerConfig/removeAttributes}}"] exists and
          |config|["{{SanitizerConfig/removeAttributes}}"] [=SanitizerConfig/contains=]
          |attrName|:
-         1. Remove |attr| from |child|.
+         1. Then [=remove an attribute|remove=] |attr|.
       1. If |config|["{{SanitizerConfig/elements}}"][|elementName|] exists,
          and if
          |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
          exists, and if
          |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
          does not [=SanitizerConfig/contain=] |attrName|:
-         1. Remove |attr| from |child|.
+         1. Then [=remove an attribute|remove=] |attr|.
       1. If |config|["{{SanitizerConfig/elements}}"][|elementName|] exists,
          and if
          |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
          exists, and if
          |config|["{{SanitizerConfig/elements}}"][|elementName|]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
          [=SanitizerConfig/contains=] |attrName|:
-         1. Remove |attr| from |child|.
-      1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
-         [=navigating URL attributes list=], and if |attr|'s [=protocol=] is
-         "`javascript:`":
-         1. Then remove |attr| from |child|.
+         1. Then [=remove an attribute|remove=] |attr|.
+      1. If the [=navigating URL attributes list=] [=SanitizerConfig/contains=]
+         &laquo;[|elementName|, |attrName|]&raquo; and "`javascript:`" is a
+         [=code unit prefix=] of the result of [=strip leading and
+         trailing ASCII whitespace=] from |attr|'s [=get an attribute
+         value|value=]:
+         1. Then [=remove an attribute|remove=] |attr|.
+      1. If the [=animating URL attributes list=] [=SanitizerConfig/contains=]
+         &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
+         [=get an attribute value|value=] [=string/is=] "`href`" or
+         "`xlink:href`":
+         1. Then [=remove an attribute|remove=] |attr|.
        1. Call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
     1. else:
-      1. [=/remove=] |child|.
+      1. [=/Remove=] |child|.
 
 </div>
 
@@ -650,7 +657,7 @@ regard to order:
 
 </div>
 
-## Defaults ## {#sanitization-defaults}
+## Defaults and Built-ins ## {#sanitization-defaults}
 
 Note: The defaults should follow a certain form, which is checked for at the
       beginning of [=canonicalize a configuration=].
@@ -686,33 +693,71 @@ Note: The [=known elements=] and [=known attributes=] should be derived from the
 
 <div>
 The <dfn>navigating URL attributes list</dfn>, for which "`javascript:`"
-navigations are unsafe, are as follows:
+navigations are unsafe, is as follows:
 
 &laquo;[
   <br>
   [
-    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`area`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`area`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`form`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`form`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`action`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`input`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`input`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; "[=HTML namespace=]" },
+    { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; [=XLink namespace=] }
+  ],
+  <br>
+]&raquo;
+
+The <dfn>animating URL attributes list</dfn>, which can be used in [[SVG]] to
+declaratively modify navigation elements to use "`javascript:`" URLs, is as
+follows:
+
+&laquo;[
+  <br>
+  [
+    { "`name`" &rightarrow; "`animate`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null`] }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`animateMotion`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`animateTransform`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`set`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
 ]&raquo;
