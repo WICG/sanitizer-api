@@ -400,6 +400,13 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          trailing ASCII whitespace=] from |attr|'s [=get an attribute
          value|value=]:
          1. Then [=remove an attribute|remove=] |attr|.
+      1. If |child|'s [=Element/namespace=] [=string/is=] the
+         [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
+         "`href`" and  "`javascript:`" is a
+         [=code unit prefix=] of the result of [=strip leading and
+         trailing ASCII whitespace=] from |attr|'s [=get an attribute
+         value|value=]:
+         1. Then [=remove an attribute|remove=] |attr|.
       1. If the [=animating URL attributes list=] [=SanitizerConfig/contains=]
          &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
          [=get an attribute value|value=] [=string/is=] "`href`" or
