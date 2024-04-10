@@ -395,17 +395,12 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          [=SanitizerConfig/contains=] |attrName|:
          1. Then [=remove an attribute|remove=] |attr|.
       1. If the [=navigating URL attributes list=] [=SanitizerConfig/contains=]
-         &laquo;[|elementName|, |attrName|]&raquo; and "`javascript:`" is a
-         [=code unit prefix=] of the result of [=strip leading and
-         trailing ASCII whitespace=] from |attr|'s [=get an attribute
-         value|value=]:
+         &laquo;[|elementName|, |attrName|]&raquo; and |attr|
+         [=contains a javascript URL=]:
          1. Then [=remove an attribute|remove=] |attr|.
       1. If |child|'s [=Element/namespace=] [=string/is=] the
          [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
-         "`href`" and  "`javascript:`" is a
-         [=code unit prefix=] of the result of [=strip leading and
-         trailing ASCII whitespace=] from |attr|'s [=get an attribute
-         value|value=]:
+         "`href`" and  |attr| [=contains a javascript URL=]:
          1. Then [=remove an attribute|remove=] |attr|.
       1. If the [=animating URL attributes list=] [=SanitizerConfig/contains=]
          &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
@@ -417,6 +412,36 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
       1. [=/Remove=] |child|.
 
 </div>
+
+<div class=note>
+<span class=marker>Note:</span> Current browsers support `javascript` URLs
+only when navigating. Since navigation itself is not an XSS threat we treat
+navigation to `javascript` URLs, but not navigations in general.
+
+Declarative navigation falls into a handful of categories:
+
+  1. Anchor elements. (`<a>` in HTML and SVG namespaces)
+  1. Form elements that trigger navigation as part of the form action.
+  1. MathML allows [any element to act as an anchor](
+     https://www.w3.org/TR/MathML3/mathml.html#chapter2_fund.globatt).
+  1. SVG animation.
+
+The first two are covered by the [=navigating URL attributes list=]. The MathML
+case is covered by a seperate rule, because there is no formalism in this spec
+to cover a "per-namespace global" rule. The animation case is covered by the
+[=animating URL attributes list=]. But since the interpretation of SVG animation elements depends on the animation target, and since during sanitization we cannot know what the final target will be, the [=sanitize=] algorithm blocks any animation of `href` attributes.
+
+</div>
+
+<div algorithm>
+To determine whether an |attribute| <dfn>contains a javascript URL</dfn>, do this:
+
+1. Let |url| be the result of running the [=basic URL parser=]
+   on |attribute|'s [=get an attribute value|value=].
+1. Return whether |url|'s [=url/scheme=] [=string/is=] "`javascript`".
+
+</div>
+
 
 ## Configuration Processing ## {#configuration-processing}
 
@@ -811,7 +836,7 @@ navigations are unsafe, is as follows:
   <br>
 ]&raquo;
 
-The <dfn>animating URL attributes list</dfn>, which can be used in [[SVG]] to
+The <dfn>animating URL attributes list</dfn>, which can be used in [[SVG11]] to
 declaratively modify navigation elements to use "`javascript:`" URLs, is as
 follows:
 
