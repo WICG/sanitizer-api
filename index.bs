@@ -25,6 +25,7 @@ text: innerHTML; type: attribute; for: Element; url: https://dom.spec.whatwg.org
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
 text: template contents; type: dfn; url: https://html.spec.whatwg.org/#template-contents
+text: internal slot; type:dfn; url: https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots
 </pre>
 <pre class="biblio">
 {
@@ -107,8 +108,8 @@ markup, and an optional configuration.
 
 <pre class="idl extract">
 partial interface Element {
-  [CEReactions] undefined setHTMLUnsafe(HTMLString html, optional SanitizerConfig config = {});
-  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTMLUnsafe(HTMLString html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
 
@@ -131,8 +132,8 @@ partial interface Element {
 
 <pre class="idl extract">
 partial interface ShadowRoot {
-  [CEReactions] undefined setHTMLUnsafe(HTMLString html, optional SanitizerConfig config = {});
-  [CEReactions] undefined setHTML(DOMString html, optional SanitizerConfig config = {});
+  [CEReactions] undefined setHTMLUnsafe(HTMLString html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
 
@@ -159,8 +160,8 @@ The {{Document}} interface gains two new methods which parse an entire {{Documen
 
 <pre class="idl extract">
 partial interface Document {
-  static Document parseHTMLUnsafe(HTMLString html, optional SanitizerConfig config = {});
-  static Document parseHTML(DOMString html, optional SanitizerConfig config = {});
+  static Document parseHTMLUnsafe(HTMLString html, optional SetHTMLOptions options = {});
+  static Document parseHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
 
@@ -172,8 +173,8 @@ The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method step
    Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML=] from a string given |document| and |html|.
-1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|["`sanitizer`"] and false.
+1. Let |config| be the result of calling [=get a sanitizer config from options=]
+   with |options| and false.
 1. If |config| is not [=list/empty=],
    then call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
@@ -189,10 +190,66 @@ The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
    Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML=] from a string given |document| and |html|.
-1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|["`sanitizer`"] and true.
+1. Let |config| be the result of calling [=get a sanitizer config from options=]
+   with |options| and true.
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
 1. Return |document|.
+
+</div>
+
+## SetHTML options and the configuration object. ## {#configobject}
+
+The family of {{Element/setHTML()}}-like methods always take an options
+dictionary. Right now, only one member of this dictionary is defined:
+
+<pre class=idl>
+dictionary SetHTMLOptions {
+  (Sanitizer or SanitizerConfig) sanitizer = {};
+};
+</pre>
+
+The {{Sanitizer}} configuration object encapsulates a filter configuration.
+The same config can be used with both safe or unsafe methods. The intent is
+that one (or a few) configurations will be built-up early on in a page's
+lifetime, and can then be used whenever needed. This allows implementations
+to pre-process configurations.
+
+The configuration object is also query-able and can return
+[=SanitizerConfig/canonical=] configuration dictionaries,
+in both safe and unsafe variants. This allows a
+page to query and predict what effect a given configuration will have, or
+to build a new configuration based on an existing one.
+
+<pre class=idl>
+[Exposed=Window,Worker]
+interface Sanitizer {
+  constructor(optional SanitizerConfig config = {});
+  SanitizerConfig get();
+  SanitizerConfig getUnsafe();
+};
+</pre>
+
+<div algorithm>
+The <dfn for="Sanitizer" export>constructor</dfn>(|config|)
+method steps are:
+
+1. Store |config| in [=this=]'s [=internal slot=].
+
+</div>
+
+<div algorithm>
+The <dfn for="Sanitizer" export>get</dfn>() method steps are:
+
+1. Return the result of [=canonicalize a configuration=] with the value of
+   [=this=]'s [=internal slot=] and true.
+
+</div>
+
+<div algorithm>
+The <dfn for="Sanitizer" export>getUnsafe</dfn>() method steps are:
+
+1. Return the result of [=canonicalize a configuration=] with the value of
+   [=this=]'s [=internal slot=] and false.
 
 </div>
 
@@ -232,6 +289,7 @@ dictionary SanitizerConfig {
 };
 </pre>
 
+
 # Algorithms # {#algorithms}
 
 <div algorithm>
@@ -242,14 +300,30 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 1. If |safe| and |contextElement|'s [=Element/local name=] is "`script`" and
    |contextElement|'s [=Element/namespace=] is the [=HTML namespace=] or the
    [=SVG namespace=], then return.
-1. Let |config| be the result of calling [=canonicalize a configuration=] on
-   |options|["`sanitizer`"] and |safe|.
+1. Let |config| be the result of calling [=get a sanitizer config from options=]
+   with |options| and |safe|.
 1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
    given |contextElement|, |html|, and true.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
 1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
 1. If |config| is not [=list/empty=], then run [=sanitize=] on |fragment| using |config|.
 1. [=Replace all=] with |fragment| within |target|.
+
+</div>
+
+<div algorithm>
+To <dfn for="SanitizerConfig">get a sanitizer config from options</dfn> for
+an options dictionary |options| and a boolean |safe|, do:
+
+1. Assert: |options| is a [=dictionary=].
+1. If |options|["`sanitizer`"] doesn't [=map/exists=], then return undefined.
+1. Assert: |options|["`sanitizer`"] is either a {{Sanitizer}} instance
+   or a [=dictionary=].
+1. If |options|["`sanitizer`"] is a {{Sanitizer}} instance:
+   1. Then let |config| be the value of |options|["`sanitizer`"]'s [=internal slot=].
+   1. Otherwise let |config| be the value of |options|["`sanitizer`"].
+1. Return the result of calling [=canonicalize a configuration=] on
+   |config| and |safe|.
 
 </div>
 

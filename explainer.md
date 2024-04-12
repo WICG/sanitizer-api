@@ -110,15 +110,6 @@ The currently proposed API differs in a number of aspects:
   use-config-as-written way.
 - The configuration dictionary differs substantially in syntax.
 
-## Open questions:
-
-- Defaults: If no filter is supplied, do the safe methods have any filtering
-  other than the baseline? (For further discussion, see #188.)
-- Should the filter config be a separate object, or should it be a plain
-  dictionary? (As-is, it should probably be a dictionary. An object would
-  require either compelling performance numbers, or a compelling operation that
-  would only work with a pre-processed dictionary.)
-
 ## Examples
 
 The new APIs, in their most basic form:
@@ -198,7 +189,7 @@ applications' needs. Both "safe" and "unsafe" versions can take a configuration.
 The "safe" version will ignore configuration items that break its security
 guarantees:
 ```js
-const an_unsafe_config = { 'elements': [ { name: 'script' } ] };
+const an_unsafe_config = new Sanitizer({ 'elements': [ { name: 'script' } ] });
 element.setHTML("<script>", { sanitizer: an_unsafe_config });  // <div></div>
 element.setHTMLUnsafe("<script>", { sanitizer: an_unsafe_config });  // You now have a script. Congrats.
 ```
@@ -209,7 +200,7 @@ only the name, in the HTML/null namespace (for elements/attributes,
 respectively).
 
 ``` js
-const config_with_namespaces = {
+const config_with_namespaces = new Sanitizer({
   elements: [
     'a',  // The HTML anchor element.
     { name: 'a' },  // Also the HTML anchor element.
@@ -225,13 +216,50 @@ const config_with_namespaces = {
         // It won't match any HTML-defined href attributes. Probably the config
         // author made an error.
   ]
-};
+});
 ```
 
 > [!NOTE]
 > The `config_with_namespaces` example contains multiple entries for the same
 > element or attribute, to illustrate the syntax. Note that this isn't actually
 > allowed.
+
+### Configuration Options: Sanitizer object or dictionary.
+
+The Sanitizer object can be constructed from a dictionary. The same dictionary
+can also be used directly in the method options.
+
+```
+const config_dict = {
+  elements: [ "div", "p", "em", "b", "span" ],
+  attributes: [ "class", "style" ]
+};
+
+// These two should be the same:
+const some_html_string = "...";
+div.setHTML(some_html_string, {sanitizer: config_dict});
+div.setHTML(some_html_string, {sanitizer: new Sanitizer(config_dict)});
+```
+
+Note that implementations are expected to perform normalization work on the
+configuration, which can be easily re-used and amortized over many calls when
+used with the Sanitizer object that holds the configuration. To encourage this
+usage we explicitly instantiate objects in this explainer, outside of this
+particular sub-section.
+
+```
+// These should have the same results, but likely different performance:
+const huge_array_of_strings = [ "...", ... ];
+
+for (const str of huge_array_of_strings) {
+  div.setHTML(str, {sanitizer: config_dict});
+}
+
+const sanitizer = new Sanitizer(config_dict);
+for (const str of huge_array_of_strings) {
+  div.setHTML(str, {sanitizer: sanitizer});
+}
+```
 
 ### Configuration Options: Allowing or removing elements or attributes
 
@@ -243,17 +271,17 @@ This effectively specifies the sanitizer output relative to the built-in list.
 This can be useful if you wish to mostly retain the built-in defaults.
 
 ```js
-const config_allow_some_formatting = {
+const config_allow_some_formatting = new Sanitizer({
   elements: [ "div", "p", "em", "b", "img" ],  // Allows only 5 elements.
   attributes: [ "class" ]  // Allows only class attributes.
       // Output with "safe" and "unsafe" methods are the same for this config.
-};
-const config_disallow_style_definitions = {
+});
+const config_disallow_style_definitions = new Sanitizer({
   removeElements: [ "style" ],  // Allows the defaults, but without <style>.
   removeAttributes: [ "class", "style" ]  // No style or class attribute either.
       // And not XSS-y stuff, either, if used with a "safe" method.
       // Output with "safe" and "unsafe" methods might be quite different.
-};
+});
 ```
 
 You may also wish to remove elements, but retain their children. This is
@@ -261,9 +289,9 @@ chiefly useful to remove unwanted formatting from user input, while
 preserving its textual content.
 
 ```js
-const config_that_removes_elements_but_preserves_their_children = {
+const config_that_removes_elements_but_preserves_their_children = new Sanitizer({
  replaceWithChildrenElements: ["span", "em", "u", "s", "i", "b"]
-};
+});
 
 element.setHTML(
   "Fancy <b>text</b> with <span style='color:blue'>pizzazz</span>.",
@@ -279,10 +307,10 @@ level. Combining `elements` with `replaceWithChildrenElements` lets you keep
 some formatting, but all the text content:
 
 ```js
-const config_replace_spans = {
+const config_replace_spans = new Sanitizer({
   elements: ["b", "i"],
   replaceWithChildrenElements: ["span"]
-};
+});
 
 // <div>Fancy text with <b>pizzazz</b>.</div>
 element.setHTML(
@@ -304,22 +332,22 @@ If one wanted to allow `class` everywhere, but `src` only on `<img>`, the
 following would do:
 
 ```js
-const config_with_element_specific_attributes = {
+const config_with_element_specific_attributes = new Sanitizer({
   elements: [
     "div", "p","em", "b",
     { name: "img", attributes: [ "src" ] }
   ],
   attributes: ["class"],
-};
+});
 ```
 
 If you want to remove `src` attributes from `<input>` elements but retain them
 elsewhere, you can use:
 
 ```js
-const remove_src_attribute_from_input = {
+const remove_src_attribute_from_input = new Sanitizer({
   elements: [{ name: "input", removeAttributes: ["src"]}],
-}
+});
 ```
 
 Note that the `removeAttributes` key is on an allowed element, since removing
@@ -332,7 +360,7 @@ Handling of HTML comment nodes can be controlled by an option. Setting
 `comments` to `true` allows them:
 
 ```js
-const config_comments: { comments: true };
+const config_comments: new Sanitizer({ comments: true });
 element.setHTML("XXX<!-- Hello world! -->XXX", {sanitizer: config_comments});
 // <div>XXX<!-- Hello world! -->XXX</div>
 ```
@@ -367,33 +395,33 @@ the configuration. A well-formed configuration has the following properties:
 
 ```js
 // Mixing allow and block lists throws.
-const config_that_mixes_allow_and_block_lists = {
+const config_that_mixes_allow_and_block_lists = new Sanitizer({
     elements: ["i", "u"],
     removeElements: ["u", "s"],
-};
+});
 element.setHTML("bla", {sanitizer: config_that_mixes_allow_and_block_lists}); // throws
 
 // Mixing allow and replace with children lists works.
-const config_that_retains_simple_styling_but_most_text = {
+const config_that_retains_simple_styling_but_most_text = new Sanitizer({
   elements: ["p", "b", "i"],
   replaceWithChildrenElements: ["div", "span", "em", "u", "s", "li"],
-};
+});
 const styled_text = "<p>Some <span style='color: blue'>colourful</span> <u>styled</u> <b>text</b>";
 
 // <div><p>Some colourful styled <b>text</b></p></div>
 element.setHTML(styled_text, {sanitizer: config_that_retains_simple_styling_but_most_text});
 
 // Duplicate entries throw.
-const config_with_dupes = {
+const config_with_dupes = new Sanitizer({
   elements: [ "div", { name: "div", namespace: "http://www.w3.org/1999/xhtml" } ]
-};
+});
 element.setHTML("bla", {sanitizer: config_with_dupes});  // throws.
 
-const config_with_dupes2 = {
+const config_with_dupes2 = new Sanitizer({
   elements: [
     { name: "div", attributes: ["class"] },
     { name: "div", attributes: ["style"] }
-  ] };
+  ] });
 element.setHTML("bla", config_with_dupes2);  // throws.
 ```
 
@@ -401,12 +429,91 @@ Listing an attribute in the "global" allow-list and in an element specific one
 is allowed. In this case, the specific action takes precedence.
 
 ```js
-const config_with_local_and_global_attributes = {
+const config_with_local_and_global_attributes = new Sanitizer({
   elements: [ "span", { name: "b", removeAttributes: [ "class" ] } ],
   attributes: ["class"]
-};
+});
 
 // <div><span class="a">abc</span> <b>def</b></div>
 element.setHTML("<span class='a'>abc</span> <b class='b'>def</b>",
                 {sanitizer: config_with_local_and_global_attributes});
 ```
+
+### Querying the Configuration
+
+If you would like to better understand what a given configuration will do, you
+can query a `Sanitizer` (and possibly build a new config out of an existing one):
+
+```js
+const a_simple_config = new Sanitizer({ elements: [ "div", "p", "span", "script" ] });
+
+a_simple_config.get();
+// The result will be quite long. It'll look something like this:
+{
+  elements: [
+    { "name": "div", "namespace": "http://www.w3.org/1999/xhtml" },
+    { "name": "p", "namespace": "http://www.w3.org/1999/xhtml" },
+    { "name": "span", "namespace": "http://www.w3.org/1999/xhtml" }
+  ],
+  attributes: [
+    { "name": "href", "namespace": "" },
+    { "name": "class, "namespace": "" },
+    { "name": "id", "namespace": "" },
+    // ... many more
+  ]
+};
+```
+
+Note that:
+
+1. The returned config entries all have the "long" form with explicit name
+   and namespace.
+1. The `"script"` element has disappeared. Because, when used in a "safe"
+   version of the API, it wouldn't be allowed.
+1. Note that we suddenly have an `"attributes"` key that
+   represent the defaults.
+
+But what would the unsafe versions do with this config? Just ask:
+
+```js
+a_simple_config.getUnsafe();
+// The result:
+{
+  elements: [
+    { "name": "div", "namespace": "http://www.w3.org/1999/xhtml" },
+    { "name": "p", "namespace": "http://www.w3.org/1999/xhtml" },
+    { "name": "span", "namespace": "http://www.w3.org/1999/xhtml" }
+    { "name": "script", "namespace": "http://www.w3.org/1999/xhtml" }
+  ],
+  attributes: [
+    // ... many more. Should be the same list as above.
+  ]
+};
+```
+
+The configuration that is returned corresponds to what the specification calls
+a canonical configuration: Names are resolved into their explicit name &amp;
+namespace form. But some keys are also processed further. For example:
+
+```js
+new Sanitizer({
+  removeElements: [ "span" ],
+  removeAttributes: ["id", "class"]
+}).get();
+
+// The result will be quite long. It'll look something like this:
+{
+  elements: [
+    { "name": "div", "namespace": "http://www.w3.org/1999/xhtml" },
+    { "name": "p", "namespace": "http://www.w3.org/1999/xhtml" },
+    // ... many more. But no span.
+  ],
+  attributes: [
+    { "name": "href", "namespace": "" },
+    // ... many more. But no id or class.
+  ]
+};
+```
+
+Note that here, the remove-lists are converted to their allow-list equivalents,
+based on the built-in defaults.
