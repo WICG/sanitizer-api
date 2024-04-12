@@ -110,15 +110,6 @@ The currently proposed API differs in a number of aspects:
   use-config-as-written way.
 - The configuration dictionary differs substantially in syntax.
 
-## Open questions:
-
-- Defaults: If no filter is supplied, do the safe methods have any filtering
-  other than the baseline? (For further discussion, see #188.)
-- Should the filter config be a separate object, or should it be a plain
-  dictionary? (As-is, it should probably be a dictionary. An object would
-  require either compelling performance numbers, or a compelling operation that
-  would only work with a pre-processed dictionary.)
-
 ## Examples
 
 The new APIs, in their most basic form:
@@ -232,6 +223,43 @@ const config_with_namespaces = new Sanitizer({
 > The `config_with_namespaces` example contains multiple entries for the same
 > element or attribute, to illustrate the syntax. Note that this isn't actually
 > allowed.
+
+### Configuration Options: Sanitizer object or dictionary.
+
+The Sanitizer object can be constructed from a dictionary. The same dictionary
+can also be used directly in the method options.
+
+```
+const config_dict = {
+  elements: [ "div", "p", "em", "b", "span" ],
+  attributes: [ "class", "style" ]
+};
+
+// These two should be the same:
+const some_html_string = "...";
+div.setHTML(some_html_string, {sanitizer: config_dict});
+div.setHTML(some_html_string, {sanitizer: new Sanitizer(config_dict)});
+```
+
+Note that implementations are expected to perform normalization work on the
+configuration, which can be easily re-used and amortized over many calls when
+used with the Sanitizer object that holds the configuration. To encourage this
+usage we explicitly instantiate objects in this explainer, outside of this
+particular sub-section.
+
+```
+// These should have the same results, but likely different performance:
+const huge_array_of_strings = [ "...", ... ];
+
+for (const str of huge_array_of_strings) {
+  div.setHTML(str, {sanitizer: config_dict});
+}
+
+const sanitizer = new Sanitizer(config_dict);
+for (const str of huge_array_of_strings) {
+  div.setHTML(str, {sanitizer: sanitizer});
+}
+```
 
 ### Configuration Options: Allowing or removing elements or attributes
 

@@ -204,7 +204,7 @@ dictionary. Right now, only one member of this dictionary is defined:
 
 <pre class=idl>
 dictionary SetHTMLOptions {
-  Sanitizer? sanitizer;
+  (Sanitizer or SanitizerConfig) sanitizer = {};
 };
 </pre>
 
@@ -316,11 +316,14 @@ To <dfn for="SanitizerConfig">get a sanitizer config from options</dfn> for
 an options dictionary |options| and a boolean |safe|, do:
 
 1. Assert: |options| is a [=dictionary=].
-1. If |options|["`sanitizer`"] doesn't [=map/exists=]
-   or if |options|["`sanitizer`"] [=map/exists=] but is not a
-   {{Sanitizer}} instance, then return undefined.
+1. If |options|["`sanitizer`"] doesn't [=map/exists=], then return undefined.
+1. Assert: |options|["`sanitizer`"] is either a {{Sanitizer}} instance
+   or a [=dictionary=].
+1. If |options|["`sanitizer`"] is a {{Sanitizer}} instance:
+   1. Then let |config| be the value of |options|["`sanitizer`"]'s [=internal slot=].
+   1. Otherwise let |config| be the value of |options|["`sanitizer`"].
 1. Return the result of calling [=canonicalize a configuration=] on
-   |options|["`sanitizer`"]'s [=internal slot=] and |safe|.
+   |config| and |safe|.
 
 </div>
 
