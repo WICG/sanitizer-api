@@ -396,11 +396,11 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          1. Then [=remove an attribute|remove=] |attr|.
       1. If the [=navigating URL attributes list=] [=SanitizerConfig/contains=]
          &laquo;[|elementName|, |attrName|]&raquo; and |attr|
-         [=contains a javascript URL=]:
+         [=contains a javascript: URL=]:
          1. Then [=remove an attribute|remove=] |attr|.
       1. If |child|'s [=Element/namespace=] [=string/is=] the
          [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
-         "`href`" and  |attr| [=contains a javascript URL=]:
+         "`href`" and  |attr| [=contains a javascript: URL=]:
          1. Then [=remove an attribute|remove=] |attr|.
       1. If the [=animating URL attributes list=] [=SanitizerConfig/contains=]
          &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
@@ -414,9 +414,9 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
 </div>
 
 <div class=note>
-<span class=marker>Note:</span> Current browsers support `javascript` URLs
+<span class=marker>Note:</span> Current browsers support `javascript:` URLs
 only when navigating. Since navigation itself is not an XSS threat we treat
-navigation to `javascript` URLs, but not navigations in general.
+navigation to `javascript:` URLs, but not navigations in general.
 
 Declarative navigation falls into a handful of categories:
 
@@ -434,11 +434,13 @@ to cover a "per-namespace global" rule. The animation case is covered by the
 </div>
 
 <div algorithm>
-To determine whether an |attribute| <dfn>contains a javascript URL</dfn>, do this:
+To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>, do this:
 
 1. Let |url| be the result of running the [=basic URL parser=]
    on |attribute|'s [=get an attribute value|value=].
-1. Return whether |url|'s [=url/scheme=] [=string/is=] "`javascript`".
+1. Let |contains javascript: url| be:
+   |url| is not `failure` and |url|'s [=url/scheme=] [=string/is=] "`javascript`".
+1. Return |contains javascript: url|.
 
 </div>
 
