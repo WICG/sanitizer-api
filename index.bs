@@ -862,7 +862,7 @@ We recommend against this practice. If processing or passing of HTML as a
 string should be necessary after all, then any string should be considered
 untrusted and should be sanitized (again) when inserting it into the DOM. In
 other words, a sanitized and then serialized HTML tree can no
-longer considered as sanitized.
+longer be considered as sanitized.
 
 A more complete treatement of mXSS can be found in [[MXSS]].
 
