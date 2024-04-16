@@ -361,7 +361,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
       1. Call [=sanitize=] on |child| with |config|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
     1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
-       "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo,
+       "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;,
        then call [=sanitize=] on |child|'s [=template contents=] with |config|.
     1. If |child| is a [=shadow host=],
        then call [=sanitize=] on |child|'s [=Element/shadow root=] with |config|.
