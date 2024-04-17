@@ -25,6 +25,7 @@ text: innerHTML; type: attribute; for: Element; url: https://dom.spec.whatwg.org
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
 text: template contents; type: dfn; url: https://html.spec.whatwg.org/#template-contents
+text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#parse-html-from-a-string
 text: internal slot; type:dfn; url: https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots
 </pre>
 <pre class="biblio">
@@ -172,7 +173,7 @@ The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method step
 
    Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
-1. [=Parse HTML=] from a string given |document| and |html|.
+1. [=Parse HTML from a string=] given |document| and |html|.
 1. Let |config| be the result of calling [=get a sanitizer config from options=]
    with |options| and false.
 1. If |config| is not [=list/empty=],
@@ -189,7 +190,7 @@ The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
 
    Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
-1. [=Parse HTML=] from a string given |document| and |html|.
+1. [=Parse HTML from a string=] given |document| and |html|.
 1. Let |config| be the result of calling [=get a sanitizer config from options=]
    with |options| and true.
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |config|.
@@ -302,7 +303,7 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
    [=SVG namespace=], then return.
 1. Let |config| be the result of calling [=get a sanitizer config from options=]
    with |options| and |safe|.
-1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm=]
+1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm steps=]
    given |contextElement|, |html|, and true.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
 1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
