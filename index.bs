@@ -117,8 +117,8 @@ partial interface Element {
 <div algorithm="DOM-Element-setHTMLUnsafe" export>
 {{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
-1. Let |target| be |this|' [=template contents=] if [=this=] is a
-   {{HTMLTemplateElement|template}} element; otherwise |this|.
+1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
+   {{HTMLTemplateElement|template}} element; otherwise [=this=].
 1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and false.
 
 </div>
@@ -126,8 +126,8 @@ partial interface Element {
 <div algorithm="DOM-Element-setHTML" export>
 {{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|) method steps are:
 
-1. Let |target| be |this|' [=template contents=] if [=this=] is a
-   {{HTMLTemplateElement|template}}; otherwise |this|.
+1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
+   {{HTMLTemplateElement|template}}; otherwise [=this=].
 1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and true.
 
 </div>
@@ -145,7 +145,7 @@ These methods are mirrored on the {{ShadowRoot}}:
 {{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. [=Set and filter HTML=] using [=this=],
-   [=this=]' [=shadow host=] (as context element),
+   [=this=]'s [=shadow host=] (as context element),
    |html|, |options|, and false.
 
 </div>
@@ -235,7 +235,7 @@ interface Sanitizer {
 The <dfn for="Sanitizer" export>constructor</dfn>(|config|)
 method steps are:
 
-1. Store |config| in [=this=]' [=internal slot=].
+1. Store |config| in [=this=]'s [=internal slot=].
 
 </div>
 
@@ -243,7 +243,7 @@ method steps are:
 The <dfn for="Sanitizer" export>get</dfn>() method steps are:
 
 1. Return the result of [=canonicalize a configuration=] with the value of
-   [=this=]' [=internal slot=] and true.
+   [=this=]'s [=internal slot=] and true.
 
 </div>
 
@@ -251,7 +251,7 @@ The <dfn for="Sanitizer" export>get</dfn>() method steps are:
 The <dfn for="Sanitizer" export>getUnsafe</dfn>() method steps are:
 
 1. Return the result of [=canonicalize a configuration=] with the value of
-   [=this=]' [=internal slot=] and false.
+   [=this=]'s [=internal slot=] and false.
 
 </div>
 
