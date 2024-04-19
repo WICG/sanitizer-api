@@ -79,7 +79,7 @@ API which aims to do just that.
 *   Make HTML output safe for use within the current user agent, taking into
     account its current understanding of HTML.
 
-*   Allow developers to override the defaults set of elements and attributes.
+*   Allow developers to override the default set of elements and attributes.
     Adding certain elements and attributes can prevent
     <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a>
     attacks.
@@ -96,7 +96,7 @@ configuration. The methods come in two by two flavours:
 * Context: Methods are defined on {{Element}} and {{ShadowRoot}} and will
   replace these {{Node}}'s children, and are largely analogous to {{innerHTML}}.
   There are also static methods on the {{Document}}, which parse an entire
-  document are are largely analogous to {{DOMParser}}.{{parseFromString()}}.
+  document are largely analogous to {{DOMParser}}.{{parseFromString()}}.
 
 
 # Framework # {#framework}
@@ -117,7 +117,8 @@ partial interface Element {
 <div algorithm="DOM-Element-setHTMLUnsafe" export>
 {{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
-1. Let |target| be |this|'s [=template contents=] if [=this=] is {{HTMLTemplateElement|template}} element; otherwise |this|.
+1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
+   {{HTMLTemplateElement|template}} element; otherwise [=this=].
 1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and false.
 
 </div>
@@ -125,8 +126,8 @@ partial interface Element {
 <div algorithm="DOM-Element-setHTML" export>
 {{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|) method steps are:
 
-1. Let |target| be |this|'s [=template contents=] if [=this=] is a
-   {{HTMLTemplateElement|template}}; otherwise |this|.
+1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
+   {{HTMLTemplateElement|template}}; otherwise [=this=].
 1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and true.
 
 </div>
@@ -200,7 +201,7 @@ The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
 
 ## SetHTML options and the configuration object. ## {#configobject}
 
-The family of {{Element/setHTML()}}-like methods always take an options
+The family of {{Element/setHTML()}}-like methods all accept an options
 dictionary. Right now, only one member of this dictionary is defined:
 
 <pre class=idl>
@@ -317,7 +318,7 @@ To <dfn for="SanitizerConfig">get a sanitizer config from options</dfn> for
 an options dictionary |options| and a boolean |safe|, do:
 
 1. Assert: |options| is a [=dictionary=].
-1. If |options|["`sanitizer`"] doesn't [=map/exists=], then return undefined.
+1. If |options|["`sanitizer`"] doesn't [=map/exist=], then return undefined.
 1. Assert: |options|["`sanitizer`"] is either a {{Sanitizer}} instance
    or a [=dictionary=].
 1. If |options|["`sanitizer`"] is a {{Sanitizer}} instance:
@@ -339,7 +340,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
 1. [=list/iterate|For each=] |child| in |current|'s [=tree/children=]:
   1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
 
-     Note: Currently, this algorithm is only be called on output of the HTML
+     Note: Currently, this algorithm is only called on output of the HTML
            parser for which this assertion should hold. If in the future
            this algorithm will be used in different contexts, this assumption
            needs to be re-examined.
@@ -442,13 +443,13 @@ A |config| is <dfn for="SanitizerConfig">valid</dfn> if all these conditions are
       namespace for the element lists, and `null` as default namespace for the
       attributes lists.
 
-      Note: The intent here is to assert about list erlements, but without regard
-            of whether the string shortcut syntax or the explicit dictionary
+      Note: The intent here is to assert about list elements, but without regard
+            to whether the string shortcut syntax or the explicit dictionary
             syntax is used. For example, having "img" in `elements` and
             `{ name: "img" }` in `removeElements`. An implementation might well
             do this without explicitly canonicalizing the lists at this point.
 
-      1. Given theses canonlicalized name lists, all of the following conditions hold:
+      1. Given theses canonicalized name lists, all of the following conditions hold:
 
         1. The [=set/intersection=] between
            |tmp|["{{SanitizerConfig/elements}}"] and
@@ -850,7 +851,7 @@ when a parsed HTML fragment has been serialized to a string, the string is
 not guaranteed to be parsed and interpreted exactly the same when inserted
 into a different parent element. An example for carrying out such an attack
 is by relying on the change of parsing behavior for foreign content or
-misnested tags.
+mis-nested tags.
 
 The Sanitizer API offers help against Mutated XSS, but relies on some amount of
 cooperation by the developers. The `sanitize()` function does not handle strings
@@ -867,7 +868,7 @@ parsing. Directly operating on a fragment after sanitization also comes with a
 performance benefit, as the cost of additional serialization and parsing is
 avoided.
 
-A more complete treatement of mXSS can be found in [[MXSS]].
+A more complete treatment of mXSS can be found in [[MXSS]].
 
 # Acknowledgements # {#ack}
 
