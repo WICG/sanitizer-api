@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/WICG/sanitizer-api.svg?branch=main)](https://travis-ci.org/WICG/sanitizer-api)
-
 # Sanitization Explainer
 
 ## The Problem

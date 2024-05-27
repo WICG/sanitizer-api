@@ -77,5 +77,3 @@ a general purpose library. These should continue to be able to use whichever
 library or mechanism they prefer. However, the library should play well with
 other enforcement mechanisms.
 
------------------
-[![Build Status](https://travis-ci.org/WICG/sanitizer-api.svg?branch=main)](https://travis-ci.org/WICG/sanitizer-api)
