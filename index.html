@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version d765c696b, updated Fri Mar 8 15:58:52 2024 -0800" name="generator">
+  <meta content="Bikeshed version 4afc1fdf9, updated Tue May 28 15:43:17 2024 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="d5204ad1edcf907c3c96f0bbcfe22fbab3bfce11" name="revision">
+  <meta content="c8e529daf930fc33c1a25007cd9bd26f5e4a16a8" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -852,7 +852,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-05-27">27 May 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-05-29">29 May 2024</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1816,18 +1816,15 @@ not guaranteed to be parsed and interpreted exactly the same when inserted
 into a different parent element. An example for carrying out such an attack
 is by relying on the change of parsing behavior for foreign content or
 mis-nested tags.</p>
-   <p>The Sanitizer API offers help against Mutated XSS, but relies on some amount of
-cooperation by the developers. The <code>sanitize()</code> function does not handle strings
-and is therefore unaffected. The <code>setHTML</code> function combines sanitization
-with DOM modification and can implicitly apply the correct context. The <code>sanitizeFor()</code> function combines parsing and sanitization, and relies on the
-developer to supply the correct context for the eventual application of its
-result.</p>
-   <p>If the data to be sanitized is available as a node tree, we encourage authors
-to use the <code>sanitize()</code> function of the API which returns a
-DocumentFragment and avoids risks that come with serialization and additional
-parsing. Directly operating on a fragment after sanitization also comes with a
-performance benefit, as the cost of additional serialization and parsing is
-avoided.</p>
+   <p>The Sanitizer API offers only functions that turn a string into a node tree.
+The context is supplied implicitly by all sanitizer functions: <code>Element.setHTML()</code> uses the current element; <code>Document.parseHTML()</code> creates a
+new document. Therefore Sanitizer API is not directly affected by mutated XSS.</p>
+   <p>If a developer were to retrieve a sanitized node tree as a string, e.g. via <code>.innerHTML</code>, and to then parse it again then mutated XSS may occur.
+We discourage this practice. If processing or passing of HTML as a
+string should be necessary after all, then any string should be considered
+untrusted and should be sanitized (again) when inserting it into the DOM. In
+other words, a sanitized and then serialized HTML tree can no
+longer be considered as sanitized.</p>
    <p>A more complete treatment of mXSS can be found in <a data-link-type="biblio" href="#biblio-mxss" title="mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations">[MXSS]</a>.</p>
    <h2 class="heading settled" data-level="5" id="ack"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
    <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
