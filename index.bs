@@ -109,7 +109,7 @@ markup, and an optional configuration.
 
 <pre class="idl extract">
 partial interface Element {
-  [CEReactions] undefined setHTMLUnsafe(HTMLString html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
   [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -117,9 +117,11 @@ partial interface Element {
 <div algorithm="DOM-Element-setHTMLUnsafe" export>
 {{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
+1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
+   {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Element setHTMLUnsafe", and "script".
 1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
    {{HTMLTemplateElement|template}} element; otherwise [=this=].
-1. [=Set and filter HTML=] given |target|, [=this=], |html|, |options|, and false.
+1. [=Set and filter HTML=] given |target|, [=this=], |compliantHTML|, |options|, and false.
 
 </div>
 
@@ -134,7 +136,7 @@ partial interface Element {
 
 <pre class="idl extract">
 partial interface ShadowRoot {
-  [CEReactions] undefined setHTMLUnsafe(HTMLString html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
   [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -144,9 +146,11 @@ These methods are mirrored on the {{ShadowRoot}}:
 <div algorithm="ShadowRoot-setHTMLUnsafe" export>
 {{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
+1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
+   {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "ShadowRoot setHTMLUnsafe", and "script".
 1. [=Set and filter HTML=] using [=this=],
    [=this=]'s [=shadow host=] (as context element),
-   |html|, |options|, and false.
+   |compliantHTML|, |options|, and false.
 
 </div>
 
@@ -162,7 +166,7 @@ The {{Document}} interface gains two new methods which parse an entire {{Documen
 
 <pre class="idl extract">
 partial interface Document {
-  static Document parseHTMLUnsafe(HTMLString html, optional SetHTMLOptions options = {});
+  static Document parseHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
   static Document parseHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -170,11 +174,13 @@ partial interface Document {
 <div algorithm="parseHTMLUnsafe" export>
 The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
+1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
+   {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Document parseHTMLUnsafe", and "script".
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
 
    Note: Since |document| does not have a browsing context, scripting is disabled.
 1. Set |document|'s [=allow declarative shadow roots=] to true.
-1. [=Parse HTML from a string=] given |document| and |html|.
+1. [=Parse HTML from a string=] given |document| and |compliantHTML|.
 1. Let |config| be the result of calling [=get a sanitizer config from options=]
    with |options| and false.
 1. If |config| is not [=list/empty=],
