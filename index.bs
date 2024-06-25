@@ -21,7 +21,7 @@ WPT Display: inline
 WPT Path Prefix: /sanitizer-api/
 </pre>
 <pre class="anchors">
-text: innerHTML; type: attribute; for: Element; url: https://dom.spec.whatwg.org/#widl-Element-innerHTML
+text: innerHTML; type: attribute; for: Element; url: https://html.spec.whatwg.org/#dom-element-innerhtml
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
 text: template contents; type: dfn; url: https://html.spec.whatwg.org/#template-contents
