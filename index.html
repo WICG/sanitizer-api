@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version a1dabb26c, updated Mon Jun 17 15:00:44 2024 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="c39463e55bbb8349e1e7c7a79bc68cddc813be57" name="revision">
+  <meta content="d6e50d0f91b71484d7a235bb0159fd728ffebccb" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -852,7 +852,7 @@ dd:not(:last-child) > .wpt-tests-block:not([open]):last-child {
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-06-24">24 June 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-06-25">25 June 2024</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -943,7 +943,7 @@ DOM.</p>
 perhaps as part of a client-side templating solution, perhaps as part of
 rendering user generated content, etc. It is difficult to do so in a safe way.
 The naive approach of joining strings together and stuffing them into
-an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#widl-Element-innerHTML" id="ref-for-widl-Element-innerHTML">innerHTML</a></code> is fraught with risk, as it can cause
+an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element">Element</a></code>'s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#dom-element-innerhtml" id="ref-for-dom-element-innerhtml">innerHTML</a></code> is fraught with risk, as it can cause
 JavaScript execution in a number of unexpected ways.</p>
    <p>Libraries like <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> attempt to manage this problem by carefully
 parsing and sanitizing strings before insertion, by constructing a DOM and
@@ -983,7 +983,7 @@ script. That is, they should be safe from XSS. The "unsafe" methods will parse
 and filter whatever they’re supposed to.</p>
     <li data-md>
      <p>Context: Methods are defined on <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element①">Element</a></code> and <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#shadowroot" id="ref-for-shadowroot">ShadowRoot</a></code> and will
-replace these <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node" id="ref-for-node">Node</a></code>'s children, and are largely analogous to <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#widl-Element-innerHTML" id="ref-for-widl-Element-innerHTML①">innerHTML</a></code>.
+replace these <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#node" id="ref-for-node">Node</a></code>'s children, and are largely analogous to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/#dom-element-innerhtml" id="ref-for-dom-element-innerhtml①">innerHTML</a></code>.
 There are also static methods on the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code>, which parse an entire
 document are largely analogous to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#domparser" id="ref-for-domparser">DOMParser</a></code>.<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-domparser-parsefromstring" id="ref-for-dom-domparser-parsefromstring">parseFromString()</a></code>.</p>
    </ul>
@@ -1962,7 +1962,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li>
     <a data-link-type="biblio">[]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="9c72363f">innerHTML</span>
+     <li><span class="dfn-paneled" id="10e9aa8a">innerHTML</span>
      <li><span class="dfn-paneled" id="dd722468">internal slot</span>
      <li><span class="dfn-paneled" id="769996cd">parse html from a string</span>
      <li><span class="dfn-paneled" id="b159e2cd">template contents</span>
@@ -2334,6 +2334,7 @@ let dfnPanelData = {
 "03afaf9c": {"dfnID":"03afaf9c","dfnText":"empty","external":true,"refSections":[{"refs":[{"id":"ref-for-list-empty"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-list-empty\u2460"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-empty\u2461"},{"id":"ref-for-list-empty\u2462"},{"id":"ref-for-list-empty\u2463"},{"id":"ref-for-list-empty\u2464"},{"id":"ref-for-list-empty\u2465"},{"id":"ref-for-list-empty\u2466"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-empty"},
 "0698d556": {"dfnID":"0698d556","dfnText":"string","external":true,"refSections":[{"refs":[{"id":"ref-for-string"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-string\u2460"},{"id":"ref-for-string\u2461"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#string"},
 "0e0b900e": {"dfnID":"0e0b900e","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-remove"},{"id":"ref-for-concept-node-remove\u2460"},{"id":"ref-for-concept-node-remove\u2461"},{"id":"ref-for-concept-node-remove\u2462"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-node-remove"},
+"10e9aa8a": {"dfnID":"10e9aa8a","dfnText":"innerHTML","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-element-innerhtml"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-dom-element-innerhtml\u2460"}],"title":"1.2. API Summary"}],"url":"https://html.spec.whatwg.org/#dom-element-innerhtml"},
 "1243a891": {"dfnID":"1243a891","dfnText":"exist","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"},{"id":"ref-for-map-exists\u2464"},{"id":"ref-for-map-exists\u2465"},{"id":"ref-for-map-exists\u2466"},{"id":"ref-for-map-exists\u2467"},{"id":"ref-for-map-exists\u2468"},{"id":"ref-for-map-exists\u2460\u24ea"},{"id":"ref-for-map-exists\u2460\u2460"},{"id":"ref-for-map-exists\u2460\u2461"},{"id":"ref-for-map-exists\u2460\u2462"},{"id":"ref-for-map-exists\u2460\u2463"},{"id":"ref-for-map-exists\u2460\u2464"},{"id":"ref-for-map-exists\u2460\u2465"},{"id":"ref-for-map-exists\u2460\u2466"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
 "12d6b9a8": {"dfnID":"12d6b9a8","dfnText":"values","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-values"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
 "1a897bae": {"dfnID":"1a897bae","dfnText":"Get Trusted Type compliant string","external":true,"refSections":[{"refs":[{"id":"ref-for-abstract-opdef-get-trusted-type-compliant-string"},{"id":"ref-for-abstract-opdef-get-trusted-type-compliant-string\u2460"},{"id":"ref-for-abstract-opdef-get-trusted-type-compliant-string\u2461"}],"title":"2.1. Sanitizer API"}],"url":"https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string"},
@@ -2374,7 +2375,6 @@ let dfnPanelData = {
 "92b2d7da": {"dfnID":"92b2d7da","dfnText":"children","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-child"},{"id":"ref-for-concept-tree-child\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-tree-child"},
 "96c16e60": {"dfnID":"96c16e60","dfnText":"Node","external":true,"refSections":[{"refs":[{"id":"ref-for-node"}],"title":"1.2. API Summary"}],"url":"https://dom.spec.whatwg.org/#node"},
 "99c988d6": {"dfnID":"99c988d6","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-list-remove"},{"id":"ref-for-list-remove\u2460"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-remove"},
-"9c72363f": {"dfnID":"9c72363f","dfnText":"innerHTML","external":true,"refSections":[{"refs":[{"id":"ref-for-widl-Element-innerHTML"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-widl-Element-innerHTML\u2460"}],"title":"1.2. API Summary"}],"url":"https://dom.spec.whatwg.org/#widl-Element-innerHTML"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"},{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"},{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"2.3. The Configuration Dictionary"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "a0647283": {"dfnID":"a0647283","dfnText":"Comment","external":true,"refSections":[{"refs":[{"id":"ref-for-comment"},{"id":"ref-for-comment\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#comment"},
 "a32c65d4": {"dfnID":"a32c65d4","dfnText":"implements","external":true,"refSections":[{"refs":[{"id":"ref-for-implements"},{"id":"ref-for-implements\u2460"},{"id":"ref-for-implements\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://webidl.spec.whatwg.org/#implements"},
@@ -2922,7 +2922,7 @@ let refsData = {
 "https://dom.spec.whatwg.org/#parentnode": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"ParentNode","type":"interface","url":"https://dom.spec.whatwg.org/#parentnode"},
 "https://dom.spec.whatwg.org/#shadowroot": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"ShadowRoot","type":"interface","url":"https://dom.spec.whatwg.org/#shadowroot"},
 "https://dom.spec.whatwg.org/#text": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"Text","type":"interface","url":"https://dom.spec.whatwg.org/#text"},
-"https://dom.spec.whatwg.org/#widl-Element-innerHTML": {"export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"","status":"anchor-block","text":"innerHTML","type":"attribute","url":"https://dom.spec.whatwg.org/#widl-Element-innerHTML"},
+"https://html.spec.whatwg.org/#dom-element-innerhtml": {"export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"","status":"anchor-block","text":"innerHTML","type":"attribute","url":"https://html.spec.whatwg.org/#dom-element-innerhtml"},
 "https://html.spec.whatwg.org/#parse-html-from-a-string": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"","status":"anchor-block","text":"parse html from a string","type":"dfn","url":"https://html.spec.whatwg.org/#parse-html-from-a-string"},
 "https://html.spec.whatwg.org/#template-contents": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"","status":"anchor-block","text":"template contents","type":"dfn","url":"https://html.spec.whatwg.org/#template-contents"},
 "https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"CEReactions","type":"extended-attribute","url":"https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions"},
