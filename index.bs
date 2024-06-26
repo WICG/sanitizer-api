@@ -398,7 +398,8 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
          then [=remove an attribute|remove=] |attr|.
       1. If |child|'s [=Element/namespace=] [=string/is=] the
          [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
-         "`href`" and  |attr| [=contains a javascript: URL=],
+         "`href`" and  |attr|'s [=Attr/namespace=] [=string/is=] `null` or the
+         [=XLink namespace=] and |attr| [=contains a javascript: URL=],
          then [=remove an attribute|remove=] |attr|.
       1. If the [=animating URL attributes list=] [=SanitizerConfig/contains=]
          &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
@@ -828,6 +829,11 @@ navigations are unsafe, is as follows:
   [
     { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=SVG namespace=] },
     { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; [=XLink namespace=] }
+  ],
+  <br>
+ [
+    { "`name`" &rightarrow; "`base`", "`namespace`" &rightarrow; [=HTML namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
 ]&raquo;
