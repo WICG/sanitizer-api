@@ -363,6 +363,44 @@ element.setHTML("XXX<!-- Hello world! -->XXX", {sanitizer: config_comments});
 // <div>XXX<!-- Hello world! -->XXX</div>
 ```
 
+### Modifying Existing Configurations
+
+The `Sanitizer` object offers multiple methods to easily modify or tailor
+an existing configuration. The query methods (`get()` and `getUnsafe()`) can
+be used to retrieve a dictionary representation of a Sanitizer,
+for introspection, or for use with the Sanitizer constructor to create a new
+Sanitizer. Additionally, there are methods that directly manipulate the filter
+functionality of the Sanitizer.
+
+The following methods are offered on the Sanitizer object:
+
+- `allow(x, options)`
+  - `options` is an optional dictionary argument.
+    Supported keys are: `"attributes":` and `"removeAttributes":.`
+- `removeElement(x)`
+- `replaceWithChildren(x)`
+- `allowAttribute(x)`
+- `removeAttribute(x)`
+
+These correspond 1:1 to the keys in the configuration dictionary.
+
+Adding an element or attribute to any of the allow- or deny-lists will also
+remove that element or attribute from the other lists for its type. E.g.,
+calling `allow(x)` will also remove `x` from the removeElements and
+replaceWithChildrenElements lists.
+
+Any name can be given as either a string, or a dictionary with name or
+namespace, just as with the configuration dictionary.
+
+```js
+const s = new Sanitizer({ elements: ["div", "p", "b"] });
+s.element("span");
+s.removeElement("b");
+s.get();  // { elements: ["div", "p", "span"], removeElements: ["b"] }
+          // Really, all these entries will be dictionaries with name and
+          // namespace entries.
+```
+
 ### Configuration Errors
 
 The configuration allows expressing redundant or even contradictory options.
