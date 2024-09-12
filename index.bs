@@ -17,16 +17,16 @@ Indent: 2
 Work Status: exploring
 Boilerplate: omit conformance
 Markup Shorthands: css off, markdown on
-WPT Display: inline
-WPT Path Prefix: /sanitizer-api/
+</pre>
+<pre class="link-defaults">
+spec:html; type:attribute; text: innerHTML
+spec:dom; type:method; text: createDocumentFragment
+spec:html; type:dfn; text: template contents
 </pre>
 <pre class="anchors">
-text: innerHTML; type: attribute; for: Element; url: https://html.spec.whatwg.org/#dom-element-innerhtml
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
-text: createDocumentFragment; type: method; url: https://dom.spec.whatwg.org/#dom-document-createdocumentfragment
-text: template contents; type: dfn; url: https://html.spec.whatwg.org/#template-contents
-text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#parse-html-from-a-string
 text: internal slot; type:dfn; url: https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots
+text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#parse-html-from-a-string
 </pre>
 <pre class="biblio">
 {
@@ -94,7 +94,7 @@ configuration. The methods come in two by two flavours:
   script. That is, they should be safe from XSS. The "unsafe" methods will parse
   and filter whatever they're supposed to.
 * Context: Methods are defined on {{Element}} and {{ShadowRoot}} and will
-  replace these {{Node}}'s children, and are largely analogous to {{innerHTML}}.
+  replace these {{Node}}'s children, and are largely analogous to {{Element/innerHTML}}.
   There are also static methods on the {{Document}}, which parse an entire
   document are largely analogous to {{DOMParser}}.{{parseFromString()}}.
 
@@ -114,8 +114,8 @@ partial interface Element {
 };
 </pre>
 
-<div algorithm="DOM-Element-setHTMLUnsafe" export>
-{{Element}}'s <dfn for="DOM/Element">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+<div algorithm>
+{{Element}}'s <dfn for="Element" export>setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Element setHTMLUnsafe", and "script".
@@ -125,8 +125,8 @@ partial interface Element {
 
 </div>
 
-<div algorithm="DOM-Element-setHTML" export>
-{{Element}}'s <dfn for="DOM/Element">setHTML</dfn>(|html|, |options|) method steps are:
+<div algorithm>
+{{Element}}'s <dfn for="Element" export>setHTML</dfn>(|html|, |options|) method steps are:
 
 1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
    {{HTMLTemplateElement|template}}; otherwise [=this=].
@@ -143,8 +143,8 @@ partial interface ShadowRoot {
 
 These methods are mirrored on the {{ShadowRoot}}:
 
-<div algorithm="ShadowRoot-setHTMLUnsafe" export>
-{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+<div algorithm>
+{{ShadowRoot}}'s <dfn for="ShadowRoot" export>setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "ShadowRoot setHTMLUnsafe", and "script".
@@ -154,8 +154,8 @@ These methods are mirrored on the {{ShadowRoot}}:
 
 </div>
 
-<div algorithm="ShadowRoot-setHTML" export>
-{{ShadowRoot}}'s <dfn for="DOM/ShadowRoot">setHTML</dfn>(|html|, |options|)</dfn> method steps are:
+<div algorithm>
+{{ShadowRoot}}'s <dfn for="ShadowRoot" export>setHTML</dfn>(|html|, |options|)</dfn> method steps are:
 
 1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
    |html|, |options|, and true.
@@ -171,8 +171,8 @@ partial interface Document {
 };
 </pre>
 
-<div algorithm="parseHTMLUnsafe" export>
-The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+<div algorithm>
+The <dfn for="Document" export>parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Document parseHTMLUnsafe", and "script".
@@ -190,8 +190,8 @@ The <dfn for="DOM/Document">parseHTMLUnsafe</dfn>(|html|, |options|) method step
 </div>
 
 
-<div algorithm="parseHTML" export>
-The <dfn for="DOM/Document">parseHTML</dfn>(|html|, |options|) method steps are:
+<div algorithm>
+The <dfn for="Document" export>parseHTML</dfn>(|html|, |options|) method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
 
