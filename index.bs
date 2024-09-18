@@ -253,7 +253,6 @@ interface Sanitizer {
   undefined removeAttribute(SanitizerAttribute attribute);
   undefined setComment(boolean allow);
   undefined setDataAttributes(boolean allow);
-  undefined setOtherMarkup(boolean allow);
 
   // Remove markup that executes script. May modify multiple lists:
   undefined removeUnsafe();
@@ -264,8 +263,15 @@ ISSUE(238): Final naming TBD.
 
 ISSUE(240): "other markup" TBD.
 
+ISSUE: Can a missing dict value and a dict entry with an empty sequence be
+    treated differently?
+
 ISSUE: Should these be setter methods -- particularly the setXXX(boolean) --
     or setters or properties or somesuch?
+
+ISSUE: Should the modifier methods return a reference to [=this=], so that you
+    can 'chain' methods?
+    (e.g. `sanitizer.allowElement("a").allowElement("span")`).
 
 <div algorithm>
 The <dfn for="Sanitizer" export>constructor</dfn>(|config|)
@@ -355,13 +361,6 @@ The <dfn for="Sanitizer" export>setDataAttributes</dfn>(|allow|) method steps ar
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>setOtherMarkup</dfn>(|allow|) method steps are:
-
-1. Set [=this=]'s [=internal slot=]'s {{SanitizerConfig/otherMarkup}} to |allow|.
-
-</div>
-
-<div algorithm>
 The <dfn for="Sanitizer" export>removeUnsafe</dfn>() method steps are:
 
 1. Update [=this=]'s [=internal slot=] with the result of calling [=remove unsafe=]
@@ -402,10 +401,10 @@ dictionary SanitizerConfig {
 
   boolean comments;
   boolean dataAttributes;
-  boolean otherMarkup;
 };
 </pre>
 
+ISSUE: Sould members be required, or have declared defaults?
 
 # Algorithms # {#algorithms}
 
@@ -480,7 +479,7 @@ template contents). It consistes of these steps:
   1. else:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
-    1. If |config|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |config|["{{SanitizerConfig/elements}}"] does not [=SanitizerConfig/contain=] |elementName| and |config|["{{SanitizerConfig/otherMarkup}}"] is false:
+    1. If |config|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |config|["{{SanitizerConfig/elements}}"] is not [=list/empty=] and does not [=SanitizerConfig/contain=] |elementName|:
        1. [=/remove=] |child|.
     1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize core=] on |child| with |config| and
@@ -504,14 +503,13 @@ template contents). It consistes of these steps:
          1. Remove |attr| from |child|.
 
       1. If all of the following are false, then remove |attr| from |child|.
-         - |config|["{{SanitizerConfig/attributes}}"]
+         - |config|["{{SanitizerConfig/attributes}}"] [=list/exists=] and 
            [=SanitizerConfig/contains=] |attrName|
          - |config|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
            [=SanitizerConfig/contains=] |attrName|
          - "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             [=Attr/namespace=] is `null` and
             |config|["{{SanitizerConfig/dataAttributes}}"] is true
-         - |config|["{{SanitizerConfig/otherMarkup}}"]
       1. If |handle javascript navigation urls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
          [=navigating URL attributes list=], and if |attr|'s [=protocol=] is
          "`javascript:`":
@@ -563,7 +561,6 @@ To <dfn for="Sanitizer">set a config</dfn> |config| on a {{Sanitizer}} |sanitize
   1. Call |sanitizer|.{{Sanitizer/removeAttribute()|removeAttribute}}(|item|).
 1. Call |sanitizer|.{{Sanitizer/setComment()|setComment}}(|config|[{{SanitizerConfig/comments}}]).
 1. Call |sanitizer|.{{Sanitizer/setDataAttributes()|setDataAttributes}}(|config|[{{SanitizerConfig/dataAttributes}}]).
-1. Call |sanitizer|.{{Sanitizer/setOtherMarkup()|setOtherMarkup}}(|config|[{{SanitizerConfig/otherMarkup}}]).
 
 Note: Previous versions of this spec had elaborate definitions of how to
   canonicalize a config. This has now effectively been moved into the method
@@ -657,7 +654,6 @@ It is as follows:
   attributes: [],
   removeAttributes: [],
   comments: true,
-  otherMarkup: true,
 }
 ```
 
@@ -671,7 +667,6 @@ script-content, and nothing else. It is as follows:
   ],
   removeAttributes: [....],
   comments: true,
-  otherMarkup: true
 }
 ```
 
