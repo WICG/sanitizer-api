@@ -246,7 +246,7 @@ interface Sanitizer {
   SanitizerConfig get();
 
   // Modify a Sanitizer's lists and fields:
-  undefined allowElement(SanitizerElementNamespaceWithAttributes element);
+  undefined allowElement(SanitizerElementWithAttributes element);
   undefined removeElement(SanitizerElement element);
   undefined replaceWithChildrenElement(SanitizerElement element);
   undefined allowAttribute(SanitizerAttribute attribute);
@@ -295,11 +295,30 @@ The <dfn for="Sanitizer" export>get</dfn>() method steps are:
 The <dfn for="Sanitizer" export>allowElement</dfn>(|element|) method steps are:
 
 1. Let |name| be the result of [=canonicalize a sanitizer name=] |element| with [=HTML namespace=] as the default namespace.
-1. [=SanitizerConfig/Add=] |name| to [=this=]'s [=internal slot=]'s {{SanitizerConfig/elements}}.
-1. [=Merge attribute lists=] of |element| to [=this=]'s [=internal slot=]'s {{SanitizerConfig/elements}}.
+1. [=list/Remove=] |name| from [=this=]'s [=internal slot=]'s {{SanitizerConfig/elements}}.
+1. [=list/Append=] |name| to [=this=]'s [=internal slot=]'s {{SanitizerConfig/elements}}.
+1. [=list/iterate|For each=] |attr| in
+    |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}],
+    [=SanitizerConfig/add=] |attr| to [=this=]'s [=internal slot=]'s
+    {{SanitizerConfig/elements}}[|name|][{{SanitizerElementNamespaceWithAttributes/attributes}}].
+1. [=list/iterate|For each=] |attr| in
+    |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}],
+    [=SanitizerConfig/add=] |attr| to [=this=]'s [=internal slot=]'s
+    {{SanitizerConfig/elements}}[|name|][{{SanitizerElementNamespaceWithAttributes/removeAttributes}}].
 1. [=list/Remove=] |name| from [=this=]'s [=internal slot=]'s {{SanitizerConfig/removeElements}}.
 1. [=list/Remove=] |name| from [=this=]'s [=internal slot=]'s
    {{SanitizerConfig/replaceWithChildrenElements}}.
+
+NOTE: Handling of [=allowElement=] is a little more complicated than the other
+    methods, because the element allow list can have per-element allow- and
+    remove-attribute lists. We first remove the given element from the list
+    before then adding it, which has the effect of re-setting (rather than
+    merging or elsehow modifying) the per-element list to whatever is passed
+    in. In other words, the per-element allow- and remove-lists can only be
+    set as a whole.
+
+</div>
+
 
 </div>
 
@@ -588,23 +607,6 @@ To <dfn for="SanitizerConfig">add</dfn> a |name| to a |list|, where |name| is
 
 1. If |list| [=SanitizerConfig/contains=] |name|, then return.
 1. [=list/Append=] |name| to |list|.
-
-</div>
-
-<div algorithm>
-To <dfn for="SanitizerConfig">merge attribute lists</dfn> of an |element| to a
-|list|, run these steps:
-
-1. [=Assert=]: |element| is an {{SanitizerElementNamespaceWithAttributes}}.
-1. [=Assert=]: |list| [=SanitizerConfig/contains=] |element|.
-1. [=list/iterate|For each=] |attr| in
-    |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}],
-    [=SanitizerConfig/add=] |attr| to
-    |list|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}].
-1. [=list/iterate|For each=] |attr| in
-    |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}],
-    [=SanitizerConfig/add=] |attr| to
-    |list|[|element|][{{SanitizerElementNamespaceWithAttributes/removeAttributes}}].
 
 </div>
 
