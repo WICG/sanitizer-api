@@ -263,9 +263,6 @@ ISSUE(238): Final naming TBD.
 
 ISSUE(240): "other markup" TBD.
 
-ISSUE: Can a missing dict value and a dict entry with an empty sequence be
-    treated differently?
-
 ISSUE: Should these be setter methods -- particularly the setXXX(boolean) --
     or setters or properties or somesuch?
 
@@ -277,10 +274,8 @@ ISSUE: Should the modifier methods return a reference to [=this=], so that you
 The <dfn for="Sanitizer" export>constructor</dfn>(|config|)
 method steps are:
 
-1. [=Set a config|Set=] |config| on [=this=].
-
-Issue: This abandons all error handling, because setting a config will
-    just overwrite contradictory entries. Do we want this?
+1. Let |valid| be the return value of [=set a config|Set=] |config| on [=this=].
+1. If not |valid|, throw a {{TypeError}1. If not |valid|, throw a {{TypeError}}}
 
 </div>
 
@@ -580,10 +575,38 @@ To <dfn for="Sanitizer">set a config</dfn> |config| on a {{Sanitizer}} |sanitize
   1. Call |sanitizer|.{{Sanitizer/removeAttribute()|removeAttribute}}(|item|).
 1. Call |sanitizer|.{{Sanitizer/setComment()|setComment}}(|config|[{{SanitizerConfig/comments}}]).
 1. Call |sanitizer|.{{Sanitizer/setDataAttributes()|setDataAttributes}}(|config|[{{SanitizerConfig/dataAttributes}}]).
+1. Return whether all of the following are true:
+    - [=list/size=] of |config|[{{SanitizerConfig/elements}}] equals
+      [=list/size=] of [=this=]'s [=internal slot=]'s {{SanitizerConfig/elements}}.
+    - [=list/size=] of |config|[{{SanitizerConfig/removeElements}}] equals
+      [=list/size=] of [=this=]'s [=internal slot=]'s {{SanitizerConfig/removeElements}}.
+    - [=list/size=] of |config|[{{SanitizerConfig/replaceWithChildrenElements}}] equals
+      [=list/size=] of [=this=]'s [=internal slot=]'s {{SanitizerConfig/replaceWithChildrenElements}}.
+    - [=list/size=] of |config|[{{SanitizerConfig/attributes}}] equals
+      [=list/size=] of [=this=]'s [=internal slot=]'s {{SanitizerConfig/attributes}}.
+    - [=list/size=] of |config|[{{SanitizerConfig/removeAttributes}}] equals
+      [=list/size=] of [=this=]'s [=internal slot=]'s {{SanitizerConfig/removeAttributes}}.
+    - Either |config|[{{SanitizerConfig/elements}}] or
+      |config|[{{SanitizerConfig/removeElements}}] [=map/exist=],
+      or neither, but not both.
+    - Either |config|[{{SanitizerConfig/attributes}}] or
+      |config|[{{SanitizerConfig/removeAttributes}}] [=map/exist=],
+      or neither, but not both.
 
 Note: Previous versions of this spec had elaborate definitions of how to
   canonicalize a config. This has now effectively been moved into the method
   definitions.
+
+Note: This operation is defined in terms of the manipulation methods on the
+    {{Sanitizer}}. Those methods remove matching entries from other lists.
+    The size equality steps in the last step would then catch this.
+    For example:
+    `{ allow: ["div", "div"] }` would create a Sanitizer with one element in
+    the allow list. The final test would then return false, which would cause
+    the caller to throw an exception.
+
+Issue: This is still missing error checks for the per-element attribute lists
+    and syntax errors.
 
 </div>
 
