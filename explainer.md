@@ -381,6 +381,8 @@ The following methods are offered on the Sanitizer object:
 - `replaceWithChildren(x)`
 - `allowAttribute(x)`
 - `removeAttribute(x)`
+- `comments(bool)`
+- `dataAttributes(bool)`
 
 These correspond 1:1 to the keys in the configuration dictionary.
 
@@ -400,6 +402,23 @@ s.get();  // { elements: ["div", "p", "span"], removeElements: ["b"] }
           // Really, all these entries will be dictionaries with name and
           // namespace entries.
 ```
+
+If one wishes to modify the element-dependent attributes, then `allow` is
+the way to do this, with a dictionary as argument. This allows `"attributes"`
+and `"removeAttributes"` keys, like the configuration dictionary. These
+element-dependent attributes are set, meaning they overwrite any previously
+set values, rather than some sort of merger operation.
+
+```js
+const s = new Sanitizer();
+s.element({name: "div", attributes: ["id", "class"]});
+s.element({name: "div", attributes: ["style"]});
+// s now allows <div style="bla">, but will drop the id= from <div id="bla">
+```
+
+Since the configuration is mutable, passing around a pre-configured Sanitizer
+can be used to let other callers modify its configuration. The "safe" methods
+(`setHTML` and `parseHTML`) will still guarantee XSS safety.
 
 ### Configuration Errors
 
