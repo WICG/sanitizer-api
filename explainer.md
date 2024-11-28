@@ -378,11 +378,11 @@ The following methods are offered on the Sanitizer object:
   - `options` is an optional dictionary argument.
     Supported keys are: `"attributes":` and `"removeAttributes":.`
 - `removeElement(x)`
-- `replaceWithChildren(x)`
+- `replaceElementWithChildren(x)`
 - `allowAttribute(x)`
 - `removeAttribute(x)`
-- `comments(bool)`
-- `dataAttributes(bool)`
+- `setComments(bool)`
+- `setDataAttributes(bool)`
 
 These correspond 1:1 to the keys in the configuration dictionary.
 
