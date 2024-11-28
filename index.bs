@@ -222,8 +222,9 @@ The family of {{Element/setHTML()}}-like methods all accept an options
 dictionary. Right now, only one member of this dictionary is defined:
 
 <pre class=idl>
+enum SanitizerPresets { "default" };
 dictionary SetHTMLOptions {
-  (Sanitizer or SanitizerConfig) sanitizer = {};
+  (Sanitizer or SanitizerConfig or SanitizerPresets) sanitizer = "default";
 };
 </pre>
 
