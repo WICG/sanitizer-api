@@ -101,9 +101,10 @@ The Sanitizer API offers functionality to parse a string containing HTML into
 a DOM tree, and to filter the resulting tree according to a user-supplied
 configuration. The methods come in two by two flavours:
 
-* Safe and unsafe: The "safe" methods will not generate any markup that executes
-  script. That is, they should be safe from XSS. The "unsafe" methods will parse
-  and filter whatever they're supposed to.
+* <dfn>Safe and unsafe</dfn>: The "safe" methods will not generate any markup that
+  executes script. That is, they should be safe from XSS. The "unsafe" methods
+  will parse and filter whatever they're supposed to.
+  See also: [[#security-considerations]].
 * Context: Methods are defined on {{Element}} and {{ShadowRoot}} and will
   replace these {{Node}}'s children, and are largely analogous to {{Element/innerHTML}}.
   There are also static methods on the {{Document}}, which parse an entire
@@ -227,8 +228,10 @@ dictionary SetHTMLOptions {
 </pre>
 
 The {{Sanitizer}} configuration object encapsulates a filter configuration.
-The same configuration can be used with both safe or unsafe methods, where
-the safe methods perform an implicit {{removeUnsafe}} operation. The intent is
+The same configuration can be used with both <a lt="safe and unsafe">"safe"
+or "unsafe"</a> methods, where the "safe" methods perform an implicit
+{{removeUnsafe}} operation on the passed in configuration and have a default
+configuration when none is passed. The intent is
 that one (or a few) configurations will be built-up early on in a page's
 lifetime, and can then be used whenever needed. This allows implementations
 to pre-process configurations.
@@ -258,6 +261,9 @@ interface Sanitizer {
 };
 </pre>
 
+Note: {{Sanitizer}} will likely get an additional method:
+    <br>`[NewObject] static Sanitizer getDefault();`
+
 A {{Sanitizer}} has an associated <dfn for="Sanitizer">configuration</dfn>, a {{SanitizerConfig}}.
 
 <div algorithm>
@@ -283,7 +289,7 @@ to [=remove an element=] with |element| and [=this=]'s [=Sanitizer/configuration
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>replaceElementWithChildren</dfn>(|element|) method steps are to [=replace an element=] with |element| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" export>replaceElementWithChildren</dfn>(|element|) method steps are to [=replace an element with its children=] with |element| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
@@ -296,11 +302,11 @@ The <dfn for="Sanitizer" export>removeAttribute</dfn>(|attribute|) method steps 
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>setComments</dfn>(|allow|) method steps to [=allow comments=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" export>setComments</dfn>(|allow|) method steps to [=set comments=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>setDataAttributes</dfn>(|allow|) method steps are to [=allow data attributes=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" export>setDataAttributes</dfn>(|allow|) method steps are to [=set data attributes=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
@@ -371,14 +377,20 @@ To <dfn for="SanitizerConfig">get a sanitizer instance from options</dfn> for
 an options dictionary |options|, do:
 
 1. [=Assert=]: |options| is a [=dictionary=].
-1. If |options|["`sanitizer`"] doesn't [=map/exist=],
-   then return new {{Sanitizer}}().
+1. If |options|["`sanitizer`"] doesn't [=map/exist=], then:
+   1. Let |result| be a new {{Sanitizer}} instance.
+   1. Call [=set a config=] with an empty [=dictionary=] on |result|.
+   1. [=Assert=]: The return value is true.
+   1. Return |result|.
 1. [=Assert=]: |options|["`sanitizer`"] is either a {{Sanitizer}} instance
    or a [=dictionary=].
 1. If |options|["`sanitizer`"] is a {{Sanitizer}} instance:
    Then return  |options|["`sanitizer`"].
 1. [=Assert=]: |options|["`sanitizer`"] is a [=dictionary=].
-1. Return new {{Sanitizer}}(|options|["`sanitizer`"]).
+1. Let |result| be a new {{Sanitizer}} instance.
+1. Call [=set a config=] with |options|["`sanitizer`"].
+1. If [=set a config=] returned false, [=throw=] a {{TypeError}}.
+1. Otherwise, return |result|.
 
 </div>
 
@@ -390,15 +402,14 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
 
 1. Let |configuration| be the value of |sanitizer|'s [=Sanitizer/configuration=].
 1. If |safe| is true, then set |configuration| to the result of calling [=remove unsafe=] on |configuration|.
-1. Call [=sanitize core=] on |node|, |configuration|, and |safe| (as value for
-    handling javascript navigation urls).
+1. Call [=sanitize core=] on |node|, |configuration|, and with [=handleJavascriptNavigationUrls=] set to |safe|.
 
 </div>
 
-<div algorithm>
+<div algorithm="sanitize core">
 The <dfn>sanitize core</dfn> operation,
 using a {{ParentNode}} |node|, a {{SanitizerConfig}} |configuration|, and a
-[=boolean=] |handle javascript navigation urls|, iterates over the DOM tree
+[=boolean=] <var><dfn type=argument>handleJavascriptNavigationUrls</dfn></var>, iterates over the DOM tree
 beginning with |node|, and may recurse to handle some special cases (e.g.
 template contents). It consistes of these steps:
 
@@ -422,15 +433,15 @@ template contents). It consistes of these steps:
        1. [=/remove=] |child|.
     1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize core=] on |child| with |configuration| and
-          |handle javascript navigation urls|.
+          |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
     1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;
       1. Then call [=sanitize core=] on |child|'s [=template contents=] with
-          |configuration| and |handle javascript navigation urls|.
+          |configuration| and |handleJavascriptNavigationUrls|.
     1. If |child| is a [=shadow host=]:
       1. Then call [=sanitize core=] on |child|'s [=Element/shadow root=] with
-          |configuration| and |handle javascript navigation urls|.
+          |configuration| and |handleJavascriptNavigationUrls|.
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
@@ -449,7 +460,7 @@ template contents). It consistes of these steps:
          - "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             [=Attr/namespace=] is `null` and
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true
-      1. If |handle javascript navigation urls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
+      1. If |handleJavascriptNavigationUrls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
          [=navigating URL attributes list=], and if |attribute|'s [=protocol=] is
          "`javascript:`":
          1. Then remove |attribute| from |child|.
@@ -492,7 +503,7 @@ To <dfn for="Sanitizer">remove an element</dfn> |element| from a {{SanitizerConf
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">replace an element</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">replace an element with its children</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
 
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
 1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
@@ -520,14 +531,14 @@ To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a {{Sanitizer
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">allow comments</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">set comments</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
 
 1. Set |configuration|["{{SanitizerConfig/comments}}"] to |allow|.
 
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">allow data attributes</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">set data attributes</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
 
 1. Set |configuration|["{{SanitizerConfig/dataAttributes}}"] to |allow|.
 
@@ -568,13 +579,13 @@ To <dfn for="Sanitizer">set a config</dfn> |configuration| on a {{Sanitizer}} |s
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
   1. Call [=remove an element=] with |element| and |sanitizer|.
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
-  1. Call [=replace an element=] with |element| and |sanitizer|.
+  1. Call [=replace an element with its children=] with |element| and |sanitizer|.
 1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
   1. Call [=allow an attribute=] with |attribute| and |sanitizer|.
 1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
   1. Call [=Sanitizer/remove an attribute=] with |attribute| and |sanitizer|.
-1. Call [=allow comments=] with |configuration|["{{SanitizerConfig/comments}}"] and |sanitizer|.
-1. Call [=allow data attributes=] with |configuration|["{{SanitizerConfig/dataAttributes}}"] and |sanitizer|.
+1. Call [=set comments=] with |configuration|["{{SanitizerConfig/comments}}"] and |sanitizer|.
+1. Call [=set data attributes=] with |configuration|["{{SanitizerConfig/dataAttributes}}"] and |sanitizer|.
 1. Return whether all of the following are true:
     - [=list/size=] of |configuration|["{{SanitizerConfig/elements}}"] equals
       [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"].
@@ -711,11 +722,10 @@ It is as follows:
   removeElements: [],
   attributes: [],
   removeAttributes: [],
-  comments: true,
 }
 ```
 
-The <dfn>built-in  safe baseline config</dfn> is meant to block only
+The <dfn>built-in safe baseline config</dfn> is meant to block only
 script-content, and nothing else. It is as follows:
 ```
 {
@@ -724,13 +734,12 @@ script-content, and nothing else. It is as follows:
     { name: "script", namespace: "http://www.w3.org/2000/svg" }
   ],
   removeAttributes: [....],
-  comments: true,
 }
 ```
 
 <div>
 The <dfn>navigating URL attributes list</dfn>, for which "`javascript:`"
-navigations are unsafe, are as follows:
+navigations are "unsafe", are as follows:
 
 &laquo;[
   <br>
