@@ -1,0 +1,937 @@
+# Elements & attributes #
+
+This "mostly free-form" document lists elements + attributes in HTML (and
+referenced standards, SVG + MathML), and assigns them to one of several groups:
+
+- other
+- script-ish
+- frames
+- legacy
+- harmless
+
+# Elements #
+
+## Script-ish ##
+
+script
+name: script, namespace: http://www.w3.org/2000/svg
+
+## Frames ##
+
+iframe
+frame
+frameset
+noframes
+
+## Legacy ##
+
+applet
+object
+embed
+noembed
+layer
+nolayer
+
+## Harmless ##
+
+b
+div
+h1
+h2
+h3
+h4
+h5
+h6
+i
+p
+span
+a
+abbr
+acronym
+address
+area
+article
+aside
+audio
+bdi
+bdo
+big
+blockquote
+body
+br
+button
+canvas
+caption
+center
+cite
+code
+col
+colgroup
+data
+datalist
+dd
+del
+details
+dfn
+dir
+dialog
+dl
+dt
+em
+fieldset
+figcaption
+figure
+font
+footer
+form
+head
+header
+hgroup
+hr
+html
+img
+input
+ins
+kbd
+label
+legend
+li
+link
+listing
+main
+map
+mark
+marquee
+menu
+meter
+nav
+nobr
+noscript
+ol
+optgroup
+option
+output
+picture
+pre
+progress
+q
+rp
+rt
+ruby
+s
+samp
+search
+section
+select
+slot
+small
+source
+strike
+strong
+style
+sub
+summary
+sup
+table
+tbody
+td
+template
+textarea
+tfoot
+th
+thead
+time
+title
+tr
+track
+tt
+u
+ul
+var
+video
+wbr
+name: a, namespace: http://www.w3.org/2000/svg
+name: circle, namespace: http://www.w3.org/2000/svg
+name: clipPath, namespace: http://www.w3.org/2000/svg
+name: defs, namespace: http://www.w3.org/2000/svg
+name: desc, namespace: http://www.w3.org/2000/svg
+name: ellipse, namespace: http://www.w3.org/2000/svg
+name: feBlend, namespace: http://www.w3.org/2000/svg
+name: feColorMatrix, namespace: http://www.w3.org/2000/svg
+name: feComponentTransfer, namespace: http://www.w3.org/2000/svg
+name: feComposite, namespace: http://www.w3.org/2000/svg
+name: feConvolveMatrix, namespace: http://www.w3.org/2000/svg
+name: feDiffuseLighting, namespace: http://www.w3.org/2000/svg
+name: feDisplacementMap, namespace: http://www.w3.org/2000/svg
+name: feDistantLight, namespace: http://www.w3.org/2000/svg
+name: feFlood, namespace: http://www.w3.org/2000/svg
+name: feFuncA, namespace: http://www.w3.org/2000/svg
+name: feFuncB, namespace: http://www.w3.org/2000/svg
+name: feFuncG, namespace: http://www.w3.org/2000/svg
+name: feFuncR, namespace: http://www.w3.org/2000/svg
+name: feGaussianBlur, namespace: http://www.w3.org/2000/svg
+name: feImage, namespace: http://www.w3.org/2000/svg
+name: feMerge, namespace: http://www.w3.org/2000/svg
+name: feMergeNode, namespace: http://www.w3.org/2000/svg
+name: feMorphology, namespace: http://www.w3.org/2000/svg
+name: feOffset, namespace: http://www.w3.org/2000/svg
+name: fePointLight, namespace: http://www.w3.org/2000/svg
+name: feSpecularLighting, namespace: http://www.w3.org/2000/svg
+name: feSpotLight, namespace: http://www.w3.org/2000/svg
+name: feTile, namespace: http://www.w3.org/2000/svg
+name: feTurbulence, namespace: http://www.w3.org/2000/svg
+name: filter, namespace: http://www.w3.org/2000/svg
+name: g, namespace: http://www.w3.org/2000/svg
+name: image, namespace: http://www.w3.org/2000/svg
+name: line, namespace: http://www.w3.org/2000/svg
+name: linearGradient, namespace: http://www.w3.org/2000/svg
+name: marker, namespace: http://www.w3.org/2000/svg
+name: mask, namespace: http://www.w3.org/2000/svg
+name: metadata, namespace: http://www.w3.org/2000/svg
+name: mpath, namespace: http://www.w3.org/2000/svg
+name: path, namespace: http://www.w3.org/2000/svg
+name: pattern, namespace: http://www.w3.org/2000/svg
+name: polygon, namespace: http://www.w3.org/2000/svg
+name: polyline, namespace: http://www.w3.org/2000/svg
+name: radialGradient, namespace: http://www.w3.org/2000/svg
+name: rect, namespace: http://www.w3.org/2000/svg
+name: stop, namespace: http://www.w3.org/2000/svg
+name: svg, namespace: http://www.w3.org/2000/svg
+name: switch, namespace: http://www.w3.org/2000/svg
+name: symbol, namespace: http://www.w3.org/2000/svg
+name: text, namespace: http://www.w3.org/2000/svg
+name: textPath, namespace: http://www.w3.org/2000/svg
+name: title, namespace: http://www.w3.org/2000/svg
+name: tspan, namespace: http://www.w3.org/2000/svg
+name: view, namespace: http://www.w3.org/2000/svg
+name: math, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: menclose, namespace: http://www.w3.org/1998/Math/MathML
+name: merror, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mfenced, namespace: http://www.w3.org/1998/Math/MathML
+name: mfrac, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mglyph, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mmultiscripts, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mi, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mn, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mo "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mpadded "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mphantom, namespace: http://www.w3.org/1998/Math/MathML
+name: mroot, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mrow, namespace: http://www.w3.org/1998/Math/MathML
+name: ms, namespace: http://www.w3.org/1998/Math/MathML
+name: mspace, namespace: http://www.w3.org/1998/Math/MathML
+name: msqrt, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mstyle, namespace: http://www.w3.org/1998/Math/MathML
+name: msub, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: msup, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: msubsup, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mtable, namespace: http://www.w3.org/1998/Math/MathML
+name: mtd, namespace: http://www.w3.org/1998/Math/MathML
+name: mtr, namespace: http://www.w3.org/1998/Math/MathML
+name: mtext, namespace: http://www.w3.org/1998/Math/MathML
+name: mover, namespace: http://www.w3.org/1998/Math/MathML
+name: munder, namespace: http://www.w3.org/1998/Math/MathML
+name: munderover, namespace: http://www.w3.org/1998/Math/MathML
+
+## Other ##
+
+base
+basefont
+bgsound
+command
+fencedframe
+image
+keygen
+meta
+param
+permission
+plaintext
+rb
+rtc
+selectedcontent
+xmp
+name: annotation, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: annotation-xml, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: maction, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: malignmark, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: mprescripts, "namespace": "http://www.w3.org/1998/Math/MathML",
+name: semantics, namespace: http://www.w3.org/1998/Math/MathML
+name: none, namespace: http://www.w3.org/1998/Math/MathML
+name: animate, namespace: http://www.w3.org/2000/svg
+name: animateColor, namespace: http://www.w3.org/2000/svg
+name: animateMotion, namespace: http://www.w3.org/2000/svg
+name: animateTransform, namespace: http://www.w3.org/2000/svg
+name: set, namespace: http://www.w3.org/2000/svg
+name: feDropShadow, namespace: http://www.w3.org/2000/svg
+name: foreignObject, namespace: http://www.w3.org/2000/svg
+name: style, namespace: http://www.w3.org/2000/svg
+name: use, namespace: http://www.w3.org/2000/svg
+name: font, namespace: http://www.w3.org/2000/svg
+name: tref, namespace: http://www.w3.org/2000/svg
+name: glyph, namespace: http://www.w3.org/2000/svg
+name: glyphRef, namespace: http://www.w3.org/2000/svg
+
+# Attributes #
+
+## Script-ish ##
+
+onabort
+onafterprint
+onanimationstart
+onanimationiteration
+onanimationend
+onauxclick
+onbeforecopy
+onbeforecut
+onbeforeinput
+onbeforepaste
+onbeforeprint
+onbeforetoggle
+onbeforeunload
+onblur
+oncancel
+oncanplay
+oncanplaythrough
+onchange
+onclick
+onclose
+oncontentvisibilityautostatechange
+oncontextlost
+oncontextmenu
+oncontextrestored
+oncopy
+oncuechange
+oncut
+ondblclick
+ondismiss
+ondrag
+ondragend
+ondragenter
+ondragleave
+ondragover
+ondragstart
+ondrop
+ondurationchange
+onemptied
+onended
+onerror
+onfocus
+onfocusin
+onfocusout
+onformdata
+ongotpointercapture
+onhashchange
+oninput
+oninvalid
+onkeydown
+onkeypress
+onkeyup
+onlanguagechange
+onload
+onloadeddata
+onloadedmetadata
+onloadstart
+onlostpointercapture
+onmessage
+onmessageerror
+onmousedown
+onmouseenter
+onmouseleave
+onmousemove
+onmouseout
+onmouseover
+onmouseup
+onmousewheel
+onmove
+ononline
+onoffline
+onorientationchange
+onoverscroll
+onpagehide
+onpageshow
+onpaste
+onpause
+onplay
+onplaying
+onpointercancel
+onpointerdown
+onpointerenter
+onpointerleave
+onpointermove
+onpointerout
+onpointerover
+onpointerrawupdate
+onpointerup
+onpopstate
+onprogress
+onratechange
+onreset
+onresize
+onresolve
+onscroll
+onscrollend
+onsearch
+onsecuritypolicyviolation
+onseeked
+onseeking
+onselect
+onselectstart
+onselectionchange
+onshow
+onslotchange
+onscrollsnapchange
+onscrollsnapchanging
+onstalled
+onstorage
+onsuspend
+onsubmit
+ontimeupdate
+ontimezonechange
+ontoggle
+ontouchstart
+ontouchmove
+ontouchend
+ontouchcancel
+ontransitionend
+onunload
+onvalidationstatuschange
+onvolumechange
+onwaiting
+onwebkitanimationstart
+onwebkitanimationiteration
+onwebkitanimationend
+onwebkitfullscreenchange
+onwebkitfullscreenerror
+onwebkittransitionend
+onwheel
+
+## Other ##
+
+aria-actions
+aria-activedescendant
+aria-atomic
+aria-autocomplete
+aria-braillelabel
+aria-brailleroledescription
+aria-busy
+aria-checked
+aria-colcount
+aria-colindex
+aria-colindextext
+aria-colspan
+aria-controls
+aria-current
+aria-describedby
+aria-description
+aria-details
+aria-disabled
+aria-errormessage
+aria-expanded
+aria-flowto
+aria-haspopup
+aria-hidden
+aria-invalid
+aria-keyshortcuts
+aria-label
+aria-labelledby
+aria-labeledby
+aria-level
+aria-live
+aria-modal
+aria-multiline
+aria-multiselectable
+aria-orientation
+aria-owns
+aria-placeholder
+aria-posinset
+aria-pressed
+aria-readonly
+aria-relevant
+aria-required
+aria-roledescription
+aria-rowcount
+aria-rowindex
+aria-rowindextext
+aria-rowspan
+aria-selected
+aria-setsize
+aria-sort
+aria-valuemax
+aria-valuemin
+aria-valuenow
+aria-valuetext
+aria-virtualcontent
+abbr
+accept-charset
+accept
+accesskey
+action
+adauctionheaders
+align
+alink
+allow
+allowfullscreen
+allowpaymentrequest
+alt
+anchor
+archive
+as
+async
+attributionsrc
+autocapitalize
+autocomplete
+autocorrect
+autofocus
+autoplay
+axis
+background
+behavior
+bgcolor
+blocking
+border
+bordercolor
+browsingtopics
+capture
+cellpadding
+cellspacing
+char
+challenge
+charoff
+charset
+checked
+cite
+class
+classid
+clear
+closedby
+code
+codebase
+codetype
+color
+cols
+colspan
+command
+commandfor
+compact
+content
+contenteditable
+controls
+controlslist
+coords
+credentialless
+crossorigin
+csp
+data
+data-src
+datetime
+declare
+decoding
+default
+defer
+delegatesfocus
+dir
+direction
+dirname
+disabled
+disablepictureinpicture
+disableremoteplayback
+download
+draggable
+elementtiming
+enctype
+end
+enterkeyhint
+event
+exportparts
+face
+fetchpriority
+focusgroup
+for
+form
+formaction
+formenctype
+formmethod
+formnovalidate
+formtarget
+frame
+frameborder
+headers
+height
+hidden
+high
+href
+hreflang
+hreftranslate
+hspace
+http-equiv
+id
+imagesizes
+imagesrcset
+incremental
+inert
+inputmode
+integrity
+interestaction
+interesttarget
+is
+ismap
+itemprop
+keytype
+kind
+invisible
+label
+lang
+language
+latencyhint
+leftmargin
+link
+list
+loading
+longdesc
+loop
+low
+lowsrc
+manifest
+marginheight
+marginwidth
+max
+maxlength
+mayscript
+media
+method
+min
+minlength
+multiple
+muted
+name
+nohref
+nomodule
+nonce
+noresize
+noshade
+novalidate
+nowrap
+object
+open
+optimum
+parseparts
+part
+pattern
+placeholder
+playsinline
+ping
+policy
+popover
+popovertarget
+popovertargetaction
+poster
+preload
+property
+pseudo
+readonly
+referrerpolicy
+rel
+required
+rev
+reversed
+role
+rows
+rowspan
+rules
+sandbox
+scheme
+scope
+scrollamount
+scrolldelay
+scrolling
+select
+selected
+selectedcontentelement
+shadowroot
+shadowrootmode
+shadowrootclonable
+shadowrootdelegatesfocus
+shadowrootreferencetarget
+shadowrootserializable
+shape
+sharedstoragewritable
+size
+sizes
+slot
+span
+spellcheck
+src
+srcset
+srcdoc
+srclang
+standby
+start
+step
+style
+summary
+tabindex
+target
+text
+title
+topmargin
+translate
+truespeed
+preciselocation
+privatetoken
+type
+usemap
+valign
+value
+valuetype
+version
+vlink
+vspace
+virtualkeyboardpolicy
+webkitdirectory
+width
+wrap
+writingsuggestions
+accent
+accentunder
+columnspan
+definitionURL
+depth
+display
+displaystyle
+encoding
+form
+height
+largeop
+linethickness
+lspace
+mathbackground
+mathcolor
+mathsize
+mathvariant
+maxsize
+minsize
+movablelimits
+rowspan
+rspace
+scriptlevel
+stretchy
+symmetric
+voffset
+width
+accumulate
+additive
+alignment-baseline
+amplitude
+animate
+attributeName
+attributeType
+autofocus
+azimuth
+baseFrequency
+baseline-shift
+baseProfile
+begin
+bias
+buffered-rendering
+by
+calcMode
+clip
+clip-path
+clip-rule
+clipPathUnits
+color
+color-interpolation
+color-interpolation-filters
+color-rendering
+crossorigin
+cursor
+cx
+cy
+d
+decoding
+diffuseConstant
+direction
+display
+divisor
+dominant-baseline
+dur
+dx
+dy
+edgeMode
+elevation
+end
+exponent
+fill
+fill-opacity
+fill-rule
+filter
+filterUnits
+flood-color
+flood-opacity
+focusgroup
+font-family
+font-size
+font-size-adjust
+font-stretch
+font-style
+font-variant
+font-weight
+format
+from
+fx
+fy
+fr
+g1
+g2
+glyphRef
+gradientTransform
+gradientUnits
+height
+href
+image-rendering
+in
+in2
+intercept
+interestaction
+interesttarget
+k
+k1
+k2
+k3
+k4
+kernelMatrix
+kernelUnitLength
+keyPoints
+keySplines
+keyTimes
+lang
+lengthAdjust
+letter-spacing
+lighting-color
+limitingConeAngle
+local
+marker-end
+marker-mid
+marker-start
+markerHeight
+markerUnits
+markerWidth
+mask
+mask-type
+maskContentUnits
+maskUnits
+max
+media
+method
+min
+mode
+name
+numOctaves
+offset
+onactivate
+onbegin
+onend
+onfocusin
+onfocusout
+onrepeat
+opacity
+operator
+order
+orient
+origin
+overflow
+paint-order
+path
+pathLength
+patternContentUnits
+patternTransform
+patternUnits
+pointer-events
+points
+pointsAtX
+pointsAtY
+pointsAtZ
+preserveAlpha
+preserveAspectRatio
+primitiveUnits
+r
+radius
+refX
+refY
+repeatCount
+repeatDur
+requiredExtensions
+requiredFeatures
+restart
+result
+rotate
+rx
+ry
+scale
+seed
+shape-rendering
+slope
+spacing
+specularConstant
+specularExponent
+spreadMethod
+startOffset
+stdDeviation
+stitchTiles
+stop-color
+stop-opacity
+stroke
+stroke-dasharray
+stroke-dashoffset
+stroke-linecap
+stroke-linejoin
+stroke-miterlimit
+stroke-opacity
+stroke-width
+style
+surfaceScale
+systemLanguage
+tableValues
+target
+targetX
+targetY
+text-anchor
+text-decoration
+text-rendering
+textLength
+title
+to
+transform
+transform-origin
+type
+u1
+u2
+unicode-bidi
+values
+vector-effect
+version
+viewBox
+visibility
+width
+word-spacing
+writing-mode
+x
+x1
+x2
+xChannelSelector
+y
+y1
+y2
+yChannelSelector
+z
+zoomAndPan
+name: "actuate", "namespace": "http://www.w3.org/1999/xlink",
+name: "arcrole", "namespace": "http://www.w3.org/1999/xlink",
+name: "href", "namespace": "http://www.w3.org/1999/xlink",
+name: role, "namespace": "http://www.w3.org/1999/xlink",
+name: show, "namespace": "http://www.w3.org/1999/xlink",
+name: title, "namespace": "http://www.w3.org/1999/xlink",
+name: type, "namespace": "http://www.w3.org/1999/xlink",
+name: lang, "namespace": "http://www.w3.org/XML/1998/namespace",
+name: space, "namespace": "http://www.w3.org/XML/1998/namespace",
+name: xmlns, "namespace": "http://www.w3.org/2000/xmlns/",
