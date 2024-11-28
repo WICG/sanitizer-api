@@ -374,9 +374,10 @@ functionality of the Sanitizer.
 
 The following methods are offered on the Sanitizer object:
 
-- `allow(x, options)`
-  - `options` is an optional dictionary argument.
-    Supported keys are: `"attributes":` and `"removeAttributes":.`
+- `allowElement(x)`
+  - `x` can be a dictionary (similar to all other methods), but it also
+    supports additional keys to allow (`"attributes"`) or to remove attributes
+    ("removeAttributes"`) for this particular element type.
 - `removeElement(x)`
 - `replaceElementWithChildren(x)`
 - `allowAttribute(x)`
@@ -396,7 +397,7 @@ namespace, just as with the configuration dictionary.
 
 ```js
 const s = new Sanitizer({ elements: ["div", "p", "b"] });
-s.element("span");
+s.allowElement("span");
 s.removeElement("b");
 s.get();  // { elements: ["div", "p", "span"], removeElements: ["b"] }
           // Really, all these entries will be dictionaries with name and
@@ -411,8 +412,8 @@ set values, rather than some sort of merger operation.
 
 ```js
 const s = new Sanitizer();
-s.element({name: "div", attributes: ["id", "class"]});
-s.element({name: "div", attributes: ["style"]});
+s.allowElement({name: "div", attributes: ["id", "class"]});
+s.allowElement({name: "div", attributes: ["style"]});
 // s now allows <div style="bla">, but will drop the id= from <div id="bla">
 ```
 
