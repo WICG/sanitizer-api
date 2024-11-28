@@ -270,7 +270,7 @@ A {{Sanitizer}} has an associated <dfn for="Sanitizer">configuration</dfn>, a {{
 The <dfn for="Sanitizer" export>constructor</dfn>(|configuration|)
 method steps are:
 
-1. Let |valid| be the return value of [=set a config|setting=] |configuration| on [=this=].
+1. Let |valid| be the return value of [=set a configuration|setting=] |configuration| on [=this=].
 1. If |valid| is false, then throw a {{TypeError}}.
 
 </div>
@@ -379,8 +379,9 @@ an options dictionary |options|, do:
 1. [=Assert=]: |options| is a [=dictionary=].
 1. If |options|["`sanitizer`"] doesn't [=map/exist=], then:
    1. Let |result| be a new {{Sanitizer}} instance.
-   1. Call [=set a config=] with an empty [=dictionary=] on |result|.
-   1. [=Assert=]: The return value is true.
+   1. Let |setConfigurationResult| be the result of [=set a configuration=]
+      with an empty [=dictionary=] on |result|.
+   1. [=Assert=]: The |setConfigurationResult| is true.
    1. Return |result|.
 1. [=Assert=]: |options|["`sanitizer`"] is either a {{Sanitizer}} instance
    or a [=dictionary=].
@@ -388,8 +389,8 @@ an options dictionary |options|, do:
    Then return  |options|["`sanitizer`"].
 1. [=Assert=]: |options|["`sanitizer`"] is a [=dictionary=].
 1. Let |result| be a new {{Sanitizer}} instance.
-1. Call [=set a config=] with |options|["`sanitizer`"].
-1. If [=set a config=] returned false, [=throw=] a {{TypeError}}.
+1. Call [=set a configuration=] with |options|["`sanitizer`"].
+1. If [=set a configuration=] returned false, [=throw=] a {{TypeError}}.
 1. Otherwise, return |result|.
 
 </div>
@@ -409,7 +410,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
 <div algorithm="sanitize core">
 The <dfn>sanitize core</dfn> operation,
 using a {{ParentNode}} |node|, a {{SanitizerConfig}} |configuration|, and a
-[=boolean=] <var><dfn type=argument>handleJavascriptNavigationUrls</dfn></var>, iterates over the DOM tree
+[=boolean=] <var><dfn>handleJavascriptNavigationUrls</dfn></var>, iterates over the DOM tree
 beginning with |node|, and may recurse to handle some special cases (e.g.
 template contents). It consistes of these steps:
 
@@ -554,26 +555,25 @@ Note: While this algorithm is called [=remove unsafe=], we use
 
 To <dfn for="SanitizerConfig">remove unsafe</dfn> from a |configuration|, do this:
 
-1. [=Assert=]: The [=built-in safe baseline config=] has
+1. [=Assert=]: The [=built-in safe baseline configuration=] has
    {{SanitizerConfig/removeElements}} and {{SanitizerConfig/removeAttributes}}
    keys set, but not {{SanitizerConfig/elements}},
    {{SanitizerConfig/replaceWithChildrenElements}}, or
    {{SanitizerConfig/attributes}}.
 1. Let |result| be a copy of |configuration|.
 1. [=list/For each=] |element| in
-   [=built-in safe baseline config=][{{SanitizerConfig/removeElements}}]:
+   [=built-in safe baseline configuration=][{{SanitizerConfig/removeElements}}]:
     1. Call [=remove an element=] with |element| and |result|.
 1. [=list/For each=] |attribute| in
-   [=built-in safe baseline config=][{{SanitizerConfig/removeAttributes}}]:
+   [=built-in safe baseline configuration=][{{SanitizerConfig/removeAttributes}}]:
     1. Call [=Sanitizer/remove an attribute=] with |attribute| and |result|.
 1. Return |result|.
 
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">set a config</dfn> |configuration| on a {{Sanitizer}} |sanitizer|, do this:
+To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration| and a {{Sanitizer}} |sanitizer|:
 
-1. [=Assert=]: |configuration| is a [=dictionary=].
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
   1. Call [=allow an element=] with |element| and |sanitizer|.
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
@@ -704,17 +704,17 @@ regard to order:
 
 There are four builtins:
 
-* The [=built-in safe default config=],
-* the [=built-in unsafe default config=],
-* the [=built-in safe baseline config=], and
+* The [=built-in safe default configuration=],
+* the [=built-in unsafe default configuration=],
+* the [=built-in safe baseline configuration=], and
 * the [=navigating URL attributes list=].
 
-The <dfn>built-in safe default config</dfn> is the same as the [=built-in safe baseline config=].
+The <dfn>built-in safe default configuration</dfn> is the same as the [=built-in safe baseline configuration=].
 
 ISSUE(233): Determine if this actually holds.
 
 
-The <dfn>built-in unsafe default config</dfn> is meant to allow anything.
+The <dfn>built-in unsafe default configuration</dfn> is meant to allow anything.
 It is as follows:
 ```
 {
@@ -725,7 +725,7 @@ It is as follows:
 }
 ```
 
-The <dfn>built-in safe baseline config</dfn> is meant to block only
+The <dfn>built-in safe baseline configuration</dfn> is meant to block only
 script-content, and nothing else. It is as follows:
 ```
 {
