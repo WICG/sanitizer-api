@@ -121,7 +121,7 @@ markup, and an optional configuration.
 
 <pre class="idl extract">
 partial interface Element {
-  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLUnsafeOptions options = {});
   [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -148,7 +148,7 @@ partial interface Element {
 
 <pre class="idl extract">
 partial interface ShadowRoot {
-  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLUnsafeOptions options = {});
   [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -178,7 +178,7 @@ The {{Document}} interface gains two new methods which parse an entire {{Documen
 
 <pre class="idl extract">
 partial interface Document {
-  static Document parseHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
+  static Document parseHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLUnsafeOptions options = {});
   static Document parseHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -226,6 +226,9 @@ enum SanitizerPresets { "default" };
 dictionary SetHTMLOptions {
   (Sanitizer or SanitizerConfig or SanitizerPresets) sanitizer = "default";
 };
+dictionary SetHTMLUnsafeOptions {
+  (Sanitizer or SanitizerConfig or SanitizerPresets) sanitizer = {};
+};
 </pre>
 
 The {{Sanitizer}} configuration object encapsulates a filter configuration.
@@ -243,7 +246,7 @@ It can also be modified directly.
 <pre class=idl>
 [Exposed=(Window,Worker)]
 interface Sanitizer {
-  constructor(optional SanitizerConfig configuration = {});
+  constructor(optional (SanitizerConfig or SanitizerPresets) configuration = "default");
 
   // Query configuration:
   SanitizerConfig get();
@@ -259,9 +262,6 @@ interface Sanitizer {
 
   // Remove markup that executes script. May modify multiple lists:
   undefined removeUnsafe();
-
-  // Create a Sanitizer instance using the built-in defaults.
-  [NewObject] static Sanitizer getDefault();
 };
 </pre>
 
@@ -271,6 +271,9 @@ A {{Sanitizer}} has an associated <dfn for="Sanitizer">configuration</dfn>, a {{
 The <dfn for="Sanitizer" export>constructor</dfn>(|configuration|)
 method steps are:
 
+1. If |configuration| is a {{SanitizerPresets}} [=string=], then:
+    1. [=Assert=]: |configuration| [=is=] {{SanitizerPresets/default}}.
+    1. Let |configuration| be the [=built-in safe default configuration=].
 1. Let |valid| be the return value of [=set a configuration|setting=] |configuration| on [=this=].
 1. If |valid| is false, then throw a {{TypeError}}.
 
@@ -381,6 +384,9 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 <div algorithm>
 To <dfn for="SanitizerConfig">get a sanitizer instance from options</dfn> from
 a [=dictionary=] |options|, do:
+
+Note: This algorithm works for both {{SetHTMLOptions}} and
+    {{SetHTMLUnsafeOptions}}. They only differ in the defaults.
 
 1. Let |sanitizerSpec| be "{{SanitizerPresets/default}}".
 1. If |options|["{{SetHTMLOptions/sanitizer}}"] [=map/exists=], then:
