@@ -363,6 +363,64 @@ element.setHTML("XXX<!-- Hello world! -->XXX", {sanitizer: config_comments});
 // <div>XXX<!-- Hello world! -->XXX</div>
 ```
 
+### Modifying Existing Configurations
+
+The `Sanitizer` object offers multiple methods to easily modify or tailor
+an existing configuration. The query methods (`get()` and `getUnsafe()`) can
+be used to retrieve a dictionary representation of a Sanitizer,
+for introspection, or for use with the Sanitizer constructor to create a new
+Sanitizer. Additionally, there are methods that directly manipulate the filter
+functionality of the Sanitizer.
+
+The following methods are offered on the Sanitizer object:
+
+- `allowElement(x)`
+  - `x` can be a dictionary (similar to all other methods), but it also
+    supports additional keys to allow (`"attributes"`) or to remove attributes
+    ("removeAttributes"`) for this particular element type.
+- `removeElement(x)`
+- `replaceElementWithChildren(x)`
+- `allowAttribute(x)`
+- `removeAttribute(x)`
+- `setComments(bool)`
+- `setDataAttributes(bool)`
+
+These correspond 1:1 to the keys in the configuration dictionary.
+
+Adding an element or attribute to any of the allow- or deny-lists will also
+remove that element or attribute from the other lists for its type. E.g.,
+calling `allow(x)` will also remove `x` from the removeElements and
+replaceWithChildrenElements lists.
+
+Any name can be given as either a string, or a dictionary with name or
+namespace, just as with the configuration dictionary.
+
+```js
+const s = new Sanitizer({ elements: ["div", "p", "b"] });
+s.allowElement("span");
+s.removeElement("b");
+s.get();  // { elements: ["div", "p", "span"], removeElements: ["b"] }
+          // Really, all these entries will be dictionaries with name and
+          // namespace entries.
+```
+
+If one wishes to modify the element-dependent attributes, then `allow` is
+the way to do this, with a dictionary as argument. This allows `"attributes"`
+and `"removeAttributes"` keys, like the configuration dictionary. These
+element-dependent attributes are set, meaning they overwrite any previously
+set values, rather than some sort of merger operation.
+
+```js
+const s = new Sanitizer();
+s.allowElement({name: "div", attributes: ["id", "class"]});
+s.allowElement({name: "div", attributes: ["style"]});
+// s now allows <div style="bla">, but will drop the id= from <div id="bla">
+```
+
+Since the configuration is mutable, passing around a pre-configured Sanitizer
+can be used to let other callers modify its configuration. The "safe" methods
+(`setHTML` and `parseHTML`) will still guarantee XSS safety.
+
 ### Configuration Errors
 
 The configuration allows expressing redundant or even contradictory options.
