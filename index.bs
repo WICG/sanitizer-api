@@ -319,11 +319,6 @@ update [=this=]'s [=Sanitizer/configuration=] with the result of calling [=remov
 on [=this=]'s [=Sanitizer/configuration=].
 </div>
 
-<div algorithm>
-The <dfn for="Sanitizer" export>getDefault</dfn> method steps are to return the
-result of [=get a sanitizer instance from options=] with &laquo;[ "{{SetHTMLOptions/sanitizer}}" &rightarrow; "{{SanitizerPresets/default}}" ]&raquo;
-</div>
-
 ## The Configuration Dictionary ## {#config}
 
 <pre class=idl>
