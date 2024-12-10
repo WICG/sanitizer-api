@@ -273,7 +273,7 @@ method steps are:
 
 1. If |configuration| is a {{SanitizerPresets}} [=string=], then:
     1. [=Assert=]: |configuration| [=is=] {{SanitizerPresets/default}}.
-    1. Let |configuration| be the [=built-in safe default configuration=].
+    1. Set |configuration| to the [=built-in safe default configuration=].
 1. Let |valid| be the return value of [=set a configuration|setting=] |configuration| on [=this=].
 1. If |valid| is false, then throw a {{TypeError}}.
 
