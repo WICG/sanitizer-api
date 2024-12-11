@@ -385,12 +385,12 @@ Note: This algorithm works for both {{SetHTMLOptions}} and
 
 1. Let |sanitizerSpec| be "{{SanitizerPresets/default}}".
 1. If |options|["{{SetHTMLOptions/sanitizer}}"] [=map/exists=], then:
-   1. Let |sanitizerSpec| be |options|["{{SetHTMLOptions/sanitizer}}"]
+   1. Set |sanitizerSpec| to |options|["{{SetHTMLOptions/sanitizer}}"]
 1. [=Assert=]: |sanitizerSpec| is either a {{Sanitizer}} instance,
    a [=string=] which is a {{SanitizerPresets}} member, or a [=dictionary=].
 1. If |sanitizerSpec| is a [=string=]:
    1. [=Assert=]: |sanitizerSpec| [=is=] "{{SanitizerPresets/default}}"
-   1. Let |sanitizerSpec| be the [=built-in safe default configuration=].
+   1. Set |sanitizerSpec| to the [=built-in safe default configuration=].
 1. [=Assert=]: |sanitizerSpec| is either a {{Sanitizer}} instance,
    or a [=dictionary=].
 1. If |sanitizerSpec| is a [=dictionary=]:
@@ -398,7 +398,7 @@ Note: This algorithm works for both {{SetHTMLOptions}} and
    1. Let |setConfigurationResult| be the result of [=set a configuration=]
       with |sanitizerSpec| on |sanitizer|.
    1. If |setConfigurationResult| is false, [=throw=] a {{TypeError}}.
-   1. Let |sanitizerSpec| be |sanitizer|.
+   1. Set |sanitizerSpec| to |sanitizer|.
 1. [=Assert=]: |sanitizerSpec| is a {{Sanitizer}} instance.
 1. Return |sanitizerSpec|.
 
