@@ -14,6 +14,7 @@ referenced standards, SVG + MathML), and assigns them to one of several groups:
 ## Script-ish ##
 
 script
+noscript
 name: script, namespace: http://www.w3.org/2000/svg
 
 ## Frames ##
@@ -23,133 +24,395 @@ frame
 frameset
 noframes
 
-## Legacy ##
+## Non-Conforming features https://html.spec.whatwg.org/#non-conforming-features ##
 
 applet
+acronym
+bgsound
+keygen
 object
 embed
 noembed
+param
+plaintext
+rb
+rtc
+basefont
+big
+center
+nobr
+marquee
+strike
+tt
+font
+dir
+listing
+xmp
+
+### Probably should be non-conforming feature ###
+
 layer
 nolayer
 
+
 ## Harmless ##
 
-b
-div
+### Document element: https://html.spec.whatwg.org/#the-root-element ###
+
+html
+
+### Document metadata: https://html.spec.whatwg.org/#document-metadata ###
+
+head
+title
+link
+- href
+- crossorigin
+- rel
+- media
+- integrity
+- hreflang
+- type
+- referrerpolicy
+- sizes
+- imagesrcset
+- imagesizes
+- as
+- blocking
+- color
+- disabled
+- fetchpriority
+- title  // Is global, but has special semantics
+style
+- media
+- blocking
+- title  // Is global, but has special semantics.
+
+### Sections: https://html.spec.whatwg.org/#sections ###
+
+body
+- lots of on****
+article
+section
+nav
+aside
 h1
 h2
 h3
 h4
 h5
 h6
-i
-p
-span
-a
-abbr
-acronym
+hgroup
+header
+footer
 address
-area
-article
-aside
-audio
-bdi
-bdo
-big
+
+### Grouping Content: https://html.spec.whatwg.org/#grouping-content ###
+
+p
+hr
+pre
 blockquote
-body
-br
-button
-canvas
-caption
-center
-cite
-code
-col
-colgroup
-data
-datalist
-dd
-del
-details
-dfn
-dir
-dialog
+- cite
+ol
+- reversed
+- start
+- type
+ul
+menu
+li
+- value
 dl
 dt
-em
-fieldset
-figcaption
+dd
 figure
-font
-footer
-form
-head
-header
-hgroup
-hr
-html
-img
-input
-ins
-kbd
-label
-legend
-li
-link
-listing
+figcaption
 main
-map
-mark
-marquee
-menu
-meter
-nav
-nobr
-noscript
-ol
-optgroup
-option
-output
-picture
-pre
-progress
-q
-rp
-rt
-ruby
-s
-samp
 search
-section
-select
-slot
-small
-source
-strike
+div
+
+### Text-level Semantics: https://html.spec.whatwg.org/#text-level-semantics ###
+
+a
+- href
+- target
+- download
+- ping
+- rel
+- hreflang
+- type
+- referrerpolicy
+em
 strong
-style
-sub
-summary
-sup
-table
-tbody
-td
-template
-textarea
-tfoot
-th
-thead
+small
+s
+cite
+q
+dfn
+- title  // Is global, but has special semantics here.
+abbr
+- title  // Is global, but has special semantics here.
+ruby
+rt
+rp
+data
+- value
 time
-title
-tr
-track
-tt
-u
-ul
+- datetime
+code
 var
-video
+samp
+kbd
+sub
+sup
+i
+b
+u
+mark
+bdi
+- dir   // Is global, but has special semantics here.
+bdo
+- dir   // Is global, but has special semantics here.
+span
+br
 wbr
+
+### Links: https://html.spec.whatwg.org/#links ###
+
+### Edits: https://html.spec.whatwg.org/#edits ###
+
+ins
+- cite
+- datetime
+del
+- cite
+- datetime
+
+### Embedded content: https://html.spec.whatwg.org/#embedded-content ###
+
+picture
+source
+- type
+- media
+- src
+- srcset
+- sizes
+- width
+- height
+img
+- alt
+- src
+- srcset
+- sizes
+- crossorigin
+- usemap
+- ismap
+- width
+- height
+- referrerpolicy
+- decoding
+- loading
+- fetchpriority
+video
+- src
+- crossorigin
+- poster
+- preload
+- autoplay
+- playsinline
+- loop
+- muted
+- controls
+- width
+- height
+audio
+- src
+- crossorigin
+- preload
+- autoplay
+- loop
+- muted
+- controls
+track
+- kind
+- src
+- srclang
+- label
+- default
+map
+- name
+area
+- alt
+- coords
+- shape
+- href
+- target
+- download
+- ping
+- rel
+- referrerpolicy
+
+### Tabular Data https://html.spec.whatwg.org/#tables ###
+
+table
+caption
+colgroup
+- span
+col
+- span
+tbody
+thead
+tfoot
+tr
+td
+- colspan
+- rowspan
+- headers
+th
+- colspan
+- rowspan
+- headers
+- scope
+- abbr
+
+### Forms https://html.spec.whatwg.org/#forms ###
+
+form
+- accept-charset
+- action
+- autocomplete
+- enctype
+- method
+- name
+- novalidate
+- target
+- rel
+label
+- for
+input
+- accept
+- alpha
+- alt
+- autocomplete
+- checked
+- colorspace
+- dirname
+- disabled
+- form
+- formaction
+- formenctype
+- formmethod
+- formnovalidate
+- formtarget
+- height
+- list
+- max
+- maxlength
+- min
+- minlength
+- multiple
+- name
+- pattern
+- placeholder
+- popovertarget
+- popovertargetaction
+- readonly
+- required
+- size
+- src
+- step
+- type
+- value
+- width
+- title  // Is global, but has special semantics here.
+button
+- disabled
+- form
+- formaction
+- formenctype
+- formmethod
+- formnovalidate
+- formtarget
+- name
+- popovertarget
+- popovertagetaction
+- type
+- value
+select
+- autocomplete
+- disabled
+- form
+- multiple
+- name
+- required
+- size
+datalist
+optgroup
+- disabled
+- label
+option
+- disabled
+- label
+- selected
+- value
+textarea
+- autocomplete
+- cols
+- dirname
+- disabled
+- form
+- maxlength
+- minlength
+- name
+- placeholder
+- readonly
+- required
+- rows
+- wrap
+output
+- for
+- form
+- name
+progress
+- value
+- max
+meter
+- value
+- min
+- max
+- low
+- high
+- optimum
+fieldset
+- disabled
+- form
+- name
+legend
+
+### Interactive Elements https://html.spec.whatwg.org/#interactive-elements ###
+
+details
+- name
+- open
+summary
+dialog
+- open
+
+### Scripting ###
+
+template
+- shadowrootmode
+- shadowrootdelegatesfocus
+- shadowrootclonable
+- shadowrootserializable
+slot
+- name
+canvas
+- width
+- height
+
+### SVG + MathML ###
+
 name: a, namespace: http://www.w3.org/2000/svg
 name: circle, namespace: http://www.w3.org/2000/svg
 name: clipPath, namespace: http://www.w3.org/2000/svg
@@ -236,20 +499,20 @@ name: munderover, namespace: http://www.w3.org/1998/Math/MathML
 ## Other ##
 
 base
-basefont
-bgsound
+- href
+- target
+meta
+- name
+- http-quiv
+- content
+- charset
+- media
+
 command
 fencedframe
 image
-keygen
-meta
-param
 permission
-plaintext
-rb
-rtc
 selectedcontent
-xmp
 name: annotation, "namespace": "http://www.w3.org/1998/Math/MathML",
 name: annotation-xml, "namespace": "http://www.w3.org/1998/Math/MathML",
 name: maction, "namespace": "http://www.w3.org/1998/Math/MathML",
