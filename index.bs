@@ -121,7 +121,7 @@ markup, and an optional configuration.
 
 <pre class="idl extract">
 partial interface Element {
-  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLUnsafeOptions options = {});
   [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -148,7 +148,7 @@ partial interface Element {
 
 <pre class="idl extract">
 partial interface ShadowRoot {
-  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
+  [CEReactions] undefined setHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLUnsafeOptions options = {});
   [CEReactions] undefined setHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -178,7 +178,7 @@ The {{Document}} interface gains two new methods which parse an entire {{Documen
 
 <pre class="idl extract">
 partial interface Document {
-  static Document parseHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLOptions options = {});
+  static Document parseHTMLUnsafe((TrustedHTML or DOMString) html, optional SetHTMLUnsafeOptions options = {});
   static Document parseHTML(DOMString html, optional SetHTMLOptions options = {});
 };
 </pre>
@@ -222,8 +222,12 @@ The family of {{Element/setHTML()}}-like methods all accept an options
 dictionary. Right now, only one member of this dictionary is defined:
 
 <pre class=idl>
+enum SanitizerPresets { "default" };
 dictionary SetHTMLOptions {
-  (Sanitizer or SanitizerConfig) sanitizer = {};
+  (Sanitizer or SanitizerConfig or SanitizerPresets) sanitizer = "default";
+};
+dictionary SetHTMLUnsafeOptions {
+  (Sanitizer or SanitizerConfig or SanitizerPresets) sanitizer = {};
 };
 </pre>
 
@@ -242,7 +246,7 @@ It can also be modified directly.
 <pre class=idl>
 [Exposed=(Window,Worker)]
 interface Sanitizer {
-  constructor(optional SanitizerConfig configuration = {});
+  constructor(optional (SanitizerConfig or SanitizerPresets) configuration = "default");
 
   // Query configuration:
   SanitizerConfig get();
@@ -261,15 +265,15 @@ interface Sanitizer {
 };
 </pre>
 
-Note: {{Sanitizer}} will likely get an additional method:
-    <br>`[NewObject] static Sanitizer getDefault();`
-
 A {{Sanitizer}} has an associated <dfn for="Sanitizer">configuration</dfn>, a {{SanitizerConfig}}.
 
 <div algorithm>
 The <dfn for="Sanitizer" export>constructor</dfn>(|configuration|)
 method steps are:
 
+1. If |configuration| is a {{SanitizerPresets}} [=string=], then:
+    1. [=Assert=]: |configuration| [=is=] {{SanitizerPresets/default}}.
+    1. Set |configuration| to the [=built-in safe default configuration=].
 1. Let |valid| be the return value of [=set a configuration|setting=] |configuration| on [=this=].
 1. If |valid| is false, then throw a {{TypeError}}.
 
@@ -373,25 +377,30 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 </div>
 
 <div algorithm>
-To <dfn for="SanitizerConfig">get a sanitizer instance from options</dfn> for
-an options dictionary |options|, do:
+To <dfn for="SanitizerConfig">get a sanitizer instance from options</dfn> from
+a [=dictionary=] |options|, do:
 
-1. [=Assert=]: |options| is a [=dictionary=].
-1. If |options|["`sanitizer`"] doesn't [=map/exist=], then:
-   1. Let |result| be a new {{Sanitizer}} instance.
-   1. Let |setConfigurationResult| be the result of [=set a configuration=]
-      with an empty [=dictionary=] on |result|.
-   1. [=Assert=]: The |setConfigurationResult| is true.
-   1. Return |result|.
-1. [=Assert=]: |options|["`sanitizer`"] is either a {{Sanitizer}} instance
+Note: This algorithm works for both {{SetHTMLOptions}} and
+    {{SetHTMLUnsafeOptions}}. They only differ in the defaults.
+
+1. Let |sanitizerSpec| be "{{SanitizerPresets/default}}".
+1. If |options|["{{SetHTMLOptions/sanitizer}}"] [=map/exists=], then:
+   1. Set |sanitizerSpec| to |options|["{{SetHTMLOptions/sanitizer}}"]
+1. [=Assert=]: |sanitizerSpec| is either a {{Sanitizer}} instance,
+   a [=string=] which is a {{SanitizerPresets}} member, or a [=dictionary=].
+1. If |sanitizerSpec| is a [=string=]:
+   1. [=Assert=]: |sanitizerSpec| [=is=] "{{SanitizerPresets/default}}"
+   1. Set |sanitizerSpec| to the [=built-in safe default configuration=].
+1. [=Assert=]: |sanitizerSpec| is either a {{Sanitizer}} instance,
    or a [=dictionary=].
-1. If |options|["`sanitizer`"] is a {{Sanitizer}} instance:
-   Then return  |options|["`sanitizer`"].
-1. [=Assert=]: |options|["`sanitizer`"] is a [=dictionary=].
-1. Let |result| be a new {{Sanitizer}} instance.
-1. Call [=set a configuration=] with |options|["`sanitizer`"].
-1. If [=set a configuration=] returned false, [=throw=] a {{TypeError}}.
-1. Otherwise, return |result|.
+1. If |sanitizerSpec| is a [=dictionary=]:
+   1. Let |sanitizer| be a new {{Sanitizer}} instance.
+   1. Let |setConfigurationResult| be the result of [=set a configuration=]
+      with |sanitizerSpec| on |sanitizer|.
+   1. If |setConfigurationResult| is false, [=throw=] a {{TypeError}}.
+   1. Set |sanitizerSpec| to |sanitizer|.
+1. [=Assert=]: |sanitizerSpec| is a {{Sanitizer}} instance.
+1. Return |sanitizerSpec|.
 
 </div>
 
@@ -462,7 +471,7 @@ template contents). It consistes of these steps:
             [=Attr/namespace=] is `null` and
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true
       1. If |handleJavascriptNavigationUrls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
-         [=navigating URL attributes list=], and if |attribute|'s [=protocol=] is
+         [=built-in navigating URL attributes list=], and if |attribute|'s [=protocol=] is
          "`javascript:`":
          1. Then remove |attribute| from |child|.
 
@@ -702,26 +711,17 @@ regard to order:
 
 ## Defaults ## {#sanitization-defaults}
 
-There are four builtins:
+There are three builtins:
 
 * The [=built-in safe default configuration=],
-* the [=built-in unsafe default configuration=],
 * the [=built-in safe baseline configuration=], and
-* the [=navigating URL attributes list=].
+* the [=built-in navigating URL attributes list=].
 
-The <dfn>built-in safe default configuration</dfn> is the same as the [=built-in safe baseline configuration=].
-
-ISSUE(233): Determine if this actually holds.
-
-
-The <dfn>built-in unsafe default configuration</dfn> is meant to allow anything.
-It is as follows:
+The <dfn>built-in safe default configuration</dfn> is as follows:
 ```
 {
-  allow: [],
-  removeElements: [],
-  attributes: [],
-  removeAttributes: [],
+  elements: [ ... ],
+  attributes: [ ... ],
 }
 ```
 
@@ -738,7 +738,7 @@ script-content, and nothing else. It is as follows:
 ```
 
 <div>
-The <dfn>navigating URL attributes list</dfn>, for which "`javascript:`"
+The <dfn>built-in navigating URL attributes list</dfn>, for which "`javascript:`"
 navigations are "unsafe", are as follows:
 
 &laquo;[
