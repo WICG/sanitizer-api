@@ -6,7 +6,7 @@ referenced standards, SVG + MathML), and assigns them to one of several groups:
 - other
 - script-ish
 - frames
-- legacy
+- legacy / non-conforming
 - harmless
 
 # Elements #
@@ -23,6 +23,7 @@ iframe
 frame
 frameset
 noframes
+fencedframe
 
 ## Non-Conforming features https://html.spec.whatwg.org/#non-conforming-features ##
 
@@ -91,7 +92,6 @@ style
 ### Sections: https://html.spec.whatwg.org/#sections ###
 
 body
-- lots of on****
 article
 section
 nav
@@ -176,8 +176,6 @@ bdo
 span
 br
 wbr
-
-### Links: https://html.spec.whatwg.org/#links ###
 
 ### Edits: https://html.spec.whatwg.org/#edits ###
 
@@ -398,7 +396,7 @@ summary
 dialog
 - open
 
-### Scripting ###
+### Scripting https://html.spec.whatwg.org/#scripting ###
 
 template
 - shadowrootmode
@@ -509,7 +507,6 @@ meta
 - media
 
 command
-fencedframe
 image
 permission
 selectedcontent
@@ -538,19 +535,12 @@ name: glyphRef, namespace: http://www.w3.org/2000/svg
 
 ## Script-ish ##
 
-onabort
-onafterprint
-onanimationstart
-onanimationiteration
-onanimationend
+### Script-ish HTML global attributes https://html.spec.whatwg.org/#global-attributes ###
+
 onauxclick
-onbeforecopy
-onbeforecut
 onbeforeinput
-onbeforepaste
-onbeforeprint
+onbeforematch
 onbeforetoggle
-onbeforeunload
 onblur
 oncancel
 oncanplay
@@ -558,7 +548,6 @@ oncanplaythrough
 onchange
 onclick
 onclose
-oncontentvisibilityautostatechange
 oncontextlost
 oncontextmenu
 oncontextrestored
@@ -566,7 +555,6 @@ oncopy
 oncuechange
 oncut
 ondblclick
-ondismiss
 ondrag
 ondragend
 ondragenter
@@ -579,24 +567,16 @@ onemptied
 onended
 onerror
 onfocus
-onfocusin
-onfocusout
 onformdata
-ongotpointercapture
-onhashchange
 oninput
 oninvalid
 onkeydown
 onkeypress
 onkeyup
-onlanguagechange
 onload
 onloadeddata
 onloadedmetadata
 onloadstart
-onlostpointercapture
-onmessage
-onmessageerror
 onmousedown
 onmouseenter
 onmouseleave
@@ -604,18 +584,84 @@ onmousemove
 onmouseout
 onmouseover
 onmouseup
-onmousewheel
-onmove
-ononline
-onoffline
-onorientationchange
-onoverscroll
-onpagehide
-onpageshow
 onpaste
 onpause
 onplay
 onplaying
+onprogress
+onratechange
+onreset
+onresize
+onscroll
+onscrollend
+onsecuritypolicyviolation
+onseeked
+onseeking
+onselect
+onslotchange
+onstalled
+onsubmit
+onsuspend
+ontimeupdate
+ontoggle
+onvolumechange
+onwaiting
+onwheel
+
+### body element https://html.spec.whatwg.org/#the-body-element ###
+
+onafterprint
+onbeforeprint
+onbeforeunload
+onhashchange
+onlanguagechange
+onmessage
+onmessageerror
+onoffline
+ononline
+onpageswap
+onpagehide
+onpagereveal
+onpageshow
+onpopstate
+onrejectionhandled
+onstorage
+onunhandledrejection
+onunload
+
+###
+https://html.spec.whatwg.org/#event-handlers-on-elements,-document-objects,-and-window-objects
+###
+
+onwebkitanimationstart
+onwebkitanimationiteration
+onwebkitanimationend
+onwebkittransitionend
+onwebkittransitionend
+onwebkittransitionend
+onreadystatechange
+onvisibilitychange
+
+### other event handlers
+
+onabort
+onanimationstart
+onanimationiteration
+onanimationend
+onbeforecopy
+onbeforecut
+onbeforepaste
+oncontentvisibilityautostatechange
+ondismiss
+onfocusin
+onfocusout
+ongotpointercapture
+onhashchange
+onlostpointercapture
+onmousewheel
+onmove
+onorientationchange
+onoverscroll
 onpointercancel
 onpointerdown
 onpointerenter
@@ -625,79 +671,49 @@ onpointerout
 onpointerover
 onpointerrawupdate
 onpointerup
-onpopstate
-onprogress
-onratechange
-onreset
-onresize
 onresolve
-onscroll
-onscrollend
 onsearch
-onsecuritypolicyviolation
-onseeked
-onseeking
-onselect
 onselectstart
 onselectionchange
 onshow
-onslotchange
 onscrollsnapchange
 onscrollsnapchanging
-onstalled
-onstorage
-onsuspend
-onsubmit
-ontimeupdate
 ontimezonechange
-ontoggle
 ontouchstart
 ontouchmove
 ontouchend
 ontouchcancel
 ontransitionend
-onunload
 onvalidationstatuschange
-onvolumechange
-onwaiting
-onwebkitanimationstart
-onwebkitanimationiteration
-onwebkitanimationend
 onwebkitfullscreenchange
 onwebkitfullscreenerror
-onwebkittransitionend
-onwheel
 
-## Other ##
+## ARIA https://www.w3.org/TR/wai-aria-1.2/#state_prop_def ##
 
-aria-actions
 aria-activedescendant
 aria-atomic
 aria-autocomplete
-aria-braillelabel
-aria-brailleroledescription
 aria-busy
 aria-checked
 aria-colcount
 aria-colindex
-aria-colindextext
 aria-colspan
 aria-controls
 aria-current
 aria-describedby
-aria-description
 aria-details
 aria-disabled
+aria-dropeffect
 aria-errormessage
 aria-expanded
 aria-flowto
+aria-grabbed
 aria-haspopup
 aria-hidden
 aria-invalid
 aria-keyshortcuts
 aria-label
 aria-labelledby
-aria-labeledby
 aria-level
 aria-live
 aria-modal
@@ -714,7 +730,6 @@ aria-required
 aria-roledescription
 aria-rowcount
 aria-rowindex
-aria-rowindextext
 aria-rowspan
 aria-selected
 aria-setsize
@@ -723,34 +738,65 @@ aria-valuemax
 aria-valuemin
 aria-valuenow
 aria-valuetext
+
+## ARIA 1.3 draft additions https://w3c.github.io/aria/ ###
+
+aria-braillelabel
+aria-brailleroledescription
+aria-colindextext
+aria-rowindextext
+
+## ARIA: no idea ##
+
+aria-actions
+aria-labeledby
 aria-virtualcontent
-abbr
-accept-charset
-accept
+
+### HTML global attributes ###
+
 accesskey
-action
+autocapitalize
+autocorrect
+autofocus
+contenteditable
+dir
+draggable
+enterkeyhint
+hidden
+inert
+inputmode
+is
+itemid
+itemprop
+itemref
+itemscope
+itemtype
+lang
+nonce
+popover
+spellcheck
+style
+tabindex
+title
+translate
+writingsuggestions
+
+## Other ##
+
 adauctionheaders
 align
 alink
 allow
 allowfullscreen
 allowpaymentrequest
-alt
 anchor
 archive
-as
 async
 attributionsrc
-autocapitalize
-autocomplete
-autocorrect
-autofocus
-autoplay
 axis
 background
 behavior
 bgcolor
-blocking
 border
 bordercolor
 browsingtopics
@@ -761,8 +807,6 @@ char
 challenge
 charoff
 charset
-checked
-cite
 class
 classid
 clear
@@ -770,140 +814,66 @@ closedby
 code
 codebase
 codetype
-color
-cols
-colspan
 command
 commandfor
 compact
 content
-contenteditable
-controls
 controlslist
 coords
 credentialless
-crossorigin
 csp
 data
 data-src
-datetime
 declare
-decoding
-default
 defer
 delegatesfocus
-dir
 direction
-dirname
-disabled
 disablepictureinpicture
 disableremoteplayback
-download
-draggable
 elementtiming
-enctype
 end
-enterkeyhint
 event
 exportparts
 face
-fetchpriority
-focusgroup
-for
-form
-formaction
-formenctype
-formmethod
-formnovalidate
-formtarget
+focusgroupp
 frame
 frameborder
-headers
-height
-hidden
-high
-href
-hreflang
 hreftranslate
 hspace
 http-equiv
 id
-imagesizes
-imagesrcset
 incremental
-inert
-inputmode
-integrity
 interestaction
 interesttarget
-is
-ismap
 itemprop
 keytype
-kind
 invisible
-label
-lang
 language
 latencyhint
 leftmargin
 link
-list
-loading
 longdesc
-loop
-low
 lowsrc
 manifest
 marginheight
 marginwidth
-max
-maxlength
 mayscript
-media
-method
-min
-minlength
-multiple
-muted
-name
 nohref
 nomodule
-nonce
 noresize
 noshade
-novalidate
 nowrap
-object
-open
-optimum
+objectp
 parseparts
 part
-pattern
-placeholder
-playsinline
-ping
 policy
-popover
-popovertarget
-popovertargetaction
-poster
-preload
 property
 pseudo
-readonly
-referrerpolicy
-rel
-required
 rev
-reversed
 role
-rows
-rowspan
 rules
 sandbox
 scheme
-scope
 scrollamount
 scrolldelay
 scrolling
@@ -911,49 +881,25 @@ select
 selected
 selectedcontentelement
 shadowroot
-shadowrootmode
-shadowrootclonable
-shadowrootdelegatesfocus
 shadowrootreferencetarget
-shadowrootserializable
-shape
 sharedstoragewritable
-size
-sizes
 slot
-span
-spellcheck
-src
-srcset
 srcdoc
 srclang
 standby
-start
-step
-style
 summary
-tabindex
-target
 text
-title
 topmargin
-translate
 truespeed
 preciselocation
 privatetoken
-type
-usemap
 valign
-value
 valuetype
 version
 vlink
 vspace
 virtualkeyboardpolicy
 webkitdirectory
-width
-wrap
-writingsuggestions
 accent
 accentunder
 columnspan
@@ -963,7 +909,6 @@ display
 displaystyle
 encoding
 form
-height
 largeop
 linethickness
 lspace
