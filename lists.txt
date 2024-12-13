@@ -738,6 +738,7 @@ aria-valuemax
 aria-valuemin
 aria-valuenow
 aria-valuetext
+aria-labeledby // See note "labeledby" in spec.
 
 ## ARIA 1.3 draft additions https://w3c.github.io/aria/ ###
 
@@ -746,11 +747,10 @@ aria-brailleroledescription
 aria-colindextext
 aria-rowindextext
 
-## ARIA: no idea ##
+## ARIA: in development ##
 
-aria-actions
-aria-labeledby
-aria-virtualcontent
+aria-actions // https://github.com/w3c/aria/pull/1805
+aria-virtualcontent  // https://github.com/WICG/accessible-loading-and-searching-of-content/blob/main/explainer.md
 
 ### HTML global attributes ###
 
