@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Generate safe-default-configuration.json
+        run: python builtins/safe-default-configuration.py --input builtins/safe-default-configuration.txt --out builtins/safe-default-configuration.json
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages

@@ -1,0 +1,171 @@
+// Document element
+// https://html.spec.whatwg.org/#the-root-element
+
+html
+
+// Document metadata
+// https://html.spec.whatwg.org/#document-metadata
+
+head
+title
+
+// meta and link, purposely omitted
+
+// Sections
+// https://html.spec.whatwg.org/#sections
+
+body
+article
+section
+nav
+aside
+h1
+h2
+h3
+h4
+h5
+h6
+hgroup
+header
+footer
+address
+
+// Grouping Content
+// https://html.spec.whatwg.org/#grouping-content
+
+p
+hr
+pre
+blockquote
+- cite
+ol
+- reversed
+- start
+- type
+ul
+menu
+li
+- value
+dl
+dt
+dd
+figure
+figcaption
+main
+search
+div
+
+// Text-level Semantics
+// https://html.spec.whatwg.org/#text-level-semantics ###
+
+a
+- href
+- rel
+- hreflang
+- type
+// Purposely omitted:
+// - target
+// - download
+// - referrerpolicy
+// - ping
+em
+strong
+small
+s
+cite
+q
+dfn
+- title
+abbr
+- title
+ruby
+rt
+rp
+data
+- value
+time
+- datetime
+code
+var
+samp
+kbd
+sub
+sup
+i
+b
+u
+mark
+bdi
+- dir
+bdo
+- dir
+span
+br
+wbr
+
+// Edits
+// https://html.spec.whatwg.org/#edits
+
+ins
+- cite
+- datetime
+del
+- cite
+- datetime
+
+// Embedded content
+// https://html.spec.whatwg.org/#embedded-content
+//
+// Purposely omitted.
+
+// Tabular Data
+// https://html.spec.whatwg.org/#tables
+
+table
+caption
+colgroup
+- span
+col
+- span
+tbody
+thead
+tfoot
+tr
+td
+- colspan
+- rowspan
+- headers
+th
+- colspan
+- rowspan
+- headers
+- scope
+- abbr
+
+// Forms
+// https://html.spec.whatwg.org/#forms
+//
+// Purposely omitted
+
+// Interactive Elements
+// https://html.spec.whatwg.org/#interactive-elements
+//
+// Purposly omitted.
+
+// Scripting
+// https://html.spec.whatwg.org/#scripting
+//
+// Purposely omitted.
+
+// SVG: TBD
+// MathML: TDB
+
+// HTML global attributes
+//
+// Selection of attributes. Most are purposely omitted.
+
+[HTML Global]
+- dir
+- lang
+- title
+
