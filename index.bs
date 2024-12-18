@@ -759,24 +759,19 @@ There are four builtins:
 * the [=built-in animating URL attributes list=].
 
 The <dfn>built-in safe default configuration</dfn> is as follows:
-```
-{
-  elements: [ ... ],
-  attributes: [ ... ],
-}
-```
+
+<pre class="include-code">
+path: builtins/safe-default-configuration.json
+highlight: json
+</pre>
 
 The <dfn>built-in safe baseline configuration</dfn> is meant to block only
 script-content, and nothing else. It is as follows:
-```
-{
-  removeElements: [
-    { name: "script", namespace: "http://www.w3.org/1999/xhtml" },
-    { name: "script", namespace: "http://www.w3.org/2000/svg" }
-  ],
-  removeAttributes: [....],
-}
-```
+
+<pre class="include-code">
+path: builtins/safe-baseline-configuration.json
+highlight: json
+</pre>
 
 <div>
 The <dfn>built-in navigating URL attributes list</dfn>, for which "`javascript:`"
