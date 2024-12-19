@@ -754,22 +754,17 @@ navigations are "unsafe", are as follows:
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; [=HTML namespace=] },
-    { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
-  ],
-  <br>
-  [
     { "`name`" &rightarrow; "`form`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`action`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`iframe`", "`namespace`" &rightarrow; [=HTML namespace=] },
-    { "`name`" &rightarrow; "`src`", "`namespace`" &rightarrow; `null` }
+    { "`name`" &rightarrow; "`input`", "`namespace`" &rightarrow; [=HTML namespace=] },
+    { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`input`", "`namespace`" &rightarrow; [=HTML namespace=] },
+    { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
