@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="4497de30fa811dde3ec20139c5f191020d7fdca6" name="revision">
+  <meta content="0e58018b1c7fae3f4950ae4411572acd0f360d3f" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-12-19">19 December 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-12-20">20 December 2024</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1544,13 +1544,16 @@ navigations are "unsafe", are as follows:
     { "<code>name</code>" → "<code>area</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
-    { "<code>name</code>" → "<code>form</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑤">HTML namespace</a> },
-    { "<code>name</code>" → "<code>action</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
-    { "<code>name</code>" → "<code>input</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑥">HTML namespace</a> },
+    { "<code>name</code>" → "<code>button</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑤">HTML namespace</a> },
     { "<code>name</code>" → "<code>formaction</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
-    { "<code>name</code>" → "<code>button</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑦">HTML namespace</a> },
+    { "<code>name</code>" → "<code>form</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑥">HTML namespace</a> },
+    { "<code>name</code>" → "<code>action</code>", "<code>namespace</code>" → <code>null</code> }
+  ], <br> [
+    { "<code>name</code>" → "<code>iframe</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑦">HTML namespace</a> },
+    { "<code>name</code>" → "<code>src</code>", "<code>namespace</code>" → <code>null</code> }
+  ], <br> [
+    { "<code>name</code>" → "<code>input</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑧">HTML namespace</a> },
     { "<code>name</code>" → "<code>formaction</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> ]»</p>
    </div>
@@ -2272,7 +2275,7 @@ let dfnPanelData = {
 "element-sethtmlunsafe": {"dfnID":"element-sethtmlunsafe","dfnText":"setHTMLUnsafe","external":false,"refSections":[],"url":"#element-sethtmlunsafe"},
 "enumdef-sanitizerpresets": {"dfnID":"enumdef-sanitizerpresets","dfnText":"SanitizerPresets","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-sanitizerpresets"},{"id":"ref-for-enumdef-sanitizerpresets\u2460"},{"id":"ref-for-enumdef-sanitizerpresets\u2461"},{"id":"ref-for-enumdef-sanitizerpresets\u2462"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-enumdef-sanitizerpresets\u2463"}],"title":"3. Algorithms"}],"url":"#enumdef-sanitizerpresets"},
 "f02cd417": {"dfnID":"f02cd417","dfnText":"iterate","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
-"f052b1ea": {"dfnID":"f052b1ea","dfnText":"HTML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-html-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-html-namespace\u2462"},{"id":"ref-for-html-namespace\u2463"},{"id":"ref-for-html-namespace\u2464"},{"id":"ref-for-html-namespace\u2465"},{"id":"ref-for-html-namespace\u2466"}],"title":"3.4. Defaults"}],"url":"https://infra.spec.whatwg.org/#html-namespace"},
+"f052b1ea": {"dfnID":"f052b1ea","dfnText":"HTML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-html-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-html-namespace\u2462"},{"id":"ref-for-html-namespace\u2463"},{"id":"ref-for-html-namespace\u2464"},{"id":"ref-for-html-namespace\u2465"},{"id":"ref-for-html-namespace\u2466"},{"id":"ref-for-html-namespace\u2467"}],"title":"3.4. Defaults"}],"url":"https://infra.spec.whatwg.org/#html-namespace"},
 "f099a38d": {"dfnID":"f099a38d","dfnText":"HTMLTemplateElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmltemplateelement"},{"id":"ref-for-htmltemplateelement\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement"},
 "f7960529": {"dfnID":"f7960529","dfnText":"root","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-root"},{"id":"ref-for-concept-tree-root\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#concept-tree-root"},
 "f937b7b6": {"dfnID":"f937b7b6","dfnText":"continue","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-continue"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#iteration-continue"},
