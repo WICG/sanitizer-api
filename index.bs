@@ -468,9 +468,15 @@ template contents). It consistes of these steps:
          - "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             [=Attr/namespace=] is `null` and
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true
-      1. If |handleJavascriptNavigationUrls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
-         [=built-in navigating URL attributes list=], and if |attribute|
-         [=contains a javascript: URL=], then remove |attribute| from |child|.
+      1. If |handleJavascriptNavigationUrls|:
+         1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in
+            the [=built-in navigating URL attributes list=], and if |attribute|
+            [=contains a javascript: URL=], then remove |attribute| from |child|.
+         1. If the [=built-in animating URL attributes list=]
+            [=SanitizerConfig/contains=]
+            &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
+            [=get an attribute value|value=] [=string/is=] "`href`" or
+            "`xlink:href`", then [=/remove an attribute|remove=] |attr|.
 
 </div>
 
@@ -717,11 +723,12 @@ regard to order:
 
 ## Defaults ## {#sanitization-defaults}
 
-There are three builtins:
+There are four builtins:
 
 * The [=built-in safe default configuration=],
 * the [=built-in safe baseline configuration=], and
-* the [=built-in navigating URL attributes list=].
+* the [=built-in navigating URL attributes list=], and
+* the [=built-in animating URL attributes list=].
 
 The <dfn>built-in safe default configuration</dfn> is as follows:
 ```
@@ -797,6 +804,33 @@ navigations are "unsafe", are as follows:
 ]&raquo;
 </div>
 
+The <dfn>built-in animating URL attributes list</dfn>, which can be used in
+[[SVG11]] to declaratively modify navigation elements to use "`javascript:`"
+URLs, is as follows:
+
+&laquo;[
+  <br>
+  [
+    { "`name`" &rightarrow; "`animate`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null`] }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`animateMotion`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`animateTransform`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`set`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+]&raquo;
 
 # Security Considerations # {#security-considerations}
 
