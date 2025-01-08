@@ -485,6 +485,29 @@ template contents). It consistes of these steps:
 
 </div>
 
+<div class=note>
+<span class=marker>Note:</span> Current browsers support `javascript:` URLs
+only when navigating. Since navigation itself is not an XSS threat we handle
+navigation to `javascript:` URLs, but not navigations in general.
+
+Declarative navigation falls into a handful of categories:
+
+  1. Anchor elements. (`<a>` in HTML and SVG namespaces)
+  1. Form elements that trigger navigation as part of the form action.
+  1. [[MathML]] allows [any element to act as an anchor](
+     https://www.w3.org/TR/MathML3/mathml.html#chapter2_fund.globatt).
+  1. [[SVG11]] animation.
+
+The first two are covered by the [=built-in navigating URL attributes list=].
+
+The MathML case is covered by a seperate rule, because there is no formalism
+in this spec to cover a "per-namespace global" rule.
+
+The SVG animation case is covered by the
+[=built-in animating URL attributes list=]. But since the interpretation of SVG animation elements depends on the animation target, and since during sanitization we cannot know what the final target will be, the [=sanitize=] algorithm blocks any animation of `href` attributes.
+
+</div>
+
 <div algorithm>
 To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>:
 1. Let |url| be the result of running the [=basic URL parser=]
