@@ -472,6 +472,11 @@ template contents). It consistes of these steps:
          1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in
             the [=built-in navigating URL attributes list=], and if |attribute|
             [=contains a javascript: URL=], then remove |attribute| from |child|.
+         1. If |child|'s [=Element/namespace=] [=string/is=] the
+            [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
+            "`href`" and  |attr|'s [=Attr/namespace=] is `null` or the
+            [=XLink namespace=] and |attr| [=contains a javascript: URL=],
+            then [=/remove an attribute|remove=] |attr|.
          1. If the [=built-in animating URL attributes list=]
             [=SanitizerConfig/contains=]
             &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
