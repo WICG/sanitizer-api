@@ -779,6 +779,21 @@ navigations are "unsafe", are as follows:
     { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
+  [
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=SVG namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; [=XLink namespace=] }
+  ],
+  <br>
+  [
+    { "`name`" &rightarrow; "`base`", "`namespace`" &rightarrow; [=HTML namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
 ]&raquo;
 </div>
 
