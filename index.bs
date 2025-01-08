@@ -22,6 +22,7 @@ Markup Shorthands: css off, markdown on
 spec:html; type:attribute; text: innerHTML
 spec:dom; type:method; text: createDocumentFragment
 spec:html; type:dfn; text: template contents
+spec:infra; type:dfn; text: user agent
 </pre>
 <pre class="anchors">
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
@@ -576,6 +577,8 @@ To <dfn for="SanitizerConfig">remove unsafe</dfn> from a |configuration|, do thi
 1. [=list/For each=] |attribute| in
    [=built-in safe baseline configuration=][{{SanitizerConfig/removeAttributes}}]:
     1. Call [=Sanitizer/remove an attribute=] with |attribute| and |result|.
+1. [=list/For each=] |attribute| listed in [=event handler content attributes=]:
+    1. Call [=Sanitizer/remove an attribute=] with |attribute| and |result|.
 1. Return |result|.
 
 </div>
@@ -709,7 +712,7 @@ regard to order:
 [=superset=] of |B| and |B| is a [=superset=] of |A|.
 </div>
 
-## Defaults ## {#sanitization-defaults}
+## Builtins ## {#sanitization-defaults}
 
 There are three builtins:
 
@@ -725,12 +728,29 @@ highlight: json
 </pre>
 
 The <dfn>built-in safe baseline configuration</dfn> is meant to block only
-script-content, and nothing else. It is as follows:
+script-content. It is as follows:
 
 <pre class="include-code">
 path: builtins/safe-baseline-configuration.json
 highlight: json
 </pre>
+
+<div class="note" role="note">
+
+<span class="marker">Note:</span> The [=remove unsafe=] algorithm specifies
+to additionally remove any [=event handler content attributes=], as defined
+in [[HTML]].
+If a [=user agent=] defines extensions to the [[HTML]] spec with additional
+[=event handler content attributes=], it is its responsibility to decide how
+to handle them. Using the current [=event handler content attributes=] list,
+the safe baseline configuration looks effectively like so:
+
+<pre class="include-code">
+path: builtins/safe-baseline-configuration-materialized.json
+highlight: json
+</pre>
+
+</div>
 
 <div>
 The <dfn>built-in navigating URL attributes list</dfn>, for which "`javascript:`"
