@@ -15,7 +15,7 @@ jobs:
       - name: Generate safe-default-configuration.json
         run: python builtins/safe-default-configuration.py --input builtins/safe-default-configuration.txt --out builtins/safe-default-configuration.json
       - name: Generate safe-baseline-configuration-materialized.json
-        run: python builtins/safe-baseline-configuration.py --input builtins/safe-baseline-configuration.txt --event-hanlders builtins/event-handler-content-attributes.txt --out builtins/safe-baseline-configuration-materialized.json
+        run: python builtins/safe-baseline-configuration.py --input builtins/safe-baseline-configuration.json --event-hanlders builtins/event-handler-content-attributes.txt --out builtins/safe-baseline-configuration-materialized.json
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
