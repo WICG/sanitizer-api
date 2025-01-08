@@ -431,16 +431,15 @@ template contents). It consistes of these steps:
            parser for which this assertion should hold. If in the future
            this algorithm will be used in different contexts, this assumption
            needs to be re-examined.
-  1. If |child| [=implements=] {{Text}}:
-    1. [=continue=].
-  1. else if |child| [=implements=] {{Comment}}:
-    1. If |configuration|["{{SanitizerConfig/comments}}"] is not true:
-      1. [=/remove=] |child|.
-  1. else:
+  1. If |child| [=implements=] {{Text}}, then [=continue=].
+  1. If |child| [=implements=] {{Comment}}:
+    1. If |configuration|["{{SanitizerConfig/comments}}"] is not true,
+       then [=/remove=] |child|.
+  1. Otherwise:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |configuration|["{{SanitizerConfig/elements}}"] is not [=list/empty=] and does not [=SanitizerConfig/contain=] |elementName|:
-       1. [=/remove=] |child|.
+    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |configuration|["{{SanitizerConfig/elements}}"] is not [=list/empty=] and does not [=SanitizerConfig/contain=] |elementName|,
+       then [=/remove=] |child|.
     1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize core=] on |child| with |configuration| and
           |handleJavascriptNavigationUrls|.
@@ -449,18 +448,17 @@ template contents). It consistes of these steps:
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;
       1. Then call [=sanitize core=] on |child|'s [=template contents=] with
           |configuration| and |handleJavascriptNavigationUrls|.
-    1. If |child| is a [=shadow host=]:
-      1. Then call [=sanitize core=] on |child|'s [=Element/shadow root=] with
-          |configuration| and |handleJavascriptNavigationUrls|.
+    1. If |child| is a [=shadow host=],
+       then call [=sanitize core=] on |child|'s [=Element/shadow root=] with
+       |configuration| and |handleJavascriptNavigationUrls|.
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
       1. If |configuration|["{{SanitizerConfig/removeAttributes}}"]
-           [=SanitizerConfig/contains=] |attrName|:
-         1. Remove |attribute| from |child|.
+         [=SanitizerConfig/contains=] |attrName|,
+         then Remove |attribute| from |child|.
       1. If |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-           [=SanitizerConfig/contains=] |attrName|:
-         1. Remove |attribute| from |child|.
+           [=SanitizerConfig/contains=] |attrName|, then remove |attribute| from |child|.
 
       1. If all of the following are false, then remove |attribute| from |child|.
          - |configuration|["{{SanitizerConfig/attributes}}"] [=list/exists=] and
@@ -472,8 +470,7 @@ template contents). It consistes of these steps:
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true
       1. If |handleJavascriptNavigationUrls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
          [=built-in navigating URL attributes list=], and if |attribute|
-         [=contains a javascript: URL=]:
-         1. Then remove |attribute| from |child|.
+         [=contains a javascript: URL=], then remove |attribute| from |child|.
 
 </div>
 
