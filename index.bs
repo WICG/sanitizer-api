@@ -471,9 +471,18 @@ template contents). It consistes of these steps:
             [=Attr/namespace=] is `null` and
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true
       1. If |handleJavascriptNavigationUrls| and &laquo;[|elementName|, |attrName|]&raquo; matches an entry in the
-         [=built-in navigating URL attributes list=], and if |attribute|'s [=protocol=] is
-         "`javascript:`":
+         [=built-in navigating URL attributes list=], and if |attribute|
+         [=contains a javascript: URL=]:
          1. Then remove |attribute| from |child|.
+
+</div>
+
+<div algorithm>
+To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>:
+1. Let |url| be the result of running the [=basic URL parser=]
+   on |attribute|'s [=get an attribute value|value=].
+1. If |url| is `failure`, then return false.
+1. Return whether |url|'s [=url/scheme=] [=string/is=] "`javascript`".
 
 </div>
 
