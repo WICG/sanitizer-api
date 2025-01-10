@@ -478,7 +478,7 @@ template contents). It consistes of these steps:
 </div>
 
 <div algorithm>
-To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>, do:
+To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>:
 1. Let |url| be the result of running the [=basic URL parser=]
    on |attribute|'s [=get an attribute value|value=].
 1. If |url| is `failure`, then return false.
