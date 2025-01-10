@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="0e58018b1c7fae3f4950ae4411572acd0f360d3f" name="revision">
+  <meta content="3604c34b73a0ff094121d4936c269508f7faa718" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2024-12-20">20 December 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-01-10">10 January 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -763,7 +763,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2024 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -1254,8 +1254,7 @@ template contents). It consistes of these steps:
               <p>"data-" is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#code-unit-prefix" id="ref-for-code-unit-prefix">code unit prefix</a> of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name①">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace①">namespace</a> is <code>null</code> and <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes">dataAttributes</a></code>"] is true</p>
             </ul>
            <li data-md>
-            <p>If <var>handleJavascriptNavigationUrls</var> and «[<var>elementName</var>, <var>attrName</var>]» matches an entry in the <a data-link-type="dfn" href="#built-in-navigating-url-attributes-list" id="ref-for-built-in-navigating-url-attributes-list">built-in navigating URL attributes list</a>, and if <var>attribute</var>’s <a data-link-type="dfn" href="https://urlpattern.spec.whatwg.org/#constructor-string-parser-state-protocol" id="ref-for-constructor-string-parser-state-protocol">protocol</a> is
- "<code>javascript:</code>":</p>
+            <p>If <var>handleJavascriptNavigationUrls</var> and «[<var>elementName</var>, <var>attrName</var>]» matches an entry in the <a data-link-type="dfn" href="#built-in-navigating-url-attributes-list" id="ref-for-built-in-navigating-url-attributes-list">built-in navigating URL attributes list</a>, and if <var>attribute</var> <a data-link-type="dfn" href="#contains-a-javascript-url" id="ref-for-contains-a-javascript-url">contains a javascript: URL</a>:</p>
             <ol>
              <li data-md>
               <p>Then remove <var>attribute</var> from <var>child</var>.</p>
@@ -1263,6 +1262,17 @@ template contents). It consistes of these steps:
           </ol>
         </ol>
       </ol>
+    </ol>
+   </div>
+   <div class="algorithm" data-algorithm="contains a javascript: URL">
+     To determine whether an <var>attribute</var> <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="contains-a-javascript-url">contains a javascript: URL</dfn>: 
+    <ol>
+     <li data-md>
+      <p>Let <var>url</var> be the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-basic-url-parser" id="ref-for-concept-basic-url-parser">basic URL parser</a> on <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-get-value" id="ref-for-concept-element-attributes-get-value">value</a>.</p>
+     <li data-md>
+      <p>If <var>url</var> is <code>failure</code>, then return false.</p>
+     <li data-md>
+      <p>Return whether <var>url</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is②">is</a> "<code>javascript</code>".</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.2" id="configuration-processing"><span class="secno">3.2. </span><span class="content">Configuration Processing</span><a class="self-link" href="#configuration-processing"></a></h3>
@@ -1646,6 +1656,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <li><a href="#dom-sanitizer-sanitizer">constructor()</a><span>, in § 2.2</span>
    <li><a href="#dom-sanitizer-sanitizer">constructor(configuration)</a><span>, in § 2.2</span>
    <li><a href="#sanitizerconfig-contains">contains</a><span>, in § 3.3</span>
+   <li><a href="#contains-a-javascript-url">contains a javascript: URL</a><span>, in § 3.1</span>
    <li><a href="#dom-sanitizerconfig-dataattributes">dataAttributes</a><span>, in § 2.3</span>
    <li><a href="#dom-sanitizerpresets-default">"default"</a><span>, in § 2.2</span>
    <li><a href="#dom-sanitizerconfig-elements">elements</a><span>, in § 2.3</span>
@@ -1783,6 +1794,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="77211728">attribute list</span>
      <li><span class="dfn-paneled" id="92b2d7da">children</span>
      <li><span class="dfn-paneled" id="3f23ec71">content type</span>
+     <li><span class="dfn-paneled" id="3e6df8da">get an attribute value</span>
      <li><span class="dfn-paneled" id="e240317a">local name <small>(for Attr)</small></span>
      <li><span class="dfn-paneled" id="83ca4a87">local name <small>(for Element)</small></span>
      <li><span class="dfn-paneled" id="b3955a25">namespace <small>(for Attr)</small></span>
@@ -1836,9 +1848,10 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="bdec671a">TrustedHTML</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[URLPATTERN]</a> defines the following terms:
+    <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="80d81456">protocol</span>
+     <li><span class="dfn-paneled" id="9ed8b710">basic URL parser</span>
+     <li><span class="dfn-paneled" id="3a711be7">scheme</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
@@ -1866,8 +1879,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-trusted-types">[TRUSTED-TYPES]
    <dd>Krzysztof Kotowicz. <a href="https://w3c.github.io/trusted-types/dist/spec/"><cite>Trusted Types</cite></a>. URL: <a href="https://w3c.github.io/trusted-types/dist/spec/">https://w3c.github.io/trusted-types/dist/spec/</a>
-   <dt id="biblio-urlpattern">[URLPATTERN]
-   <dd>Ben Kelly; Jeremy Roman; 宍戸俊哉 (Shunya Shishido). <a href="https://urlpattern.spec.whatwg.org/"><cite>URL Pattern Standard</cite></a>. Living Standard. URL: <a href="https://urlpattern.spec.whatwg.org/">https://urlpattern.spec.whatwg.org/</a>
+   <dt id="biblio-url">[URL]
+   <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/"><cite>URL Standard</cite></a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
   </dl>
@@ -2156,6 +2169,8 @@ let dfnPanelData = {
 "296f3551": {"dfnID":"296f3551","dfnText":"Element","external":true,"refSections":[{"refs":[{"id":"ref-for-element"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-element\u2460"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-element\u2461"},{"id":"ref-for-element\u2462"},{"id":"ref-for-element\u2463"},{"id":"ref-for-element\u2464"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-element\u2465"},{"id":"ref-for-element\u2466"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-element\u2467"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#element"},
 "35feaa5b": {"dfnID":"35feaa5b","dfnText":"superset","external":true,"refSections":[{"refs":[{"id":"ref-for-set-superset"},{"id":"ref-for-set-superset\u2460"}],"title":"3.3. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#set-superset"},
 "36858240": {"dfnID":"36858240","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-boolean"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-boolean\u2460"},{"id":"ref-for-boolean\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#boolean"},
+"3a711be7": {"dfnID":"3a711be7","dfnText":"scheme","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-url-scheme"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://url.spec.whatwg.org/#concept-url-scheme"},
+"3e6df8da": {"dfnID":"3e6df8da","dfnText":"get an attribute value","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-attributes-get-value"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-attributes-get-value"},
 "3e7fc2a2": {"dfnID":"3e7fc2a2","dfnText":"template contents","external":true,"refSections":[{"refs":[{"id":"ref-for-template-contents"},{"id":"ref-for-template-contents\u2460"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-template-contents\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://html.spec.whatwg.org/multipage/scripting.html#template-contents"},
 "3f23ec71": {"dfnID":"3f23ec71","dfnText":"content type","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-content-type"},{"id":"ref-for-concept-document-content-type\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#concept-document-content-type"},
 "4013a022": {"dfnID":"4013a022","dfnText":"this","external":true,"refSections":[{"refs":[{"id":"ref-for-this"},{"id":"ref-for-this\u2460"},{"id":"ref-for-this\u2461"},{"id":"ref-for-this\u2462"},{"id":"ref-for-this\u2463"},{"id":"ref-for-this\u2464"},{"id":"ref-for-this\u2465"},{"id":"ref-for-this\u2466"},{"id":"ref-for-this\u2467"},{"id":"ref-for-this\u2468"},{"id":"ref-for-this\u2460\u24ea"},{"id":"ref-for-this\u2460\u2460"},{"id":"ref-for-this\u2460\u2461"},{"id":"ref-for-this\u2460\u2462"},{"id":"ref-for-this\u2460\u2463"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-this\u2460\u2464"},{"id":"ref-for-this\u2460\u2465"},{"id":"ref-for-this\u2460\u2466"},{"id":"ref-for-this\u2460\u2467"},{"id":"ref-for-this\u2460\u2468"},{"id":"ref-for-this\u2461\u24ea"},{"id":"ref-for-this\u2461\u2460"},{"id":"ref-for-this\u2461\u2461"},{"id":"ref-for-this\u2461\u2462"},{"id":"ref-for-this\u2461\u2463"},{"id":"ref-for-this\u2461\u2464"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-this\u2461\u2465"},{"id":"ref-for-this\u2461\u2466"},{"id":"ref-for-this\u2461\u2467"},{"id":"ref-for-this\u2461\u2468"},{"id":"ref-for-this\u2462\u24ea"}],"title":"3.2. Configuration Processing"}],"url":"https://webidl.spec.whatwg.org/#this"},
@@ -2177,8 +2192,7 @@ let dfnPanelData = {
 "77211728": {"dfnID":"77211728","dfnText":"attribute list","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-attribute"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-attribute"},
 "77b4c09a": {"dfnID":"77b4c09a","dfnText":"assert","external":true,"refSections":[{"refs":[{"id":"ref-for-assert"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-assert\u2460"},{"id":"ref-for-assert\u2461"},{"id":"ref-for-assert\u2462"},{"id":"ref-for-assert\u2463"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-assert\u2464"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-assert\u2465"},{"id":"ref-for-assert\u2466"},{"id":"ref-for-assert\u2467"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#assert"},
 "799f3036": {"dfnID":"799f3036","dfnText":"fragment parsing algorithm steps","external":true,"refSections":[{"refs":[{"id":"ref-for-fragment-parsing-algorithm-steps"}],"title":"3. Algorithms"}],"url":"https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#fragment-parsing-algorithm-steps"},
-"7a87d819": {"dfnID":"7a87d819","dfnText":"is","external":true,"refSections":[{"refs":[{"id":"ref-for-string-is"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-string-is\u2460"}],"title":"3. Algorithms"}],"url":"https://infra.spec.whatwg.org/#string-is"},
-"80d81456": {"dfnID":"80d81456","dfnText":"protocol","external":true,"refSections":[{"refs":[{"id":"ref-for-constructor-string-parser-state-protocol"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://urlpattern.spec.whatwg.org/#constructor-string-parser-state-protocol"},
+"7a87d819": {"dfnID":"7a87d819","dfnText":"is","external":true,"refSections":[{"refs":[{"id":"ref-for-string-is"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-string-is\u2460"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-string-is\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#string-is"},
 "82ca3efc": {"dfnID":"82ca3efc","dfnText":"TypeError","external":true,"refSections":[{"refs":[{"id":"ref-for-exceptiondef-typeerror"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2460"}],"title":"3. Algorithms"}],"url":"https://webidl.spec.whatwg.org/#exceptiondef-typeerror"},
 "83ca4a87": {"dfnID":"83ca4a87","dfnText":"local name (for Element)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-local-name"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-concept-element-local-name\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-local-name"},
 "84b454ff": {"dfnID":"84b454ff","dfnText":"ordered map","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-map"},{"id":"ref-for-ordered-map\u2460"},{"id":"ref-for-ordered-map\u2461"}],"title":"3.3. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#ordered-map"},
@@ -2190,6 +2204,7 @@ let dfnPanelData = {
 "96c16e60": {"dfnID":"96c16e60","dfnText":"Node","external":true,"refSections":[{"refs":[{"id":"ref-for-node"}],"title":"1.2. API Summary"}],"url":"https://dom.spec.whatwg.org/#node"},
 "99c988d6": {"dfnID":"99c988d6","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-list-remove"}],"title":"3.3. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-remove"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"},{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"},{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"2.3. The Configuration Dictionary"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
+"9ed8b710": {"dfnID":"9ed8b710","dfnText":"basic URL parser","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-basic-url-parser"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://url.spec.whatwg.org/#concept-basic-url-parser"},
 "a0647283": {"dfnID":"a0647283","dfnText":"Comment","external":true,"refSections":[{"refs":[{"id":"ref-for-comment"},{"id":"ref-for-comment\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#comment"},
 "a32c65d4": {"dfnID":"a32c65d4","dfnText":"implements","external":true,"refSections":[{"refs":[{"id":"ref-for-implements"},{"id":"ref-for-implements\u2460"},{"id":"ref-for-implements\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://webidl.spec.whatwg.org/#implements"},
 "b3955a25": {"dfnID":"b3955a25","dfnText":"namespace (for Attr)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-attribute-namespace"},{"id":"ref-for-concept-attribute-namespace\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-attribute-namespace"},
@@ -2205,6 +2220,7 @@ let dfnPanelData = {
 "canonicalize-a-sanitizer-element-with-attributes": {"dfnID":"canonicalize-a-sanitizer-element-with-attributes","dfnText":"canonicalize a sanitizer element with attributes","external":false,"refSections":[{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-element-with-attributes"}],"title":"3.2. Configuration Processing"}],"url":"#canonicalize-a-sanitizer-element-with-attributes"},
 "canonicalize-a-sanitizer-name": {"dfnID":"canonicalize-a-sanitizer-name","dfnText":"canonicalize a sanitizer name","external":false,"refSections":[{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-name"},{"id":"ref-for-canonicalize-a-sanitizer-name\u2460"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-name\u2461"},{"id":"ref-for-canonicalize-a-sanitizer-name\u2462"}],"title":"3.3. Supporting Algorithms"}],"url":"#canonicalize-a-sanitizer-name"},
 "ce720392": {"dfnID":"ce720392","dfnText":"shadow root","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-shadow-root"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-shadow-root"},
+"contains-a-javascript-url": {"dfnID":"contains-a-javascript-url","dfnText":"contains a javascript: URL","external":false,"refSections":[{"refs":[{"id":"ref-for-contains-a-javascript-url"}],"title":"3.1. Sanitization Algorithms"}],"url":"#contains-a-javascript-url"},
 "d354f084": {"dfnID":"d354f084","dfnText":"window.toStaticHTML()","external":true,"refSections":[{"refs":[{"id":"ref-for-something"}],"title":"5. Acknowledgements"}],"url":"https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx"},
 "d4127354": {"dfnID":"d4127354","dfnText":"innerHTML","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-element-innerhtml"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-dom-element-innerhtml\u2460"}],"title":"1.2. API Summary"}],"url":"https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-element-innerhtml"},
 "dbd32973": {"dfnID":"dbd32973","dfnText":"DOMParser","external":true,"refSections":[{"refs":[{"id":"ref-for-domparser"}],"title":"1.2. API Summary"}],"url":"https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#domparser"},
@@ -2710,6 +2726,7 @@ let refsData = {
 "#canonicalize-a-sanitizer-element": {"displayText":"canonicalize a sanitizer element","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"canonicalize a sanitizer element","type":"dfn","url":"#canonicalize-a-sanitizer-element"},
 "#canonicalize-a-sanitizer-element-with-attributes": {"displayText":"canonicalize a sanitizer element with attributes","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"canonicalize a sanitizer element with attributes","type":"dfn","url":"#canonicalize-a-sanitizer-element-with-attributes"},
 "#canonicalize-a-sanitizer-name": {"displayText":"canonicalize a sanitizer name","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"canonicalize a sanitizer name","type":"dfn","url":"#canonicalize-a-sanitizer-name"},
+"#contains-a-javascript-url": {"displayText":"contains a javascript: url","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"contains a javascript: url","type":"dfn","url":"#contains-a-javascript-url"},
 "#dictdef-sanitizerattributenamespace": {"displayText":"SanitizerAttributeNamespace","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"SanitizerAttributeNamespace","type":"dictionary","url":"#dictdef-sanitizerattributenamespace"},
 "#dictdef-sanitizerconfig": {"displayText":"SanitizerConfig","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"SanitizerConfig","type":"dictionary","url":"#dictdef-sanitizerconfig"},
 "#dictdef-sanitizerelementnamespace": {"displayText":"SanitizerElementNamespace","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"SanitizerElementNamespace","type":"dictionary","url":"#dictdef-sanitizerelementnamespace"},
@@ -2761,6 +2778,7 @@ let refsData = {
 "https://dom.spec.whatwg.org/#concept-attribute-namespace": {"displayText":"namespace","export":true,"for_":["Attr"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"namespace","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-attribute-namespace"},
 "https://dom.spec.whatwg.org/#concept-document-content-type": {"displayText":"content type","export":true,"for_":["Document"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"content type","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document-content-type"},
 "https://dom.spec.whatwg.org/#concept-element-attribute": {"displayText":"attribute list","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"attribute list","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-attribute"},
+"https://dom.spec.whatwg.org/#concept-element-attributes-get-value": {"displayText":"get an attribute value","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"get an attribute value","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-attributes-get-value"},
 "https://dom.spec.whatwg.org/#concept-element-local-name": {"displayText":"local name","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"local name","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-local-name"},
 "https://dom.spec.whatwg.org/#concept-element-namespace": {"displayText":"namespace","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"namespace","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-namespace"},
 "https://dom.spec.whatwg.org/#concept-element-shadow-root": {"displayText":"shadow root","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"shadow root","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-shadow-root"},
@@ -2806,7 +2824,8 @@ let refsData = {
 "https://infra.spec.whatwg.org/#string-is": {"displayText":"is","export":true,"for_":["string"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"is","type":"dfn","url":"https://infra.spec.whatwg.org/#string-is"},
 "https://infra.spec.whatwg.org/#svg-namespace": {"displayText":"SVG namespace","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"svg namespace","type":"dfn","url":"https://infra.spec.whatwg.org/#svg-namespace"},
 "https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx": {"displayText":"window.toStaticHTML()","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"","status":"anchor-block","text":"window.toStaticHTML()","type":"method","url":"https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx"},
-"https://urlpattern.spec.whatwg.org/#constructor-string-parser-state-protocol": {"displayText":"protocol","export":true,"for_":["constructor string parser/state"],"level":"1","normative":true,"shortname":"urlpattern","spec":"urlpattern","status":"current","text":"protocol","type":"dfn","url":"https://urlpattern.spec.whatwg.org/#constructor-string-parser-state-protocol"},
+"https://url.spec.whatwg.org/#concept-basic-url-parser": {"displayText":"basic URL parser","export":true,"for_":[],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"basic url parser","type":"dfn","url":"https://url.spec.whatwg.org/#concept-basic-url-parser"},
+"https://url.spec.whatwg.org/#concept-url-scheme": {"displayText":"scheme","export":true,"for_":["url"],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"scheme","type":"dfn","url":"https://url.spec.whatwg.org/#concept-url-scheme"},
 "https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string": {"displayText":"Get Trusted Type compliant string","export":true,"for_":[],"level":"1","normative":true,"shortname":"trusted-types","spec":"trusted-types","status":"current","text":"Get Trusted Type compliant string","type":"abstract-op","url":"https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string"},
 "https://w3c.github.io/trusted-types/dist/spec/#trustedhtml": {"displayText":"TrustedHTML","export":true,"for_":[],"level":"1","normative":true,"shortname":"trusted-types","spec":"trusted-types","status":"current","text":"TrustedHTML","type":"interface","url":"https://w3c.github.io/trusted-types/dist/spec/#trustedhtml"},
 "https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
