@@ -481,7 +481,7 @@ template contents). It consistes of these steps:
 To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>, do:
 1. Let |url| be the result of running the [=basic URL parser=]
    on |attribute|'s [=get an attribute value|value=].
-1. If |url| is `failure` return false.
+1. If |url| is `failure`, then return false.
 1. Return whether |url|'s [=url/scheme=] [=string/is=] "`javascript`".
 
 </div>
