@@ -776,9 +776,10 @@ path: builtins/safe-baseline-configuration.json
 highlight: json
 </pre>
 
-<div class="note" role="note">
+<div class="advisement">
+<!-- When included in HTML, this should probably read as class="warning". -->
 
-<span class="marker">Note:</span> The [=remove unsafe=] algorithm specifies
+<strong class="marker">Warning:</strong> The [=remove unsafe=] algorithm specifies
 to additionally remove any [=event handler content attributes=], as defined
 in [[HTML]].
 If a [=user agent=] defines extensions to the [[HTML]] spec with additional
