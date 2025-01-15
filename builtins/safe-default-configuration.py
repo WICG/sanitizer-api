@@ -24,11 +24,17 @@ def main():
         pass
       elif line.startswith("- "):
         current.append({ "name": line[2:], "namespace": None })
-      elif line == "[HTML Global]":
+      elif line.startswith("[") and line.endswith("Global]"):
         current = result["attributes"]
       else:
-        elem = { "name": line, "namespace": "http://www.w3.org/1999/xhtml",
-                 "attributes": [] }
+        if line.startswith("math "):
+          elem = {"name": line[5:],
+                  "namespace": "http://www.w3.org/1998/Math/MathML"}
+        elif line.startswith("svg "):
+          elem = {"name": line[4:], "namespace": "http://www.w3.org/2000/svg"}
+        else:
+          elem = {"name": line, "namespace": "http://www.w3.org/1999/xhtml"}
+        elem["attributes"] = []
         result["elements"].append(elem)
         current = elem["attributes"]
 
