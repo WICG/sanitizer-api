@@ -230,9 +230,4 @@ math semantics
 - mathcolor
 - mathsize
 - scriptlevel
-- encoding
-- display
-- linethickness
-- intent
-- arg
 
