@@ -1,5 +1,3 @@
 /.project
 /out
 /*.ninja*
-/builtins/safe-default-configuration.json
-/builtins/safe-baseline-configuration-materialized.json
