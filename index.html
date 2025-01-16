@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ac5ea272d, updated Fri Dec 6 15:45:15 2024 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="52b48800dbe648438ea44ebe9620be547b1c9697" name="revision">
+  <meta content="fbdaa30565587c571239077166b36b1f85bc1134" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-01-10">10 January 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-01-16">16 January 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -807,7 +807,7 @@ DOM.</p>
       <li><a href="#sanitization"><span class="secno">3.1</span> <span class="content">Sanitization Algorithms</span></a>
       <li><a href="#configuration-processing"><span class="secno">3.2</span> <span class="content">Configuration Processing</span></a>
       <li><a href="#alg-support"><span class="secno">3.3</span> <span class="content">Supporting Algorithms</span></a>
-      <li><a href="#sanitization-defaults"><span class="secno">3.4</span> <span class="content">Defaults</span></a>
+      <li><a href="#sanitization-defaults"><span class="secno">3.4</span> <span class="content">Builtins</span></a>
      </ol>
     <li>
      <a href="#security-considerations"><span class="secno">4</span> <span class="content">Security Considerations</span></a>
@@ -1393,6 +1393,12 @@ in this spec to cover a "per-namespace global" rule.</p>
         <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute①">remove an attribute</a> with <var>attribute</var> and <var>result</var>.</p>
       </ol>
      <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑤">For each</a> <var>attribute</var> listed in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>:</p>
+      <ol>
+       <li data-md>
+        <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute②">remove an attribute</a> with <var>attribute</var> and <var>result</var>.</p>
+      </ol>
+     <li data-md>
       <p>Return <var>result</var>.</p>
     </ol>
    </div>
@@ -1400,34 +1406,34 @@ in this spec to cover a "per-namespace global" rule.</p>
      To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-a-configuration">set a configuration</dfn>, given a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑤">dictionary</a> <var>configuration</var> and a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑨">Sanitizer</a></code> <var>sanitizer</var>: 
     <ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑤">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑧">elements</a></code>"] do:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑥">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑧">elements</a></code>"] do:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizerconfig-allow-an-element" id="ref-for-sanitizerconfig-allow-an-element①">allow an element</a> with <var>element</var> and <var>sanitizer</var>.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑥">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑦">removeElements</a></code>"] do:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑦">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑦">removeElements</a></code>"] do:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-element" id="ref-for-sanitizer-remove-an-element②">remove an element</a> with <var>element</var> and <var>sanitizer</var>.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑦">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑥">replaceWithChildrenElements</a></code>"] do:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑥">replaceWithChildrenElements</a></code>"] do:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizer-replace-an-element-with-its-children" id="ref-for-sanitizer-replace-an-element-with-its-children①">replace an element with its children</a> with <var>element</var> and <var>sanitizer</var>.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes④">attributes</a></code>"] do:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes④">attributes</a></code>"] do:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizer-allow-an-attribute" id="ref-for-sanitizer-allow-an-attribute①">allow an attribute</a> with <var>attribute</var> and <var>sanitizer</var>.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑤">removeAttributes</a></code>"] do:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⓪">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑤">removeAttributes</a></code>"] do:</p>
       <ol>
        <li data-md>
-        <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute②">remove an attribute</a> with <var>attribute</var> and <var>sanitizer</var>.</p>
+        <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute③">remove an attribute</a> with <var>attribute</var> and <var>sanitizer</var>.</p>
       </ol>
      <li data-md>
       <p>Call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments①">set comments</a> with <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments②">comments</a></code>"] and <var>sanitizer</var>.</p>
@@ -1474,13 +1480,13 @@ or neither, but not both.</p>
       <p>If <var>element</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑥">dictionary</a>:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⓪">For each</a> <var>attribute</var> in <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes①">attributes</a></code>"]:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>attribute</var> in <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes①">attributes</a></code>"]:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add④">Add</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute②">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes②">attributes</a></code>"].</p>
         </ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>attribute</var> in <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes①">removeAttributes</a></code>"]:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>attribute</var> in <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes①">removeAttributes</a></code>"]:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add⑤">Add</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute③">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②">removeAttributes</a></code>"].</p>
@@ -1525,7 +1531,7 @@ entries:</p>
    </div>
    <div class="algorithm" data-algorithm="equal" data-algorithm-for="set"> Equality for <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">ordered sets</a> is equality of its members, but without
 regard to order: <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">Ordered sets</a> <var>A</var> and <var>B</var> are <dfn class="dfn-paneled" data-dfn-for="set" data-dfn-type="dfn" data-noexport id="set-equal">equal</dfn> if both <var>A</var> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-superset" id="ref-for-set-superset">superset</a> of <var>B</var> and <var>B</var> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-superset" id="ref-for-set-superset①">superset</a> of <var>A</var>. </div>
-   <h3 class="heading settled" data-level="3.4" id="sanitization-defaults"><span class="secno">3.4. </span><span class="content">Defaults</span><a class="self-link" href="#sanitization-defaults"></a></h3>
+   <h3 class="heading settled" data-level="3.4" id="sanitization-defaults"><span class="secno">3.4. </span><span class="content">Builtins</span><a class="self-link" href="#sanitization-defaults"></a></h3>
    <p>There are four builtins:</p>
    <ul>
     <li data-md>
@@ -1538,21 +1544,697 @@ regard to order: <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#or
      <p>the <a data-link-type="dfn" href="#built-in-animating-url-attributes-list" id="ref-for-built-in-animating-url-attributes-list②">built-in animating URL attributes list</a>.</p>
    </ul>
    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-safe-default-configuration">built-in safe default configuration</dfn> is as follows:</p>
-<pre>{
-  elements: [ ... ],
-  attributes: [ ... ],
-}
-</pre>
+<pre class="include-code highlight"><c- p>{</c->
+  <c- f>"elements"</c-><c- p>:</c-> <c- p>[</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"html"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"head"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"title"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"body"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"article"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"section"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"nav"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"aside"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"h1"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"h2"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"h3"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"h4"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"h5"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"h6"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"hgroup"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"header"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"footer"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"address"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"p"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"hr"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"pre"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"blockquote"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cite"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"ol"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"reversed"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"start"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"type"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"ul"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"menu"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"li"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"value"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"dl"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"dt"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"dd"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"figure"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"figcaption"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"main"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"search"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"div"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"a"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"href"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rel"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"hreflang"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"type"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"em"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"strong"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"small"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"s"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"cite"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"q"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"dfn"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"title"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"abbr"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"title"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"ruby"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"rt"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"rp"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"data"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"value"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"time"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"datetime"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"code"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"var"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"samp"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"kbd"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"sub"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"sup"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"i"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"b"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"u"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"mark"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"bdi"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"dir"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"bdo"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"dir"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"span"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"br"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"wbr"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"ins"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cite"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"datetime"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"del"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cite"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"datetime"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"table"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"caption"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"colgroup"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"span"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"col"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"span"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"tbody"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"thead"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"tfoot"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"tr"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"td"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"colspan"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rowspan"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"headers"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"th"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"colspan"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rowspan"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"headers"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"scope"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"abbr"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>}</c->
+  <c- p>],</c->
+  <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"dir"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"lang"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"title"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>}</c->
+  <c- p>]</c->
+<c- p>}</c-></pre>
    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-safe-baseline-configuration">built-in safe baseline configuration</dfn> is meant to block only
-script-content, and nothing else. It is as follows:</p>
-<pre>{
-  removeElements: [
-    { name: "script", namespace: "http://www.w3.org/1999/xhtml" },
-    { name: "script", namespace: "http://www.w3.org/2000/svg" }
-  ],
-  removeAttributes: [....],
-}
+script-content. It is as follows:</p>
+<pre class="include-code highlight"><c- p>{</c->
+  <c- f>"removeElements"</c-><c- p>:</c-> <c- p>[</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"script"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"frame"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"iframe"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"object"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"embed"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"script"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"use"</c->
+    <c- p>}</c->
+  <c- p>],</c->
+  <c- f>"removeAttributes"</c-><c- p>:</c-> <c- p>[]</c->
+<c- p>}</c->
 </pre>
+   <div class="advisement">
+    <p><strong class="marker">Warning:</strong> The <a data-link-type="dfn" href="#sanitizerconfig-remove-unsafe" id="ref-for-sanitizerconfig-remove-unsafe③">remove unsafe</a> algorithm specifies
+to additionally remove any <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes①">event handler content attributes</a>, as defined
+in <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a>.
+If a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent">user agent</a> defines extensions to the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> spec with additional <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes②">event handler content attributes</a>, it is its responsibility to decide how
+to handle them. Using the current <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes③">event handler content attributes</a> list,
+the safe baseline configuration looks effectively like so:</p>
+<pre class="include-code highlight"><c- p>{</c->
+  <c- f>"removeElements"</c-><c- p>:</c-> <c- p>[</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"script"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"frame"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"iframe"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"object"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1999/xhtml"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"embed"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"script"</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"use"</c->
+    <c- p>}</c->
+  <c- p>],</c->
+  <c- f>"removeAttributes"</c-><c- p>:</c-> <c- p>[</c->
+    <c- u>"onafterprint"</c-><c- p>,</c->
+    <c- u>"onauxclick"</c-><c- p>,</c->
+    <c- u>"onbeforeinput"</c-><c- p>,</c->
+    <c- u>"onbeforematch"</c-><c- p>,</c->
+    <c- u>"onbeforeprint"</c-><c- p>,</c->
+    <c- u>"onbeforeunload"</c-><c- p>,</c->
+    <c- u>"onbeforetoggle"</c-><c- p>,</c->
+    <c- u>"onblur"</c-><c- p>,</c->
+    <c- u>"oncancel"</c-><c- p>,</c->
+    <c- u>"oncanplay"</c-><c- p>,</c->
+    <c- u>"oncanplaythrough"</c-><c- p>,</c->
+    <c- u>"onchange"</c-><c- p>,</c->
+    <c- u>"onclick"</c-><c- p>,</c->
+    <c- u>"onclose"</c-><c- p>,</c->
+    <c- u>"oncontextlost"</c-><c- p>,</c->
+    <c- u>"oncontextmenu"</c-><c- p>,</c->
+    <c- u>"oncontextrestored"</c-><c- p>,</c->
+    <c- u>"oncopy"</c-><c- p>,</c->
+    <c- u>"oncuechange"</c-><c- p>,</c->
+    <c- u>"oncut"</c-><c- p>,</c->
+    <c- u>"ondblclick"</c-><c- p>,</c->
+    <c- u>"ondrag"</c-><c- p>,</c->
+    <c- u>"ondragend"</c-><c- p>,</c->
+    <c- u>"ondragenter"</c-><c- p>,</c->
+    <c- u>"ondragleave"</c-><c- p>,</c->
+    <c- u>"ondragover"</c-><c- p>,</c->
+    <c- u>"ondragstart"</c-><c- p>,</c->
+    <c- u>"ondrop"</c-><c- p>,</c->
+    <c- u>"ondurationchange"</c-><c- p>,</c->
+    <c- u>"onemptied"</c-><c- p>,</c->
+    <c- u>"onended"</c-><c- p>,</c->
+    <c- u>"onerror"</c-><c- p>,</c->
+    <c- u>"onfocus"</c-><c- p>,</c->
+    <c- u>"onformdata"</c-><c- p>,</c->
+    <c- u>"onhashchange"</c-><c- p>,</c->
+    <c- u>"oninput"</c-><c- p>,</c->
+    <c- u>"oninvalid"</c-><c- p>,</c->
+    <c- u>"onkeydown"</c-><c- p>,</c->
+    <c- u>"onkeypress"</c-><c- p>,</c->
+    <c- u>"onkeyup"</c-><c- p>,</c->
+    <c- u>"onlanguagechange"</c-><c- p>,</c->
+    <c- u>"onload"</c-><c- p>,</c->
+    <c- u>"onloadeddata"</c-><c- p>,</c->
+    <c- u>"onloadedmetadata"</c-><c- p>,</c->
+    <c- u>"onloadstart"</c-><c- p>,</c->
+    <c- u>"onmessage"</c-><c- p>,</c->
+    <c- u>"onmessageerror"</c-><c- p>,</c->
+    <c- u>"onmousedown"</c-><c- p>,</c->
+    <c- u>"onmouseenter"</c-><c- p>,</c->
+    <c- u>"onmouseleave"</c-><c- p>,</c->
+    <c- u>"onmousemove"</c-><c- p>,</c->
+    <c- u>"onmouseout"</c-><c- p>,</c->
+    <c- u>"onmouseover"</c-><c- p>,</c->
+    <c- u>"onmouseup"</c-><c- p>,</c->
+    <c- u>"onoffline"</c-><c- p>,</c->
+    <c- u>"ononline"</c-><c- p>,</c->
+    <c- u>"onpagehide"</c-><c- p>,</c->
+    <c- u>"onpagereveal"</c-><c- p>,</c->
+    <c- u>"onpageshow"</c-><c- p>,</c->
+    <c- u>"onpageswap"</c-><c- p>,</c->
+    <c- u>"onpaste"</c-><c- p>,</c->
+    <c- u>"onpause"</c-><c- p>,</c->
+    <c- u>"onplay"</c-><c- p>,</c->
+    <c- u>"onplaying"</c-><c- p>,</c->
+    <c- u>"onpopstate"</c-><c- p>,</c->
+    <c- u>"onprogress"</c-><c- p>,</c->
+    <c- u>"onratechange"</c-><c- p>,</c->
+    <c- u>"onreset"</c-><c- p>,</c->
+    <c- u>"onresize"</c-><c- p>,</c->
+    <c- u>"onrejectionhandled"</c-><c- p>,</c->
+    <c- u>"onscroll"</c-><c- p>,</c->
+    <c- u>"onscrollend"</c-><c- p>,</c->
+    <c- u>"onsecuritypolicyviolation"</c-><c- p>,</c->
+    <c- u>"onseeked"</c-><c- p>,</c->
+    <c- u>"onseeking"</c-><c- p>,</c->
+    <c- u>"onselect"</c-><c- p>,</c->
+    <c- u>"onslotchange"</c-><c- p>,</c->
+    <c- u>"onstalled"</c-><c- p>,</c->
+    <c- u>"onstorage"</c-><c- p>,</c->
+    <c- u>"onsubmit"</c-><c- p>,</c->
+    <c- u>"onsuspend"</c-><c- p>,</c->
+    <c- u>"ontimeupdate"</c-><c- p>,</c->
+    <c- u>"ontoggle"</c-><c- p>,</c->
+    <c- u>"onunhandledrejection"</c-><c- p>,</c->
+    <c- u>"onunload"</c-><c- p>,</c->
+    <c- u>"onvolumechange"</c-><c- p>,</c->
+    <c- u>"onwaiting"</c-><c- p>,</c->
+    <c- u>"onwheel"</c->
+  <c- p>]</c->
+<c- p>}</c-></pre>
+   </div>
    <div>
      The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-navigating-url-attributes-list">built-in navigating URL attributes list</dfn>, for which "<code>javascript:</code>"
 navigations are "unsafe", are as follows: 
@@ -1847,6 +2529,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="402ed79d">CEReactions</span>
      <li><span class="dfn-paneled" id="dbd32973">DOMParser</span>
      <li><span class="dfn-paneled" id="f099a38d">HTMLTemplateElement</span>
+     <li><span class="dfn-paneled" id="cc6d9aed">event handler content attribute</span>
      <li><span class="dfn-paneled" id="799f3036">fragment parsing algorithm steps</span>
      <li><span class="dfn-paneled" id="d4127354">innerHTML</span>
      <li><span class="dfn-paneled" id="b815ad04">parseFromString(string, type)</span>
@@ -1876,6 +2559,7 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
      <li><span class="dfn-paneled" id="0698d556">string</span>
      <li><span class="dfn-paneled" id="35feaa5b">superset</span>
      <li><span class="dfn-paneled" id="85a289c7">SVG namespace</span>
+     <li><span class="dfn-paneled" id="6d19ac93">user agent</span>
      <li><span class="dfn-paneled" id="e19f3699">XLink namespace</span>
     </ul>
    <li>
@@ -2204,7 +2888,7 @@ let dfnPanelData = {
 "0698d556": {"dfnID":"0698d556","dfnText":"string","external":true,"refSections":[{"refs":[{"id":"ref-for-string"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-string\u2460"},{"id":"ref-for-string\u2461"},{"id":"ref-for-string\u2462"}],"title":"3. Algorithms"}],"url":"https://infra.spec.whatwg.org/#string"},
 "0e0b900e": {"dfnID":"0e0b900e","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-remove"},{"id":"ref-for-concept-node-remove\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-node-remove"},
 "1243a891": {"dfnID":"1243a891","dfnText":"exist (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
-"16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "1a897bae": {"dfnID":"1a897bae","dfnText":"Get Trusted Type compliant string","external":true,"refSections":[{"refs":[{"id":"ref-for-abstract-opdef-get-trusted-type-compliant-string"},{"id":"ref-for-abstract-opdef-get-trusted-type-compliant-string\u2460"},{"id":"ref-for-abstract-opdef-get-trusted-type-compliant-string\u2461"}],"title":"2.1. Sanitizer API"}],"url":"https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string"},
 "1cd7ff31": {"dfnID":"1cd7ff31","dfnText":"ShadowRoot","external":true,"refSections":[{"refs":[{"id":"ref-for-shadowroot"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-shadowroot\u2460"},{"id":"ref-for-shadowroot\u2461"},{"id":"ref-for-shadowroot\u2462"},{"id":"ref-for-shadowroot\u2463"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#shadowroot"},
 "296f3551": {"dfnID":"296f3551","dfnText":"Element","external":true,"refSections":[{"refs":[{"id":"ref-for-element"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-element\u2460"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-element\u2461"},{"id":"ref-for-element\u2462"},{"id":"ref-for-element\u2463"},{"id":"ref-for-element\u2464"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-element\u2465"},{"id":"ref-for-element\u2466"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-element\u2467"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#element"},
@@ -2228,6 +2912,7 @@ let dfnPanelData = {
 "5c8f824f": {"dfnID":"5c8f824f","dfnText":"allow declarative shadow roots","external":true,"refSections":[{"refs":[{"id":"ref-for-document-allow-declarative-shadow-roots"},{"id":"ref-for-document-allow-declarative-shadow-roots\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#document-allow-declarative-shadow-roots"},
 "5f90bbfb": {"dfnID":"5f90bbfb","dfnText":"undefined","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-undefined"},{"id":"ref-for-idl-undefined\u2460"},{"id":"ref-for-idl-undefined\u2461"},{"id":"ref-for-idl-undefined\u2462"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-idl-undefined\u2463"},{"id":"ref-for-idl-undefined\u2464"},{"id":"ref-for-idl-undefined\u2465"},{"id":"ref-for-idl-undefined\u2466"},{"id":"ref-for-idl-undefined\u2467"},{"id":"ref-for-idl-undefined\u2468"},{"id":"ref-for-idl-undefined\u2460\u24ea"},{"id":"ref-for-idl-undefined\u2460\u2460"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"https://webidl.spec.whatwg.org/#idl-undefined"},
 "692595fe": {"dfnID":"692595fe","dfnText":"ordered set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"},{"id":"ref-for-ordered-set\u2460"}],"title":"3.3. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
+"6d19ac93": {"dfnID":"6d19ac93","dfnText":"user agent","external":true,"refSections":[{"refs":[{"id":"ref-for-user-agent"}],"title":"3.4. Builtins"}],"url":"https://infra.spec.whatwg.org/#user-agent"},
 "746cc3ba": {"dfnID":"746cc3ba","dfnText":"namespace (for Element)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-concept-element-namespace\u2460"},{"id":"ref-for-concept-element-namespace\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-namespace"},
 "75393c04": {"dfnID":"75393c04","dfnText":"exist (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-contain"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-contain"},
 "769996cd": {"dfnID":"769996cd","dfnText":"parse HTML from a string","external":true,"refSections":[{"refs":[{"id":"ref-for-parse-html-from-a-string"},{"id":"ref-for-parse-html-from-a-string\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://html.spec.whatwg.org/#parse-html-from-a-string"},
@@ -2239,7 +2924,7 @@ let dfnPanelData = {
 "83ca4a87": {"dfnID":"83ca4a87","dfnText":"local name (for Element)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-local-name"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-concept-element-local-name\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-local-name"},
 "84b454ff": {"dfnID":"84b454ff","dfnText":"ordered map","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-map"},{"id":"ref-for-ordered-map\u2460"},{"id":"ref-for-ordered-map\u2461"}],"title":"3.3. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#ordered-map"},
 "85394472": {"dfnID":"85394472","dfnText":"Document","external":true,"refSections":[{"refs":[{"id":"ref-for-document"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-document\u2460"},{"id":"ref-for-document\u2461"},{"id":"ref-for-document\u2462"},{"id":"ref-for-document\u2463"},{"id":"ref-for-document\u2464"},{"id":"ref-for-document\u2465"},{"id":"ref-for-document\u2466"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#document"},
-"85a289c7": {"dfnID":"85a289c7","dfnText":"SVG namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-svg-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-svg-namespace\u2460"},{"id":"ref-for-svg-namespace\u2461"},{"id":"ref-for-svg-namespace\u2462"},{"id":"ref-for-svg-namespace\u2463"},{"id":"ref-for-svg-namespace\u2464"},{"id":"ref-for-svg-namespace\u2465"}],"title":"3.4. Defaults"}],"url":"https://infra.spec.whatwg.org/#svg-namespace"},
+"85a289c7": {"dfnID":"85a289c7","dfnText":"SVG namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-svg-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-svg-namespace\u2460"},{"id":"ref-for-svg-namespace\u2461"},{"id":"ref-for-svg-namespace\u2462"},{"id":"ref-for-svg-namespace\u2463"},{"id":"ref-for-svg-namespace\u2464"},{"id":"ref-for-svg-namespace\u2465"}],"title":"3.4. Builtins"}],"url":"https://infra.spec.whatwg.org/#svg-namespace"},
 "8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-idl-DOMString\u2466"},{"id":"ref-for-idl-DOMString\u2467"},{"id":"ref-for-idl-DOMString\u2468"},{"id":"ref-for-idl-DOMString\u2460\u24ea"},{"id":"ref-for-idl-DOMString\u2460\u2460"},{"id":"ref-for-idl-DOMString\u2460\u2461"},{"id":"ref-for-idl-DOMString\u2460\u2462"}],"title":"2.3. The Configuration Dictionary"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2463"},{"id":"ref-for-idl-DOMString\u2460\u2464"}],"title":"3.2. Configuration Processing"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "92b2d7da": {"dfnID":"92b2d7da","dfnText":"children","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-child"},{"id":"ref-for-concept-tree-child\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-tree-child"},
@@ -2254,14 +2939,15 @@ let dfnPanelData = {
 "b815ad04": {"dfnID":"b815ad04","dfnText":"parseFromString(string, type)","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-domparser-parsefromstring"}],"title":"1.2. API Summary"}],"url":"https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-domparser-parsefromstring"},
 "bdec671a": {"dfnID":"bdec671a","dfnText":"TrustedHTML","external":true,"refSections":[{"refs":[{"id":"ref-for-trustedhtml"},{"id":"ref-for-trustedhtml\u2460"},{"id":"ref-for-trustedhtml\u2461"},{"id":"ref-for-trustedhtml\u2462"},{"id":"ref-for-trustedhtml\u2463"},{"id":"ref-for-trustedhtml\u2464"}],"title":"2.1. Sanitizer API"}],"url":"https://w3c.github.io/trusted-types/dist/spec/#trustedhtml"},
 "bec98d30": {"dfnID":"bec98d30","dfnText":"dictionary","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-dictionary"},{"id":"ref-for-dfn-dictionary\u2460"},{"id":"ref-for-dfn-dictionary\u2461"},{"id":"ref-for-dfn-dictionary\u2462"},{"id":"ref-for-dfn-dictionary\u2463"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-dfn-dictionary\u2464"},{"id":"ref-for-dfn-dictionary\u2465"},{"id":"ref-for-dfn-dictionary\u2466"},{"id":"ref-for-dfn-dictionary\u2467"}],"title":"3.2. Configuration Processing"}],"url":"https://webidl.spec.whatwg.org/#dfn-dictionary"},
-"built-in-animating-url-attributes-list": {"dfnID":"built-in-animating-url-attributes-list","dfnText":"built-in animating URL attributes list","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-animating-url-attributes-list"},{"id":"ref-for-built-in-animating-url-attributes-list\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-built-in-animating-url-attributes-list\u2461"}],"title":"3.4. Defaults"}],"url":"#built-in-animating-url-attributes-list"},
-"built-in-navigating-url-attributes-list": {"dfnID":"built-in-navigating-url-attributes-list","dfnText":"built-in navigating URL attributes list","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-navigating-url-attributes-list"},{"id":"ref-for-built-in-navigating-url-attributes-list\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-built-in-navigating-url-attributes-list\u2461"}],"title":"3.4. Defaults"}],"url":"#built-in-navigating-url-attributes-list"},
-"built-in-safe-baseline-configuration": {"dfnID":"built-in-safe-baseline-configuration","dfnText":"built-in safe baseline configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-safe-baseline-configuration"},{"id":"ref-for-built-in-safe-baseline-configuration\u2460"},{"id":"ref-for-built-in-safe-baseline-configuration\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-built-in-safe-baseline-configuration\u2462"}],"title":"3.4. Defaults"}],"url":"#built-in-safe-baseline-configuration"},
-"built-in-safe-default-configuration": {"dfnID":"built-in-safe-default-configuration","dfnText":"built-in safe default configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-safe-default-configuration"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-built-in-safe-default-configuration\u2460"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-built-in-safe-default-configuration\u2461"}],"title":"3.4. Defaults"}],"url":"#built-in-safe-default-configuration"},
+"built-in-animating-url-attributes-list": {"dfnID":"built-in-animating-url-attributes-list","dfnText":"built-in animating URL attributes list","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-animating-url-attributes-list"},{"id":"ref-for-built-in-animating-url-attributes-list\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-built-in-animating-url-attributes-list\u2461"}],"title":"3.4. Builtins"}],"url":"#built-in-animating-url-attributes-list"},
+"built-in-navigating-url-attributes-list": {"dfnID":"built-in-navigating-url-attributes-list","dfnText":"built-in navigating URL attributes list","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-navigating-url-attributes-list"},{"id":"ref-for-built-in-navigating-url-attributes-list\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-built-in-navigating-url-attributes-list\u2461"}],"title":"3.4. Builtins"}],"url":"#built-in-navigating-url-attributes-list"},
+"built-in-safe-baseline-configuration": {"dfnID":"built-in-safe-baseline-configuration","dfnText":"built-in safe baseline configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-safe-baseline-configuration"},{"id":"ref-for-built-in-safe-baseline-configuration\u2460"},{"id":"ref-for-built-in-safe-baseline-configuration\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-built-in-safe-baseline-configuration\u2462"}],"title":"3.4. Builtins"}],"url":"#built-in-safe-baseline-configuration"},
+"built-in-safe-default-configuration": {"dfnID":"built-in-safe-default-configuration","dfnText":"built-in safe default configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-safe-default-configuration"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-built-in-safe-default-configuration\u2460"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-built-in-safe-default-configuration\u2461"}],"title":"3.4. Builtins"}],"url":"#built-in-safe-default-configuration"},
 "canonicalize-a-sanitizer-attribute": {"dfnID":"canonicalize-a-sanitizer-attribute","dfnText":"canonicalize a sanitizer attribute","external":false,"refSections":[{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-attribute"},{"id":"ref-for-canonicalize-a-sanitizer-attribute\u2460"},{"id":"ref-for-canonicalize-a-sanitizer-attribute\u2461"},{"id":"ref-for-canonicalize-a-sanitizer-attribute\u2462"}],"title":"3.2. Configuration Processing"}],"url":"#canonicalize-a-sanitizer-attribute"},
 "canonicalize-a-sanitizer-element": {"dfnID":"canonicalize-a-sanitizer-element","dfnText":"canonicalize a sanitizer element","external":false,"refSections":[{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-element"},{"id":"ref-for-canonicalize-a-sanitizer-element\u2460"},{"id":"ref-for-canonicalize-a-sanitizer-element\u2461"}],"title":"3.2. Configuration Processing"}],"url":"#canonicalize-a-sanitizer-element"},
 "canonicalize-a-sanitizer-element-with-attributes": {"dfnID":"canonicalize-a-sanitizer-element-with-attributes","dfnText":"canonicalize a sanitizer element with attributes","external":false,"refSections":[{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-element-with-attributes"}],"title":"3.2. Configuration Processing"}],"url":"#canonicalize-a-sanitizer-element-with-attributes"},
 "canonicalize-a-sanitizer-name": {"dfnID":"canonicalize-a-sanitizer-name","dfnText":"canonicalize a sanitizer name","external":false,"refSections":[{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-name"},{"id":"ref-for-canonicalize-a-sanitizer-name\u2460"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-canonicalize-a-sanitizer-name\u2461"},{"id":"ref-for-canonicalize-a-sanitizer-name\u2462"}],"title":"3.3. Supporting Algorithms"}],"url":"#canonicalize-a-sanitizer-name"},
+"cc6d9aed": {"dfnID":"cc6d9aed","dfnText":"event handler content attribute","external":true,"refSections":[{"refs":[{"id":"ref-for-event-handler-content-attributes"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-event-handler-content-attributes\u2460"},{"id":"ref-for-event-handler-content-attributes\u2461"},{"id":"ref-for-event-handler-content-attributes\u2462"}],"title":"3.4. Builtins"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes"},
 "ce720392": {"dfnID":"ce720392","dfnText":"shadow root","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-shadow-root"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-element-shadow-root"},
 "contains-a-javascript-url": {"dfnID":"contains-a-javascript-url","dfnText":"contains a javascript: URL","external":false,"refSections":[{"refs":[{"id":"ref-for-contains-a-javascript-url"},{"id":"ref-for-contains-a-javascript-url\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"#contains-a-javascript-url"},
 "d354f084": {"dfnID":"d354f084","dfnText":"window.toStaticHTML()","external":true,"refSections":[{"refs":[{"id":"ref-for-something"}],"title":"5. Acknowledgements"}],"url":"https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx"},
@@ -2327,7 +3013,7 @@ let dfnPanelData = {
 "dom-shadowroot-sethtmlunsafe": {"dfnID":"dom-shadowroot-sethtmlunsafe","dfnText":"setHTMLUnsafe","external":false,"refSections":[],"url":"#dom-shadowroot-sethtmlunsafe"},
 "dom-shadowroot-sethtmlunsafe-html-options-html": {"dfnID":"dom-shadowroot-sethtmlunsafe-html-options-html","dfnText":"html","external":false,"refSections":[],"url":"#dom-shadowroot-sethtmlunsafe-html-options-html"},
 "dom-shadowroot-sethtmlunsafe-html-options-options": {"dfnID":"dom-shadowroot-sethtmlunsafe-html-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-shadowroot-sethtmlunsafe-html-options-options"},
-"e19f3699": {"dfnID":"e19f3699","dfnText":"XLink namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-xlink-namespace"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-xlink-namespace\u2460"}],"title":"3.4. Defaults"}],"url":"https://infra.spec.whatwg.org/#xlink-namespace"},
+"e19f3699": {"dfnID":"e19f3699","dfnText":"XLink namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-xlink-namespace"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-xlink-namespace\u2460"}],"title":"3.4. Builtins"}],"url":"https://infra.spec.whatwg.org/#xlink-namespace"},
 "e240317a": {"dfnID":"e240317a","dfnText":"local name (for Attr)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-attribute-local-name"},{"id":"ref-for-concept-attribute-local-name\u2460"},{"id":"ref-for-concept-attribute-local-name\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-attribute-local-name"},
 "e99bd18e": {"dfnID":"e99bd18e","dfnText":"relevant global object","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-relevant-global"},{"id":"ref-for-concept-relevant-global\u2460"},{"id":"ref-for-concept-relevant-global\u2461"}],"title":"2.1. Sanitizer API"}],"url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global"},
 "ead425bd": {"dfnID":"ead425bd","dfnText":"MathML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-mathml-namespace"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#mathml-namespace"},
@@ -2335,8 +3021,8 @@ let dfnPanelData = {
 "element-sethtml": {"dfnID":"element-sethtml","dfnText":"setHTML","external":false,"refSections":[],"url":"#element-sethtml"},
 "element-sethtmlunsafe": {"dfnID":"element-sethtmlunsafe","dfnText":"setHTMLUnsafe","external":false,"refSections":[],"url":"#element-sethtmlunsafe"},
 "enumdef-sanitizerpresets": {"dfnID":"enumdef-sanitizerpresets","dfnText":"SanitizerPresets","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-sanitizerpresets"},{"id":"ref-for-enumdef-sanitizerpresets\u2460"},{"id":"ref-for-enumdef-sanitizerpresets\u2461"},{"id":"ref-for-enumdef-sanitizerpresets\u2462"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-enumdef-sanitizerpresets\u2463"}],"title":"3. Algorithms"}],"url":"#enumdef-sanitizerpresets"},
-"f02cd417": {"dfnID":"f02cd417","dfnText":"iterate","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
-"f052b1ea": {"dfnID":"f052b1ea","dfnText":"HTML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-html-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-html-namespace\u2462"},{"id":"ref-for-html-namespace\u2463"},{"id":"ref-for-html-namespace\u2464"},{"id":"ref-for-html-namespace\u2465"},{"id":"ref-for-html-namespace\u2466"},{"id":"ref-for-html-namespace\u2467"},{"id":"ref-for-html-namespace\u2468"}],"title":"3.4. Defaults"}],"url":"https://infra.spec.whatwg.org/#html-namespace"},
+"f02cd417": {"dfnID":"f02cd417","dfnText":"iterate","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"f052b1ea": {"dfnID":"f052b1ea","dfnText":"HTML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-html-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-html-namespace\u2462"},{"id":"ref-for-html-namespace\u2463"},{"id":"ref-for-html-namespace\u2464"},{"id":"ref-for-html-namespace\u2465"},{"id":"ref-for-html-namespace\u2466"},{"id":"ref-for-html-namespace\u2467"},{"id":"ref-for-html-namespace\u2468"}],"title":"3.4. Builtins"}],"url":"https://infra.spec.whatwg.org/#html-namespace"},
 "f099a38d": {"dfnID":"f099a38d","dfnText":"HTMLTemplateElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmltemplateelement"},{"id":"ref-for-htmltemplateelement\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement"},
 "f7960529": {"dfnID":"f7960529","dfnText":"root","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-root"},{"id":"ref-for-concept-tree-root\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#concept-tree-root"},
 "f937b7b6": {"dfnID":"f937b7b6","dfnText":"continue","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-continue"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#iteration-continue"},
@@ -2351,7 +3037,7 @@ let dfnPanelData = {
 "sanitizer-configuration": {"dfnID":"sanitizer-configuration","dfnText":"configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-configuration"},{"id":"ref-for-sanitizer-configuration\u2460"},{"id":"ref-for-sanitizer-configuration\u2461"},{"id":"ref-for-sanitizer-configuration\u2462"},{"id":"ref-for-sanitizer-configuration\u2463"},{"id":"ref-for-sanitizer-configuration\u2464"},{"id":"ref-for-sanitizer-configuration\u2465"},{"id":"ref-for-sanitizer-configuration\u2466"},{"id":"ref-for-sanitizer-configuration\u2467"},{"id":"ref-for-sanitizer-configuration\u2468"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-configuration\u2460\u24ea"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-sanitizer-configuration\u2460\u2460"},{"id":"ref-for-sanitizer-configuration\u2460\u2461"},{"id":"ref-for-sanitizer-configuration\u2460\u2462"},{"id":"ref-for-sanitizer-configuration\u2460\u2463"},{"id":"ref-for-sanitizer-configuration\u2460\u2464"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizer-configuration"},
 "sanitizer-constructor": {"dfnID":"sanitizer-constructor","dfnText":"constructor","external":false,"refSections":[],"url":"#sanitizer-constructor"},
 "sanitizer-get": {"dfnID":"sanitizer-get","dfnText":"get","external":false,"refSections":[],"url":"#sanitizer-get"},
-"sanitizer-remove-an-attribute": {"dfnID":"sanitizer-remove-an-attribute","dfnText":"remove an attribute","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-remove-an-attribute"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-remove-an-attribute\u2460"},{"id":"ref-for-sanitizer-remove-an-attribute\u2461"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizer-remove-an-attribute"},
+"sanitizer-remove-an-attribute": {"dfnID":"sanitizer-remove-an-attribute","dfnText":"remove an attribute","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-remove-an-attribute"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-remove-an-attribute\u2460"},{"id":"ref-for-sanitizer-remove-an-attribute\u2461"},{"id":"ref-for-sanitizer-remove-an-attribute\u2462"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizer-remove-an-attribute"},
 "sanitizer-remove-an-element": {"dfnID":"sanitizer-remove-an-element","dfnText":"remove an element","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-remove-an-element"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-remove-an-element\u2460"},{"id":"ref-for-sanitizer-remove-an-element\u2461"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizer-remove-an-element"},
 "sanitizer-removeattribute": {"dfnID":"sanitizer-removeattribute","dfnText":"removeAttribute","external":false,"refSections":[],"url":"#sanitizer-removeattribute"},
 "sanitizer-removeelement": {"dfnID":"sanitizer-removeelement","dfnText":"removeElement","external":false,"refSections":[],"url":"#sanitizer-removeelement"},
@@ -2368,7 +3054,7 @@ let dfnPanelData = {
 "sanitizerconfig-contains": {"dfnID":"sanitizerconfig-contains","dfnText":"contains","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-contains"},{"id":"ref-for-sanitizerconfig-contains\u2460"},{"id":"ref-for-sanitizerconfig-contains\u2461"},{"id":"ref-for-sanitizerconfig-contains\u2462"},{"id":"ref-for-sanitizerconfig-contains\u2463"},{"id":"ref-for-sanitizerconfig-contains\u2464"},{"id":"ref-for-sanitizerconfig-contains\u2465"},{"id":"ref-for-sanitizerconfig-contains\u2466"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-sanitizerconfig-contains\u2467"}],"title":"3.3. Supporting Algorithms"}],"url":"#sanitizerconfig-contains"},
 "sanitizerconfig-get-a-sanitizer-instance-from-options": {"dfnID":"sanitizerconfig-get-a-sanitizer-instance-from-options","dfnText":"get a sanitizer instance from options","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options"},{"id":"ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options\u2460"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options\u2461"}],"title":"3. Algorithms"}],"url":"#sanitizerconfig-get-a-sanitizer-instance-from-options"},
 "sanitizerconfig-remove": {"dfnID":"sanitizerconfig-remove","dfnText":"remove","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-remove"},{"id":"ref-for-sanitizerconfig-remove\u2460"},{"id":"ref-for-sanitizerconfig-remove\u2461"},{"id":"ref-for-sanitizerconfig-remove\u2462"},{"id":"ref-for-sanitizerconfig-remove\u2463"},{"id":"ref-for-sanitizerconfig-remove\u2464"},{"id":"ref-for-sanitizerconfig-remove\u2465"},{"id":"ref-for-sanitizerconfig-remove\u2466"},{"id":"ref-for-sanitizerconfig-remove\u2467"},{"id":"ref-for-sanitizerconfig-remove\u2468"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizerconfig-remove"},
-"sanitizerconfig-remove-unsafe": {"dfnID":"sanitizerconfig-remove-unsafe","dfnText":"remove unsafe","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe\u2461"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizerconfig-remove-unsafe"},
+"sanitizerconfig-remove-unsafe": {"dfnID":"sanitizerconfig-remove-unsafe","dfnText":"remove unsafe","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-sanitizerconfig-remove-unsafe\u2462"}],"title":"3.4. Builtins"}],"url":"#sanitizerconfig-remove-unsafe"},
 "set-and-filter-html": {"dfnID":"set-and-filter-html","dfnText":"set and filter HTML","external":false,"refSections":[{"refs":[{"id":"ref-for-set-and-filter-html"},{"id":"ref-for-set-and-filter-html\u2460"},{"id":"ref-for-set-and-filter-html\u2461"},{"id":"ref-for-set-and-filter-html\u2462"}],"title":"2.1. Sanitizer API"}],"url":"#set-and-filter-html"},
 "set-equal": {"dfnID":"set-equal","dfnText":"equal","external":false,"refSections":[{"refs":[{"id":"ref-for-set-equal"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-set-equal\u2460"},{"id":"ref-for-set-equal\u2461"},{"id":"ref-for-set-equal\u2462"},{"id":"ref-for-set-equal\u2463"}],"title":"3.3. Supporting Algorithms"}],"url":"#set-equal"},
 "shadowroot-sethtml": {"dfnID":"shadowroot-sethtml","dfnText":"setHTML","external":false,"refSections":[],"url":"#shadowroot-sethtml"},
@@ -2852,6 +3538,7 @@ let refsData = {
 "https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement": {"displayText":"HTMLTemplateElement","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLTemplateElement","type":"interface","url":"https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement"},
 "https://html.spec.whatwg.org/multipage/scripting.html#template-contents": {"displayText":"template contents","export":false,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"template contents","type":"dfn","url":"https://html.spec.whatwg.org/multipage/scripting.html#template-contents"},
 "https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global": {"displayText":"relevant global object","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"relevant global object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes": {"displayText":"event handler content attribute","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"event handler content attribute","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes"},
 "https://infra.spec.whatwg.org/#assert": {"displayText":"assert","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"assert","type":"dfn","url":"https://infra.spec.whatwg.org/#assert"},
 "https://infra.spec.whatwg.org/#boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"boolean","type":"dfn","url":"https://infra.spec.whatwg.org/#boolean"},
 "https://infra.spec.whatwg.org/#code-unit-prefix": {"displayText":"code unit prefix","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"code unit prefix","type":"dfn","url":"https://infra.spec.whatwg.org/#code-unit-prefix"},
@@ -2871,6 +3558,7 @@ let refsData = {
 "https://infra.spec.whatwg.org/#string": {"displayText":"string","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"string","type":"dfn","url":"https://infra.spec.whatwg.org/#string"},
 "https://infra.spec.whatwg.org/#string-is": {"displayText":"is","export":true,"for_":["string"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"is","type":"dfn","url":"https://infra.spec.whatwg.org/#string-is"},
 "https://infra.spec.whatwg.org/#svg-namespace": {"displayText":"SVG namespace","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"svg namespace","type":"dfn","url":"https://infra.spec.whatwg.org/#svg-namespace"},
+"https://infra.spec.whatwg.org/#user-agent": {"displayText":"user agent","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"user agent","type":"dfn","url":"https://infra.spec.whatwg.org/#user-agent"},
 "https://infra.spec.whatwg.org/#xlink-namespace": {"displayText":"XLink namespace","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"xlink namespace","type":"dfn","url":"https://infra.spec.whatwg.org/#xlink-namespace"},
 "https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx": {"displayText":"window.toStaticHTML()","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"","status":"anchor-block","text":"window.toStaticHTML()","type":"method","url":"https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx"},
 "https://url.spec.whatwg.org/#concept-basic-url-parser": {"displayText":"basic URL parser","export":true,"for_":[],"level":"1","normative":true,"shortname":"url","spec":"url","status":"current","text":"basic url parser","type":"dfn","url":"https://url.spec.whatwg.org/#concept-basic-url-parser"},
