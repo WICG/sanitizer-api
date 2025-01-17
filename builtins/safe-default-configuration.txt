@@ -158,7 +158,6 @@ th
 // Purposely omitted.
 
 // SVG: TBD
-// MathML: TDB
 
 // HTML global attributes
 //
@@ -168,4 +167,79 @@ th
 - dir
 - lang
 - title
+
+// MathML
+// https://w3c.github.io/mathml-core/#mathml-elements-and-attributes
+//
+// See also: https://w3c.github.io/mathml-docs/mathml-safe-list
+
+math math
+math merror
+math mfrac
+math mi
+math mmultiscripts
+math mn
+math mo
+- form
+- fence
+- separator
+- lspace
+- rspace
+- stretchy
+- symmetric
+- maxsize
+- minsize
+- largeop
+- movablelimits
+math mover
+- accent
+math mpadded
+- width
+- height
+- depth
+- lspace
+- voffset
+math mphantom
+math mprescripts
+math mroot
+math mrow
+math ms
+math mspace
+- width
+- height
+- depth
+math msqrt
+math mstyle
+math msub
+math msubsup
+math msup
+math mtable
+math mtd
+- columnspan
+- rowspan
+math mtext
+math mtr
+math munder
+- accentunder
+math munderover
+- accent
+- accentunder
+math semantics
+
+// Purposely omitted:
+// - math annotation
+// - math annotation-xml
+// - math maction
+
+// MathML global attributes
+// https://w3c.github.io/mathml-core/#global-attributes
+//
+// Most are purposely omitted.
+[MathML Global]
+- dir
+- displaystyle
+- mathbackground
+- mathcolor
+- mathsize
+- scriptlevel
 
