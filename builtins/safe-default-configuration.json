@@ -624,6 +624,11 @@
       ]
     },
     {
+      "name": "mphantom",
+      "namespace": "http://www.w3.org/1998/Math/MathML",
+      "attributes": []
+    },
+    {
       "name": "mprescripts",
       "namespace": "http://www.w3.org/1998/Math/MathML",
       "attributes": []
