@@ -158,7 +158,6 @@ th
 // Purposely omitted.
 
 // SVG: TBD
-// MathML: TDB
 
 // HTML global attributes
 //
@@ -169,7 +168,10 @@ th
 - lang
 - title
 
-// MathML, per https://github.com/WICG/sanitizer-api/issues/103#issuecomment-2591328351
+// MathML
+// https://w3c.github.io/mathml-core/#mathml-elements-and-attributes
+//
+// See also: https://w3c.github.io/mathml-docs/mathml-safe-list
 
 math math
 math merror
@@ -223,6 +225,10 @@ math munderover
 - accentunder
 math semantics
 
+// MathML global attributes
+// https://w3c.github.io/mathml-core/#global-attributes
+//
+// Most are purposely omitted.
 [MathML Global]
 - dir
 - displaystyle
