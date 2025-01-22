@@ -356,8 +356,8 @@ dictionary SanitizerConfig {
   sequence&lt;SanitizerAttribute> attributes;
   sequence&lt;SanitizerAttribute> removeAttributes;
 
-  boolean comments;
-  boolean dataAttributes;
+  boolean comments = true;
+  boolean dataAttributes = true;
 };
 </pre>
 
