@@ -39,6 +39,11 @@ text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#pa
     "href": "https://cure53.de/fp170.pdf",
     "title": "mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations",
     "publisher": "Ruhr-Universität Bochum"
+  },
+  "SafeMathML": {
+    "href": "https://w3c.github.io/mathml-docs/mathml-safe-list",
+    "title": "MathML Safe List",
+    "publisher": "W3C Math Working Group"
   }
 }
 </pre>
@@ -767,6 +772,8 @@ The <dfn>built-in safe default configuration</dfn> is as follows:
 path: builtins/safe-default-configuration.json
 highlight: json
 </pre>
+
+Note: Included [[MathML]] markup is based on [[SafeMathML]].
 
 The <dfn>built-in safe baseline configuration</dfn> is meant to block only
 script-content. It is as follows:
