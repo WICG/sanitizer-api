@@ -173,7 +173,7 @@ These methods are mirrored on the {{ShadowRoot}}:
 </div>
 
 <div algorithm>
-{{ShadowRoot}}'s <dfn for="ShadowRoot" export>setHTML</dfn>(|html|, |options|)</dfn> method steps are:
+{{ShadowRoot}}'s <dfn for="ShadowRoot" export>setHTML</dfn>(|html|, |options|) method steps are:
 
 1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
    |html|, |options|, and true.
