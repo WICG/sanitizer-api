@@ -200,7 +200,7 @@ The <dfn for="Document" export>parseHTMLUnsafe</dfn>(|html|, |options|) method s
 1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML from a string=] given |document| and |compliantHTML|.
 1. Let |sanitizer| be the result of calling [=get a sanitizer instance from options=]
-   with |options|.
+   with |options| and false.
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |sanitizer| and false.
 1. Return |document|.
 
@@ -216,7 +216,7 @@ The <dfn for="Document" export>parseHTML</dfn>(|html|, |options|) method steps a
 1. Set |document|'s [=allow declarative shadow roots=] to true.
 1. [=Parse HTML from a string=] given |document| and |html|.
 1. Let |sanitizer| be the result of calling [=get a sanitizer instance from options=]
-   with |options|.
+   with |options| and true.
 1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |sanitizer| and true.
 1. Return |document|.
 
@@ -356,8 +356,8 @@ dictionary SanitizerConfig {
   sequence&lt;SanitizerAttribute> attributes;
   sequence&lt;SanitizerAttribute> removeAttributes;
 
-  boolean comments = true;
-  boolean dataAttributes = true;
+  boolean comments;
+  boolean dataAttributes;
 };
 </pre>
 
@@ -372,7 +372,7 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
    |contextElement|'s [=Element/namespace=] is the [=HTML namespace=] or the
    [=SVG namespace=], then return.
 1. Let |sanitizer| be the result of calling [=get a sanitizer instance from options=]
-   with |options|.
+   with |options| and |safe|.
 1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm steps=]
    given |contextElement|, |html|, and true.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
@@ -384,7 +384,7 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 
 <div algorithm>
 To <dfn for="SanitizerConfig">get a sanitizer instance from options</dfn> from
-a [=dictionary=] |options|, do:
+a [=dictionary=] |options| with a [=boolean=] |safe|, do:
 
 Note: This algorithm works for both {{SetHTMLOptions}} and
     {{SetHTMLUnsafeOptions}}. They only differ in the defaults.
@@ -402,7 +402,7 @@ Note: This algorithm works for both {{SetHTMLOptions}} and
 1. If |sanitizerSpec| is a [=dictionary=]:
    1. Let |sanitizer| be a new {{Sanitizer}} instance.
    1. Let |setConfigurationResult| be the result of [=set a configuration=]
-      with |sanitizerSpec| on |sanitizer|.
+      with |sanitizerSpec| and |safe| on |sanitizer|.
    1. If |setConfigurationResult| is false, [=throw=] a {{TypeError}}.
    1. Set |sanitizerSpec| to |sanitizer|.
 1. [=Assert=]: |sanitizerSpec| is a {{Sanitizer}} instance.
@@ -629,7 +629,7 @@ To <dfn for="SanitizerConfig">remove unsafe</dfn> from a |configuration|, do thi
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration| and a {{Sanitizer}} |sanitizer|:
+To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration|, a [=boolean=] |safe|, and a {{Sanitizer}} |sanitizer|:
 
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
   1. Call [=allow an element=] with |element| and |sanitizer|.
@@ -641,8 +641,16 @@ To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |confi
   1. Call [=allow an attribute=] with |attribute| and |sanitizer|.
 1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
   1. Call [=Sanitizer/remove an attribute=] with |attribute| and |sanitizer|.
-1. Call [=set comments=] with |configuration|["{{SanitizerConfig/comments}}"] and |sanitizer|.
-1. Call [=set data attributes=] with |configuration|["{{SanitizerConfig/dataAttributes}}"] and |sanitizer|.
+1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=]:
+  1. Then call [=set comments=] with |configuration|["{{SanitizerConfig/comments}}"]
+      and |sanitizer|
+  1. Otherwise call [=set comments=] with [=boolean/not=] |safe|
+      and |sanitizer|.
+1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=]:
+    1. Then call [=set data attributes=] with
+        |configuration|["{{SanitizerConfig/dataAttributes}}"] and |sanitizer|.
+    1. Otherwise call [=set data attributes=] with [=boolean/not=] |safe|
+        and |sanitizer|.
 1. Return whether all of the following are true:
     - [=list/size=] of |configuration|["{{SanitizerConfig/elements}}"] equals
       [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"].
@@ -755,6 +763,11 @@ Equality for [=ordered sets=] is equality of its members, but without
 regard to order:
 [=Ordered sets=] |A| and |B| are <dfn for=set>equal</dfn> if both |A| is a
 [=superset=] of |B| and |B| is a [=superset=] of |A|.
+</div>
+
+<div algorithm>
+To determine <dfn for="boolean">not</dfn> of a [=boolean=] |bool|,
+return false if |bool| is true, and return true otherwise.
 </div>
 
 ## Builtins ## {#sanitization-defaults}
