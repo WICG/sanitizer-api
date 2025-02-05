@@ -44,6 +44,11 @@ text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#pa
     "href": "https://w3c.github.io/mathml-docs/mathml-safe-list",
     "title": "MathML Safe List",
     "publisher": "W3C Math Working Group"
+  },
+  "HTML Sanitizer": {
+  "href": "https://www.bucksch.org/1/projects/mozilla/108153/",
+  "title": "HTML Sanitizer",
+  "publisher": "Ben Bucksch"
   }
 }
 </pre>
@@ -962,7 +967,8 @@ A more complete treatment of mXSS can be found in [[MXSS]].
 
 # Acknowledgements # {#ack}
 
-Cure53's [[DOMPURIFY]] is a clear inspiration for the API this document
-describes, as is Internet Explorer's {{window.toStaticHTML()}}.
-
-
+This work is informed and inspired by [[DOMPURIFY]] from cure53,
+Internet Explorer's {{window.toStaticHTML()}} as well as the original
+[[HTML Sanitizer]] from Ben Bucksch.
+Anne van Kesteren, Krzysztof Kotowicz, Tom Schuster, Luke Warlow,
+Guillaume Weghsteen, and Mike West for their valuable feedback.
