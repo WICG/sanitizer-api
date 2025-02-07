@@ -255,7 +255,7 @@ The configuration object can be queried to return a configuration dictionary.
 It can also be modified directly.
 
 <pre class=idl>
-[Exposed=(Window,Worker)]
+[Exposed=Window]
 interface Sanitizer {
   constructor(optional (SanitizerConfig or SanitizerPresets) configuration = "default");
 
