@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version c67c745b1, updated Fri Jan 17 14:27:28 2025 -0800" name="generator">
+  <meta content="Bikeshed version 97a1608be, updated Mon Feb 3 16:09:34 2025 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="8e8c3668d738a2570d7fd1e54008e1046222045f" name="revision">
+  <meta content="2805e96c56b931acec0e001fa7356718ade8d33a" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-01-22">22 January 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-02-07">7 February 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2605,8 +2605,10 @@ other words, a sanitized and then serialized HTML tree can no
 longer be considered as sanitized.</p>
    <p>A more complete treatment of mXSS can be found in <a data-link-type="biblio" href="#biblio-mxss" title="mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations">[MXSS]</a>.</p>
    <h2 class="heading settled" data-level="5" id="ack"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
-   <p>Cure53’s <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> is a clear inspiration for the API this document
-describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-something">window.toStaticHTML()</a></code>.</p>
+   <p>This work is informed and inspired by <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> from cure53,
+Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-something">window.toStaticHTML()</a></code> as well as the original <a data-link-type="biblio" href="#biblio-htmlsanitizer" title="HTML Sanitizer">[HTMLSanitizer]</a> from Ben Bucksch.
+Anne van Kesteren, Krzysztof Kotowicz, Tom Schuster, Luke Warlow,
+Guillaume Weghsteen, and Mike West for their valuable feedback.</p>
   </main>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
@@ -2876,6 +2878,8 @@ describes, as is Internet Explorer’s <code class="idl"><a data-link-type="idl"
   <dl>
    <dt id="biblio-dompurify">[DOMPURIFY]
    <dd><a href="https://github.com/cure53/DOMPurify"><cite>DOMPurify</cite></a>. URL: <a href="https://github.com/cure53/DOMPurify">https://github.com/cure53/DOMPurify</a>
+   <dt id="biblio-htmlsanitizer">[HTMLSanitizer]
+   <dd><a href="https://www.bucksch.org/1/projects/mozilla/108153/"><cite>HTML Sanitizer</cite></a>. URL: <a href="https://www.bucksch.org/1/projects/mozilla/108153/">https://www.bucksch.org/1/projects/mozilla/108153/</a>
    <dt id="biblio-mathml">[MathML]
    <dd>Patrick D F Ion; Robert R Miner. <a href="https://www.w3.org/TR/REC-MathML/"><cite>Mathematical Markup Language (MathML™) 1.01 Specification</cite></a>. 7 March 2023. REC. URL: <a href="https://www.w3.org/TR/REC-MathML/">https://www.w3.org/TR/REC-MathML/</a>
    <dt id="biblio-mxss">[MXSS]
