@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 97a1608be, updated Mon Feb 3 16:09:34 2025 -0800" name="generator">
+  <meta content="Bikeshed version 47d87adb7, updated Tue Feb 18 17:18:43 2025 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="2805e96c56b931acec0e001fa7356718ade8d33a" name="revision">
+  <meta content="80dfa6fb4c585dec725586a0e98860e847d32230" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-02-07">7 February 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-02-19">19 February 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1001,7 +1001,7 @@ lifetime, and can then be used whenever needed. This allows implementations
 to pre-process configurations.</p>
    <p>The configuration object can be queried to return a configuration dictionary.
 It can also be modified directly.</p>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
+<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="sanitizer"><code><c- g>Sanitizer</c-></code></dfn> {
   <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="constructor" data-export data-lt="Sanitizer(configuration)|constructor(configuration)|Sanitizer()|constructor()" id="dom-sanitizer-sanitizer"><code><c- g>constructor</c-></code></dfn>(<c- b>optional</c-> (<a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig②"><c- n>SanitizerConfig</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="#enumdef-sanitizerpresets" id="ref-for-enumdef-sanitizerpresets②"><c- n>SanitizerPresets</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer/Sanitizer(configuration), Sanitizer/constructor(configuration), Sanitizer/Sanitizer(), Sanitizer/constructor()" data-dfn-type="argument" data-export id="dom-sanitizer-sanitizer-configuration-configuration"><code><c- g>configuration</c-></code></dfn> = "default");
 
@@ -2898,7 +2898,7 @@ Guillaume Weghsteen, and Mike West for their valuable feedback.</p>
   (<a data-link-type="idl-name" href="#sanitizer"><c- n>Sanitizer</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="#enumdef-sanitizerpresets"><c- n>SanitizerPresets</c-></a>) <a data-default="{}" data-type="(Sanitizer or SanitizerConfig or SanitizerPresets)" href="#dom-sethtmlunsafeoptions-sanitizer"><code><c- g>sanitizer</c-></code></a> = {};
 };
 
-[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
+[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <a href="#sanitizer"><code><c- g>Sanitizer</c-></code></a> {
   <a href="#dom-sanitizer-sanitizer"><code><c- g>constructor</c-></code></a>(<c- b>optional</c-> (<a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <c- b>or</c-> <a data-link-type="idl-name" href="#enumdef-sanitizerpresets"><c- n>SanitizerPresets</c-></a>) <a href="#dom-sanitizer-sanitizer-configuration-configuration"><code><c- g>configuration</c-></code></a> = "default");
 
