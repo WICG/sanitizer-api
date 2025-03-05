@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 47d87adb7, updated Tue Feb 18 17:18:43 2025 -0800" name="generator">
+  <meta content="Bikeshed version 60c422380, updated Thu Feb 20 19:11:22 2025 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="80dfa6fb4c585dec725586a0e98860e847d32230" name="revision">
+  <meta content="33bfc9d308a7e659c16844a4ae5b4127187aaa85" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-02-19">19 February 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-05">5 March 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2512,16 +2512,19 @@ navigations are "unsafe", are as follows:
     { "<code>name</code>" → "<code>area</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
-    { "<code>name</code>" → "<code>button</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑤">HTML namespace</a> },
+    { "<code>name</code>" → "<code>base</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑤">HTML namespace</a> },
+    { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
+  ], <br> [
+    { "<code>name</code>" → "<code>button</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑥">HTML namespace</a> },
     { "<code>name</code>" → "<code>formaction</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
-    { "<code>name</code>" → "<code>form</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑥">HTML namespace</a> },
+    { "<code>name</code>" → "<code>form</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑦">HTML namespace</a> },
     { "<code>name</code>" → "<code>action</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
-    { "<code>name</code>" → "<code>iframe</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑦">HTML namespace</a> },
+    { "<code>name</code>" → "<code>iframe</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑧">HTML namespace</a> },
     { "<code>name</code>" → "<code>src</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
-    { "<code>name</code>" → "<code>input</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑧">HTML namespace</a> },
+    { "<code>name</code>" → "<code>input</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑨">HTML namespace</a> },
     { "<code>name</code>" → "<code>formaction</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> [
     { "<code>name</code>" → "<code>a</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace①">SVG namespace</a> },
@@ -2529,9 +2532,6 @@ navigations are "unsafe", are as follows:
   ], <br> [
     { "<code>name</code>" → "<code>a</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace②">SVG namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#xlink-namespace" id="ref-for-xlink-namespace①">XLink namespace</a> }
-  ], <br> [
-    { "<code>name</code>" → "<code>base</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑨">HTML namespace</a> },
-    { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
   ], <br> ]»</p>
    </div>
    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-animating-url-attributes-list">built-in animating URL attributes list</dfn>, which can be used in <a data-link-type="biblio" href="#biblio-svg11" title="Scalable Vector Graphics (SVG) 1.1 (Second Edition)">[SVG11]</a> to declaratively modify navigation elements to use "<code>javascript:</code>"
@@ -3929,7 +3929,12 @@ function hideRefHint(refHint) {
 function showRefHint(link) {
     if(link.classList.contains("dfn-link")) return;
     const url = link.getAttribute("href");
-    const ref = refsData[url];
+    const refHintKey = link.getAttribute("data-refhint-key");
+    let key = url;
+    if(refHintKey) {
+        key = refHintKey + "_" + url;
+    }
+    const ref = refsData[key];
     if(!ref) return;
 
     hideAllRefHints(); // Only display one at this time.
