@@ -823,6 +823,11 @@ navigations are "unsafe", are as follows:
   ],
   <br>
   [
+    { "`name`" &rightarrow; "`base`", "`namespace`" &rightarrow; [=HTML namespace=] },
+    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
+  ],
+  <br>
+  [
     { "`name`" &rightarrow; "`button`", "`namespace`" &rightarrow; [=HTML namespace=] },
     { "`name`" &rightarrow; "`formaction`", "`namespace`" &rightarrow; `null` }
   ],
@@ -850,11 +855,6 @@ navigations are "unsafe", are as follows:
   [
     { "`name`" &rightarrow; "`a`", "`namespace`" &rightarrow; [=SVG namespace=] },
     { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; [=XLink namespace=] }
-  ],
-  <br>
-  [
-    { "`name`" &rightarrow; "`base`", "`namespace`" &rightarrow; [=HTML namespace=] },
-    { "`name`" &rightarrow; "`href`", "`namespace`" &rightarrow; `null` }
   ],
   <br>
 ]&raquo;
