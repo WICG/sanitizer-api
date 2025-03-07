@@ -4,6 +4,10 @@ import json
 import argparse
 import sys
 
+def append_unless_dupe(alist, item):
+  if not item in alist:
+    alist.append(item)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=argparse.FileType('r'), required=True)
@@ -23,7 +27,7 @@ def main():
       elif line.startswith("//"):
         pass
       elif line.startswith("- "):
-        current.append({ "name": line[2:], "namespace": None })
+        append_unless_dupe(current, {"name": line[2:], "namespace": None})
       elif line.startswith("[") and line.endswith("Global]"):
         current = result["attributes"]
       else:
@@ -35,7 +39,7 @@ def main():
         else:
           elem = {"name": line, "namespace": "http://www.w3.org/1999/xhtml"}
         elem["attributes"] = []
-        result["elements"].append(elem)
+        append_unless_dupe(result["elements"], elem)
         current = elem["attributes"]
 
     try:
