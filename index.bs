@@ -434,7 +434,7 @@ using a {{ParentNode}} |node|, a {{SanitizerConfig}} |configuration|, and a
 beginning with |node|, and may recurse to handle some special cases (e.g.
 template contents). It consistes of these steps:
 
-1. [=list/iterate|For each=] |child| in |node|'s [=tree/children=]:
+1. [=list/iterate|For each=] |child| of |node|'s [=tree/children=]:
   1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
 
      Note: Currently, this algorithm is only called on output of the HTML
