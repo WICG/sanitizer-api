@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 4b8aed3f7, updated Thu Mar 6 12:35:01 2025 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="8240cdeb454c602b235907f52dac593f557d829b" name="revision">
+  <meta content="445eca65bd914e124d5bd4eb5ab80bbb65e8b463" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-07">7 March 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-13">13 March 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1168,9 +1168,7 @@ beginning with <var>node</var>, and may recurse to handle some special cases (e.
 template contents). It consistes of these steps: 
     <ol>
      <li data-md>
-      <p>Let <var>current</var> be <var>node</var>.</p>
-     <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> <var>child</var> in <var>current</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> <var>child</var> of <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text">Text</a></code>, <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#comment" id="ref-for-comment">Comment</a></code>, or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑧">Element</a></code>.</p>
@@ -1247,6 +1245,8 @@ template contents). It consistes of these steps:
   "<code>xlink:href</code>", then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove①">remove</a> <var>attr</var>.</p>
             </ol>
           </ol>
+         <li data-md>
+          <p>Call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core④">sanitize core</a> on <var>child</var> with <var>configuration</var> and <var>handleJavascriptNavigationUrls</var>.</p>
         </ol>
       </ol>
     </ol>
@@ -3315,7 +3315,7 @@ let dfnPanelData = {
 "handlejavascriptnavigationurls": {"dfnID":"handlejavascriptnavigationurls","dfnText":"handleJavascriptNavigationUrls","external":false,"refSections":[{"refs":[{"id":"ref-for-handlejavascriptnavigationurls"}],"title":"3.1. Sanitization Algorithms"}],"url":"#handlejavascriptnavigationurls"},
 "safe-and-unsafe": {"dfnID":"safe-and-unsafe","dfnText":"Safe and unsafe","external":false,"refSections":[{"refs":[{"id":"ref-for-safe-and-unsafe"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"#safe-and-unsafe"},
 "sanitize": {"dfnID":"sanitize","dfnText":"sanitize","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitize"},{"id":"ref-for-sanitize\u2460"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-sanitize\u2461"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-sanitize\u2462"}],"title":"3.1. Sanitization Algorithms"}],"url":"#sanitize"},
-"sanitize-core": {"dfnID":"sanitize-core","dfnText":"sanitize core","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitize-core"},{"id":"ref-for-sanitize-core\u2460"},{"id":"ref-for-sanitize-core\u2461"},{"id":"ref-for-sanitize-core\u2462"}],"title":"3.1. Sanitization Algorithms"}],"url":"#sanitize-core"},
+"sanitize-core": {"dfnID":"sanitize-core","dfnText":"sanitize core","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitize-core"},{"id":"ref-for-sanitize-core\u2460"},{"id":"ref-for-sanitize-core\u2461"},{"id":"ref-for-sanitize-core\u2462"},{"id":"ref-for-sanitize-core\u2463"}],"title":"3.1. Sanitization Algorithms"}],"url":"#sanitize-core"},
 "sanitizer": {"dfnID":"sanitizer","dfnText":"Sanitizer","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer"},{"id":"ref-for-sanitizer\u2460"},{"id":"ref-for-sanitizer\u2461"},{"id":"ref-for-sanitizer\u2462"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer\u2463"},{"id":"ref-for-sanitizer\u2464"},{"id":"ref-for-sanitizer\u2465"},{"id":"ref-for-sanitizer\u2466"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-sanitizer\u2467"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-sanitizer\u2468"},{"id":"ref-for-sanitizer\u2460\u24ea"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizer"},
 "sanitizer-allow-an-attribute": {"dfnID":"sanitizer-allow-an-attribute","dfnText":"allow an attribute","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-allow-an-attribute"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-allow-an-attribute\u2460"}],"title":"3.2. Configuration Processing"}],"url":"#sanitizer-allow-an-attribute"},
 "sanitizer-allowattribute": {"dfnID":"sanitizer-allowattribute","dfnText":"allowAttribute","external":false,"refSections":[],"url":"#sanitizer-allowattribute"},
