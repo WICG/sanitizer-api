@@ -434,8 +434,7 @@ using a {{ParentNode}} |node|, a {{SanitizerConfig}} |configuration|, and a
 beginning with |node|, and may recurse to handle some special cases (e.g.
 template contents). It consistes of these steps:
 
-1. Let |current| be |node|.
-1. [=list/iterate|For each=] |child| in |current|'s [=tree/children=]:
+1. [=list/iterate|For each=] |child| of |node|'s [=tree/children=]:
   1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
 
      Note: Currently, this algorithm is only called on output of the HTML
@@ -493,6 +492,7 @@ template contents). It consistes of these steps:
             &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
             [=get an attribute value|value=] [=string/is=] "`href`" or
             "`xlink:href`", then [=/remove an attribute|remove=] |attr|.
+    1. Call [=sanitize core=] on |child| with |configuration| and |handleJavascriptNavigationUrls|.
 
 </div>
 
