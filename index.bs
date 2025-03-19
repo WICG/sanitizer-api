@@ -708,7 +708,7 @@ return the result of [=canonicalize a sanitizer name=] with |element| and the [=
 <div algorithm>
 In order to <dfn>canonicalize a sanitizer attribute</dfn> a
 {{SanitizerAttribute}} |attribute|,
-return the result of [=canonicalize a sanitizer name=] with |attribute| and `null` as the default namespace.
+return the result of [=canonicalize a sanitizer name=] with |attribute| and null as the default namespace.
 </div>
 
 <div algorithm>
