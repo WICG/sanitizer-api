@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 4b8aed3f7, updated Thu Mar 6 12:35:01 2025 -0800" name="generator">
+  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="445eca65bd914e124d5bd4eb5ab80bbb65e8b463" name="revision">
+  <meta content="6818062d1e59b87e18a13b4583b3d6b4846fbcb8" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-13">13 March 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-03-19">19 March 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1511,8 +1511,8 @@ or neither, but not both.</p>
    </div>
    <div class="algorithm" data-algorithm="canonicalize a sanitizer element"> In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-element">canonicalize a sanitizer element</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerelement" id="ref-for-typedefdef-sanitizerelement④">SanitizerElement</a></code> <var>element</var>,
 return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name">canonicalize a sanitizer name</a> with <var>element</var> and the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace②">HTML namespace</a> as the default namespace. </div>
-   <div class="algorithm" data-algorithm="canonicalize a sanitizer attribute"> In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-attribute">canonicalize a sanitizer attribute</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerattribute" id="ref-for-typedefdef-sanitizerattribute⑥">SanitizerAttribute</a></code> <var>attribute</var>, 
-return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name①">canonicalize a sanitizer name</a> with <var>attribute</var> and <code>null</code> as the default namespace. </div>
+   <div class="algorithm" data-algorithm="canonicalize a sanitizer attribute"> In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-attribute">canonicalize a sanitizer attribute</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerattribute" id="ref-for-typedefdef-sanitizerattribute⑥">SanitizerAttribute</a></code> <var>attribute</var>,
+return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name①">canonicalize a sanitizer name</a> with <var>attribute</var> and null as the default namespace. </div>
    <div class="algorithm" data-algorithm="canonicalize a sanitizer name">
      In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-name">canonicalize a sanitizer name</dfn> <var>name</var>, with a default
 namespace <var>defaultNamespace</var>, run the following steps: 
@@ -1524,7 +1524,11 @@ namespace <var>defaultNamespace</var>, run the following steps:
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑧">Assert</a>: <var>name</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑧">dictionary</a> and <var>name</var>["name"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤">exists</a>.</p>
      <li data-md>
-      <p>Return «[ <br> "<code>name</code>" → <var>name</var>["name"], <br> "<code>namespace</code>" → ( <var>name</var>["namespace"] if it <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, otherwise <var>defaultNamespace</var> ) <br> ]».</p>
+      <p>Let <var>namespace</var> be <var>name</var>["namespace"] if it <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, otherwise <var>defaultNamespace</var>.</p>
+     <li data-md>
+      <p>If <var>namespace</var> is the empty string, then set it to null.</p>
+     <li data-md>
+      <p>Return «[ <br> "<code>name</code>" → <var>name</var>["name"], <br> "<code>namespace</code>" → <var>namespace</var> <br> ]».</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.3" id="alg-support"><span class="secno">3.3. </span><span class="content">Supporting Algorithms</span><a class="self-link" href="#alg-support"></a></h3>
