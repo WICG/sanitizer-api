@@ -27,6 +27,7 @@ spec:infra; type:dfn; text: user agent
 <pre class="anchors">
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#parse-html-from-a-string
+text: HTML fragment parsing algorithm; type: dfn; url: https://html.spec.whatwg.org/#html-fragment-parsing-algorithm
 </pre>
 <pre class="biblio">
 {
@@ -378,7 +379,7 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
    [=SVG namespace=], then return.
 1. Let |sanitizer| be the result of calling [=get a sanitizer instance from options=]
    with |options| and |safe|.
-1. Let |newChildren| be the result of the HTML [=fragment parsing algorithm steps=]
+1. Let |newChildren| be the result of the [=HTML fragment parsing algorithm=]
    given |contextElement|, |html|, and true.
 1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=] is |contextElement|'s [=node document=].
 1. [=list/iterate|For each=] |node| in |newChildren|, [=list/append=] |node| to |fragment|.
