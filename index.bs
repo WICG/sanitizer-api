@@ -715,8 +715,8 @@ return the result of [=canonicalize a sanitizer name=] with |element| and the [=
 
 <div algorithm>
 In order to <dfn>canonicalize a sanitizer attribute</dfn> a
-{{SanitizerAttribute}} |attribute|, 
-return the result of [=canonicalize a sanitizer name=] with |attribute| and `null` as the default namespace.
+{{SanitizerAttribute}} |attribute|,
+return the result of [=canonicalize a sanitizer name=] with |attribute| and null as the default namespace.
 </div>
 
 <div algorithm>
@@ -726,9 +726,11 @@ namespace |defaultNamespace|, run the following steps:
 1. [=Assert=]: |name| is either a {{DOMString}} or a [=dictionary=].
 1. If |name| is a {{DOMString}}, then return &laquo;[ "`name`" &rightarrow; |name|, "`namespace`" &rightarrow; |defaultNamespace|]&raquo;.
 1. [=Assert=]: |name| is a [=dictionary=] and |name|["name"] [=map/exists=].
+1. Let |namespace| be |name|["namespace"] if it [=map/exists=], otherwise |defaultNamespace|.
+1. If |namespace| is the empty string, then set it to null.
 1. Return &laquo;[ <br>
   "`name`" &rightarrow; |name|["name"], <br>
-  "`namespace`" &rightarrow; ( |name|["namespace"] if it [=map/exists=], otherwise |defaultNamespace| ) <br>
+  "`namespace`" &rightarrow; |namespace| <br>
   ]&raquo;.
 
 </div>
