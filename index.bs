@@ -448,14 +448,14 @@ template contents). It consistes of these steps:
   1. Otherwise:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |configuration|["{{SanitizerConfig/elements}}"] is not [=list/empty=] and does not [=SanitizerConfig/contain=] |elementName|:
-       1. [=/Remove=] |child|.
-       1. [=Continue=].
     1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize core=] on |child| with |configuration| and
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
       1. [=Continue=].
+    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |configuration|["{{SanitizerConfig/elements}}"] is not [=list/empty=] and does not [=SanitizerConfig/contain=] |elementName|:
+       1. [=/Remove=] |child|.
+       1. [=Continue=].
     1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;
       1. Then call [=sanitize core=] on |child|'s [=template contents=] with
