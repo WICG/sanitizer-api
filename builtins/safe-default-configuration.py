@@ -4,9 +4,15 @@ import json
 import argparse
 import sys
 
-def append_unless_dupe(alist, item):
-  if not item in alist:
-    alist.append(item)
+def dedupe(alist):
+  result = []
+  for item in alist:
+    if not item in result:
+      result.append(item)
+  return result
+
+def remove_from(alist, reference):
+  return [item for item in dedupe(alist) if not item in reference]
 
 def main():
     parser = argparse.ArgumentParser()
@@ -27,7 +33,7 @@ def main():
       elif line.startswith("//"):
         pass
       elif line.startswith("- "):
-        append_unless_dupe(current, {"name": line[2:], "namespace": None})
+        current.append({"name": line[2:], "namespace": None})
       elif line.startswith("[") and line.endswith("Global]"):
         current = result["attributes"]
       else:
@@ -39,8 +45,18 @@ def main():
         else:
           elem = {"name": line, "namespace": "http://www.w3.org/1999/xhtml"}
         elem["attributes"] = []
-        append_unless_dupe(result["elements"], elem)
+        result["elements"].append(elem)
         current = elem["attributes"]
+
+    # De-dupe the global element + attribute allow lists.
+    result["elements"] = dedupe(result["elements"])
+    result["attributes"] = dedupe(result["attributes"])
+
+    # Remove globally allowed attributes from per-element allow lists.
+    for element in result["elements"]:
+      if "attributes" in element:
+        element["attributes"] = remove_from(element["attributes"],
+                                            result["attributes"])
 
     try:
       json.dump(result, args.out, indent=2)
