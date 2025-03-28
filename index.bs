@@ -262,6 +262,7 @@ interface Sanitizer {
 
   // Query configuration:
   SanitizerConfig get();
+  static SanitizerConfig default();
 
   // Modify a Sanitizer's lists and fields:
   undefined allowElement(SanitizerElementWithAttributes element);
@@ -293,6 +294,19 @@ method steps are:
 
 <div algorithm>
 The <dfn for="Sanitizer" export>get</dfn>() method steps are to return the value of [=this=]'s [=Sanitizer/configuration=].
+</div>
+
+<div algorithm>
+The <dfn for="Sanitizer" export>default</dfn>() method steps are:
+
+1. Let |sanitizer| be a new {{Sanitizer}}.
+1. [=Set a configuration=] with [=built-in safe default configuration=], true,
+    and |sanitizer|.
+1. Return |sanitizer|'s [=Sanitizer/configuration=].
+
+Note: We create a new {{Sanitizer}} instance so we get the normalization steps
+    that configuration setting on a Sanitizer performs. This work does not need
+    to be done for every call.
 </div>
 
 <div algorithm>
