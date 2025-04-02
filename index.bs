@@ -640,36 +640,37 @@ To <dfn for="SanitizerConfig">remove unsafe</dfn> from a |configuration|, do thi
 To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration|, a [=boolean=] |safe|, and a {{Sanitizer}} |sanitizer|:
 
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
-  1. Call [=allow an element=] with |element| and |sanitizer|.
+  1. Call [=allow an element=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
-  1. Call [=remove an element=] with |element| and |sanitizer|.
+  1. Call [=remove an element=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
 1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
-  1. Call [=replace an element with its children=] with |element| and |sanitizer|.
+  1. Call [=replace an element with its children=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
 1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
-  1. Call [=allow an attribute=] with |attribute| and |sanitizer|.
+  1. Call [=allow an attribute=] with |attribute| and |sanitizer|'s [=Sanitizer/configuration=].
 1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
-  1. Call [=Sanitizer/remove an attribute=] with |attribute| and |sanitizer|.
+  1. Call [=Sanitizer/remove an attribute=] with |attribute| and |sanitizer|'s [=Sanitizer/configuration=].
 1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=]:
   1. Then call [=set comments=] with |configuration|["{{SanitizerConfig/comments}}"]
-      and |sanitizer|.
+      and |sanitizer|'s [=Sanitizer/configuration=].
   1. Otherwise call [=set comments=] with [=boolean/not=] |safe|
-      and |sanitizer|.
+      and |sanitizer|'s [=Sanitizer/configuration=].
 1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=]:
     1. Then call [=set data attributes=] with
-        |configuration|["{{SanitizerConfig/dataAttributes}}"] and |sanitizer|.
+        |configuration|["{{SanitizerConfig/dataAttributes}}"]
+        and |sanitizer|'s [=Sanitizer/configuration=].
     1. Otherwise call [=set data attributes=] with [=boolean/not=] |safe|
-        and |sanitizer|.
+        and |sanitizer|'s [=Sanitizer/configuration=].
 1. Return whether all of the following are true:
     - [=list/size=] of |configuration|["{{SanitizerConfig/elements}}"] equals
-      [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"].
+      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"].
     - [=list/size=] of |configuration|["{{SanitizerConfig/removeElements}}"] equals
-      [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeElements}}"].
+      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeElements}}"].
     - [=list/size=] of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] equals
-      [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/replaceWithChildrenElements}}"].
+      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/replaceWithChildrenElements}}"].
     - [=list/size=] of |configuration|["{{SanitizerConfig/attributes}}"] equals
-      [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}"].
+      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}"].
     - [=list/size=] of |configuration|["{{SanitizerConfig/removeAttributes}}"] equals
-      [=list/size=] of [=this=]'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}"].
+      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}"].
     - Either |configuration|["{{SanitizerConfig/elements}}"] or
       |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exist=],
       or neither, but not both.
