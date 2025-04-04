@@ -522,6 +522,12 @@ The SVG animation case is covered by the
 
 </div>
 
+Note: Within an origin with a `javascript:` URL &mdash; that is, after the
+    browser has already navigated to a `javascript:`-URL &mdash;
+    [=relative-URL strings=] may turn into `javascript:`-URLs, because the
+    origin may be used as the [=base URL=]. These cases are not handled by
+    the Sanitizer.
+
 <div algorithm>
 To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>:
 1. Let |url| be the result of running the [=basic URL parser=]
