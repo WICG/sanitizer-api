@@ -680,12 +680,12 @@ To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |confi
       [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}"].
     - [=list/size=] of |configuration|["{{SanitizerConfig/removeAttributes}}"] equals
       [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}"].
-    - Either |configuration|["{{SanitizerConfig/elements}}"] or
-      |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exist=],
-      or neither, but not both.
-    - Either |configuration|["{{SanitizerConfig/attributes}}"] or
-      |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=],
-      or neither, but not both.
+    - If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] then
+      |configuration|["{{SanitizerConfig/removeElements}}"] does not
+      [=map/exist=].
+    - If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] then
+      |configuration|["{{SanitizerConfig/removeAttributes}}"] does not
+      [=map/exist=].
 
 Note: Previous versions of this spec had elaborate definitions of how to
   canonicalize a config. This has now effectively been moved into the method
@@ -698,9 +698,6 @@ Note: This operation is defined in terms of the manipulation methods on the
     `{ allow: ["div", "div"] }` would create a Sanitizer with one element in
     the allow list. The final test would then return false, which would cause
     the caller to throw an exception.
-
-Issue: This is still missing error checks for the per-element attribute lists
-    and syntax errors.
 
 </div>
 
