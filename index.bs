@@ -450,12 +450,16 @@ template contents). It consistes of these steps:
   1. Otherwise:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
-    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |elementName|:
+    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+        [=map/exists=] and [=SanitizerConfig/contains=] |elementName|:
       1. Call [=sanitize core=] on |child| with |configuration| and
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
       1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=SanitizerConfig/contains=] |elementName|, or if |configuration|["{{SanitizerConfig/elements}}"] is not [=list/empty=] and does not [=SanitizerConfig/contain=] |elementName|:
+    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=] and
+        [=SanitizerConfig/contains=] |elementName|, or if
+        |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and does not
+        [=SanitizerConfig/contain=] |elementName|:
        1. [=/Remove=] |child|.
        1. [=Continue=].
     1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
@@ -468,24 +472,28 @@ template contents). It consistes of these steps:
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
-      1. If |configuration|["{{SanitizerConfig/removeAttributes}}"]
-         [=SanitizerConfig/contains=] |attrName|,
-         then Remove |attribute| from |child|.
-      1. If |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-           [=SanitizerConfig/contains=] |attrName|, then remove |attribute| from |child|.
+      1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]
+          and [=SanitizerConfig/contains=] |attrName|,
+         then [=/remove an attribute|remove=] |attribute| from |child|.
+      1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+          |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+          [=map/exists=] and [=SanitizerConfig/contains=] |attrName|,
+          then [=/remove an attribute|remove=] |attribute| from |child|.
 
-      1. If all of the following are false, then remove |attribute| from |child|.
-         - |configuration|["{{SanitizerConfig/attributes}}"] [=list/exists=] and
-           [=SanitizerConfig/contains=] |attrName|
-         - |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-           [=SanitizerConfig/contains=] |attrName|
+      1. If all of the following are false,
+          then [=/remove an attribute|remove=] |attribute| from |child|.
+         - |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
+           does not [=SanitizerConfig/contain=] |attrName|
+         - |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]
+           and |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+           [=map/exists=] and does not [=SanitizerConfig/contain=] |attrName|
          - "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             [=Attr/namespace=] is `null` and
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true
       1. If |handleJavascriptNavigationUrls|:
          1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in
             the [=built-in navigating URL attributes list=], and if |attribute|
-            [=contains a javascript: URL=], then remove |attribute| from |child|.
+            [=contains a javascript: URL=], then [=/remove an attribute|remove=] |attribute| from |child|.
          1. If |child|'s [=Element/namespace=] [=string/is=] the
             [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
             "`href`" and  |attr|'s [=Attr/namespace=] is `null` or the
