@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="3cd0ca8effaa380f7013da316e4b51116190b9cd" name="revision">
+  <meta content="c7cb19fe8a174bd22ced1a84b3ad84bafd78496f" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -747,7 +747,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-02">2 April 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-10">10 April 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1034,7 +1034,7 @@ method steps are:
         <p>Set <var>configuration</var> to the <a data-link-type="dfn" href="#built-in-safe-default-configuration" id="ref-for-built-in-safe-default-configuration">built-in safe default configuration</a>.</p>
       </ol>
      <li data-md>
-      <p>Let <var>valid</var> be the return value of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration">setting</a> <var>configuration</var> on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>.</p>
+      <p>Let <var>valid</var> be the return value of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration">set a configuration</a> with <var>configuration</var> and true on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>.</p>
      <li data-md>
       <p>If <var>valid</var> is false, then throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code>.</p>
     </ol>
@@ -1136,7 +1136,7 @@ a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" 
        <li data-md>
         <p>Let <var>sanitizer</var> be a new <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑥">Sanitizer</a></code> instance.</p>
        <li data-md>
-        <p>Let <var>setConfigurationResult</var> be the result of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration①">set a configuration</a> with <var>sanitizerSpec</var> and <var>safe</var> on <var>sanitizer</var>.</p>
+        <p>Let <var>setConfigurationResult</var> be the result of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration①">set a configuration</a> with <var>sanitizerSpec</var> and <a data-link-type="dfn" href="#boolean-not" id="ref-for-boolean-not">not</a> <var>safe</var> on <var>sanitizer</var>.</p>
        <li data-md>
         <p>If <var>setConfigurationResult</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①">TypeError</a></code>.</p>
        <li data-md>
@@ -1409,7 +1409,7 @@ in this spec to cover a "per-namespace global" rule.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="set a configuration" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-a-configuration">set a configuration</dfn>, given a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑤">dictionary</a> <var>configuration</var>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean④">boolean</a> <var>safe</var>, and a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑨">Sanitizer</a></code> <var>sanitizer</var>: 
+     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-a-configuration">set a configuration</dfn>, given a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑤">dictionary</a> <var>configuration</var>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean④">boolean</a> <var>allowCommentsAndDataAttributes</var>, and a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑨">Sanitizer</a></code> <var>sanitizer</var>: 
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑥">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑧">elements</a></code>"] do:</p>
@@ -1448,7 +1448,7 @@ in this spec to cover a "per-namespace global" rule.</p>
         <p>Then call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments①">set comments</a> with <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments③">comments</a></code>"]
   and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑥">configuration</a>.</p>
        <li data-md>
-        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments②">set comments</a> with <a data-link-type="dfn" href="#boolean-not" id="ref-for-boolean-not">not</a> <var>safe</var> and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑦">configuration</a>.</p>
+        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments②">set comments</a> with <var>allowCommentsAndDataAttributes</var> and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑦">configuration</a>.</p>
       </ol>
      <li data-md>
       <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes②">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a>:</p>
@@ -1457,7 +1457,7 @@ in this spec to cover a "per-namespace global" rule.</p>
         <p>Then call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes①">set data attributes</a> with <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes③">dataAttributes</a></code>"]
   and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑧">configuration</a>.</p>
        <li data-md>
-        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes②">set data attributes</a> with <a data-link-type="dfn" href="#boolean-not" id="ref-for-boolean-not①">not</a> <var>safe</var> and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑨">configuration</a>.</p>
+        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes②">set data attributes</a> with <var>allowCommentsAndDataAttributes</var> and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑨">configuration</a>.</p>
       </ol>
      <li data-md>
       <p>Return whether all of the following are true:</p>
@@ -2355,7 +2355,9 @@ return false if <var>bool</var> is true, and return true otherwise. </div>
       <c- f>"name"</c-><c- p>:</c-> <c- u>"scriptlevel"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>}</c->
-  <c- p>]</c->
+  <c- p>],</c->
+  <c- f>"comments"</c-><c- p>:</c-> <c- kc>false</c-><c- p>,</c->
+  <c- f>"dataAttributes"</c-><c- p>:</c-> <c- kc>false</c->
 <c- p>}</c-></pre>
    <p class="note" role="note"><span class="marker">Note:</span> Included <a data-link-type="biblio" href="#biblio-mathml" title="Mathematical Markup Language (MathML™) 1.01 Specification">[MathML]</a> markup is based on <a data-link-type="biblio" href="#biblio-safemathml" title="MathML Safe List">[SafeMathML]</a>.</p>
    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-safe-baseline-configuration">built-in safe baseline configuration</dfn> is meant to block only
@@ -3234,7 +3236,7 @@ let dfnPanelData = {
 "b815ad04": {"dfnID":"b815ad04","dfnText":"parseFromString(string, type)","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-domparser-parsefromstring"}],"title":"1.2. API Summary"}],"url":"https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-domparser-parsefromstring"},
 "bdec671a": {"dfnID":"bdec671a","dfnText":"TrustedHTML","external":true,"refSections":[{"refs":[{"id":"ref-for-trustedhtml"},{"id":"ref-for-trustedhtml\u2460"},{"id":"ref-for-trustedhtml\u2461"},{"id":"ref-for-trustedhtml\u2462"},{"id":"ref-for-trustedhtml\u2463"},{"id":"ref-for-trustedhtml\u2464"}],"title":"2.1. Sanitizer API"}],"url":"https://w3c.github.io/trusted-types/dist/spec/#trustedhtml"},
 "bec98d30": {"dfnID":"bec98d30","dfnText":"dictionary","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-dictionary"},{"id":"ref-for-dfn-dictionary\u2460"},{"id":"ref-for-dfn-dictionary\u2461"},{"id":"ref-for-dfn-dictionary\u2462"},{"id":"ref-for-dfn-dictionary\u2463"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-dfn-dictionary\u2464"},{"id":"ref-for-dfn-dictionary\u2465"},{"id":"ref-for-dfn-dictionary\u2466"},{"id":"ref-for-dfn-dictionary\u2467"}],"title":"3.2. Configuration Processing"}],"url":"https://webidl.spec.whatwg.org/#dfn-dictionary"},
-"boolean-not": {"dfnID":"boolean-not","dfnText":"not","external":false,"refSections":[{"refs":[{"id":"ref-for-boolean-not"},{"id":"ref-for-boolean-not\u2460"}],"title":"3.2. Configuration Processing"}],"url":"#boolean-not"},
+"boolean-not": {"dfnID":"boolean-not","dfnText":"not","external":false,"refSections":[{"refs":[{"id":"ref-for-boolean-not"}],"title":"3. Algorithms"}],"url":"#boolean-not"},
 "built-in-animating-url-attributes-list": {"dfnID":"built-in-animating-url-attributes-list","dfnText":"built-in animating URL attributes list","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-animating-url-attributes-list"},{"id":"ref-for-built-in-animating-url-attributes-list\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-built-in-animating-url-attributes-list\u2461"}],"title":"3.4. Builtins"}],"url":"#built-in-animating-url-attributes-list"},
 "built-in-navigating-url-attributes-list": {"dfnID":"built-in-navigating-url-attributes-list","dfnText":"built-in navigating URL attributes list","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-navigating-url-attributes-list"},{"id":"ref-for-built-in-navigating-url-attributes-list\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-built-in-navigating-url-attributes-list\u2461"}],"title":"3.4. Builtins"}],"url":"#built-in-navigating-url-attributes-list"},
 "built-in-safe-baseline-configuration": {"dfnID":"built-in-safe-baseline-configuration","dfnText":"built-in safe baseline configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-built-in-safe-baseline-configuration"},{"id":"ref-for-built-in-safe-baseline-configuration\u2460"},{"id":"ref-for-built-in-safe-baseline-configuration\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-built-in-safe-baseline-configuration\u2462"}],"title":"3.4. Builtins"}],"url":"#built-in-safe-baseline-configuration"},
