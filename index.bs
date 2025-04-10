@@ -475,16 +475,15 @@ template contents). It consistes of these steps:
       1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]
           and [=SanitizerConfig/contains=] |attrName|,
          then [=/remove an attribute|remove=] |attribute| from |child|.
-      1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
-          |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+      1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=], and
+          if |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
           [=map/exists=] and [=SanitizerConfig/contains=] |attrName|,
           then [=/remove an attribute|remove=] |attribute| from |child|.
-
       1. If all of the following are false,
           then [=/remove an attribute|remove=] |attribute| from |child|.
          - |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
            does not [=SanitizerConfig/contain=] |attrName|
-         - |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]
+         - |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=],
            and |configuration|["{{SanitizerConfig/elements}}"]["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
            [=map/exists=] and does not [=SanitizerConfig/contain=] |attrName|
          - "data-" is a [=code unit prefix=] of [=Attr/local name=] and
