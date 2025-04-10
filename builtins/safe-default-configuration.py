@@ -19,7 +19,7 @@ def main():
     except BaseException as err:
       parser.error("Cannot read from --input file.")
 
-    result = { "elements": [], "attributes": [] }
+    result = { "elements": [], "attributes": [], "comments": False, "dataAttributes": False }
     current = []
     for line in lines.split("\n"):
       if not line:
