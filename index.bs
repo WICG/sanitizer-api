@@ -544,11 +544,16 @@ To determine whether an |attribute| <dfn>contains a javascript: URL</dfn>:
 <div algorithm>
 To <dfn for="SanitizerConfig">allow an element</dfn> |element| with a {{SanitizerConfig}} |configuration|, do:
 
-1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=] with |element|.
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"].
-1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"].
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
+1. Set |element| to the result of [=canonicalize a sanitizer element with
+    attributes=] with |element|.
+1. [=SanitizerConfig/Remove=] |element| from the "{{SanitizerConfig/elements}}"
+    key of |configuration|.
+1. [=SanitizerConfig/Add=] |element| to the "{{SanitizerConfig/elements}}"
+    key of |configuration|.
+1. [=SanitizerConfig/Remove=] |element| from the
+    "{{SanitizerConfig/removeElements}}" key of |configuration|.
+1. [=SanitizerConfig/Remove=] |element| from the
+    "{{SanitizerConfig/replaceWithChildrenElements}}" key of |configuration|.
 
 NOTE: Handling of [=allowElement=] is a little more complicated than the other
     methods, because the element allow list can have per-element allow- and
@@ -567,38 +572,55 @@ NOTE: [=SanitizerConfig/Remove=] matches on name and namespace, so adding an
 <div algorithm>
 To <dfn for="Sanitizer">remove an element</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
 
-1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
-1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/removeElements}}"].
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"] list.
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
+1. Set |element| to the result of [=canonicalize a sanitizer element=] with
+    |element|.
+1. [=SanitizerConfig/Add=] |element| to the "{{SanitizerConfig/removeElements}}"
+    key of |configuration|.
+1. [=SanitizerConfig/Remove=] |element| from "{{SanitizerConfig/elements}}"
+    key of |configuration|.
+1. [=SanitizerConfig/Remove=] |element| from
+    "{{SanitizerConfig/replaceWithChildrenElements}}" key of |configuration|.
 
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">replace an element with its children</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">replace an element with its children</dfn> |element|
+from a {{SanitizerConfig}} |configuration|, do:
 
-1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
-1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"] list.
-
-</div>
-
-<div algorithm>
-To <dfn for="Sanitizer">allow an attribute</dfn> |attribute| on a {{SanitizerConfig}} |configuration|, do:
-
-1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
-1. [=SanitizerConfig/Add=] |attribute| to |configuration|["{{SanitizerConfig/attributes}}"].
-1. [=SanitizerConfig/Remove=] |attribute| from |configuration|["{{SanitizerConfig/removeAttributes}}"].
+1. Set |element| to the result of [=canonicalize a sanitizer element=] with
+    |element|.
+1. [=SanitizerConfig/Add=] |element| to the
+    "{{SanitizerConfig/replaceWithChildrenElements}}" key of |configuration|.
+1. [=SanitizerConfig/Remove=] |element| from the
+    "{{SanitizerConfig/removeElements}}" key of |configuration|.
+1. [=SanitizerConfig/Remove=] |element| from the "{{SanitizerConfig/elements}}"
+    key of |configuration|.
 
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">allow an attribute</dfn> |attribute| on a
+{{SanitizerConfig}} |configuration|, do:
 
-1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
-1. [=SanitizerConfig/Add=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"].
-1. [=SanitizerConfig/Remove=] |attribute| from |configuration|["{{SanitizerConfig/attributes}}"].
+1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=]
+    with |attribute|.
+1. [=SanitizerConfig/Add=] |attribute| to the "{{SanitizerConfig/attributes}}"
+    key of |configuration|.
+1. [=SanitizerConfig/Remove=] |attribute| from the
+    "{{SanitizerConfig/removeAttributes}}" key of |configuration|.
+
+</div>
+
+<div algorithm>
+To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a
+{{SanitizerConfig}} |configuration|, do:
+
+1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=]
+    with |attribute|.
+1. [=SanitizerConfig/Add=] |attribute| to "{{SanitizerConfig/removeAttributes}}"
+    key of |configuration|.
+1. [=SanitizerConfig/Remove=] |attribute| from "{{SanitizerConfig/attributes}}"
+    key of |configuration|.
 
 </div>
 
@@ -759,16 +781,27 @@ if there exists an |entry| of |list| that is an [=ordered map=], and where
 </div>
 
 <div algorithm>
-To <dfn for="SanitizerConfig">remove</dfn> an |item| from a |list| that is an
-[=ordered map=], [=list/remove=] all |entry| from |list|
-where |item|["name"] [=equals=] |entry|["name"] and
-|item|["namespace"] [=equals=] |entry|["namespace"].
+To <dfn for="SanitizerConfig">remove</dfn> an |item| from the key |key| in a
+|configuration|:
+
+1. If |configuration|[|key|] does not [=map/exist=], return.
+1. Let |list| be |configuration|[|key|].
+1. [=Assert=]: |list| is an [=ordered map=].
+1. [=list/Remove=] all |entry| from |list| where |item|["name"]
+    [=equals=] |entry|["name"] and
+    |item|["namespace"] [=equals=] |entry|["namespace"].
+
 </div>
 
 <div algorithm>
-To <dfn for="SanitizerConfig">add</dfn> a |name| to a |list|, where |name| is
-[=canonicalize a sanitizer name|canonicalized=] and |list| is an [=ordered map=]:
+To <dfn for="SanitizerConfig">add</dfn> a |name| to the key |key| in a
+|configuration|, where |name| is
+[=canonicalize a sanitizer name|canonicalized=] and
+|configuration| is a {{SanitizerConfig}}:
 
+1. If |configuration|[|key|] does not [=map/exist=], set
+    |configuration|[|key|] to &laquo;[]&raquo;.
+1. Let |list| be |configuration|[|key|].
 1. If |list| [=SanitizerConfig/contains=] |name|, then return.
 1. [=list/Append=] |name| to |list|.
 
