@@ -669,16 +669,42 @@ To <dfn for="SanitizerConfig">remove unsafe</dfn> from a |configuration|, do thi
 <div algorithm>
 To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration|, a [=boolean=] |allowCommentsAndDataAttributes|, and a {{Sanitizer}} |sanitizer|:
 
-1. [=SanitizerConfig/iterate|For each=] |element| of key "{{SanitizerConfig/elements}}" in |configuration| do:
-  1. Call [=allow an element=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=SanitizerConfig/iterate|For each=] |element| of key "{{SanitizerConfig/removeElements}}" in |configuration| do:
-  1. Call [=remove an element=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=SanitizerConfig/iterate|For each=] |element| of key "{{SanitizerConfig/replaceWithChildrenElements}}" in |configuration| do:
-  1. Call [=replace an element with its children=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=SanitizerConfig/iterate|For each=] |attribute| of key "{{SanitizerConfig/attributes}}" in |configuration| do:
-  1. Call [=allow an attribute=] with |attribute| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=SanitizerConfig/iterate|For each=] |attribute| of key "{{SanitizerConfig/removeAttributes}}" in |configuration| do:
-  1. Call [=Sanitizer/remove an attribute=] with |attribute| and |sanitizer|'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+  1. Set |sanitizer|'s |configuration|["{{SanitizerConfig/elements}}"]
+      to &laquo;[]&raquo;
+  1. [=list/iterate|For each=] |element| of
+      |configuration|["{{SanitizerConfig/elements}}"]:
+    1. Call [=allow an element=] with |element| and
+        |sanitizer|'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+  1. Set |sanitizer|'s |configuration|["{{SanitizerConfig/removeElements}}"]
+      to &laquo;[]&raquo;.
+  1. [=list/iterate|For each=] |element| of
+      |configuration|["{{SanitizerConfig/removeElements}}"]:
+    1. Call [=remove an element=] with |element| and
+       |sanitizer|'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    [=map/exists=]:
+  1. Set |sanitizer|'s |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+      to &laquo;[]&raquo;.
+  1. [=list/iterate|For each=] |element| of
+      |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]:
+    1. Call  [=replace an element with its children=] with |element| and
+       |sanitizer|'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+  1. Set |sanitizer|'s |configuration|["{{SanitizerConfig/attributes}}"]
+      to &laquo;[]&raquo;.
+  1. [=list/iterate|For each=] |element| of
+      |configuration|["{{SanitizerConfig/attributes}}"]:
+    1. Call [=allow an attribute=] with |attribute| and
+        |sanitizer|'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+  1. Set |sanitizer|'s |configuration|["{{SanitizerConfig/removeAttributes}}"]
+      to &laquo;[]&raquo;.
+  1. [=list/iterate|For each=] |element| of
+      |configuration|["{{SanitizerConfig/removeAttributes}}"]:
+    1. Call [=Sanitizer/remove an attribute=] with |attribute| and
+        |sanitizer|'s [=Sanitizer/configuration=].
 1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=]:
   1. Then call [=set comments=] with |configuration|["{{SanitizerConfig/comments}}"]
       and |sanitizer|'s [=Sanitizer/configuration=].
@@ -804,15 +830,6 @@ To <dfn for="SanitizerConfig">add</dfn> a |name| to the key |key| in a
 1. Let |list| be |configuration|[|key|].
 1. If |list| [=SanitizerConfig/contains=] |name|, then return.
 1. [=list/Append=] |name| to |list|.
-
-</div>
-
-<div algorithm>
-To <dfn for="SanitizerConfig">iterate</dfn> over a key |key| of a |configuration|, use phrasing of the form "[=SanitizerConfig/iterate=] item of |key| in |configuration|" and do:
-
-1. If |configuration|[|key|] does not [=list/exist=], then return.
-1. [=list/iterate|For each=] |item| of |configuration|[|key|] and
-    perform the steps given in the calling algorithm on each |item| in order.
 
 </div>
 
