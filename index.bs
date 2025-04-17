@@ -669,15 +669,15 @@ To <dfn for="SanitizerConfig">remove unsafe</dfn> from a |configuration|, do thi
 <div algorithm>
 To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration|, a [=boolean=] |allowCommentsAndDataAttributes|, and a {{Sanitizer}} |sanitizer|:
 
-1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
+1. [=SanitizerConfig/iterate|For each=] |element| of key "{{SanitizerConfig/elements}}" in |configuration| do:
   1. Call [=allow an element=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
+1. [=SanitizerConfig/iterate|For each=] |element| of key "{{SanitizerConfig/removeElements}}" in |configuration| do:
   1. Call [=remove an element=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
+1. [=SanitizerConfig/iterate|For each=] |element| of key "{{SanitizerConfig/replaceWithChildrenElements}}" in |configuration| do:
   1. Call [=replace an element with its children=] with |element| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
+1. [=SanitizerConfig/iterate|For each=] |attribute| of key "{{SanitizerConfig/attributes}}" in |configuration| do:
   1. Call [=allow an attribute=] with |attribute| and |sanitizer|'s [=Sanitizer/configuration=].
-1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
+1. [=SanitizerConfig/iterate|For each=] |attribute| of key "{{SanitizerConfig/removeAttributes}}" in |configuration| do:
   1. Call [=Sanitizer/remove an attribute=] with |attribute| and |sanitizer|'s [=Sanitizer/configuration=].
 1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=]:
   1. Then call [=set comments=] with |configuration|["{{SanitizerConfig/comments}}"]
@@ -691,16 +691,16 @@ To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |confi
     1. Otherwise call [=set data attributes=] with |allowCommentsAndDataAttributes|
         and |sanitizer|'s [=Sanitizer/configuration=].
 1. Return whether all of the following are true:
-    - [=list/size=] of |configuration|["{{SanitizerConfig/elements}}"] equals
-      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"].
-    - [=list/size=] of |configuration|["{{SanitizerConfig/removeElements}}"] equals
-      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeElements}}"].
-    - [=list/size=] of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] equals
-      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/replaceWithChildrenElements}}"].
-    - [=list/size=] of |configuration|["{{SanitizerConfig/attributes}}"] equals
-      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}"].
-    - [=list/size=] of |configuration|["{{SanitizerConfig/removeAttributes}}"] equals
-      [=list/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}"].
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/elements}}"] equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"].
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/removeElements}}"] equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeElements}}"].
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/replaceWithChildrenElements}}"].
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/attributes}}"] equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}"].
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/removeAttributes}}"] equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}"].
     - If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] then
       |configuration|["{{SanitizerConfig/removeElements}}"] does not
       [=map/exist=].
@@ -804,6 +804,23 @@ To <dfn for="SanitizerConfig">add</dfn> a |name| to the key |key| in a
 1. Let |list| be |configuration|[|key|].
 1. If |list| [=SanitizerConfig/contains=] |name|, then return.
 1. [=list/Append=] |name| to |list|.
+
+</div>
+
+<div algorithm>
+To <dfn for="SanitizerConfig">iterate</dfn> over a key |key| of a |configuration|, use phrasing of the form "[=SanitizerConfig/iterate=] item of |key| in |configuration|" and do:
+
+1. If |configuration|[|key|] does not [=list/exist=], then return.
+1. [=list/iterate|For each=] |item| of |configuration|[|key|] and
+    perform the steps given in the calling algorithm on each |item| in order.
+
+</div>
+
+<div algorithm>
+To determine the <dfn for="SanitizerConfig">size</dfn> of a [=/list=] |list|:
+
+1. If |list| does not [=map/exist=], return None.
+1. Return [=list/size=] of |list|.
 
 </div>
 
