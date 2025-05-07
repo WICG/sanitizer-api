@@ -459,9 +459,10 @@ template contents). It consistes of these steps:
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
       1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=] and
-        [=SanitizerConfig/contains=] |elementName| or
-        |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and does not
+    1. If |configuration|["{{SanitizerConfig/removeElements}}",&laquo;[]&raquo;]
+        [=SanitizerConfig/contains=] |elementName|, or
+        |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+        |configuration|["{{SanitizerConfig/elements}}"] does not
         [=SanitizerConfig/contain=] |elementName|:
        1. [=/Remove=] |child|.
        1. [=Continue=].
