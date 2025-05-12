@@ -207,7 +207,7 @@ The <dfn for="Document" export>parseHTMLUnsafe</dfn>(|html|, |options|) method s
 1. [=Parse HTML from a string=] given |document| and |compliantHTML|.
 1. Let |sanitizer| be the result of calling [=get a sanitizer instance from options=]
    with |options| and false.
-1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |sanitizer| and false.
+1. Call [=sanitize=] on |document| with |sanitizer| and false.
 1. Return |document|.
 
 </div>
@@ -223,7 +223,7 @@ The <dfn for="Document" export>parseHTML</dfn>(|html|, |options|) method steps a
 1. [=Parse HTML from a string=] given |document| and |html|.
 1. Let |sanitizer| be the result of calling [=get a sanitizer instance from options=]
    with |options| and true.
-1. Call [=sanitize=] on |document|'s [=tree/root|root node=] with |sanitizer| and true.
+1. Call [=sanitize=] on |document| with |sanitizer| and true.
 1. Return |document|.
 
 </div>
@@ -437,12 +437,15 @@ beginning with |node|, and may recurse to handle some special cases (e.g.
 template contents). It consistes of these steps:
 
 1. [=list/iterate|For each=] |child| of |node|'s [=tree/children=]:
-  1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, or {{Element}}.
+  1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, {{Element}},
+      or {{DocumentType}}.
 
      Note: Currently, this algorithm is only called on output of the HTML
-           parser for which this assertion should hold. If in the future
-           this algorithm will be used in different contexts, this assumption
-           needs to be re-examined.
+           parser for which this assertion should hold. {{DocumentType}} should
+           only occur for {{Document/parseHTML}} and {{Document/parseHTMLUnsafe}}.
+           If in the future this algorithm will be used in different contexts,
+           this assumption needs to be re-examined.
+  1. If |child| [=implements=] {{DocumentType}}, then [=continue=].
   1. If |child| [=implements=] {{Text}}, then [=continue=].
   1. If |child| [=implements=] {{Comment}}:
     1. If |configuration|["{{SanitizerConfig/comments}}"] is not true,
