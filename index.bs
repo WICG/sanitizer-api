@@ -456,7 +456,7 @@ template contents). It consistes of these steps:
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
       1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}",&laquo;[]&raquo;]
+    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/with default=] &laquo;[]&raquo;
         [=SanitizerConfig/contains=] |elementName|, or
         |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
         |configuration|["{{SanitizerConfig/elements}}"] does not
@@ -473,18 +473,21 @@ template contents). It consistes of these steps:
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
-      1. If |configuration|["{{SanitizerConfig/removeAttributes}}",&laquo;[]&raquo;] [=SanitizerConfig/contains=] |attrName|,
+      1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/with default=] &laquo;[]&raquo; [=SanitizerConfig/contains=] |attrName|,
          then [=/remove an attribute|remove=] |attribute| from |child|.
-      1. If |configuration|["{{SanitizerConfig/elements}}",&laquo;[]&raquo;]
-          ["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}",&laquo;[]&raquo;]
+      1. Let |elements| be |configuration|["{{SanitizerConfig/elements}}"] [=map/with default=] &laquo;[]&raquo;.
+      1. If |elements|
+          ["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+          [=map/with default=] &laquo;[]&raquo;
           [=SanitizerConfig/contains=] |attrName|,
           then [=/remove an attribute|remove=] |attribute| from |child|.
       1. If all of the following are false:
-         - |configuration|["{{SanitizerConfig/attributes}}",&laquo;[]&raquo;]
+         - |configuration|["{{SanitizerConfig/attributes}}"]
+            [=map/with default=] &laquo;[]&raquo;
             [=SanitizerConfig/contains=] |attrName|,
-         - |configuration|["{{SanitizerConfig/elements}}",&laquo;[]&raquo;]
-           ["{{SanitizerElementNamespaceWithAttributes/attributes}}",&laquo;[]&raquo;]
-           does not [=SanitizerConfig/contain=] |attrName|, and
+         - elements["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+            [=map/with default=] &laquo;[]&raquo;
+            does not [=SanitizerConfig/contain=] |attrName|, and
          - "data-" is a [=code unit prefix=] of [=Attr/local name=] and
             [=Attr/namespace=] is `null` and
             |configuration|["{{SanitizerConfig/dataAttributes}}"] is true,
@@ -551,12 +554,14 @@ To <dfn for="SanitizerConfig">allow an element</dfn> |element| with a {{Sanitize
     [=map/set=] |configuration|["{{SanitizerConfig/elements}}"] to
     &laquo;[]&raquo;
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/elements}}",None].
+    |configuration|["{{SanitizerConfig/elements}}"] [=map/with default=] None.
 1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"].
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/removeElements}}",None].
+    |configuration|["{{SanitizerConfig/removeElements}}"] [=map/with default=]
+    None.
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}",None].
+    |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    [=map/with default=] None.
 
 NOTE: Handling of [=allowElement=] is a little more complicated than the other
     methods, because the element allow list can have per-element allow- and
@@ -583,9 +588,10 @@ To <dfn for="Sanitizer">remove an element</dfn> |element| from a {{SanitizerConf
 1. [=list/Append=] |element| to
     |configuration|["{{SanitizerConfig/removeElements}}"].
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/elements}}",None].
+    |configuration|["{{SanitizerConfig/elements}}"] [=map/with default=] None.
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}",None].
+    |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    [=map/with default=] None.
 
 </div>
 
@@ -602,9 +608,10 @@ from a {{SanitizerConfig}} |configuration|, do:
 1. [=list/Append=] |element| to
     |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/removeElements}}",None].
+    |configuration|["{{SanitizerConfig/removeElements}}"]
+    [=map/with default=] None.
 1. [=SanitizerConfig/Remove=] |element| from
-    |configuration|["{{SanitizerConfig/elements}}",None].
+    |configuration|["{{SanitizerConfig/elements}}"] [=map/with default=] None.
 
 </div>
 
@@ -620,7 +627,8 @@ To <dfn for="Sanitizer">allow an attribute</dfn> |attribute| on a
 1. [=list/Append=] |attribute| to
     |configuration|["{{SanitizerConfig/attributes}}"].
 1. [=SanitizerConfig/Remove=] |attribute| from
-    |configuration|["{{SanitizerConfig/removeAttributes}}",None]
+    |configuration|["{{SanitizerConfig/removeAttributes}}"]
+    [=map/with default=] None.
 
 </div>
 
@@ -636,7 +644,7 @@ To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a
 1. [=list/Append=] |attribute| to
     |configuration|["{{SanitizerConfig/removeAttributes}}"].
 1. [=SanitizerConfig/Remove=] |attribute| from
-    |configuration|["{{SanitizerConfig/attributes}}",None].
+    |configuration|["{{SanitizerConfig/attributes}}"] [=map/with default=] None.
 
 </div>
 
@@ -733,16 +741,16 @@ To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |confi
     1. Otherwise call [=set data attributes=] with |allowCommentsAndDataAttributes|
         and |sanitizer|'s [=Sanitizer/configuration=].
 1. Return whether all of the following are true:
-    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/elements}}",None] equals
-      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}",None].
-    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/removeElements}}",None] equals
-      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeElements}}",None].
-    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}",None] equals
-      [=SanitizerConfig/size=] of |sanitizer| [=Sanitizer/configuration=]["{{SanitizerConfig/replaceWithChildrenElements}}",None].
-    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/attributes}}",None] equals
-      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}",None].
-    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/removeAttributes}}",None] equals
-      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}",None].
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/elements}}"] [=map/with default=] None equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/elements}}"] [=map/with default=] None.
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/removeElements}}"] [=map/with default=] None equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeElements}}"] [=map/with default=] None.
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/with default=] None equals
+      [=SanitizerConfig/size=] of |sanitizer| [=Sanitizer/configuration=]["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/with default=] None.
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/attributes}}"] [=map/with default=] None equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/attributes}}"] [=map/with default=] None.
+    - [=SanitizerConfig/size=] of |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/with default=] None equals
+      [=SanitizerConfig/size=] of |sanitizer|'s [=Sanitizer/configuration=]["{{SanitizerConfig/removeAttributes}}"] [=map/with default=] None.
     - If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] then
       |configuration|["{{SanitizerConfig/removeElements}}"] does not
       [=map/exist=].
@@ -878,12 +886,19 @@ To <dfn for="map">maybe get the value</dfn> in an [=ordered map=]
 
 </div>
 
-We can also denote [=maybe get the value|maybe getting the value=] using an indexing syntax with two parameters, by providing a [=map/key=] and a default value seperated by comma, inside square brackets directly following a map.
+When using [=get the value|indexing syntax=], you can add the
+phrase <dfn for="map">with default</dfn> to denote [=maybe get the value=]
+and to provide a default value.
 
 <div class=example>
-`map["test",None]` would return
-`"ok"` for a [=map=] &laquo;["test"&rightarrow;"ok"]&raquo;,
-and `None` for a [=map=] &laquo;["ok"&rightarrow;"test"]&raquo;.
+Given a map &laquo;["test"&rightarrow;"ok"]&raquo;:
+* `map["test"]` returns `"ok"`.
+* `map["bla"]` is invalid, due to the assertion in step 1 of [=get the value=].
+* <code>map["test"] [=map/with default=] None</code> also returns `"ok"`.
+* <code>map["bla"] [=map/with default=] None</code> returns `None`.
+* The default value isn't constrained to error values.
+   <code>map["bla"] [=map/with default=] "also ok"</code> returns `"also ok"`.
+
 </div>
 
 ## Builtins ## {#sanitization-defaults}
