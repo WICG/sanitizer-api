@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="d4a6cff1ad499ac66bcfdf4b5a08dd0cec160225" name="revision">
+  <meta content="50ed6b60c596a9a98c304988708bbb0e4cc2dd97" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -747,7 +747,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-04-10">10 April 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-14">14 May 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -957,7 +957,7 @@ markup, and an optional configuration.</p>
      <li data-md>
       <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options">get a sanitizer instance from options</a> with <var>options</var> and false.</p>
      <li data-md>
-      <p>Call <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> on <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-root" id="ref-for-concept-tree-root">root node</a> with <var>sanitizer</var> and false.</p>
+      <p>Call <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> on <var>document</var> with <var>sanitizer</var> and false.</p>
      <li data-md>
       <p>Return <var>document</var>.</p>
     </ol>
@@ -975,7 +975,7 @@ markup, and an optional configuration.</p>
      <li data-md>
       <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options①">get a sanitizer instance from options</a> with <var>options</var> and true.</p>
      <li data-md>
-      <p>Call <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize①">sanitize</a> on <var>document</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-root" id="ref-for-concept-tree-root①">root node</a> with <var>sanitizer</var> and true.</p>
+      <p>Call <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize①">sanitize</a> on <var>document</var> with <var>sanitizer</var> and true.</p>
      <li data-md>
       <p>Return <var>document</var>.</p>
     </ol>
@@ -1170,15 +1170,19 @@ template contents). It consistes of these steps:
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> <var>child</var> of <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a>:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text">Text</a></code>, <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#comment" id="ref-for-comment">Comment</a></code>, or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑧">Element</a></code>.</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text">Text</a></code>, <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#comment" id="ref-for-comment">Comment</a></code>, <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑧">Element</a></code>,
+  or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documenttype" id="ref-for-documenttype">DocumentType</a></code>.</p>
         <p class="note" role="note"><span class="marker">Note:</span> Currently, this algorithm is only called on output of the HTML
-       parser for which this assertion should hold. If in the future
-       this algorithm will be used in different contexts, this assumption
-       needs to be re-examined.</p>
+       parser for which this assertion should hold. <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documenttype" id="ref-for-documenttype①">DocumentType</a></code> should
+       only occur for <code class="idl"><a data-link-type="idl" href="#dom-document-parsehtml" id="ref-for-dom-document-parsehtml">parseHTML</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-document-parsehtmlunsafe" id="ref-for-dom-document-parsehtmlunsafe">parseHTMLUnsafe</a></code>.
+       If in the future this algorithm will be used in different contexts,
+       this assumption needs to be re-examined.</p>
        <li data-md>
-        <p>If <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements①">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text①">Text</a></code>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue">continue</a>.</p>
+        <p>If <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements①">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documenttype" id="ref-for-documenttype②">DocumentType</a></code>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue">continue</a>.</p>
        <li data-md>
-        <p>If <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements②">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#comment" id="ref-for-comment①">Comment</a></code>:</p>
+        <p>If <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements②">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#text" id="ref-for-text①">Text</a></code>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue①">continue</a>.</p>
+       <li data-md>
+        <p>If <var>child</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements③">implements</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#comment" id="ref-for-comment①">Comment</a></code>:</p>
         <ol>
          <li data-md>
           <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments">comments</a></code>"] is not true,
@@ -1197,7 +1201,7 @@ template contents). It consistes of these steps:
            <li data-md>
             <p>Call <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">replace all</a> with <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child①">children</a> within <var>child</var>.</p>
            <li data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue①">Continue</a>.</p>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue②">Continue</a>.</p>
           </ol>
          <li data-md>
           <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements">removeElements</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①">contains</a> <var>elementName</var>, or if <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements">elements</a></code>"] is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty">empty</a> and does not <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains②">contain</a> <var>elementName</var>:</p>
@@ -1205,7 +1209,7 @@ template contents). It consistes of these steps:
            <li data-md>
             <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-remove" id="ref-for-concept-node-remove①">Remove</a> <var>child</var>.</p>
            <li data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue②">Continue</a>.</p>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue③">Continue</a>.</p>
           </ol>
          <li data-md>
           <p>If <var>elementName</var> <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal">equals</a> «[ "<code>name</code>" → "<code>template</code>",
@@ -2776,6 +2780,7 @@ Guillaume Weghsteen, and Mike West for their valuable feedback.</p>
      <li><span class="dfn-paneled" id="a0647283">Comment</span>
      <li><span class="dfn-paneled" id="85394472">Document</span>
      <li><span class="dfn-paneled" id="49a2843d">DocumentFragment</span>
+     <li><span class="dfn-paneled" id="9011c821">DocumentType</span>
      <li><span class="dfn-paneled" id="296f3551">Element</span>
      <li><span class="dfn-paneled" id="96c16e60">Node</span>
      <li><span class="dfn-paneled" id="ece46d2b">ParentNode</span>
@@ -2794,7 +2799,6 @@ Guillaume Weghsteen, and Mike West for their valuable feedback.</p>
      <li><span class="dfn-paneled" id="0e0b900e">remove</span>
      <li><span class="dfn-paneled" id="414d5b08">remove an attribute</span>
      <li><span class="dfn-paneled" id="4fd7ca14">replace all</span>
-     <li><span class="dfn-paneled" id="f7960529">root</span>
      <li><span class="dfn-paneled" id="58a8f724">shadow host</span>
      <li><span class="dfn-paneled" id="ce720392">shadow root</span>
     </ul>
@@ -3204,13 +3208,14 @@ let dfnPanelData = {
 "85a289c7": {"dfnID":"85a289c7","dfnText":"SVG namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-svg-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-svg-namespace\u2460"},{"id":"ref-for-svg-namespace\u2461"},{"id":"ref-for-svg-namespace\u2462"},{"id":"ref-for-svg-namespace\u2463"},{"id":"ref-for-svg-namespace\u2464"},{"id":"ref-for-svg-namespace\u2465"}],"title":"3.4. Builtins"}],"url":"https://infra.spec.whatwg.org/#svg-namespace"},
 "8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-idl-DOMString\u2466"},{"id":"ref-for-idl-DOMString\u2467"},{"id":"ref-for-idl-DOMString\u2468"},{"id":"ref-for-idl-DOMString\u2460\u24ea"},{"id":"ref-for-idl-DOMString\u2460\u2460"},{"id":"ref-for-idl-DOMString\u2460\u2461"},{"id":"ref-for-idl-DOMString\u2460\u2462"}],"title":"2.3. The Configuration Dictionary"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2463"},{"id":"ref-for-idl-DOMString\u2460\u2464"}],"title":"3.2. Configuration Processing"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
+"9011c821": {"dfnID":"9011c821","dfnText":"DocumentType","external":true,"refSections":[{"refs":[{"id":"ref-for-documenttype"},{"id":"ref-for-documenttype\u2460"},{"id":"ref-for-documenttype\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#documenttype"},
 "92b2d7da": {"dfnID":"92b2d7da","dfnText":"children","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-child"},{"id":"ref-for-concept-tree-child\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-tree-child"},
 "96c16e60": {"dfnID":"96c16e60","dfnText":"Node","external":true,"refSections":[{"refs":[{"id":"ref-for-node"}],"title":"1.2. API Summary"}],"url":"https://dom.spec.whatwg.org/#node"},
 "99c988d6": {"dfnID":"99c988d6","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-list-remove"}],"title":"3.3. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-remove"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"},{"id":"ref-for-idl-sequence\u2461"},{"id":"ref-for-idl-sequence\u2462"},{"id":"ref-for-idl-sequence\u2463"},{"id":"ref-for-idl-sequence\u2464"},{"id":"ref-for-idl-sequence\u2465"}],"title":"2.3. The Configuration Dictionary"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "9ed8b710": {"dfnID":"9ed8b710","dfnText":"basic URL parser","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-basic-url-parser"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://url.spec.whatwg.org/#concept-basic-url-parser"},
 "a0647283": {"dfnID":"a0647283","dfnText":"Comment","external":true,"refSections":[{"refs":[{"id":"ref-for-comment"},{"id":"ref-for-comment\u2460"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#comment"},
-"a32c65d4": {"dfnID":"a32c65d4","dfnText":"implements","external":true,"refSections":[{"refs":[{"id":"ref-for-implements"},{"id":"ref-for-implements\u2460"},{"id":"ref-for-implements\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://webidl.spec.whatwg.org/#implements"},
+"a32c65d4": {"dfnID":"a32c65d4","dfnText":"implements","external":true,"refSections":[{"refs":[{"id":"ref-for-implements"},{"id":"ref-for-implements\u2460"},{"id":"ref-for-implements\u2461"},{"id":"ref-for-implements\u2462"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://webidl.spec.whatwg.org/#implements"},
 "b3955a25": {"dfnID":"b3955a25","dfnText":"namespace (for Attr)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-attribute-namespace"},{"id":"ref-for-concept-attribute-namespace\u2460"},{"id":"ref-for-concept-attribute-namespace\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-attribute-namespace"},
 "b4cfa5ce": {"dfnID":"b4cfa5ce","dfnText":"throw","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-throw"}],"title":"3. Algorithms"}],"url":"https://webidl.spec.whatwg.org/#dfn-throw"},
 "b815ad04": {"dfnID":"b815ad04","dfnText":"parseFromString(string, type)","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-domparser-parsefromstring"}],"title":"1.2. API Summary"}],"url":"https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-domparser-parsefromstring"},
@@ -3239,10 +3244,10 @@ let dfnPanelData = {
 "dictdef-sethtmlunsafeoptions": {"dfnID":"dictdef-sethtmlunsafeoptions","dfnText":"SetHTMLUnsafeOptions","external":false,"refSections":[{"refs":[{"id":"ref-for-dictdef-sethtmlunsafeoptions"},{"id":"ref-for-dictdef-sethtmlunsafeoptions\u2460"},{"id":"ref-for-dictdef-sethtmlunsafeoptions\u2461"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-dictdef-sethtmlunsafeoptions\u2462"}],"title":"3. Algorithms"}],"url":"#dictdef-sethtmlunsafeoptions"},
 "document-parsehtml": {"dfnID":"document-parsehtml","dfnText":"parseHTML","external":false,"refSections":[],"url":"#document-parsehtml"},
 "document-parsehtmlunsafe": {"dfnID":"document-parsehtmlunsafe","dfnText":"parseHTMLUnsafe","external":false,"refSections":[],"url":"#document-parsehtmlunsafe"},
-"dom-document-parsehtml": {"dfnID":"dom-document-parsehtml","dfnText":"parseHTML","external":false,"refSections":[],"url":"#dom-document-parsehtml"},
+"dom-document-parsehtml": {"dfnID":"dom-document-parsehtml","dfnText":"parseHTML","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-document-parsehtml"}],"title":"3.1. Sanitization Algorithms"}],"url":"#dom-document-parsehtml"},
 "dom-document-parsehtml-html-options-html": {"dfnID":"dom-document-parsehtml-html-options-html","dfnText":"html","external":false,"refSections":[],"url":"#dom-document-parsehtml-html-options-html"},
 "dom-document-parsehtml-html-options-options": {"dfnID":"dom-document-parsehtml-html-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-document-parsehtml-html-options-options"},
-"dom-document-parsehtmlunsafe": {"dfnID":"dom-document-parsehtmlunsafe","dfnText":"parseHTMLUnsafe","external":false,"refSections":[],"url":"#dom-document-parsehtmlunsafe"},
+"dom-document-parsehtmlunsafe": {"dfnID":"dom-document-parsehtmlunsafe","dfnText":"parseHTMLUnsafe","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-document-parsehtmlunsafe"}],"title":"3.1. Sanitization Algorithms"}],"url":"#dom-document-parsehtmlunsafe"},
 "dom-document-parsehtmlunsafe-html-options-html": {"dfnID":"dom-document-parsehtmlunsafe-html-options-html","dfnText":"html","external":false,"refSections":[],"url":"#dom-document-parsehtmlunsafe-html-options-html"},
 "dom-document-parsehtmlunsafe-html-options-options": {"dfnID":"dom-document-parsehtmlunsafe-html-options-options","dfnText":"options","external":false,"refSections":[],"url":"#dom-document-parsehtmlunsafe-html-options-options"},
 "dom-element-sethtml": {"dfnID":"dom-element-sethtml","dfnText":"setHTML","external":false,"refSections":[{"refs":[{"id":"ref-for-dom-element-sethtml"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-dom-element-sethtml\u2460"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"#dom-element-sethtml"},
@@ -3302,9 +3307,8 @@ let dfnPanelData = {
 "f02cd417": {"dfnID":"f02cd417","dfnText":"iterate","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"3.2. Configuration Processing"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "f052b1ea": {"dfnID":"f052b1ea","dfnText":"HTML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-html-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2460"}],"title":"3.1. Sanitization Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2461"}],"title":"3.2. Configuration Processing"},{"refs":[{"id":"ref-for-html-namespace\u2462"},{"id":"ref-for-html-namespace\u2463"},{"id":"ref-for-html-namespace\u2464"},{"id":"ref-for-html-namespace\u2465"},{"id":"ref-for-html-namespace\u2466"},{"id":"ref-for-html-namespace\u2467"},{"id":"ref-for-html-namespace\u2468"}],"title":"3.4. Builtins"}],"url":"https://infra.spec.whatwg.org/#html-namespace"},
 "f099a38d": {"dfnID":"f099a38d","dfnText":"HTMLTemplateElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmltemplateelement"},{"id":"ref-for-htmltemplateelement\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement"},
-"f7960529": {"dfnID":"f7960529","dfnText":"root","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-tree-root"},{"id":"ref-for-concept-tree-root\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#concept-tree-root"},
 "f7cccb8c": {"dfnID":"f7cccb8c","dfnText":"HTML fragment parsing algorithm","external":true,"refSections":[{"refs":[{"id":"ref-for-html-fragment-parsing-algorithm"}],"title":"3. Algorithms"}],"url":"https://html.spec.whatwg.org/#html-fragment-parsing-algorithm"},
-"f937b7b6": {"dfnID":"f937b7b6","dfnText":"continue","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-continue"},{"id":"ref-for-iteration-continue\u2460"},{"id":"ref-for-iteration-continue\u2461"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#iteration-continue"},
+"f937b7b6": {"dfnID":"f937b7b6","dfnText":"continue","external":true,"refSections":[{"refs":[{"id":"ref-for-iteration-continue"},{"id":"ref-for-iteration-continue\u2460"},{"id":"ref-for-iteration-continue\u2461"},{"id":"ref-for-iteration-continue\u2462"}],"title":"3.1. Sanitization Algorithms"}],"url":"https://infra.spec.whatwg.org/#iteration-continue"},
 "handlejavascriptnavigationurls": {"dfnID":"handlejavascriptnavigationurls","dfnText":"handleJavascriptNavigationUrls","external":false,"refSections":[{"refs":[{"id":"ref-for-handlejavascriptnavigationurls"}],"title":"3.1. Sanitization Algorithms"}],"url":"#handlejavascriptnavigationurls"},
 "safe-and-unsafe": {"dfnID":"safe-and-unsafe","dfnText":"Safe and unsafe","external":false,"refSections":[{"refs":[{"id":"ref-for-safe-and-unsafe"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"#safe-and-unsafe"},
 "sanitize": {"dfnID":"sanitize","dfnText":"sanitize","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitize"},{"id":"ref-for-sanitize\u2460"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-sanitize\u2461"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-sanitize\u2462"}],"title":"3.1. Sanitization Algorithms"}],"url":"#sanitize"},
@@ -3745,6 +3749,8 @@ let refsData = {
 "#dictdef-sanitizerelementnamespacewithattributes": {"displayText":"SanitizerElementNamespaceWithAttributes","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"SanitizerElementNamespaceWithAttributes","type":"dictionary","url":"#dictdef-sanitizerelementnamespacewithattributes"},
 "#dictdef-sethtmloptions": {"displayText":"SetHTMLOptions","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"SetHTMLOptions","type":"dictionary","url":"#dictdef-sethtmloptions"},
 "#dictdef-sethtmlunsafeoptions": {"displayText":"SetHTMLUnsafeOptions","export":true,"for_":[],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"SetHTMLUnsafeOptions","type":"dictionary","url":"#dictdef-sethtmlunsafeoptions"},
+"#dom-document-parsehtml": {"displayText":"parseHTML(html)","export":true,"for_":["Document"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"parseHTML(html)","type":"method","url":"#dom-document-parsehtml"},
+"#dom-document-parsehtmlunsafe": {"displayText":"parseHTMLUnsafe(html)","export":true,"for_":["Document"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"parseHTMLUnsafe(html)","type":"method","url":"#dom-document-parsehtmlunsafe"},
 "#dom-element-sethtml": {"displayText":"setHTML(html)","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"setHTML(html)","type":"method","url":"#dom-element-sethtml"},
 "#dom-element-sethtmlunsafe": {"displayText":"setHTMLUnsafe(html)","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"setHTMLUnsafe(html)","type":"method","url":"#dom-element-sethtmlunsafe"},
 "#dom-sanitizer-removeunsafe": {"displayText":"removeUnsafe()","export":true,"for_":["Sanitizer"],"level":"1","normative":true,"shortname":"sanitizer-api","spec":"sanitizer-api-1","status":"local","text":"removeUnsafe()","type":"method","url":"#dom-sanitizer-removeunsafe"},
@@ -3799,10 +3805,10 @@ let refsData = {
 "https://dom.spec.whatwg.org/#concept-node-remove": {"displayText":"remove","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"remove","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-remove"},
 "https://dom.spec.whatwg.org/#concept-node-replace-all": {"displayText":"replace all","export":true,"for_":["Node"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"replace all","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-replace-all"},
 "https://dom.spec.whatwg.org/#concept-tree-child": {"displayText":"children","export":true,"for_":["tree"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"children","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-tree-child"},
-"https://dom.spec.whatwg.org/#concept-tree-root": {"displayText":"root","export":true,"for_":["tree"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"root","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-tree-root"},
 "https://dom.spec.whatwg.org/#document": {"displayText":"Document","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"Document","type":"interface","url":"https://dom.spec.whatwg.org/#document"},
 "https://dom.spec.whatwg.org/#document-allow-declarative-shadow-roots": {"displayText":"allow declarative shadow roots","export":true,"for_":["Document"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"allow declarative shadow roots","type":"dfn","url":"https://dom.spec.whatwg.org/#document-allow-declarative-shadow-roots"},
 "https://dom.spec.whatwg.org/#documentfragment": {"displayText":"DocumentFragment","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"DocumentFragment","type":"interface","url":"https://dom.spec.whatwg.org/#documentfragment"},
+"https://dom.spec.whatwg.org/#documenttype": {"displayText":"DocumentType","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"DocumentType","type":"interface","url":"https://dom.spec.whatwg.org/#documenttype"},
 "https://dom.spec.whatwg.org/#element": {"displayText":"Element","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"Element","type":"interface","url":"https://dom.spec.whatwg.org/#element"},
 "https://dom.spec.whatwg.org/#element-shadow-host": {"displayText":"shadow host","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"shadow host","type":"dfn","url":"https://dom.spec.whatwg.org/#element-shadow-host"},
 "https://dom.spec.whatwg.org/#node": {"displayText":"Node","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"Node","type":"interface","url":"https://dom.spec.whatwg.org/#node"},
