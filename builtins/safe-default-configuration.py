@@ -32,6 +32,8 @@ def main():
         pass
       elif line.startswith("//"):
         pass
+      elif line.startswith("- xml "):
+        current.append({"name": line[6:], "namespace": "http://www.w3.org/XML/1998/namespace"})
       elif line.startswith("- "):
         current.append({"name": line[2:], "namespace": None})
       elif line.startswith("[") and line.endswith("Global]"):

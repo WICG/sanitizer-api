@@ -243,3 +243,200 @@ math semantics
 - mathsize
 - scriptlevel
 
+
+// SVG 2
+// https://svgwg.org/svg2-draft/
+// as referenced here: https://html.spec.whatwg.org/#refsSVG
+
+// Document structure, https://svgwg.org/svg2-draft/struct.html
+svg svg
+- viewBox
+- preserveAspectRatio
+- transform
+svg g
+svg defs
+svg symbol
+- preserveAspectRatio
+- viewBox
+- refX
+- refY
+// Purposely omitted: svg use.
+svg switch
+svg title
+svg desc
+svg metadata
+
+// Paths, https://svgwg.org/svg2-draft/paths.html
+svg path
+- pathLength
+- d
+
+// Shapes, https://svgwg.org/svg2-draft/shapes.html
+svg rect
+- pathLength
+- x
+- y
+- width
+- height
+- rx
+- ry
+svg circle
+- pathLength
+- cx
+- cy
+- r
+svg ellipse
+- pathLength
+- cx
+- cy
+- rx
+- ry
+svg line
+- pathLength
+- x1
+- y1
+- x2
+- y2
+svg polyline
+- pathLength
+- points
+svg polygon
+- pathLength
+- points
+// Text, https://svgwg.org/svg2-draft/text.html
+svg text
+- lengthAdjust
+- x
+- y
+- dx
+- dy
+- rotate
+- textLength
+svg tspan
+- lengthAdjust
+- x
+- y
+- dx
+- dy
+- rotate
+- textLength
+svg textPath
+- lengthAdjust
+- textLength
+- path
+- href
+- startOffset
+- method
+- spacing
+- side
+
+// Embedded Content, https://svgwg.org/svg2-draft/embedded.html
+svg image
+- preserveAspectRatio
+- href
+- crossorigin
+- x
+- y
+- width
+- height
+svg foreignObject
+- x
+- y
+- width
+- height
+// Painting, https://svgwg.org/svg2-draft/painting.html
+svg marker
+- viewBox
+- preserveAspectRatio
+- refX
+- refY
+- markerUnits
+- markerWidth
+- markerHeight
+- orient
+
+// Purposely omitted: svg script
+
+// Common attributes: https://svgwg.org/svg2-draft/struct.html#CommonAttributes
+[SVG Global]
+- id
+- lang
+- xml space
+- tabindex
+- autofocus
+// data-*, purposely omitted because we have an attribute for that.
+// Conditional processing attributes, https://svgwg.org/svg2-draft/struct.html#ConditionalProcessingDefinitions
+- requiredExtensions
+- systemLanguage
+
+// Presentation Attributes: https://svgwg.org/svg2-draft/styling.html#PresentationAttributes
+[SVG Global]
+- cx
+- cy
+- height
+- width
+- x
+- y
+- d
+- fill
+- transform
+- alignment-baseline
+- baseline-shift
+- clip-path
+- clip-rule
+- color
+- color-interpolation
+- color-interpolation-filters
+- cursor
+- direction
+- display
+- dominant-baseline
+- fill-opacity
+- fill-rule
+- filter
+- flood-color
+- flood-opacity
+- font-family
+- font-size
+- font-size-adjust
+- font-stretch
+- font-style
+- font-variant
+- font-weight
+- glyph-orientation-horizontal
+- glyph-orientation-vertical
+- image-rendering
+- letter-spacing
+- lighting-color
+- marker-end
+- marker-mid
+- marker-start
+- mask
+- mask-type
+- opacity
+// Purposely omitted: overflow, see https://github.com/WICG/sanitizer-api/issues/295
+- paint-order
+- pointer-events
+- shape-rendering
+- stop-color
+- stop-opacity
+- stroke
+- stroke-dasharray
+- stroke-dashoffset
+- stroke-linecap
+- stroke-linejoin
+- stroke-miterlimit
+- stroke-opacity
+- stroke-width
+- text-anchor
+- text-decoration
+- text-overflow
+- text-rendering
+- transform-origin
+- unicode-bidi
+- vector-effect
+- visibility
+- white-space
+- word-spacing
+- writing-mode
+
