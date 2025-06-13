@@ -28,6 +28,8 @@ spec:infra; type:dfn; text: user agent
 text: window.toStaticHTML(); type: method; url: https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx
 text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#parse-html-from-a-string
 text: HTML fragment parsing algorithm; type: dfn; url: https://html.spec.whatwg.org/#html-fragment-parsing-algorithm
+text: global attribute; type: dfn; url: https://html.spec.whatwg.org/multipage/dom.html#global-attributes
+text: custom data attribute; type: dfn; url: https://html.spec.whatwg.org/multipage/dom.html#custom-data-attribute
 </pre>
 <pre class="biblio">
 {
@@ -264,11 +266,11 @@ interface Sanitizer {
   SanitizerConfig get();
 
   // Modify a Sanitizer's lists and fields:
-  undefined allowElement(SanitizerElementWithAttributes element);
-  undefined removeElement(SanitizerElement element);
-  undefined replaceElementWithChildren(SanitizerElement element);
-  undefined allowAttribute(SanitizerAttribute attribute);
-  undefined removeAttribute(SanitizerAttribute attribute);
+  boolean allowElement(SanitizerElementWithAttributes element);
+  boolean removeElement(SanitizerElement element);
+  boolean replaceElementWithChildren(SanitizerElement element);
+  boolean allowAttribute(SanitizerAttribute attribute);
+  boolean removeAttribute(SanitizerAttribute attribute);
   undefined setComments(boolean allow);
   undefined setDataAttributes(boolean allow);
 
@@ -367,6 +369,154 @@ dictionary SanitizerConfig {
   boolean dataAttributes;
 };
 </pre>
+
+## Configuration Invariants ## {#invariants}
+
+An empty configuration allows everything (when called with the "unsafe" methods).
+A configuration `"default"` contains a [=built-in safe default configuration=]. Note
+that different sanitizer methods have different defaults.
+
+Configurations can and should be modified by developers to suit their
+purposes. Options are to write a new [[#config|configuration dictionary]] from
+scratch, to modify an existing {{Sanitizer}}'s configuration by using the
+modifier methods, or to {{Sanitizer/get()}} an existing {{Sanitizer}}'s
+[[#config|configuration]]  as a dictionary and modify the dictionary and then
+create a new {{Sanitizer}} with it.
+
+Several conditions need to hold for a configuration to be valid:
+
+- Mixing global allow- and remove-lists:
+  - {{SanitizerConfig/elements}} or {{SanitizerConfig/removeElements}} may exist,
+    but not both.
+    If both are missing, this is equivalent to {{SanitizerConfig/removeElements}}
+    [=map/set=] to &laquo; [] &raquo;.
+  - {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}} may exist,
+    but not both.
+    If both are missing, this is equivalent to {{SanitizerConfig/removeAttributes}}
+    [=map/set=] to &laquo; [] &raquo;.
+  - {{SanitizerConfig/dataAttributes}} is conceptually an extension of the
+    {{SanitizerConfig/attributes}} allow-list. This attribute is only allowed when the
+    corresponing list is allowed.
+- Duplicate entries between different global lists:
+  - There are no duplicate entries (i.e. no same elements) between
+    {{SanitizerConfig/elements}}, {{SanitizerConfig/removeElements}}, or
+    {{SanitizerConfig/replaceWithChildrenElements}}.
+  - There are no duplicate entries (i.e. no same attributes) between
+    {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}}.
+
+
+The {{SanitizerConfig/elements}} element allow-list can also specify allowing or removing
+attributes for a given element. This is meant to mirror [[HTML]]'s structure, which knows
+both local <a spec=dom>attributes</a> that apply to a specific element, as well as
+[=/global attributes=]. Not all combinations make sense:
+
+<table class=data>
+<tr>
+ <td></td>
+ <th>global {{SanitizerConfig/attributes}}</th>
+ <th>global {{SanitizerConfig/removeAttributes}}</th>
+</tr>
+<tr>
+ <th>local {{SanitizerElementNamespaceWithAttributes/attributes}}</th>
+ <td class=long>An attribute is allowed if it matches either list. No duplicates are allowed.</td>
+ <td class=long>An attribute is allowed, if it's in the local allow list, and not in the global
+   remove list. No duplicate entries between global remove and local allow lists are allowed.</td>
+</tr>
+<tr>
+ <th>local {{SanitizerElementNamespaceWithAttributes/removeAttributes}}</th>
+ <td class=long>An attribute is allowed if it's in the global allow-list, but not in the local
+   remove-list. Local remove must be a subset of the global allow lists. </td>
+ <td class=long>An attribute is allowed if it is in neither list.
+   No duplicate entries between global remove and local remove lists are allowed.</td>
+</tr>
+</table>
+
+The {{SanitizerConfig/dataAttributes}} setting allows [=custom data attributes=]. The rules
+above easily extends to [=custom data attributes=] if one considers
+{{SanitizerConfig/dataAttributes}} to be an allow-list:
+
+<table class=data>
+<tr>
+ <td></td>
+ <th>global {{SanitizerConfig/attributes}} and {{SanitizerConfig/dataAttributes}} set</th>
+</tr>
+<tr>
+ <th>local {{SanitizerElementNamespaceWithAttributes/attributes}}</th>
+ <td class=long>[=Custom data attributes=] are allowed. No [=custom data attributes=] may
+   be listed in any allow-list, as that would mean a duplicate entry.</td>
+</tr>
+<tr>
+ <th>local {{SanitizerElementNamespaceWithAttributes/removeAttributes}}</th>
+ <td class=long>A [=custom data attribute=] is allowed, unless it's listed in the local
+   remove-list.
+   No [=custom data attributes=] may be listed in the global allow-list, as that would mean a
+   duplicate entry.</td>
+</tr>
+</table>
+
+Putting these rules in words:
+
+* Duplicates and interactions between global and local lists:
+  * If a global {{SanitizerConfig/attributes}} allow list exists, then all element's local lists:
+    * If a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow lists exists,
+        there may be no duplicate entries between these lists.
+    * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove lists exists,
+        then all its entries must also be listed in the global {{SanitizerConfig/attributes}}
+        allow list.
+    * If {{SanitizerConfig/dataAttributes}} is true, then no [=custom data attributes=] may be
+        listed in any of the allow-lists.
+  * If a global {{SanitizerConfig/removeAttributes}} remove list exists, then:
+    * If a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow lists exists,
+        there may be no duplicate entries between these lists.
+    * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove lists exists,
+        there may be no duplicate entries between these lists.
+    * {{SanitizerConfig/dataAttributes}} must be false or absent.
+
+
+Note that these rules put a somewhat higher burden on configuration authors, as it's on them
+to avoid configurations which might be ambiguous.
+
+<div algorithm>
+A {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>valid</dfn> if all of the following
+conditions hold:
+
+1. The |config| has an {{SanitizerConfig/elements}} or an {{SanitizerConfig/removeElements}}
+    [=map/key=], or neither, but not both.
+1. The |config| has an {{SanitizerConfig/attributes}} or an {{SanitizerConfig/removeAttributes}}
+    [=map/key=], or neither, but not both.
+1. Assuming that all element names have run through [=canonicalize a sanitizer element=] algorithm,
+    and all attribute names have run through [=canonicalize a sanitizer attribute=] algorithm.
+    1. The [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
+        |config|[{{SanitizerConfig/removeElements}}] is [=list/empty=].
+    1. The [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
+        |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
+    1. The [=set/difference=] of |config|[{{SanitizerConfig/removeElements}}] and
+        |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
+    1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
+        |config|[{{SanitizerConfig/removeAttributes}}] is [=list/empty=].
+    1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
+        1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
+            1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
+                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}] is
+                [=list/empty=].
+            1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
+                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] is
+                [=list/empty=].
+            1. If {{SanitizerConfig/dataAttributes}} is true:
+                1. Neither |config|[{{SanitizerConfig/attributes}}] nor
+                    |config|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}]
+                    contain a [=custom data attribute=].
+    1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
+        1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
+            1. The [=set/difference=] of {{SanitizerConfig/removeAttributes}} and
+                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}] is
+                [=list/empty=].
+            1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
+                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
+                is [=list/empty=].
+        1. |config|[{{SanitizerConfig/dataAttributes}}] is false or does not [=map/exist=].
+
+</div>
 
 # Algorithms # {#algorithms}
 
