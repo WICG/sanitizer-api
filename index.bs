@@ -271,11 +271,11 @@ interface Sanitizer {
   boolean replaceElementWithChildren(SanitizerElement element);
   boolean allowAttribute(SanitizerAttribute attribute);
   boolean removeAttribute(SanitizerAttribute attribute);
-  undefined setComments(boolean allow);
-  undefined setDataAttributes(boolean allow);
+  boolean setComments(boolean allow);
+  boolean setDataAttributes(boolean allow);
 
   // Remove markup that executes script. May modify multiple lists:
-  undefined removeUnsafe();
+  boolean removeUnsafe();
 };
 </pre>
 
@@ -749,22 +749,65 @@ To <dfn for="Sanitizer">allow an attribute</dfn> |attribute| on a {{SanitizerCon
 To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a {{SanitizerConfig}} |configuration|, do:
 
 1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
-1. [=SanitizerConfig/Add=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"].
-1. [=SanitizerConfig/Remove=] |attribute| from |configuration|["{{SanitizerConfig/attributes}}"].
+1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+    1. If |configuration|["{{SanitizerConfig/attributes}}"] [=list/contains=] |attribute|:
+        1. [=list/Remove=] |attribute| from |configuration|["{{SanitizerConfig/attributes}}"].
+        1. Return true.
+    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+        1. Let |result| be true.
+        1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+                1. [=list/Remove=] |attribute| from
+                    |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+                1. Set |result| to false.
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+                1. [=list/Remove=] |attribute| from
+                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+                1. Set |result| to false.
+        1. Return |result|.
+1. Otherwise:
+    1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] does not [=map/exist=], then
+        set |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; [] &raquo;
+    1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=list/contains=] |attribute|
+        return false.
+    1. [=list/Append=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"]
+    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+        1. Let |result| be true.
+        1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+                1. [=list/Remove=] |attribute| from
+                    |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+                1. Set |result| to false.
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+                1. [=list/Remove=] |attribute| from
+                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+                1. Set |result| to false.
+        1. Return |result|.
+    1. Retzrn true.
 
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">set comments</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">set comments</dfn> with |allow| on a {{SanitizerConfig}} |configuration|,
+do:
 
 1. Set |configuration|["{{SanitizerConfig/comments}}"] to |allow|.
+1. Return true.
 
 </div>
 
 <div algorithm>
 To <dfn for="Sanitizer">set data attributes</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
 
+1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=], then return false.
+1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=map/exist=], then set
+    |configuration|["{{SanitizerConfig/attributes}}"] to &laquo; [] &raquo;.
 1. Set |configuration|["{{SanitizerConfig/dataAttributes}}"] to |allow|.
+1. Return true.
 
 </div>
 
