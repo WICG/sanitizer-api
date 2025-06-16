@@ -407,8 +407,12 @@ Several conditions need to hold for a configuration to be valid:
 
 The {{SanitizerConfig/elements}} element allow-list can also specify allowing or removing
 attributes for a given element. This is meant to mirror [[HTML]]'s structure, which knows
-both local <a spec=dom>attributes</a> that apply to a specific element, as well as
-[=/global attributes=]. Not all combinations make sense:
+both [=/global attributes=] as well as local <a spec=dom>attributes</a> that apply to a
+specific element. For {{SanitizerConfig|Sanitizer configurations}}, it is assumed that
+configuration authors would prefer either all-global or all-local attribute declarations.
+If they do decide to mix them, the following rules apply. Note in particular that ambiguous
+configurations, where a particular attribute would be allowed by one list and forbidden by another,
+are generally invalid.
 
 <table class=data>
 <tr>
@@ -419,8 +423,10 @@ both local <a spec=dom>attributes</a> that apply to a specific element, as well 
 <tr>
  <th>local {{SanitizerElementNamespaceWithAttributes/attributes}}</th>
  <td class=long>An attribute is allowed if it matches either list. No duplicates are allowed.</td>
- <td class=long>An attribute is allowed, if it's in the local allow list, and not in the global
-   remove list. No duplicate entries between global remove and local allow lists are allowed.</td>
+ <td class=long>An attribute is allowed if it's in the local allow list.
+   No duplicate entries between global remove and local allow lists are allowed.
+   Note that the global remove list has no function for this particular element, but may well
+   apply to other elements that do not have a local allow list.</td>
 </tr>
 <tr>
  <th>local {{SanitizerElementNamespaceWithAttributes/removeAttributes}}</th>
@@ -442,7 +448,7 @@ above easily extends to [=custom data attributes=] if one considers
 </tr>
 <tr>
  <th>local {{SanitizerElementNamespaceWithAttributes/attributes}}</th>
- <td class=long>[=Custom data attributes=] are allowed. No [=custom data attributes=] may
+ <td class=long>All [=custom data attributes=] are allowed. No [=custom data attributes=] may
    be listed in any allow-list, as that would mean a duplicate entry.</td>
 </tr>
 <tr>
@@ -470,7 +476,7 @@ Putting these rules in words:
         there may be no duplicate entries between these lists.
     * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove lists exists,
         there may be no duplicate entries between these lists.
-    * {{SanitizerConfig/dataAttributes}} must be false or absent.
+    * {{SanitizerConfig/dataAttributes}} must be absent.
 
 
 Note that these rules put a somewhat higher burden on configuration authors, as it's on them
