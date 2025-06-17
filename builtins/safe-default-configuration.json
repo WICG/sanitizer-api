@@ -1080,36 +1080,6 @@
       ]
     },
     {
-      "name": "image",
-      "namespace": "http://www.w3.org/2000/svg",
-      "attributes": [
-        {
-          "name": "preserveAspectRatio",
-          "namespace": null
-        },
-        {
-          "name": "crossorigin",
-          "namespace": null
-        },
-        {
-          "name": "x",
-          "namespace": null
-        },
-        {
-          "name": "y",
-          "namespace": null
-        },
-        {
-          "name": "width",
-          "namespace": null
-        },
-        {
-          "name": "height",
-          "namespace": null
-        }
-      ]
-    },
-    {
       "name": "foreignObject",
       "namespace": "http://www.w3.org/2000/svg",
       "attributes": [

@@ -340,14 +340,14 @@ svg textPath
 - side
 
 // Embedded Content, https://svgwg.org/svg2-draft/embedded.html
-svg image
-- preserveAspectRatio
-// - href, purposely omitted: This loads an image from a resource.
-- crossorigin
-- x
-- y
-- width
-- height
+// svg image, purposely omitted, as we don't support html's <img> either
+// - preserveAspectRatio
+// - href, double-purposely omitted: This loads an image from a resource.
+// - crossorigin
+// - x
+// - y
+// - width
+// - height
 svg foreignObject
 - x
 - y
