@@ -753,41 +753,42 @@ To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a {{Sanitizer
     1. If |configuration|["{{SanitizerConfig/attributes}}"] [=list/contains=] |attribute|:
         1. [=list/Remove=] |attribute| from |configuration|["{{SanitizerConfig/attributes}}"].
         1. Return true.
-    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-        1. Let |result| be true.
-        1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
-            1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
-                1. [=list/Remove=] |attribute| from
-                    |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
-                1. Set |result| to false.
-            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
-                1. [=list/Remove=] |attribute| from
-                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
-                1. Set |result| to false.
-        1. Return |result|.
+    1. If |configuration|["{{SanitizerConfig/elements}}"] does not [=map/exist=]:
+        1. Return true.
+    1. Let |result| be true.
+    1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+           [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+            1. [=list/Remove=] |attribute| from
+                |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+            1. Set |result| to false.
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+           [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+            1. [=list/Remove=] |attribute| from
+                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+            1. Set |result| to false.
+    1. Return |result|.
 1. Otherwise:
     1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] does not [=map/exist=], then
         set |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; [] &raquo;
     1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=list/contains=] |attribute|
         return false.
     1. [=list/Append=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"]
-    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-        1. Let |result| be true.
-        1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
-            1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
-                1. [=list/Remove=] |attribute| from
-                    |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
-                1. Set |result| to false.
-            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
-                1. [=list/Remove=] |attribute| from
-                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
-                1. Set |result| to false.
-        1. Return |result|.
-    1. Retzrn true.
+    1. If |configuration|["{{SanitizerConfig/elements}}"] does not [=map/exist=]:
+        1. Return true.
+    1. Let |result| be true.
+    1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+           [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+            1. [=list/Remove=] |attribute| from
+                |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+            1. Set |result| to false.
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+           [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+            1. [=list/Remove=] |attribute| from
+                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+            1. Set |result| to false.
+    1. Return |result|.
 
 </div>
 
