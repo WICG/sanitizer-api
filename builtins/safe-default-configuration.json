@@ -582,6 +582,14 @@
       "namespace": "http://www.w3.org/1998/Math/MathML",
       "attributes": [
         {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "height",
+          "namespace": null
+        },
+        {
           "name": "depth",
           "namespace": null
         },
@@ -624,6 +632,14 @@
       "name": "mspace",
       "namespace": "http://www.w3.org/1998/Math/MathML",
       "attributes": [
+        {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "height",
+          "namespace": null
+        },
         {
           "name": "depth",
           "namespace": null
@@ -724,6 +740,22 @@
         {
           "name": "preserveAspectRatio",
           "namespace": null
+        },
+        {
+          "name": "height",
+          "namespace": null
+        },
+        {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
+          "namespace": null
         }
       ]
     },
@@ -756,6 +788,22 @@
         {
           "name": "refY",
           "namespace": null
+        },
+        {
+          "name": "height",
+          "namespace": null
+        },
+        {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
+          "namespace": null
         }
       ]
     },
@@ -786,6 +834,10 @@
         {
           "name": "pathLength",
           "namespace": null
+        },
+        {
+          "name": "d",
+          "namespace": null
         }
       ]
     },
@@ -795,6 +847,22 @@
       "attributes": [
         {
           "name": "pathLength",
+          "namespace": null
+        },
+        {
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
+          "namespace": null
+        },
+        {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "height",
           "namespace": null
         },
         {
@@ -816,6 +884,14 @@
           "namespace": null
         },
         {
+          "name": "cx",
+          "namespace": null
+        },
+        {
+          "name": "cy",
+          "namespace": null
+        },
+        {
           "name": "r",
           "namespace": null
         }
@@ -827,6 +903,14 @@
       "attributes": [
         {
           "name": "pathLength",
+          "namespace": null
+        },
+        {
+          "name": "cx",
+          "namespace": null
+        },
+        {
+          "name": "cy",
           "namespace": null
         },
         {
@@ -902,6 +986,14 @@
           "namespace": null
         },
         {
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
+          "namespace": null
+        },
+        {
           "name": "dx",
           "namespace": null
         },
@@ -925,6 +1017,14 @@
       "attributes": [
         {
           "name": "lengthAdjust",
+          "namespace": null
+        },
+        {
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
           "namespace": null
         },
         {
@@ -962,10 +1062,6 @@
           "namespace": null
         },
         {
-          "name": "href",
-          "namespace": null
-        },
-        {
           "name": "startOffset",
           "namespace": null
         },
@@ -992,11 +1088,23 @@
           "namespace": null
         },
         {
-          "name": "href",
+          "name": "crossorigin",
           "namespace": null
         },
         {
-          "name": "crossorigin",
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
+          "namespace": null
+        },
+        {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "height",
           "namespace": null
         }
       ]
@@ -1004,7 +1112,24 @@
     {
       "name": "foreignObject",
       "namespace": "http://www.w3.org/2000/svg",
-      "attributes": []
+      "attributes": [
+        {
+          "name": "x",
+          "namespace": null
+        },
+        {
+          "name": "y",
+          "namespace": null
+        },
+        {
+          "name": "width",
+          "namespace": null
+        },
+        {
+          "name": "height",
+          "namespace": null
+        }
+      ]
     },
     {
       "name": "marker",
@@ -1079,20 +1204,8 @@
       "namespace": null
     },
     {
-      "name": "id",
-      "namespace": null
-    },
-    {
       "name": "space",
       "namespace": "http://www.w3.org/XML/1998/namespace"
-    },
-    {
-      "name": "tabindex",
-      "namespace": null
-    },
-    {
-      "name": "autofocus",
-      "namespace": null
     },
     {
       "name": "requiredExtensions",
@@ -1100,34 +1213,6 @@
     },
     {
       "name": "systemLanguage",
-      "namespace": null
-    },
-    {
-      "name": "cx",
-      "namespace": null
-    },
-    {
-      "name": "cy",
-      "namespace": null
-    },
-    {
-      "name": "height",
-      "namespace": null
-    },
-    {
-      "name": "width",
-      "namespace": null
-    },
-    {
-      "name": "x",
-      "namespace": null
-    },
-    {
-      "name": "y",
-      "namespace": null
-    },
-    {
-      "name": "d",
       "namespace": null
     },
     {

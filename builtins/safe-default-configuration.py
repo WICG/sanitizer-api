@@ -28,9 +28,10 @@ def main():
     result = { "elements": [], "attributes": [], "comments": False, "dataAttributes": False }
     current = []
     for line in lines.split("\n"):
+      if "//" in line:
+        line = line[:line.find("//")]
+      line = line.strip()
       if not line:
-        pass
-      elif line.startswith("//"):
         pass
       elif line.startswith("- xml "):
         current.append({"name": line[6:], "namespace": "http://www.w3.org/XML/1998/namespace"})

@@ -253,6 +253,10 @@ svg svg
 - viewBox
 - preserveAspectRatio
 - transform
+- height  // Specified as global "presentation attribute"
+- width  // Specified as global "presentation attribute"
+- x  // Specified as global "presentation attribute"
+- y  // Specified as global "presentation attribute"
 svg g
 svg defs
 svg symbol
@@ -260,6 +264,11 @@ svg symbol
 - viewBox
 - refX
 - refY
+- height  // Specified as global "presentation attribute"
+- width  // Specified as global "presentation attribute"
+- x  // Specified as global "presentation attribute"
+- y  // Specified as global "presentation attribute"
+
 // Purposely omitted: svg use.
 svg switch
 svg title
@@ -324,7 +333,7 @@ svg textPath
 - lengthAdjust
 - textLength
 - path
-- href
+// - href, purposely omitted: This loads a textPath from a resource.
 - startOffset
 - method
 - spacing
@@ -333,7 +342,7 @@ svg textPath
 // Embedded Content, https://svgwg.org/svg2-draft/embedded.html
 svg image
 - preserveAspectRatio
-- href
+// - href, purposely omitted: This loads an image from a resource.
 - crossorigin
 - x
 - y
@@ -359,11 +368,11 @@ svg marker
 
 // Common attributes: https://svgwg.org/svg2-draft/struct.html#CommonAttributes
 [SVG Global]
-- id
+// - id, purposely omitted, as it interferes with HTML, MathML, and "DOM/id clobbering"
 - lang
 - xml space
-- tabindex
-- autofocus
+// - tabindex, purposely omitted, as it potentially interferes with other parts on the page
+// - autofocus, purposely omitted, as it potentially interferes with other parts on the page
 // data-*, purposely omitted because we have an attribute for that.
 // Conditional processing attributes, https://svgwg.org/svg2-draft/struct.html#ConditionalProcessingDefinitions
 - requiredExtensions
@@ -371,13 +380,15 @@ svg marker
 
 // Presentation Attributes: https://svgwg.org/svg2-draft/styling.html#PresentationAttributes
 [SVG Global]
-- cx
-- cy
-- height
-- width
-- x
-- y
-- d
+// The following are purposely omitted and are added as local attributes to their supported
+// elements:
+// - cx
+// - cy
+// - height
+// - width
+// - x
+// - y
+// - d
 - fill
 - transform
 - alignment-baseline
