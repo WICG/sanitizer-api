@@ -503,22 +503,22 @@ conditions hold:
     1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
             1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
-                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}] is
+                |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] is
                 [=list/empty=].
             1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
-                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] is
+                |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] is
                 [=list/empty=].
             1. If {{SanitizerConfig/dataAttributes}} is true:
                 1. Neither |config|[{{SanitizerConfig/attributes}}] nor
-                    |config|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}]
+                    |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
                     contain a [=custom data attribute=].
     1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
-            1. The [=set/difference=] of {{SanitizerConfig/removeAttributes}} and
-                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/attributes}}] is
+            1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
+                |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] is
                 [=list/empty=].
             1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
-                |config|[|element|][{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
+                |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
                 is [=list/empty=].
         1. |config|[{{SanitizerConfig/dataAttributes}}] is false or does not [=map/exist=].
 
