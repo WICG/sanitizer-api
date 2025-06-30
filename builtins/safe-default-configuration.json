@@ -808,11 +808,6 @@
       ]
     },
     {
-      "name": "switch",
-      "namespace": "http://www.w3.org/2000/svg",
-      "attributes": []
-    },
-    {
       "name": "title",
       "namespace": "http://www.w3.org/2000/svg",
       "attributes": []
@@ -1172,10 +1167,6 @@
     {
       "name": "scriptlevel",
       "namespace": null
-    },
-    {
-      "name": "space",
-      "namespace": "http://www.w3.org/XML/1998/namespace"
     },
     {
       "name": "requiredExtensions",

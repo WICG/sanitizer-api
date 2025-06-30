@@ -270,7 +270,7 @@ svg symbol
 - y  // Specified as global "presentation attribute"
 
 // Purposely omitted: svg use.
-svg switch
+// Purposely omitted: svg switch
 svg title
 svg desc
 svg metadata
@@ -370,7 +370,7 @@ svg marker
 [SVG Global]
 // - id, purposely omitted, as it interferes with HTML, MathML, and "DOM/id clobbering"
 - lang
-- xml space
+// - xml space, purposely omitted; deprecated and useless
 // - tabindex, purposely omitted, as it potentially interferes with other parts on the page
 // - autofocus, purposely omitted, as it potentially interferes with other parts on the page
 // data-*, purposely omitted because we have an attribute for that.
