@@ -375,8 +375,8 @@ svg marker
 // - autofocus, purposely omitted, as it potentially interferes with other parts on the page
 // data-*, purposely omitted because we have an attribute for that.
 // Conditional processing attributes, https://svgwg.org/svg2-draft/struct.html#ConditionalProcessingDefinitions
-- requiredExtensions
-- systemLanguage
+// - requiredExtensions, purposely omitted, as this creates <svg:switch>-like behaviour.
+// - systemLanguage, purposely omitted, as above.
 
 // Presentation Attributes: https://svgwg.org/svg2-draft/styling.html#PresentationAttributes
 [SVG Global]
