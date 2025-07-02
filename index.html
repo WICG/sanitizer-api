@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
+  <meta content="Bikeshed version 618007319, updated Thu Jun 26 17:23:55 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="50ed6b60c596a9a98c304988708bbb0e4cc2dd97" name="revision">
+  <meta content="7f24d56f7cbbf19778a3e26b00cf7cb88208fb03" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -747,7 +747,8 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
  <body class="h-entry">
   <div class="head">
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2025-05-14">14 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
+    <time class="dt-updated" datetime="2025-07-02">2 July 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -763,7 +764,8 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
    </div>
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 the Contributors to the HTML Sanitizer API Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
-A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
+A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available.
+</p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -775,12 +777,17 @@ DOM.</p>
   <div data-fill-with="at-risk"></div>
   <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
-   <p> This specification was published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a>.
+   <p>
+  This specification was published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a>.
   It is not a W3C Standard nor is it on the W3C Standards Track.
 
-  Please note that under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a> there is a limited opt-out and other conditions apply.
+  Please note that under the
+  <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>
+  there is a limited opt-out and other conditions apply.
 
-  Learn more about <a href="http://www.w3.org/community/">W3C Community and Business Groups</a>. </p>
+  Learn more about
+  <a href="http://www.w3.org/community/">W3C Community and Business Groups</a>.
+</p>
    <p></p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -867,7 +874,9 @@ API which aims to do just that.</p>
   account its current understanding of HTML.</p>
     <li data-md>
      <p>Allow developers to override the default set of elements and attributes.
-  Adding certain elements and attributes can prevent <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a> attacks.</p>
+  Adding certain elements and attributes can prevent
+  <a href="https://github.com/google/security-research-pocs/tree/master/script-gadgets">script gadget</a>
+  attacks.</p>
    </ul>
    <h3 class="heading settled" data-level="1.2" id="api-summary"><span class="secno">1.2. </span><span class="content">API Summary</span><a class="self-link" href="#api-summary"></a></h3>
    <p>The Sanitizer API offers functionality to parse a string containing HTML into
@@ -887,7 +896,8 @@ document are largely analogous to <code class="idl"><a data-link-type="idl" href
    </ul>
    <h2 class="heading settled" data-level="2" id="framework"><span class="secno">2. </span><span class="content">Framework</span><a class="self-link" href="#framework"></a></h2>
    <h3 class="heading settled" data-level="2.1" id="sanitizer-api"><span class="secno">2.1. </span><span class="content">Sanitizer API</span><a class="self-link" href="#sanitizer-api"></a></h3>
-   <p>The <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element②">Element</a></code> interface defines two methods, <code class="idl"><a data-link-type="idl" href="#dom-element-sethtml" id="ref-for-dom-element-sethtml">setHTML()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-element-sethtmlunsafe" id="ref-for-dom-element-sethtmlunsafe">setHTMLUnsafe()</a></code>. Both of these take a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString">DOMString</a></code> with HTML
+   <p>The <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element②">Element</a></code> interface defines two methods, <code class="idl"><a data-link-type="idl" href="#dom-element-sethtml" id="ref-for-dom-element-sethtml">setHTML()</a></code> and
+<code class="idl"><a data-link-type="idl" href="#dom-element-sethtmlunsafe" id="ref-for-dom-element-sethtmlunsafe">setHTMLUnsafe()</a></code>. Both of these take a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString">DOMString</a></code> with HTML
 markup, and an optional configuration.</p>
 <pre class="extract idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://dom.spec.whatwg.org/#element" id="ref-for-element③"><c- g>Element</c-></a> {
   [<a class="idl-code" data-link-type="extended-attribute" href="https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions" id="ref-for-cereactions"><c- g>CEReactions</c-></a>] <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Element" data-dfn-type="method" data-export data-lt="setHTMLUnsafe(html, options)|setHTMLUnsafe(html)" id="dom-element-sethtmlunsafe"><code><c- g>setHTMLUnsafe</c-></code></dfn>((<a data-link-type="idl-name" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml"><c- n>TrustedHTML</c-></a> <c- b>or</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-for="Element/setHTMLUnsafe(html, options), Element/setHTMLUnsafe(html)" data-dfn-type="argument" data-export id="dom-element-sethtmlunsafe-html-options-html"><code><c- g>html</c-></code></dfn>, <c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-sethtmlunsafeoptions" id="ref-for-dictdef-sethtmlunsafeoptions"><c- n>SetHTMLUnsafeOptions</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Element/setHTMLUnsafe(html, options), Element/setHTMLUnsafe(html)" data-dfn-type="argument" data-export id="dom-element-sethtmlunsafe-html-options-options"><code><c- g>options</c-></code></dfn> = {});
@@ -895,21 +905,30 @@ markup, and an optional configuration.</p>
 };
 </pre>
    <div class="algorithm" data-algorithm="setHTMLUnsafe" data-algorithm-for="Element">
-     <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element④">Element</a></code>’s <dfn class="dfn-paneled" data-dfn-for="Element" data-dfn-type="dfn" data-export id="element-sethtmlunsafe">setHTMLUnsafe</dfn>(<var>html</var>, <var>options</var>) method steps are: 
+    
+<code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element④">Element</a></code>’s <dfn class="dfn-paneled" data-dfn-for="Element" data-dfn-type="dfn" data-export id="element-sethtmlunsafe">setHTMLUnsafe</dfn>(<var>html</var>, <var>options</var>) method steps are:
+
+
     <ol>
      <li data-md>
-      <p>Let <var>compliantHTML</var> be the result of invoking the <a data-link-type="abstract-op" href="https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string" id="ref-for-abstract-opdef-get-trusted-type-compliant-string">Get Trusted Type compliant string</a> algorithm with <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml①">TrustedHTML</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>, <var>html</var>, "Element setHTMLUnsafe", and "script".</p>
+      <p>Let <var>compliantHTML</var> be the result of invoking the <a data-link-type="abstract-op" href="https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string" id="ref-for-abstract-opdef-get-trusted-type-compliant-string">Get Trusted Type compliant string</a> algorithm with
+ <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml①">TrustedHTML</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>, <var>html</var>, "Element setHTMLUnsafe", and "script".</p>
      <li data-md>
-      <p>Let <var>target</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/scripting.html#template-contents" id="ref-for-template-contents">template contents</a> if <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement">template</a></code> element; otherwise <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③">this</a>.</p>
+      <p>Let <var>target</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/scripting.html#template-contents" id="ref-for-template-contents">template contents</a> if <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a> is a
+ <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement">template</a></code> element; otherwise <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this③">this</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="#set-and-filter-html" id="ref-for-set-and-filter-html">Set and filter HTML</a> given <var>target</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this④">this</a>, <var>compliantHTML</var>, <var>options</var>, and false.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="setHTML" data-algorithm-for="Element">
-     <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑤">Element</a></code>’s <dfn class="dfn-paneled" data-dfn-for="Element" data-dfn-type="dfn" data-export id="element-sethtml">setHTML</dfn>(<var>html</var>, <var>options</var>) method steps are: 
+    
+<code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑤">Element</a></code>’s <dfn class="dfn-paneled" data-dfn-for="Element" data-dfn-type="dfn" data-export id="element-sethtml">setHTML</dfn>(<var>html</var>, <var>options</var>) method steps are:
+
+
     <ol>
      <li data-md>
-      <p>Let <var>target</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/scripting.html#template-contents" id="ref-for-template-contents①">template contents</a> if <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥">this</a> is a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement①">template</a></code>; otherwise <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>.</p>
+      <p>Let <var>target</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑤">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/scripting.html#template-contents" id="ref-for-template-contents①">template contents</a> if <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑥">this</a> is a
+ <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement" id="ref-for-htmltemplateelement①">template</a></code>; otherwise <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑦">this</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="#set-and-filter-html" id="ref-for-set-and-filter-html①">Set and filter HTML</a> given <var>target</var>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑧">this</a>, <var>html</var>, <var>options</var>, and true.</p>
     </ol>
@@ -921,19 +940,29 @@ markup, and an optional configuration.</p>
 </pre>
    <p>These methods are mirrored on the <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#shadowroot" id="ref-for-shadowroot②">ShadowRoot</a></code>:</p>
    <div class="algorithm" data-algorithm="setHTMLUnsafe" data-algorithm-for="ShadowRoot">
-     <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#shadowroot" id="ref-for-shadowroot③">ShadowRoot</a></code>’s <dfn class="dfn-paneled" data-dfn-for="ShadowRoot" data-dfn-type="dfn" data-export id="shadowroot-sethtmlunsafe">setHTMLUnsafe</dfn>(<var>html</var>, <var>options</var>) method steps are: 
+    
+<code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#shadowroot" id="ref-for-shadowroot③">ShadowRoot</a></code>’s <dfn class="dfn-paneled" data-dfn-for="ShadowRoot" data-dfn-type="dfn" data-export id="shadowroot-sethtmlunsafe">setHTMLUnsafe</dfn>(<var>html</var>, <var>options</var>) method steps are:
+
+
     <ol>
      <li data-md>
-      <p>Let <var>compliantHTML</var> be the result of invoking the <a data-link-type="abstract-op" href="https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string" id="ref-for-abstract-opdef-get-trusted-type-compliant-string①">Get Trusted Type compliant string</a> algorithm with <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml③">TrustedHTML</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>, <var>html</var>, "ShadowRoot setHTMLUnsafe", and "script".</p>
+      <p>Let <var>compliantHTML</var> be the result of invoking the <a data-link-type="abstract-op" href="https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string" id="ref-for-abstract-opdef-get-trusted-type-compliant-string①">Get Trusted Type compliant string</a> algorithm with
+ <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml③">TrustedHTML</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this⑨">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>, <var>html</var>, "ShadowRoot setHTMLUnsafe", and "script".</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#set-and-filter-html" id="ref-for-set-and-filter-html②">Set and filter HTML</a> using <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#element-shadow-host" id="ref-for-element-shadow-host">shadow host</a> (as context element), <var>compliantHTML</var>, <var>options</var>, and false.</p>
+      <p><a data-link-type="dfn" href="#set-and-filter-html" id="ref-for-set-and-filter-html②">Set and filter HTML</a> using <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⓪">this</a>,
+ <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①①">this</a>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#element-shadow-host" id="ref-for-element-shadow-host">shadow host</a> (as context element),
+ <var>compliantHTML</var>, <var>options</var>, and false.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="setHTML" data-algorithm-for="ShadowRoot">
-     <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#shadowroot" id="ref-for-shadowroot④">ShadowRoot</a></code>’s <dfn class="dfn-paneled" data-dfn-for="ShadowRoot" data-dfn-type="dfn" data-export id="shadowroot-sethtml">setHTML</dfn>(<var>html</var>, <var>options</var>) method steps are: 
+    
+<code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#shadowroot" id="ref-for-shadowroot④">ShadowRoot</a></code>’s <dfn class="dfn-paneled" data-dfn-for="ShadowRoot" data-dfn-type="dfn" data-export id="shadowroot-sethtml">setHTML</dfn>(<var>html</var>, <var>options</var>) method steps are:
+
+
     <ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="#set-and-filter-html" id="ref-for-set-and-filter-html③">Set and filter HTML</a> using <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②">this</a> (as target), <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①③">this</a> (as context element), <var>html</var>, <var>options</var>, and true.</p>
+      <p><a data-link-type="dfn" href="#set-and-filter-html" id="ref-for-set-and-filter-html③">Set and filter HTML</a> using <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①②">this</a> (as target), <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①③">this</a> (as context element),
+ <var>html</var>, <var>options</var>, and true.</p>
     </ol>
    </div>
    <p>The <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> interface gains two new methods which parse an entire <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code>:</p>
@@ -943,10 +972,14 @@ markup, and an optional configuration.</p>
 };
 </pre>
    <div class="algorithm" data-algorithm="parseHTMLUnsafe" data-algorithm-for="Document">
-     The <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-export id="document-parsehtmlunsafe">parseHTMLUnsafe</dfn>(<var>html</var>, <var>options</var>) method steps are: 
+    
+The <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-export id="document-parsehtmlunsafe">parseHTMLUnsafe</dfn>(<var>html</var>, <var>options</var>) method steps are:
+
+
     <ol>
      <li data-md>
-      <p>Let <var>compliantHTML</var> be the result of invoking the <a data-link-type="abstract-op" href="https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string" id="ref-for-abstract-opdef-get-trusted-type-compliant-string②">Get Trusted Type compliant string</a> algorithm with <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml⑤">TrustedHTML</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①④">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>, <var>html</var>, "Document parseHTMLUnsafe", and "script".</p>
+      <p>Let <var>compliantHTML</var> be the result of invoking the <a data-link-type="abstract-op" href="https://w3c.github.io/trusted-types/dist/spec/#abstract-opdef-get-trusted-type-compliant-string" id="ref-for-abstract-opdef-get-trusted-type-compliant-string②">Get Trusted Type compliant string</a> algorithm with
+ <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/trusted-types/dist/spec/#trustedhtml" id="ref-for-trustedhtml⑤">TrustedHTML</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①④">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>, <var>html</var>, "Document parseHTMLUnsafe", and "script".</p>
      <li data-md>
       <p>Let <var>document</var> be a new <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document⑥">Document</a></code>, whose <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-content-type" id="ref-for-concept-document-content-type">content type</a> is "text/html".</p>
       <p class="note" role="note"><span class="marker">Note:</span> Since <var>document</var> does not have a browsing context, scripting is disabled.</p>
@@ -955,7 +988,8 @@ markup, and an optional configuration.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/#parse-html-from-a-string" id="ref-for-parse-html-from-a-string">Parse HTML from a string</a> given <var>document</var> and <var>compliantHTML</var>.</p>
      <li data-md>
-      <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options">get a sanitizer instance from options</a> with <var>options</var> and false.</p>
+      <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options">get a sanitizer instance from options</a>
+ with <var>options</var> and false.</p>
      <li data-md>
       <p>Call <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize">sanitize</a> on <var>document</var> with <var>sanitizer</var> and false.</p>
      <li data-md>
@@ -963,7 +997,10 @@ markup, and an optional configuration.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="parseHTML" data-algorithm-for="Document">
-     The <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-export id="document-parsehtml">parseHTML</dfn>(<var>html</var>, <var>options</var>) method steps are: 
+    
+The <dfn class="dfn-paneled" data-dfn-for="Document" data-dfn-type="dfn" data-export id="document-parsehtml">parseHTML</dfn>(<var>html</var>, <var>options</var>) method steps are:
+
+
     <ol>
      <li data-md>
       <p>Let <var>document</var> be a new <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document⑦">Document</a></code>, whose <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document-content-type" id="ref-for-concept-document-content-type①">content type</a> is "text/html".</p>
@@ -973,7 +1010,8 @@ markup, and an optional configuration.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/#parse-html-from-a-string" id="ref-for-parse-html-from-a-string①">Parse HTML from a string</a> given <var>document</var> and <var>html</var>.</p>
      <li data-md>
-      <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options①">get a sanitizer instance from options</a> with <var>options</var> and true.</p>
+      <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options①">get a sanitizer instance from options</a>
+ with <var>options</var> and true.</p>
      <li data-md>
       <p>Call <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize①">sanitize</a> on <var>document</var> with <var>sanitizer</var> and true.</p>
      <li data-md>
@@ -993,7 +1031,8 @@ dictionary. Right now, only one member of this dictionary is defined:</p>
 </pre>
    <p>The <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer②">Sanitizer</a></code> configuration object encapsulates a filter configuration.
 The same configuration can be used with both <a data-link-type="dfn" href="#safe-and-unsafe" id="ref-for-safe-and-unsafe">"safe"
-or "unsafe"</a> methods, where the "safe" methods perform an implicit <code class="idl"><a data-link-type="idl" href="#dom-sanitizer-removeunsafe" id="ref-for-dom-sanitizer-removeunsafe">removeUnsafe</a></code> operation on the passed in configuration and have a default
+or "unsafe"</a> methods, where the "safe" methods perform an implicit
+<code class="idl"><a data-link-type="idl" href="#dom-sanitizer-removeunsafe" id="ref-for-dom-sanitizer-removeunsafe">removeUnsafe</a></code> operation on the passed in configuration and have a default
 configuration when none is passed. The intent is
 that one (or a few) configurations will be built-up early on in a page’s
 lifetime, and can then be used whenever needed. This allows implementations
@@ -1022,8 +1061,11 @@ It can also be modified directly.</p>
 </pre>
    <p>A <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer③">Sanitizer</a></code> has an associated <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-configuration">configuration</dfn>, a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig④">SanitizerConfig</a></code>.</p>
    <div class="algorithm" data-algorithm="constructor" data-algorithm-for="Sanitizer">
-     The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-constructor">constructor</dfn>(<var>configuration</var>)
-method steps are: 
+    
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-constructor">constructor</dfn>(<var>configuration</var>)
+method steps are:
+
+
     <ol>
      <li data-md>
       <p>If <var>configuration</var> is a <code class="idl"><a data-link-type="idl" href="#enumdef-sanitizerpresets" id="ref-for-enumdef-sanitizerpresets③">SanitizerPresets</a></code> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string">string</a>, then:</p>
@@ -1034,22 +1076,42 @@ method steps are:
         <p>Set <var>configuration</var> to the <a data-link-type="dfn" href="#built-in-safe-default-configuration" id="ref-for-built-in-safe-default-configuration">built-in safe default configuration</a>.</p>
       </ol>
      <li data-md>
-      <p>Let <var>valid</var> be the return value of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration">set a configuration</a> with <var>configuration</var> and true on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>.</p>
+      <p>Let <var>valid</var> be the return value of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration">set a configuration</a> with
+ <var>configuration</var> and true on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑤">this</a>.</p>
      <li data-md>
       <p>If <var>valid</var> is false, then throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code>.</p>
     </ol>
    </div>
-   <div class="algorithm" data-algorithm="get" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-get">get</dfn>() method steps are to return the value of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑥">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="allowElement" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-allowelement">allowElement</dfn>(<var>element</var>) method steps are to <a data-link-type="dfn" href="#sanitizerconfig-allow-an-element" id="ref-for-sanitizerconfig-allow-an-element">allow an element</a> with <var>element</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑦">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="removeElement" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-removeelement">removeElement</dfn>(<var>element</var>) method steps are
-to <a data-link-type="dfn" href="#sanitizer-remove-an-element" id="ref-for-sanitizer-remove-an-element">remove an element</a> with <var>element</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑧">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="replaceElementWithChildren" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-replaceelementwithchildren">replaceElementWithChildren</dfn>(<var>element</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-replace-an-element-with-its-children" id="ref-for-sanitizer-replace-an-element-with-its-children">replace an element with its children</a> with <var>element</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑨">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration③">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="allowAttribute" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-allowattribute">allowAttribute</dfn>(<var>attribute</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-allow-an-attribute" id="ref-for-sanitizer-allow-an-attribute">allow an attribute</a> with <var>attribute</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⓪">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration④">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="removeAttribute" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-removeattribute">removeAttribute</dfn>(<var>attribute</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute">remove an attribute</a> with <var>attribute</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②①">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑤">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="setComments" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-setcomments">setComments</dfn>(<var>allow</var>) method steps to <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments">set comments</a> with <var>allow</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②②">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑥">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="setDataAttributes" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-setdataattributes">setDataAttributes</dfn>(<var>allow</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes">set data attributes</a> with <var>allow</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②③">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑦">configuration</a>. </div>
-   <div class="algorithm" data-algorithm="removeUnsafe" data-algorithm-for="Sanitizer"> The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-removeunsafe">removeUnsafe</dfn>() method steps are to
-update <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②④">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑧">configuration</a> with the result of calling <a data-link-type="dfn" href="#sanitizerconfig-remove-unsafe" id="ref-for-sanitizerconfig-remove-unsafe">remove unsafe</a> on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑤">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑨">configuration</a>. </div>
+   <div class="algorithm" data-algorithm="get" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-get">get</dfn>() method steps are to return the value of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑥">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="allowElement" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-allowelement">allowElement</dfn>(<var>element</var>) method steps are to <a data-link-type="dfn" href="#sanitizerconfig-allow-an-element" id="ref-for-sanitizerconfig-allow-an-element">allow an element</a> with <var>element</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑦">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="removeElement" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-removeelement">removeElement</dfn>(<var>element</var>) method steps are
+to <a data-link-type="dfn" href="#sanitizer-remove-an-element" id="ref-for-sanitizer-remove-an-element">remove an element</a> with <var>element</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑧">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="replaceElementWithChildren" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-replaceelementwithchildren">replaceElementWithChildren</dfn>(<var>element</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-replace-an-element-with-its-children" id="ref-for-sanitizer-replace-an-element-with-its-children">replace an element with its children</a> with <var>element</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①⑨">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration③">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="allowAttribute" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-allowattribute">allowAttribute</dfn>(<var>attribute</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-allow-an-attribute" id="ref-for-sanitizer-allow-an-attribute">allow an attribute</a> with <var>attribute</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⓪">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration④">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="removeAttribute" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-removeattribute">removeAttribute</dfn>(<var>attribute</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute">remove an attribute</a> with <var>attribute</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②①">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑤">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="setComments" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-setcomments">setComments</dfn>(<var>allow</var>) method steps to <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments">set comments</a> with <var>allow</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②②">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑥">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="setDataAttributes" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-setdataattributes">setDataAttributes</dfn>(<var>allow</var>) method steps are to <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes">set data attributes</a> with <var>allow</var> and <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②③">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑦">configuration</a>.
+</div>
+   <div class="algorithm" data-algorithm="removeUnsafe" data-algorithm-for="Sanitizer">
+The <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-export id="sanitizer-removeunsafe">removeUnsafe</dfn>() method steps are to
+update <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②④">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑧">configuration</a> with the result of calling <a data-link-type="dfn" href="#sanitizerconfig-remove-unsafe" id="ref-for-sanitizerconfig-remove-unsafe">remove unsafe</a>
+on <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②⑤">this</a>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration⑨">configuration</a>.
+</div>
    <h3 class="heading settled" data-level="2.3" id="config"><span class="secno">2.3. </span><span class="content">The Configuration Dictionary</span><a class="self-link" href="#config"></a></h3>
 <pre class="idl highlight def"><c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-sanitizerelementnamespace"><code><c- g>SanitizerElementNamespace</c-></code></dfn> {
   <c- b>required</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString⑦"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SanitizerElementNamespace" data-dfn-type="dict-member" data-export data-type="DOMString" id="dom-sanitizerelementnamespace-name"><code><c- g>name</c-></code></dfn>;
@@ -1085,14 +1147,23 @@ update <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="r
 </pre>
    <h2 class="heading settled" data-level="3" id="algorithms"><span class="secno">3. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
    <div class="algorithm" data-algorithm="set and filter HTML">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="set-and-filter-html">set and filter HTML</dfn>, given an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑥">Element</a></code> or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment">DocumentFragment</a></code> <var>target</var>, an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> <var>contextElement</var>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①">string</a> <var>html</var>, and a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary">dictionary</a> <var>options</var>, and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean">boolean</a> <var>safe</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="set-and-filter-html">set and filter HTML</dfn>, given an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑥">Element</a></code> or <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment">DocumentFragment</a></code>
+<var>target</var>, an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#element" id="ref-for-element⑦">Element</a></code> <var>contextElement</var>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string①">string</a> <var>html</var>, and a
+<a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary">dictionary</a> <var>options</var>, and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean">boolean</a> <var>safe</var>:
+
+
     <ol>
      <li data-md>
-      <p>If <var>safe</var> and <var>contextElement</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name">local name</a> is "<code>script</code>" and <var>contextElement</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace">namespace</a> is the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace">HTML namespace</a> or the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace">SVG namespace</a>, then return.</p>
+      <p>If <var>safe</var> and <var>contextElement</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name">local name</a> is "<code>script</code>" and
+ <var>contextElement</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace">namespace</a> is the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace">HTML namespace</a> or the
+ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace">SVG namespace</a>, then return.</p>
      <li data-md>
-      <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options②">get a sanitizer instance from options</a> with <var>options</var> and <var>safe</var>.</p>
+      <p>Let <var>sanitizer</var> be the result of calling <a data-link-type="dfn" href="#sanitizerconfig-get-a-sanitizer-instance-from-options" id="ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options②">get a sanitizer instance from options</a>
+ with <var>options</var> and <var>safe</var>.</p>
      <li data-md>
-      <p>Let <var>newChildren</var> be the result of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/#html-fragment-parsing-algorithm" id="ref-for-html-fragment-parsing-algorithm">HTML fragment parsing algorithm</a> given <var>contextElement</var>, <var>html</var>, and true.</p>
+      <p>Let <var>newChildren</var> be the result of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/#html-fragment-parsing-algorithm" id="ref-for-html-fragment-parsing-algorithm">HTML fragment parsing algorithm</a>
+ given <var>contextElement</var>, <var>html</var>, and true.</p>
      <li data-md>
       <p>Let <var>fragment</var> be a new <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment①">DocumentFragment</a></code> whose <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document">node document</a> is <var>contextElement</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document①">node document</a>.</p>
      <li data-md>
@@ -1104,9 +1175,13 @@ update <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="r
     </ol>
    </div>
    <div class="algorithm" data-algorithm="get a sanitizer instance from options" data-algorithm-for="SanitizerConfig">
-     To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-get-a-sanitizer-instance-from-options">get a sanitizer instance from options</dfn> from
-a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary①">dictionary</a> <var>options</var> with a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean①">boolean</a> <var>safe</var>, do: 
-    <p class="note" role="note"><span class="marker">Note:</span> This algorithm works for both <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmloptions" id="ref-for-dictdef-sethtmloptions③">SetHTMLOptions</a></code> and <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmlunsafeoptions" id="ref-for-dictdef-sethtmlunsafeoptions③">SetHTMLUnsafeOptions</a></code>. They only differ in the defaults.</p>
+    
+To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-get-a-sanitizer-instance-from-options">get a sanitizer instance from options</dfn> from
+a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary①">dictionary</a> <var>options</var> with a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean①">boolean</a> <var>safe</var>, do:
+
+
+    <p class="note" role="note"><span class="marker">Note:</span> This algorithm works for both <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmloptions" id="ref-for-dictdef-sethtmloptions③">SetHTMLOptions</a></code> and
+    <code class="idl"><a data-link-type="idl" href="#dictdef-sethtmlunsafeoptions" id="ref-for-dictdef-sethtmlunsafeoptions③">SetHTMLUnsafeOptions</a></code>. They only differ in the defaults.</p>
     <ol>
      <li data-md>
       <p>Let <var>sanitizerSpec</var> be "<code class="idl"><a data-link-type="idl" href="#dom-sanitizerpresets-default" id="ref-for-dom-sanitizerpresets-default①">default</a></code>".</p>
@@ -1136,7 +1211,8 @@ a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" 
        <li data-md>
         <p>Let <var>sanitizer</var> be a new <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑥">Sanitizer</a></code> instance.</p>
        <li data-md>
-        <p>Let <var>setConfigurationResult</var> be the result of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration①">set a configuration</a> with <var>sanitizerSpec</var> and <a data-link-type="dfn" href="#boolean-not" id="ref-for-boolean-not">not</a> <var>safe</var> on <var>sanitizer</var>.</p>
+        <p>Let <var>setConfigurationResult</var> be the result of <a data-link-type="dfn" href="#sanitizer-set-a-configuration" id="ref-for-sanitizer-set-a-configuration①">set a configuration</a>
+  with <var>sanitizerSpec</var> and <a data-link-type="dfn" href="#boolean-not" id="ref-for-boolean-not">not</a> <var>safe</var> on <var>sanitizer</var>.</p>
        <li data-md>
         <p>If <var>setConfigurationResult</var> is false, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①">TypeError</a></code>.</p>
        <li data-md>
@@ -1150,7 +1226,11 @@ a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" 
    </div>
    <h3 class="heading settled" data-level="3.1" id="sanitization"><span class="secno">3.1. </span><span class="content">Sanitization Algorithms</span><a class="self-link" href="#sanitization"></a></h3>
    <div class="algorithm" data-algorithm="sanitize">
-     For the main <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> operation, using a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#parentnode" id="ref-for-parentnode">ParentNode</a></code> <var>node</var>, a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑧">Sanitizer</a></code> <var>sanitizer</var>, and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean②">boolean</a> <var>safe</var>, run these steps: 
+    
+For the main <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize">sanitize</dfn> operation, using a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#parentnode" id="ref-for-parentnode">ParentNode</a></code> <var>node</var>, a
+<code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑧">Sanitizer</a></code> <var>sanitizer</var>, and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean②">boolean</a> <var>safe</var>, run these steps:
+
+
     <ol>
      <li data-md>
       <p>Let <var>configuration</var> be the value of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⓪">configuration</a>.</p>
@@ -1161,10 +1241,14 @@ a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" 
     </ol>
    </div>
    <div class="algorithm" data-algorithm="sanitize core">
-     The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-core">sanitize core</dfn> operation,
-using a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#parentnode" id="ref-for-parentnode①">ParentNode</a></code> <var>node</var>, a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑤">SanitizerConfig</a></code> <var>configuration</var>, and a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean③">boolean</a> <var><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="handlejavascriptnavigationurls">handleJavascriptNavigationUrls</dfn></var>, iterates over the DOM tree
+    
+The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="sanitize-core">sanitize core</dfn> operation,
+using a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#parentnode" id="ref-for-parentnode①">ParentNode</a></code> <var>node</var>, a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑤">SanitizerConfig</a></code> <var>configuration</var>, and a
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean③">boolean</a> <var><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="handlejavascriptnavigationurls">handleJavascriptNavigationUrls</dfn></var>, iterates over the DOM tree
 beginning with <var>node</var>, and may recurse to handle some special cases (e.g.
-template contents). It consistes of these steps: 
+template contents). It consistes of these steps:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> <var>child</var> of <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child">children</a>:</p>
@@ -1192,12 +1276,14 @@ template contents). It consistes of these steps:
         <p>Otherwise:</p>
         <ol>
          <li data-md>
-          <p>Let <var>elementName</var> be a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespace" id="ref-for-dictdef-sanitizerelementnamespace②">SanitizerElementNamespace</a></code> with <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace①">namespace</a>.</p>
+          <p>Let <var>elementName</var> be a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespace" id="ref-for-dictdef-sanitizerelementnamespace②">SanitizerElementNamespace</a></code> with <var>child</var>’s
+ <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace①">namespace</a>.</p>
          <li data-md>
           <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains">contains</a> <var>elementName</var>:</p>
           <ol>
            <li data-md>
-            <p>Call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core①">sanitize core</a> on <var>child</var> with <var>configuration</var> and <var>handleJavascriptNavigationUrls</var>.</p>
+            <p>Call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core①">sanitize core</a> on <var>child</var> with <var>configuration</var> and
+  <var>handleJavascriptNavigationUrls</var>.</p>
            <li data-md>
             <p>Call <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">replace all</a> with <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child①">children</a> within <var>child</var>.</p>
            <li data-md>
@@ -1216,42 +1302,58 @@ template contents). It consistes of these steps:
  "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace①">HTML namespace</a> ]»</p>
           <ol>
            <li data-md>
-            <p>Then call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core②">sanitize core</a> on <var>child</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/scripting.html#template-contents" id="ref-for-template-contents②">template contents</a> with <var>configuration</var> and <var>handleJavascriptNavigationUrls</var>.</p>
+            <p>Then call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core②">sanitize core</a> on <var>child</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/scripting.html#template-contents" id="ref-for-template-contents②">template contents</a> with
+  <var>configuration</var> and <var>handleJavascriptNavigationUrls</var>.</p>
           </ol>
          <li data-md>
           <p>If <var>child</var> is a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#element-shadow-host" id="ref-for-element-shadow-host①">shadow host</a>,
- then call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core③">sanitize core</a> on <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-shadow-root" id="ref-for-concept-element-shadow-root">shadow root</a> with <var>configuration</var> and <var>handleJavascriptNavigationUrls</var>.</p>
+ then call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core③">sanitize core</a> on <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-shadow-root" id="ref-for-concept-element-shadow-root">shadow root</a> with
+ <var>configuration</var> and <var>handleJavascriptNavigationUrls</var>.</p>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>attribute</var> in <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attribute" id="ref-for-concept-element-attribute">attribute list</a>:</p>
           <ol>
            <li data-md>
-            <p>Let <var>attrName</var> be a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerattributenamespace" id="ref-for-dictdef-sanitizerattributenamespace①">SanitizerAttributeNamespace</a></code> with <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace">namespace</a>.</p>
+            <p>Let <var>attrName</var> be a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerattributenamespace" id="ref-for-dictdef-sanitizerattributenamespace①">SanitizerAttributeNamespace</a></code> with <var>attribute</var>’s
+ <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace">namespace</a>.</p>
            <li data-md>
-            <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes">removeAttributes</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains③">contains</a> <var>attrName</var>,
+            <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes">removeAttributes</a></code>"]
+ <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains③">contains</a> <var>attrName</var>,
  then Remove <var>attribute</var> from <var>child</var>.</p>
            <li data-md>
-            <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①">elements</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes">removeAttributes</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains④">contains</a> <var>attrName</var>, then remove <var>attribute</var> from <var>child</var>.</p>
+            <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①">elements</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes">removeAttributes</a></code>"]
+   <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains④">contains</a> <var>attrName</var>, then remove <var>attribute</var> from <var>child</var>.</p>
            <li data-md>
             <p>If all of the following are false, then remove <var>attribute</var> from <var>child</var>.</p>
             <ul>
              <li data-md>
-              <p><var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">exists</a> and <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑤">contains</a> <var>attrName</var></p>
+              <p><var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">exists</a> and
+ <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑤">contains</a> <var>attrName</var></p>
              <li data-md>
-              <p><var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②">elements</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes">attributes</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑥">contains</a> <var>attrName</var></p>
+              <p><var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②">elements</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes">attributes</a></code>"]
+ <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑥">contains</a> <var>attrName</var></p>
              <li data-md>
-              <p>"data-" is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#code-unit-prefix" id="ref-for-code-unit-prefix">code unit prefix</a> of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name①">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace①">namespace</a> is <code>null</code> and <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes">dataAttributes</a></code>"] is true</p>
+              <p>"data-" is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#code-unit-prefix" id="ref-for-code-unit-prefix">code unit prefix</a> of <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name①">local name</a> and
+  <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace①">namespace</a> is <code>null</code> and
+  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes">dataAttributes</a></code>"] is true</p>
             </ul>
            <li data-md>
             <p>If <var>handleJavascriptNavigationUrls</var>:</p>
             <ol>
              <li data-md>
               <p>If «[<var>elementName</var>, <var>attrName</var>]» matches an entry in
-  the <a data-link-type="dfn" href="#built-in-navigating-url-attributes-list" id="ref-for-built-in-navigating-url-attributes-list">built-in navigating URL attributes list</a>, and if <var>attribute</var> <a data-link-type="dfn" href="#contains-a-javascript-url" id="ref-for-contains-a-javascript-url">contains a javascript: URL</a>, then remove <var>attribute</var> from <var>child</var>.</p>
+  the <a data-link-type="dfn" href="#built-in-navigating-url-attributes-list" id="ref-for-built-in-navigating-url-attributes-list">built-in navigating URL attributes list</a>, and if <var>attribute</var>
+  <a data-link-type="dfn" href="#contains-a-javascript-url" id="ref-for-contains-a-javascript-url">contains a javascript: URL</a>, then remove <var>attribute</var> from <var>child</var>.</p>
              <li data-md>
-              <p>If <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace②">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is②">is</a> the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace">MathML Namespace</a> and <var>attr</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name②">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is③">is</a> "<code>href</code>" and <var>attr</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace②">namespace</a> is <code>null</code> or the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#xlink-namespace" id="ref-for-xlink-namespace">XLink namespace</a> and <var>attr</var> <a data-link-type="dfn" href="#contains-a-javascript-url" id="ref-for-contains-a-javascript-url①">contains a javascript: URL</a>,
+              <p>If <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace②">namespace</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is②">is</a> the
+  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#mathml-namespace" id="ref-for-mathml-namespace">MathML Namespace</a> and <var>attr</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name②">local name</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is③">is</a>
+  "<code>href</code>" and  <var>attr</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace②">namespace</a> is <code>null</code> or the
+  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#xlink-namespace" id="ref-for-xlink-namespace">XLink namespace</a> and <var>attr</var> <a data-link-type="dfn" href="#contains-a-javascript-url" id="ref-for-contains-a-javascript-url①">contains a javascript: URL</a>,
   then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove">remove</a> <var>attr</var>.</p>
              <li data-md>
-              <p>If the <a data-link-type="dfn" href="#built-in-animating-url-attributes-list" id="ref-for-built-in-animating-url-attributes-list">built-in animating URL attributes list</a> <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑦">contains</a> «[<var>elementName</var>, <var>attrName</var>]» and <var>attr</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-get-value" id="ref-for-concept-element-attributes-get-value">value</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is④">is</a> "<code>href</code>" or
+              <p>If the <a data-link-type="dfn" href="#built-in-animating-url-attributes-list" id="ref-for-built-in-animating-url-attributes-list">built-in animating URL attributes list</a>
+  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑦">contains</a>
+  «[<var>elementName</var>, <var>attrName</var>]» and <var>attr</var>’s
+  <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-get-value" id="ref-for-concept-element-attributes-get-value">value</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is④">is</a> "<code>href</code>" or
   "<code>xlink:href</code>", then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove①">remove</a> <var>attr</var>.</p>
             </ol>
           </ol>
@@ -1262,9 +1364,12 @@ template contents). It consistes of these steps:
     </ol>
    </div>
    <div class="note" role="note">
-     <span class="marker">Note:</span> Current browsers support <code>javascript:</code> URLs
+    
+<span class="marker">Note:</span> Current browsers support <code>javascript:</code> URLs
 only when navigating. Since navigation itself is not an XSS threat we handle
-navigation to <code>javascript:</code> URLs, but not navigations in general. 
+navigation to <code>javascript:</code> URLs, but not navigations in general.
+
+
     <p>Declarative navigation falls into a handful of categories:</p>
     <ol>
      <li data-md>
@@ -1279,13 +1384,17 @@ navigation to <code>javascript:</code> URLs, but not navigations in general.
     <p>The first two are covered by the <a data-link-type="dfn" href="#built-in-navigating-url-attributes-list" id="ref-for-built-in-navigating-url-attributes-list①">built-in navigating URL attributes list</a>.</p>
     <p>The MathML case is covered by a seperate rule, because there is no formalism
 in this spec to cover a "per-namespace global" rule.</p>
-    <p>The SVG animation case is covered by the <a data-link-type="dfn" href="#built-in-animating-url-attributes-list" id="ref-for-built-in-animating-url-attributes-list①">built-in animating URL attributes list</a>. But since the interpretation of SVG animation elements depends on the animation target, and since during sanitization we cannot know what the final target will be, the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize③">sanitize</a> algorithm blocks any animation of <code>href</code> attributes.</p>
+    <p>The SVG animation case is covered by the
+<a data-link-type="dfn" href="#built-in-animating-url-attributes-list" id="ref-for-built-in-animating-url-attributes-list①">built-in animating URL attributes list</a>. But since the interpretation of SVG animation elements depends on the animation target, and since during sanitization we cannot know what the final target will be, the <a data-link-type="dfn" href="#sanitize" id="ref-for-sanitize③">sanitize</a> algorithm blocks any animation of <code>href</code> attributes.</p>
    </div>
    <div class="algorithm" data-algorithm="contains a javascript: URL">
-     To determine whether an <var>attribute</var> <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="contains-a-javascript-url">contains a javascript: URL</dfn>: 
+    
+To determine whether an <var>attribute</var> <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="contains-a-javascript-url">contains a javascript: URL</dfn>:
+
     <ol>
      <li data-md>
-      <p>Let <var>url</var> be the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-basic-url-parser" id="ref-for-concept-basic-url-parser">basic URL parser</a> on <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-get-value" id="ref-for-concept-element-attributes-get-value①">value</a>.</p>
+      <p>Let <var>url</var> be the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-basic-url-parser" id="ref-for-concept-basic-url-parser">basic URL parser</a>
+ on <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-get-value" id="ref-for-concept-element-attributes-get-value①">value</a>.</p>
      <li data-md>
       <p>If <var>url</var> is <code>failure</code>, then return false.</p>
      <li data-md>
@@ -1294,7 +1403,10 @@ in this spec to cover a "per-namespace global" rule.</p>
    </div>
    <h3 class="heading settled" data-level="3.2" id="configuration-processing"><span class="secno">3.2. </span><span class="content">Configuration Processing</span><a class="self-link" href="#configuration-processing"></a></h3>
    <div class="algorithm" data-algorithm="allow an element" data-algorithm-for="SanitizerConfig">
-     To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-allow-an-element">allow an element</dfn> <var>element</var> with a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑥">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-allow-an-element">allow an element</dfn> <var>element</var> with a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑥">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>element</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element-with-attributes" id="ref-for-canonicalize-a-sanitizer-element-with-attributes">canonicalize a sanitizer element with attributes</a> with <var>element</var>.</p>
@@ -1315,10 +1427,14 @@ in this spec to cover a "per-namespace global" rule.</p>
     in. In other words, the per-element allow- and remove-lists can only be
     set as a whole.</p>
     <p class="note" role="note"><span class="marker">NOTE:</span> <a data-link-type="dfn" href="#sanitizerconfig-remove" id="ref-for-sanitizerconfig-remove③">Remove</a> matches on name and namespace, so adding an
-    element with attributes would still remove the matching element from the <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements②">removeElements</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements②">replaceWithChildrenElements</a></code> lists.</p>
+    element with attributes would still remove the matching element from the
+    <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements②">removeElements</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements②">replaceWithChildrenElements</a></code> lists.</p>
    </div>
    <div class="algorithm" data-algorithm="remove an element" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-remove-an-element">remove an element</dfn> <var>element</var> from a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑦">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-remove-an-element">remove an element</dfn> <var>element</var> from a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑦">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>element</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element" id="ref-for-canonicalize-a-sanitizer-element">canonicalize a sanitizer element</a> with <var>element</var>.</p>
@@ -1331,7 +1447,10 @@ in this spec to cover a "per-namespace global" rule.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="replace an element with its children" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-replace-an-element-with-its-children">replace an element with its children</dfn> <var>element</var> from a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑧">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-replace-an-element-with-its-children">replace an element with its children</dfn> <var>element</var> from a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑧">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>element</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element" id="ref-for-canonicalize-a-sanitizer-element①">canonicalize a sanitizer element</a> with <var>element</var>.</p>
@@ -1344,7 +1463,10 @@ in this spec to cover a "per-namespace global" rule.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="allow an attribute" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-allow-an-attribute">allow an attribute</dfn> <var>attribute</var> on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑨">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-allow-an-attribute">allow an attribute</dfn> <var>attribute</var> on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig⑨">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>attribute</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute">canonicalize a sanitizer attribute</a> with <var>attribute</var>.</p>
@@ -1355,7 +1477,10 @@ in this spec to cover a "per-namespace global" rule.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="remove an attribute" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-remove-an-attribute">remove an attribute</dfn> <var>attribute</var> from a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①⓪">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-remove-an-attribute">remove an attribute</dfn> <var>attribute</var> from a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①⓪">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>attribute</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute①">canonicalize a sanitizer attribute</a> with <var>attribute</var>.</p>
@@ -1366,38 +1491,51 @@ in this spec to cover a "per-namespace global" rule.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="set comments" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-comments">set comments</dfn> with <var>allow</var> on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①①">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-comments">set comments</dfn> with <var>allow</var> on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①①">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments①">comments</a></code>"] to <var>allow</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="set data attributes" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-data-attributes">set data attributes</dfn> with <var>allow</var> on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①②">SanitizerConfig</a></code> <var>configuration</var>, do: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-data-attributes">set data attributes</dfn> with <var>allow</var> on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig①②">SanitizerConfig</a></code> <var>configuration</var>, do:
+
+
     <ol>
      <li data-md>
       <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①">dataAttributes</a></code>"] to <var>allow</var>.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="remove unsafe" data-algorithm-for="SanitizerConfig">
-    <p class="note" role="note"><span class="marker">Note:</span> While this algorithm is called <a data-link-type="dfn" href="#sanitizerconfig-remove-unsafe" id="ref-for-sanitizerconfig-remove-unsafe②">remove unsafe</a>, we use <a href="#security-considerations">the term "unsafe" strictly in the sense
+    <p class="note" role="note"><span class="marker">Note:</span> While this algorithm is called <a data-link-type="dfn" href="#sanitizerconfig-remove-unsafe" id="ref-for-sanitizerconfig-remove-unsafe②">remove unsafe</a>, we use
+    <a href="#security-considerations">the term "unsafe" strictly in the sense
     of this spec</a>, to denote content that will
     execute JavaScript when inserted into the document. In other words, this
     method will remove oportunities for XSS.</p>
     <p>To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-remove-unsafe">remove unsafe</dfn> from a <var>configuration</var>, do this:</p>
     <ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑥">Assert</a>: The <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration">built-in safe baseline configuration</a> has <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑤">removeElements</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes③">removeAttributes</a></code> keys set, but not <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑦">elements</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑤">replaceWithChildrenElements</a></code>, or <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③">attributes</a></code>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑥">Assert</a>: The <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration">built-in safe baseline configuration</a> has
+ <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑤">removeElements</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes③">removeAttributes</a></code>
+ keys set, but not <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑦">elements</a></code>,
+ <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑤">replaceWithChildrenElements</a></code>, or
+ <code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③">attributes</a></code>.</p>
      <li data-md>
       <p>Let <var>result</var> be a copy of <var>configuration</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>element</var> in <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration①">built-in safe baseline configuration</a>[<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑥">removeElements</a></code>]:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>element</var> in
+ <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration①">built-in safe baseline configuration</a>[<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑥">removeElements</a></code>]:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-element" id="ref-for-sanitizer-remove-an-element①">remove an element</a> with <var>element</var> and <var>result</var>.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> <var>attribute</var> in <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration②">built-in safe baseline configuration</a>[<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes④">removeAttributes</a></code>]:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> <var>attribute</var> in
+ <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration②">built-in safe baseline configuration</a>[<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes④">removeAttributes</a></code>]:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute①">remove an attribute</a> with <var>attribute</var> and <var>result</var>.</p>
@@ -1413,7 +1551,10 @@ in this spec to cover a "per-namespace global" rule.</p>
     </ol>
    </div>
    <div class="algorithm" data-algorithm="set a configuration" data-algorithm-for="Sanitizer">
-     To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-a-configuration">set a configuration</dfn>, given a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑤">dictionary</a> <var>configuration</var>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean④">boolean</a> <var>allowCommentsAndDataAttributes</var>, and a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑨">Sanitizer</a></code> <var>sanitizer</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-noexport id="sanitizer-set-a-configuration">set a configuration</dfn>, given a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑤">dictionary</a> <var>configuration</var>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean④">boolean</a> <var>allowCommentsAndDataAttributes</var>, and a <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer⑨">Sanitizer</a></code> <var>sanitizer</var>:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑥">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑧">elements</a></code>"] do:</p>
@@ -1452,51 +1593,66 @@ in this spec to cover a "per-namespace global" rule.</p>
         <p>Then call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments①">set comments</a> with <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments③">comments</a></code>"]
   and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑥">configuration</a>.</p>
        <li data-md>
-        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments②">set comments</a> with <var>allowCommentsAndDataAttributes</var> and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑦">configuration</a>.</p>
+        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-comments" id="ref-for-sanitizer-set-comments②">set comments</a> with <var>allowCommentsAndDataAttributes</var>
+  and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑦">configuration</a>.</p>
       </ol>
      <li data-md>
       <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes②">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a>:</p>
       <ol>
        <li data-md>
-        <p>Then call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes①">set data attributes</a> with <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes③">dataAttributes</a></code>"]
+        <p>Then call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes①">set data attributes</a> with
+  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes③">dataAttributes</a></code>"]
   and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑧">configuration</a>.</p>
        <li data-md>
-        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes②">set data attributes</a> with <var>allowCommentsAndDataAttributes</var> and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑨">configuration</a>.</p>
+        <p>Otherwise call <a data-link-type="dfn" href="#sanitizer-set-data-attributes" id="ref-for-sanitizer-set-data-attributes②">set data attributes</a> with <var>allowCommentsAndDataAttributes</var>
+  and <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration①⑨">configuration</a>.</p>
       </ol>
      <li data-md>
       <p>Return whether all of the following are true:</p>
       <ul>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑨">elements</a></code>"] equals <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②⓪">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①⓪">elements</a></code>"].</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements⑨">elements</a></code>"] equals
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②⓪">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①⓪">elements</a></code>"].</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size②">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑧">removeElements</a></code>"] equals <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size③">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②①">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑨">removeElements</a></code>"].</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size②">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑧">removeElements</a></code>"] equals
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size③">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②①">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑨">removeElements</a></code>"].</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size④">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑦">replaceWithChildrenElements</a></code>"] equals <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑤">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②②">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑧">replaceWithChildrenElements</a></code>"].</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size④">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑦">replaceWithChildrenElements</a></code>"] equals
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑤">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②②">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑧">replaceWithChildrenElements</a></code>"].</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑥">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑤">attributes</a></code>"] equals <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑦">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②③">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑥">attributes</a></code>"].</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑥">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑤">attributes</a></code>"] equals
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑦">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②③">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑥">attributes</a></code>"].</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑧">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑥">removeAttributes</a></code>"] equals <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑨">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②④">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑦">removeAttributes</a></code>"].</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑧">size</a> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑥">removeAttributes</a></code>"] equals
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size⑨">size</a> of <var>sanitizer</var>’s <a data-link-type="dfn" href="#sanitizer-configuration" id="ref-for-sanitizer-configuration②④">configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑦">removeAttributes</a></code>"].</p>
        <li data-md>
-        <p>Either <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①①">elements</a></code>"] or <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⓪">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exist</a>,
+        <p>Either <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①①">elements</a></code>"] or
+<var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⓪">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exist</a>,
 or neither, but not both.</p>
        <li data-md>
-        <p>Either <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑦">attributes</a></code>"] or <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exist</a>,
+        <p>Either <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑦">attributes</a></code>"] or
+<var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exist</a>,
 or neither, but not both.</p>
       </ul>
     </ol>
     <p class="note" role="note"><span class="marker">Note:</span> Previous versions of this spec had elaborate definitions of how to
   canonicalize a config. This has now effectively been moved into the method
   definitions.</p>
-    <p class="note" role="note"><span class="marker">Note:</span> This operation is defined in terms of the manipulation methods on the <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①⓪">Sanitizer</a></code>. Those methods remove matching entries from other lists.
+    <p class="note" role="note"><span class="marker">Note:</span> This operation is defined in terms of the manipulation methods on the
+    <code class="idl"><a data-link-type="idl" href="#sanitizer" id="ref-for-sanitizer①⓪">Sanitizer</a></code>. Those methods remove matching entries from other lists.
     The size equality steps in the last step would then catch this.
-    For example: <code>{ allow: ["div", "div"] }</code> would create a Sanitizer with one element in
+    For example:
+    <code>{ allow: ["div", "div"] }</code> would create a Sanitizer with one element in
     the allow list. The final test would then return false, which would cause
     the caller to throw an exception.</p>
     <p class="issue" id="issue-d2a3ab76"><a class="self-link" href="#issue-d2a3ab76"></a> This is still missing error checks for the per-element attribute lists
     and syntax errors.</p>
    </div>
    <div class="algorithm" data-algorithm="canonicalize a sanitizer element with attributes">
-     In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-element-with-attributes">canonicalize a sanitizer element with attributes</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerelementwithattributes" id="ref-for-typedefdef-sanitizerelementwithattributes②">SanitizerElementWithAttributes</a></code> <var>element</var>, do this: 
+    
+In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-element-with-attributes">canonicalize a sanitizer element with attributes</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerelementwithattributes" id="ref-for-typedefdef-sanitizerelementwithattributes②">SanitizerElementWithAttributes</a></code> <var>element</var>, do this:
+
+
     <ol>
      <li data-md>
       <p>Let <var>result</var> be the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element" id="ref-for-canonicalize-a-sanitizer-element②">canonicalize a sanitizer element</a> with <var>element</var>.</p>
@@ -1504,13 +1660,15 @@ or neither, but not both.</p>
       <p>If <var>element</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑥">dictionary</a>:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>attribute</var> in <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes①">attributes</a></code>"]:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>attribute</var> in
+  <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes①">attributes</a></code>"]:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add④">Add</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute②">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes②">attributes</a></code>"].</p>
         </ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>attribute</var> in <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes①">removeAttributes</a></code>"]:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>attribute</var> in
+  <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes①">removeAttributes</a></code>"]:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add⑤">Add</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute③">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②">removeAttributes</a></code>"].</p>
@@ -1520,13 +1678,22 @@ or neither, but not both.</p>
       <p>Return <var>result</var>.</p>
     </ol>
    </div>
-   <div class="algorithm" data-algorithm="canonicalize a sanitizer element"> In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-element">canonicalize a sanitizer element</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerelement" id="ref-for-typedefdef-sanitizerelement④">SanitizerElement</a></code> <var>element</var>,
-return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name">canonicalize a sanitizer name</a> with <var>element</var> and the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace②">HTML namespace</a> as the default namespace. </div>
-   <div class="algorithm" data-algorithm="canonicalize a sanitizer attribute"> In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-attribute">canonicalize a sanitizer attribute</dfn> a <code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerattribute" id="ref-for-typedefdef-sanitizerattribute⑥">SanitizerAttribute</a></code> <var>attribute</var>,
-return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name①">canonicalize a sanitizer name</a> with <var>attribute</var> and null as the default namespace. </div>
+   <div class="algorithm" data-algorithm="canonicalize a sanitizer element">
+In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-element">canonicalize a sanitizer element</dfn> a
+<code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerelement" id="ref-for-typedefdef-sanitizerelement④">SanitizerElement</a></code> <var>element</var>,
+return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name">canonicalize a sanitizer name</a> with <var>element</var> and the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace②">HTML namespace</a> as the default namespace.
+</div>
+   <div class="algorithm" data-algorithm="canonicalize a sanitizer attribute">
+In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-attribute">canonicalize a sanitizer attribute</dfn> a
+<code class="idl"><a data-link-type="idl" href="#typedefdef-sanitizerattribute" id="ref-for-typedefdef-sanitizerattribute⑥">SanitizerAttribute</a></code> <var>attribute</var>,
+return the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name①">canonicalize a sanitizer name</a> with <var>attribute</var> and null as the default namespace.
+</div>
    <div class="algorithm" data-algorithm="canonicalize a sanitizer name">
-     In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-name">canonicalize a sanitizer name</dfn> <var>name</var>, with a default
-namespace <var>defaultNamespace</var>, run the following steps: 
+    
+In order to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a-sanitizer-name">canonicalize a sanitizer name</dfn> <var>name</var>, with a default
+namespace <var>defaultNamespace</var>, run the following steps:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑦">Assert</a>: <var>name</var> is either a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①④">DOMString</a></code> or a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑦">dictionary</a>.</p>
@@ -1539,17 +1706,35 @@ namespace <var>defaultNamespace</var>, run the following steps:
      <li data-md>
       <p>If <var>namespace</var> is the empty string, then set it to null.</p>
      <li data-md>
-      <p>Return «[ <br> "<code>name</code>" → <var>name</var>["name"], <br> "<code>namespace</code>" → <var>namespace</var> <br> ]».</p>
+      <p>Return «[ <br>
+"<code>name</code>" → <var>name</var>["name"], <br>
+"<code>namespace</code>" → <var>namespace</var> <br>
+]».</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.3" id="alg-support"><span class="secno">3.3. </span><span class="content">Supporting Algorithms</span><a class="self-link" href="#alg-support"></a></h3>
-   <p>For the <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name②">canonicalized</a> <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespace" id="ref-for-dictdef-sanitizerelementnamespace③">element</a></code> and <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerattributenamespace" id="ref-for-dictdef-sanitizerattributenamespace②">attribute name</a></code> lists
+   <p>For the <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name②">canonicalized</a>
+<code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespace" id="ref-for-dictdef-sanitizerelementnamespace③">element</a></code> and <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerattributenamespace" id="ref-for-dictdef-sanitizerattributenamespace②">attribute name</a></code> lists
 used in this spec, list membership is based on matching both "<code>name</code>" and "<code>namespace</code>"
 entries:</p>
-   <div class="algorithm" data-algorithm="contains" data-algorithm-for="SanitizerConfig"> A Sanitizer name <var>list</var> <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-contains">contains</dfn> an <var>item</var> if there exists an <var>entry</var> of <var>list</var> that is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">ordered map</a>, and where <var>item</var>["name"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal①">equals</a> <var>entry</var>["name"] and <var>item</var>["namespace"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal②">equals</a> <var>entry</var>["namespace"]. </div>
-   <div class="algorithm" data-algorithm="remove" data-algorithm-for="SanitizerConfig"> To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-remove">remove</dfn> an <var>item</var> from a <var>list</var> that is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map①">ordered map</a>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove">remove</a> all <var>entry</var> from <var>list</var> where <var>item</var>["name"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal③">equals</a> <var>entry</var>["name"] and <var>item</var>["namespace"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal④">equals</a> <var>entry</var>["namespace"]. </div>
+   <div class="algorithm" data-algorithm="contains" data-algorithm-for="SanitizerConfig">
+A Sanitizer name <var>list</var> <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-contains">contains</dfn> an <var>item</var>
+if there exists an <var>entry</var> of <var>list</var> that is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">ordered map</a>, and where
+<var>item</var>["name"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal①">equals</a> <var>entry</var>["name"] and
+<var>item</var>["namespace"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal②">equals</a> <var>entry</var>["namespace"].
+</div>
+   <div class="algorithm" data-algorithm="remove" data-algorithm-for="SanitizerConfig">
+To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-remove">remove</dfn> an <var>item</var> from a <var>list</var> that is an
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map①">ordered map</a>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove">remove</a> all <var>entry</var> from <var>list</var>
+where <var>item</var>["name"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal③">equals</a> <var>entry</var>["name"] and
+<var>item</var>["namespace"] <a data-link-type="dfn" href="#set-equal" id="ref-for-set-equal④">equals</a> <var>entry</var>["namespace"].
+</div>
    <div class="algorithm" data-algorithm="add" data-algorithm-for="SanitizerConfig">
-     To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-add">add</dfn> a <var>name</var> to a <var>list</var>, where <var>name</var> is <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name③">canonicalized</a> and <var>list</var> is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map②">ordered map</a>: 
+    
+To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-add">add</dfn> a <var>name</var> to a <var>list</var>, where <var>name</var> is
+<a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name③">canonicalized</a> and <var>list</var> is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map②">ordered map</a>:
+
+
     <ol>
      <li data-md>
       <p>If <var>list</var> <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑧">contains</a> <var>name</var>, then return.</p>
@@ -1557,10 +1742,16 @@ entries:</p>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append②">Append</a> <var>name</var> to <var>list</var>.</p>
     </ol>
    </div>
-   <div class="algorithm" data-algorithm="equal" data-algorithm-for="set"> Equality for <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">ordered sets</a> is equality of its members, but without
-regard to order: <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">Ordered sets</a> <var>A</var> and <var>B</var> are <dfn class="dfn-paneled" data-dfn-for="set" data-dfn-type="dfn" data-noexport id="set-equal">equal</dfn> if both <var>A</var> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-superset" id="ref-for-set-superset">superset</a> of <var>B</var> and <var>B</var> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-superset" id="ref-for-set-superset①">superset</a> of <var>A</var>. </div>
-   <div class="algorithm" data-algorithm="not" data-algorithm-for="boolean"> To determine <dfn class="dfn-paneled" data-dfn-for="boolean" data-dfn-type="dfn" data-noexport id="boolean-not">not</dfn> of a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean⑤">boolean</a> <var>bool</var>,
-return false if <var>bool</var> is true, and return true otherwise. </div>
+   <div class="algorithm" data-algorithm="equal" data-algorithm-for="set">
+Equality for <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">ordered sets</a> is equality of its members, but without
+regard to order:
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">Ordered sets</a> <var>A</var> and <var>B</var> are <dfn class="dfn-paneled" data-dfn-for="set" data-dfn-type="dfn" data-noexport id="set-equal">equal</dfn> if both <var>A</var> is a
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-superset" id="ref-for-set-superset">superset</a> of <var>B</var> and <var>B</var> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-superset" id="ref-for-set-superset①">superset</a> of <var>A</var>.
+</div>
+   <div class="algorithm" data-algorithm="not" data-algorithm-for="boolean">
+To determine <dfn class="dfn-paneled" data-dfn-for="boolean" data-dfn-type="dfn" data-noexport id="boolean-not">not</dfn> of a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#boolean" id="ref-for-boolean⑤">boolean</a> <var>bool</var>,
+return false if <var>bool</var> is true, and return true otherwise.
+</div>
    <h3 class="heading settled" data-level="3.4" id="sanitization-defaults"><span class="secno">3.4. </span><span class="content">Builtins</span><a class="self-link" href="#sanitization-defaults"></a></h3>
    <p>There are four builtins:</p>
    <ul>
@@ -2304,6 +2495,411 @@ return false if <var>bool</var> is true, and return true otherwise. </div>
       <c- f>"name"</c-><c- p>:</c-> <c- u>"semantics"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/1998/Math/MathML"</c-><c- p>,</c->
       <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"svg"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"viewBox"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"preserveAspectRatio"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"height"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"width"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"g"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"defs"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"symbol"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"preserveAspectRatio"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"viewBox"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"refX"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"refY"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"height"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"width"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"title"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"desc"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"metadata"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"path"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"d"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"rect"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"width"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"height"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rx"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"ry"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"circle"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cx"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cy"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"r"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"ellipse"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cx"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"cy"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rx"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"ry"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"line"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x1"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y1"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x2"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y2"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"polyline"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"points"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"polygon"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"pathLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"points"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"text"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"lengthAdjust"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"dx"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"dy"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rotate"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"textLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"tspan"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"lengthAdjust"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"dx"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"dy"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"rotate"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"textLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"textPath"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"lengthAdjust"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"textLength"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"path"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"startOffset"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"method"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"spacing"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"side"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"foreignObject"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"width"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"height"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"marker"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
+      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"viewBox"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"preserveAspectRatio"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"refX"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"refY"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"markerUnits"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"markerWidth"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"markerHeight"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>},</c->
+        <c- p>{</c->
+          <c- f>"name"</c-><c- p>:</c-> <c- u>"orient"</c-><c- p>,</c->
+          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+        <c- p>}</c->
+      <c- p>]</c->
     <c- p>}</c->
   <c- p>],</c->
   <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
@@ -2337,6 +2933,246 @@ return false if <var>bool</var> is true, and return true otherwise. </div>
     <c- p>},</c->
     <c- p>{</c->
       <c- f>"name"</c-><c- p>:</c-> <c- u>"scriptlevel"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"fill"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"transform"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"alignment-baseline"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"baseline-shift"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"clip-path"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"clip-rule"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"color"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"color-interpolation"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"color-interpolation-filters"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"cursor"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"direction"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"display"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"dominant-baseline"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"fill-opacity"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"fill-rule"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"filter"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"flood-color"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"flood-opacity"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-family"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-size"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-size-adjust"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-stretch"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-style"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-variant"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"font-weight"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"glyph-orientation-horizontal"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"glyph-orientation-vertical"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"image-rendering"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"letter-spacing"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"lighting-color"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"marker-end"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"marker-mid"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"marker-start"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"mask"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"mask-type"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"opacity"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"paint-order"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"pointer-events"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"shape-rendering"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stop-color"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stop-opacity"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-dasharray"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-dashoffset"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-linecap"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-linejoin"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-miterlimit"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-opacity"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"stroke-width"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"text-anchor"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"text-decoration"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"text-overflow"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"text-rendering"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"transform-origin"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"unicode-bidi"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"vector-effect"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"visibility"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"white-space"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"word-spacing"</c-><c- p>,</c->
+      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
+    <c- p>},</c->
+    <c- p>{</c->
+      <c- f>"name"</c-><c- p>:</c-> <c- u>"writing-mode"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>}</c->
   <c- p>],</c->
@@ -2384,7 +3220,8 @@ script-content. It is as follows:</p>
     <p><strong class="marker">Warning:</strong> The <a data-link-type="dfn" href="#sanitizerconfig-remove-unsafe" id="ref-for-sanitizerconfig-remove-unsafe③">remove unsafe</a> algorithm specifies
 to additionally remove any <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes①">event handler content attributes</a>, as defined
 in <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a>.
-If a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent">user agent</a> defines extensions to the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> spec with additional <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes②">event handler content attributes</a>, it is its responsibility to decide how
+If a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent">user agent</a> defines extensions to the <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a> spec with additional
+<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes②">event handler content attributes</a>, it is its responsibility to decide how
 to handle them. Using the current <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes③">event handler content attributes</a> list,
 the safe baseline configuration looks effectively like so:</p>
 <pre class="include-code highlight"><c- p>{</c->
@@ -2511,52 +3348,86 @@ the safe baseline configuration looks effectively like so:</p>
 <c- p>}</c-></pre>
    </div>
    <div>
-     The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-navigating-url-attributes-list">built-in navigating URL attributes list</dfn>, for which "<code>javascript:</code>"
-navigations are "unsafe", are as follows: 
-    <p>«[ <br> [
+    
+The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-navigating-url-attributes-list">built-in navigating URL attributes list</dfn>, for which "<code>javascript:</code>"
+navigations are "unsafe", are as follows:
+
+
+    <p>«[
+  <br>
+  [
     { "<code>name</code>" → "<code>a</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace③">HTML namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>area</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace④">HTML namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>base</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑤">HTML namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>button</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑥">HTML namespace</a> },
     { "<code>name</code>" → "<code>formaction</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>form</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑦">HTML namespace</a> },
     { "<code>name</code>" → "<code>action</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>iframe</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑧">HTML namespace</a> },
     { "<code>name</code>" → "<code>src</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>input</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace⑨">HTML namespace</a> },
     { "<code>name</code>" → "<code>formaction</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>a</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace①">SVG namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>a</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace②">SVG namespace</a> },
     { "<code>name</code>" → "<code>href</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#xlink-namespace" id="ref-for-xlink-namespace①">XLink namespace</a> }
-  ], <br> ]»</p>
+  ],
+  <br>
+]»</p>
    </div>
-   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-animating-url-attributes-list">built-in animating URL attributes list</dfn>, which can be used in <a data-link-type="biblio" href="#biblio-svg11" title="Scalable Vector Graphics (SVG) 1.1 (Second Edition)">[SVG11]</a> to declaratively modify navigation elements to use "<code>javascript:</code>"
+   <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="built-in-animating-url-attributes-list">built-in animating URL attributes list</dfn>, which can be used in
+<a data-link-type="biblio" href="#biblio-svg11" title="Scalable Vector Graphics (SVG) 1.1 (Second Edition)">[SVG11]</a> to declaratively modify navigation elements to use "<code>javascript:</code>"
 URLs, is as follows:</p>
-   <p>«[ <br> [
+   <p>«[
+  <br>
+  [
     { "<code>name</code>" → "<code>animate</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace③">SVG namespace</a> },
     { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code>] }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>animateMotion</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> },
     { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>animateTransform</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑤">SVG namespace</a> },
     { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> [
+  ],
+  <br>
+  [
     { "<code>name</code>" → "<code>set</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑥">SVG namespace</a> },
     { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code> }
-  ], <br> ]»</p>
+  ],
+  <br>
+]»</p>
    <h2 class="heading settled" data-level="4" id="security-considerations"><span class="secno">4. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
    <p>The Sanitizer API is intended to prevent DOM-based Cross-Site Scripting
 by traversing a supplied HTML content and removing elements and attributes
@@ -2603,9 +3474,11 @@ into a different parent element. An example for carrying out such an attack
 is by relying on the change of parsing behavior for foreign content or
 mis-nested tags.</p>
    <p>The Sanitizer API offers only functions that turn a string into a node tree.
-The context is supplied implicitly by all sanitizer functions: <code>Element.setHTML()</code> uses the current element; <code>Document.parseHTML()</code> creates a
+The context is supplied implicitly by all sanitizer functions:
+<code>Element.setHTML()</code> uses the current element; <code>Document.parseHTML()</code> creates a
 new document. Therefore Sanitizer API is not directly affected by mutated XSS.</p>
-   <p>If a developer were to retrieve a sanitized node tree as a string, e.g. via <code>.innerHTML</code>, and to then parse it again then mutated XSS may occur.
+   <p>If a developer were to retrieve a sanitized node tree as a string, e.g. via
+<code>.innerHTML</code>, and to then parse it again then mutated XSS may occur.
 We discourage this practice. If processing or passing of HTML as a
 string should be necessary after all, then any string should be considered
 untrusted and should be sanitized (again) when inserting it into the DOM. In
@@ -2614,7 +3487,8 @@ longer be considered as sanitized.</p>
    <p>A more complete treatment of mXSS can be found in <a data-link-type="biblio" href="#biblio-mxss" title="mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations">[MXSS]</a>.</p>
    <h2 class="heading settled" data-level="5" id="ack"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
    <p>This work is informed and inspired by <a data-link-type="biblio" href="#biblio-dompurify" title="DOMPurify">[DOMPURIFY]</a> from cure53,
-Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-something">window.toStaticHTML()</a></code> as well as the original <a data-link-type="biblio" href="#biblio-htmlsanitizer" title="HTML Sanitizer">[HTMLSanitizer]</a> from Ben Bucksch.
+Internet Explorer’s <code class="idl"><a data-link-type="idl" href="https://msdn.microsoft.com/en-us/library/cc848922(v=vs.85).aspx" id="ref-for-something">window.toStaticHTML()</a></code> as well as the original
+<a data-link-type="biblio" href="#biblio-htmlsanitizer" title="HTML Sanitizer">[HTMLSanitizer]</a> from Ben Bucksch.
 Anne van Kesteren, Krzysztof Kotowicz, Tom Schuster, Luke Warlow,
 Guillaume Weghsteen, and Mike West for their valuable feedback.</p>
   </main>
