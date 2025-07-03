@@ -36,7 +36,7 @@ def main():
       elif line.startswith("- xml "):
         current.append({"name": line[6:], "namespace": "http://www.w3.org/XML/1998/namespace"})
       elif line.startswith("- "):
-        current.append({"name": line[2:], "namespace": None})
+        current.append(line[2:])
       elif line.startswith("[") and line.endswith("Global]"):
         current = result["attributes"]
       else:
@@ -60,6 +60,18 @@ def main():
       if "attributes" in element:
         element["attributes"] = remove_from(element["attributes"],
                                             result["attributes"])
+
+    # Remove empty per-element allow lists.
+    for element in result["elements"]:
+      if "attributes" in element and not element["attributes"]:
+        element.pop("attributes")
+
+    # Replace element dictionaries with string (if the default handling would
+    # create the same dictionary again).
+    for index, element in enumerate(result["elements"]):
+      if (element["namespace"] == "http://www.w3.org/1999/xhtml" and
+          not "attributes" in element and not "removeAttributes" in element):
+        result["elements"][index] = element["name"]
 
     try:
       json.dump(result, args.out, indent=2)
