@@ -150,7 +150,7 @@ th
 // Interactive Elements
 // https://html.spec.whatwg.org/#interactive-elements
 //
-// Purposly omitted.
+// Purposely omitted.
 
 // Scripting
 // https://html.spec.whatwg.org/#scripting
@@ -259,17 +259,9 @@ svg svg
 - y  // Specified as global "presentation attribute"
 svg g
 svg defs
-svg symbol
-- preserveAspectRatio
-- viewBox
-- refX
-- refY
-- height  // Specified as global "presentation attribute"
-- width  // Specified as global "presentation attribute"
-- x  // Specified as global "presentation attribute"
-- y  // Specified as global "presentation attribute"
 
-// Purposely omitted: svg use.
+// Purposely omitted: svg use
+// Purposely omitted: svg symbol (because use is omitted)
 // Purposely omitted: svg switch
 svg title
 svg desc
@@ -397,16 +389,16 @@ svg marker
 - clip-rule
 - color
 - color-interpolation
-- color-interpolation-filters
+// - color-interpolation-filters, purposely omitted, no supported element
 - cursor
 - direction
 - display
 - dominant-baseline
 - fill-opacity
 - fill-rule
-- filter
-- flood-color
-- flood-opacity
+// - filter, purposely omitted, no supported filter element
+// - flood-color, purposely omitted, no supported filter element
+// - flood-opacity, purposely omitted, no supported filter element
 - font-family
 - font-size
 - font-size-adjust
@@ -414,16 +406,16 @@ svg marker
 - font-style
 - font-variant
 - font-weight
-- glyph-orientation-horizontal
-- glyph-orientation-vertical
-- image-rendering
+// - glyph-orientation-horizontal, purposely omitted, deprecated
+// - glyph-orientation-vertical, purposely omitted, deprecated
+// - image-rendering, purposely omitted, no <svg:image> element
 - letter-spacing
-- lighting-color
+// - lighting-color, purposely omitted, no supported filter element
 - marker-end
 - marker-mid
 - marker-start
-- mask
-- mask-type
+// - mask, purposely omitted, no <svg:mask> element
+// - mask-type, purposely omitted, no <svg:mask> element
 - opacity
 // Purposely omitted: overflow, see https://github.com/WICG/sanitizer-api/issues/295
 - paint-order
