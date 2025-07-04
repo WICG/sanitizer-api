@@ -274,7 +274,7 @@ interface Sanitizer {
   boolean setComments(boolean allow);
   boolean setDataAttributes(boolean allow);
 
-  // Remove markup that executes script. May modify multiple lists:
+  // Remove markup that executes script.
   boolean removeUnsafe();
 };
 </pre>
@@ -455,7 +455,7 @@ above easily extends to [=custom data attributes=] if one considers
  <th>local {{SanitizerElementNamespaceWithAttributes/removeAttributes}}</th>
  <td class=long>A [=custom data attribute=] is allowed, unless it's listed in the local
    remove-list.
-   No [=custom data attributes=] may be listed in the global allow-list, as that would mean a
+   No [=custom data attribute=] may be listed in the global allow-list, as that would mean a
    duplicate entry.</td>
 </tr>
 </table>
@@ -520,7 +520,7 @@ conditions hold:
             1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
                 is [=list/empty=].
-        1. |config|[{{SanitizerConfig/dataAttributes}}] is false or does not [=map/exist=].
+        1. |config|[{{SanitizerConfig/dataAttributes}}] does not [=map/exist=].
 
 </div>
 
