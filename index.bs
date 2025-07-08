@@ -372,7 +372,8 @@ dictionary SanitizerConfig {
 
 ## Configuration Invariants ## {#invariants}
 
-An empty configuration allows everything (when called with the "unsafe" methods).
+An empty configuration allows everything (when called with the "unsafe" methods like
+{{Element/setHTMLUnsafe}}).
 A configuration `"default"` contains a [=built-in safe default configuration=]. Note
 that different sanitizer methods have different defaults.
 
@@ -403,14 +404,14 @@ Several conditions need to hold for a configuration to be valid:
     {{SanitizerConfig/replaceWithChildrenElements}}.
   - There are no duplicate entries (i.e. no same attributes) between
     {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}}.
-
+- Duplicate entries on the same element:
+  - There are no duplicate entries between {{SanitizerElementNamespaceWithAttributes/attributes}}
+    and {{SanitizerElementNamespaceWithAttributes/removeAttributes}} on the same element.
 
 The {{SanitizerConfig/elements}} element allow-list can also specify allowing or removing
 attributes for a given element. This is meant to mirror [[HTML]]'s structure, which knows
 both [=/global attributes=] as well as local <a spec=dom>attributes</a> that apply to a
-specific element. For {{SanitizerConfig|Sanitizer configurations}}, it is assumed that
-configuration authors would prefer either all-global or all-local attribute declarations.
-If they do decide to mix them, the following rules apply. Note in particular that ambiguous
+specific element. Global and local attributes can be mixed, but not that ambiguous
 configurations, where a particular attribute would be allowed by one list and forbidden by another,
 are generally invalid.
 
@@ -423,7 +424,7 @@ are generally invalid.
 <tr>
  <th>local {{SanitizerElementNamespaceWithAttributes/attributes}}</th>
  <td class=long>An attribute is allowed if it matches either list. No duplicates are allowed.</td>
- <td class=long>An attribute is allowed if it's in the local allow list.
+ <td class=long>An attribute is only allowed if it's in the local allow list.
    No duplicate entries between global remove and local allow lists are allowed.
    Note that the global remove list has no function for this particular element, but may well
    apply to other elements that do not have a local allow list.</td>
@@ -493,25 +494,22 @@ conditions hold:
 1. Assuming that all element names have run through [=canonicalize a sanitizer element=] algorithm,
     and all attribute names have run through [=canonicalize a sanitizer attribute=] algorithm.
     1. The [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
-        |config|[{{SanitizerConfig/removeElements}}] is [=list/empty=].
-    1. The [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
         |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
     1. The [=set/difference=] of |config|[{{SanitizerConfig/removeElements}}] and
         |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
-    1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
-        |config|[{{SanitizerConfig/removeAttributes}}] is [=list/empty=].
     1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
             1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] is
                 [=list/empty=].
-            1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
-                |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] is
-                [=list/empty=].
+            1. |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] is a
+                [=set/subset=] of |config|[{{SanitizerConfig/attributes}}].
             1. If {{SanitizerConfig/dataAttributes}} is true:
-                1. Neither |config|[{{SanitizerConfig/attributes}}] nor
-                    |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
+                1. |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] does not
                     contain a [=custom data attribute=].
+        1. If {{SanitizerConfig/dataAttributes}} is true:
+            1. |config|[{{SanitizerConfig/attributes}}] does not contain
+                a [=custom data attribute=].
     1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
             1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
@@ -642,52 +640,41 @@ template contents). It consistes of these steps:
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
-      1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
-          |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-          [=map/exists=]:
+
+      1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/with default=] &laquo; [] &raquo;
+        [=SanitizerConfig/contains=] |attrName|:
+          1. [=/remove an attribute|Remove=] |attribute| from |child|.
+      1. Otherwise, if |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
           1. If |configuration|["{{SanitizerConfig/attributes}}"] does not
               [=SanitizerConfig/contain=] |attrName| and
-              |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+              |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/with default=] &laquo; [] &raquo;
               does not [=SanitizerConfig/contain=] |attrName|, and if
-              "data-" is not a [=code unit prefix=] of |attribute|'s [=Attr/local name=] aornd
+              "data-" is not a [=code unit prefix=] of |attribute|'s [=Attr/local name=] and
               [=Attr/namespace=] is not `null` or
               |configuration|["{{SanitizerConfig/dataAttributes}}"] is not true:
-              1. [=/Remove=] |attribute| from |child|.
-      1. Otherwise if
-          |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-          [=map/exists=]:
-          1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-              does not [=SanitizerConfig/contain=] |attrName|;
-              1. [=/Remove=] |attribute| from |child|.
-      1. Otherwise, if |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
-          |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-          [=map/exists=]:
-          1. If |configuration|["{{SanitizerConfig/attributes}}"] does not
-              [=SanitizerConfig/contain=] |attrName| or
-              |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-              [=SanitizerConfig/contains=] |attrName|:
-              1. [=/Remove=] |attribute| from |child|.
+              1. [=/remove an attribute|Remove=] |attribute| from |child|.
       1. Otherwise:
-          1. If |configuration|["{{SanitizerConfig/removeAttributes}}"]
-              [=SanitizerConfig/contains=] |attrName|:
-              1. [=/Remove=] |attribute| from |child|.
-          1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-              [=SanitizerConfig/contains=] |attrName|:
-              1. [=/Remove=] |attribute| from |child|.
+        1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+          [=map/exists=] and |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] does not [=SanitizerConfig/contain=] |attrName|:
+          1. [=/remove an attribute|Remove=] |attribute| from |child|
+
+        1. Otherwise, if |configuration|["{{SanitizerConfig/removeAttributes}}"] [=SanitizerConfig/contains=] |attrName|:
+              1. [=/remove an attribute|Remove=] |attribute| from |child|
+
       1. If |handleJavascriptNavigationUrls|:
          1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in
             the [=built-in navigating URL attributes list=], and if |attribute|
-            [=contains a javascript: URL=], then remove |attribute| from |child|.
+            [=contains a javascript: URL=], then [=/remove an attribute|remove=] |attribute| from |child|.
          1. If |child|'s [=Element/namespace=] [=string/is=] the
             [=MathML Namespace=] and |attr|'s [=Attr/local name=] [=string/is=]
             "`href`" and  |attr|'s [=Attr/namespace=] is `null` or the
             [=XLink namespace=] and |attr| [=contains a javascript: URL=],
-            then [=/remove an attribute|remove=] |attr|.
+            then [=/remove an attribute|remove=] |attribute| from |child|.
          1. If the [=built-in animating URL attributes list=]
             [=SanitizerConfig/contains=]
             &laquo;[|elementName|, |attrName|]&raquo; and |attr|'s
             [=get an attribute value|value=] [=string/is=] "`href`" or
-            "`xlink:href`", then [=/remove an attribute|remove=] |attr|.
+            "`xlink:href`", then [=/remove an attribute|remove=] |attribute| from |child|.
     1. Call [=sanitize core=] on |child| with |configuration| and |handleJavascriptNavigationUrls|.
 
 </div>
@@ -740,15 +727,14 @@ To <dfn for="SanitizerConfig">allow an element</dfn> |element| with a {{Sanitize
             1. [=map/iterate|For each=] |attr| in |configuration|["{{SanitizerConfig/attributes}}"]:
                 1. [=list/Remove=] |attr| from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
         1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
-            1. [=map/iterate|For each=] |attr| in |element| [=map/contains=]
-                "{{SanitizerElementNamespaceWithAttributes/attributes}}":
+            1. [=map/iterate|For each=] |attr| in |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}]":
                 1. If |configuration|["{{SanitizerConfig/attributes}}"] does not
                     [=map/contain=] |attr|:
                     1. [=list/Remove=] |attr| from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
     1. If |element| [=map/contains=] "{{SanitizerElementNamespaceWithAttributes/removeAttributes}}":
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-            1. [=map/iterate|For each=] |attr| in |element| [=map/contains=]
-                "{{SanitizerElementNamespaceWithAttributes/removeAttributes}}":
+            1. [=map/iterate|For each=] |attr| in
+                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]:
                 1. If |configuration|["{{SanitizerConfig/attributes}}"] does not
                     [=map/contain=] |attr|:
                     1. [=list/Remove=] |attr| from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
@@ -797,7 +783,7 @@ To <dfn for="Sanitizer">remove an element</dfn> |element| from a {{SanitizerConf
 To <dfn for="Sanitizer">replace an element with its children</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
 
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
-1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element:
+1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
     1. Return false.
 1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
 1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
