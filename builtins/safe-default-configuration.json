@@ -770,44 +770,6 @@
       "attributes": []
     },
     {
-      "name": "symbol",
-      "namespace": "http://www.w3.org/2000/svg",
-      "attributes": [
-        {
-          "name": "preserveAspectRatio",
-          "namespace": null
-        },
-        {
-          "name": "viewBox",
-          "namespace": null
-        },
-        {
-          "name": "refX",
-          "namespace": null
-        },
-        {
-          "name": "refY",
-          "namespace": null
-        },
-        {
-          "name": "height",
-          "namespace": null
-        },
-        {
-          "name": "width",
-          "namespace": null
-        },
-        {
-          "name": "x",
-          "namespace": null
-        },
-        {
-          "name": "y",
-          "namespace": null
-        }
-      ]
-    },
-    {
       "name": "title",
       "namespace": "http://www.w3.org/2000/svg",
       "attributes": []
@@ -1201,10 +1163,6 @@
       "namespace": null
     },
     {
-      "name": "color-interpolation-filters",
-      "namespace": null
-    },
-    {
       "name": "cursor",
       "namespace": null
     },
@@ -1226,18 +1184,6 @@
     },
     {
       "name": "fill-rule",
-      "namespace": null
-    },
-    {
-      "name": "filter",
-      "namespace": null
-    },
-    {
-      "name": "flood-color",
-      "namespace": null
-    },
-    {
-      "name": "flood-opacity",
       "namespace": null
     },
     {
@@ -1269,23 +1215,7 @@
       "namespace": null
     },
     {
-      "name": "glyph-orientation-horizontal",
-      "namespace": null
-    },
-    {
-      "name": "glyph-orientation-vertical",
-      "namespace": null
-    },
-    {
-      "name": "image-rendering",
-      "namespace": null
-    },
-    {
       "name": "letter-spacing",
-      "namespace": null
-    },
-    {
-      "name": "lighting-color",
       "namespace": null
     },
     {
@@ -1298,14 +1228,6 @@
     },
     {
       "name": "marker-start",
-      "namespace": null
-    },
-    {
-      "name": "mask",
-      "namespace": null
-    },
-    {
-      "name": "mask-type",
       "namespace": null
     },
     {
