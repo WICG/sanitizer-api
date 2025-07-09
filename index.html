@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 618007319, updated Thu Jun 26 17:23:55 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="7f24d56f7cbbf19778a3e26b00cf7cb88208fb03" name="revision">
+  <meta content="54b7efe39472f031ee6e3eab3fd3d14175564581" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -748,7 +748,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
-    <time class="dt-updated" datetime="2025-07-02">2 July 2025</time></p>
+    <time class="dt-updated" datetime="2025-07-09">9 July 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2537,44 +2537,6 @@ return false if <var>bool</var> is true, and return true otherwise.
       <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
     <c- p>},</c->
     <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"symbol"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
-      <c- f>"attributes"</c-><c- p>:</c-> <c- p>[</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"preserveAspectRatio"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"viewBox"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"refX"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"refY"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"height"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"width"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"x"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>},</c->
-        <c- p>{</c->
-          <c- f>"name"</c-><c- p>:</c-> <c- u>"y"</c-><c- p>,</c->
-          <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-        <c- p>}</c->
-      <c- p>]</c->
-    <c- p>},</c->
-    <c- p>{</c->
       <c- f>"name"</c-><c- p>:</c-> <c- u>"title"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- u>"http://www.w3.org/2000/svg"</c-><c- p>,</c->
       <c- f>"attributes"</c-><c- p>:</c-> <c- p>[]</c->
@@ -2968,10 +2930,6 @@ return false if <var>bool</var> is true, and return true otherwise.
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>},</c->
     <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"color-interpolation-filters"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
       <c- f>"name"</c-><c- p>:</c-> <c- u>"cursor"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>},</c->
@@ -2993,18 +2951,6 @@ return false if <var>bool</var> is true, and return true otherwise.
     <c- p>},</c->
     <c- p>{</c->
       <c- f>"name"</c-><c- p>:</c-> <c- u>"fill-rule"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"filter"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"flood-color"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"flood-opacity"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>},</c->
     <c- p>{</c->
@@ -3036,23 +2982,7 @@ return false if <var>bool</var> is true, and return true otherwise.
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>},</c->
     <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"glyph-orientation-horizontal"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"glyph-orientation-vertical"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"image-rendering"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
       <c- f>"name"</c-><c- p>:</c-> <c- u>"letter-spacing"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"lighting-color"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>},</c->
     <c- p>{</c->
@@ -3065,14 +2995,6 @@ return false if <var>bool</var> is true, and return true otherwise.
     <c- p>},</c->
     <c- p>{</c->
       <c- f>"name"</c-><c- p>:</c-> <c- u>"marker-start"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"mask"</c-><c- p>,</c->
-      <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
-    <c- p>},</c->
-    <c- p>{</c->
-      <c- f>"name"</c-><c- p>:</c-> <c- u>"mask-type"</c-><c- p>,</c->
       <c- f>"namespace"</c-><c- p>:</c-> <c- kc>null</c->
     <c- p>},</c->
     <c- p>{</c->
