@@ -514,15 +514,19 @@ to avoid configurations which might be ambiguous.
 A {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>valid</dfn> if all of the following
 conditions hold:
 
-1. The |config| has an {{SanitizerConfig/elements}} or an {{SanitizerConfig/removeElements}}
-    [=map/key=], or neither, but not both.
-1. The |config| has an {{SanitizerConfig/attributes}} or an {{SanitizerConfig/removeAttributes}}
-    [=map/key=], or neither, but not both.
+1. The |config| has either an {{SanitizerConfig/elements}} or a {{SanitizerConfig/removeElements}}
+    [=map/key=], but not both.
+1. The |config| has either an {{SanitizerConfig/attributes}} or a {{SanitizerConfig/removeAttributes}}
+    [=map/key=], but not both.
 1. Assuming that all element names have run through [=canonicalize a sanitizer element=] algorithm,
     and all attribute names have run through [=canonicalize a sanitizer attribute=] algorithm.
-    1. The [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
+    1. If both |config|[{{SanitizerConfig/elements}}] and
+        |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
+        the [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
         |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
-    1. The [=set/difference=] of |config|[{{SanitizerConfig/removeElements}}] and
+    1. If both |config|[{{SanitizerConfig/removeElements}}] and
+        |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
+        the [=set/difference=] of |config|[{{SanitizerConfig/removeElements}}] and
         |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
     1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
@@ -548,6 +552,13 @@ conditions hold:
         1. |config|[{{SanitizerConfig/dataAttributes}}] does not [=map/exist=].
 
 </div>
+
+Note: [=set a configuration|Setting a configuration=] from a [=dictionary=] will do a bit
+normalization. In particular, if both allow- and remove-lists are missing, it will interpret this
+as an empty remove-list. So `{}` itself is not a [=SanitizerConfig/valid=] configuration, but it
+will be normalized to `{removeElements:[],removeAttributes:[]}`, which is. This normalization step
+was chosen in order to have a missing dictionary be consistent with an empty one, i.e. to have
+`setHTMLUnsafe(txt)` be consistent with `setHTMLUnsafe(txt, {sanitizer: {}})`.
 
 # Algorithms # {#algorithms}
 
@@ -646,12 +657,13 @@ template contents). It consistes of these steps:
         |elementName|:
       1. [=/Remove=] |child|.
       1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
-        |configuration|["{{SanitizerConfig/elements}}"] does not [=SanitizerConfig/contain=]
-        |elementName|:
-       1. [=/Remove=] |child|.
-       1. [=Continue=].
-    1. If |elementName| [=equals=] &laquo;[ "`name`" &rightarrow; "`template`",
+    1. Otherwise:
+      1. [=Assert=]: |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=].
+      1. If |configuration|["{{SanitizerConfig/elements}}"] does not
+        [=SanitizerConfig/contain=] |elementName|:
+         1. [=/Remove=] |child|.
+         1. [=Continue=].
+    1. If |elementName| [=string/is|equals=] &laquo;[ "`name`" &rightarrow; "`template`",
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;
       1. Then call [=sanitize core=] on |child|'s [=template contents=] with
           |configuration| and |handleJavascriptNavigationUrls|.
@@ -758,10 +770,6 @@ This requires that we distinguish 4 cases:
 * Whether we have a global allow- or remove-list, and
 * whether they already contain |element| or not.
 
-The case where an |element| with per-element allow- or remove-lists is added to a configuration
-with a global element allow-list requires additional work, as we need to ensure those do not
-violate our validity criteria. To do so, we will remove elements from the per-element allow- or
-remove list that conflict with the existing global lists.
 </div>
 
 1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=] with
@@ -769,14 +777,8 @@ remove list that conflict with the existing global lists.
 1. [=SanitizerConfig/Remove=] |element| from
     |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-    1. If |configuration|["{{SanitizerConfig/elements}}"] does not [=map/contain=] |element|:
-        1. [=Comment=]: This is the case with a global allow-list that does not yet contain
-            |element|.
-        1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"].
-        1. Return true.
-    1. [=Comment=]: This is the case with a global allow-list that already contains |element|.
-        We'll need to do quite a bit of extra work to maintain our validity critertia in case
-        per-element attributes are used.
+    1. [=Comment=]: We need to make sure the per-element attributes do not overlap with global
+        attributes.
     1. Let |original element| be a copy of |element|.
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
@@ -800,7 +802,13 @@ remove list that conflict with the existing global lists.
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] and
                 |configuration|["{{SanitizerConfig/removeAttributes}}"].
-    1. If |element| equals |original element|, then return false.
+    1. If |configuration|["{{SanitizerConfig/elements}}"] does not [=map/contain=] |element|:
+        1. [=Comment=]: This is the case with a global allow-list that does not yet contain
+            |element|.
+        1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"].
+        1. Return true.
+    1. [=Comment=]: This is the case with a global allow-list that already contains |element|.
+    1. If |element| [=map/equals=] |original element|, then return false.
     1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"].
     1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"]
     1. Return true.
@@ -1026,25 +1034,41 @@ value to a {{SanitizerConfig}}.
     |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=], then [=map/set=]
     |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; [] &raquo;.
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+   1. Let |elements| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
-      1. Replace |element| with the result of [=canonicalize a sanitizer element with attributes=]
+      1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=]
           |element|.
+      1. If |elements| does not [=list/contain=] |element|, then [=list/append=] |element| to
+          |elements|.
+   1. Set |configuration|["{{SanitizerConfig/elements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+   1. Let |elements| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
-      1. Replace |element| with the result of [=canonicalize a sanitizer element=]
-          |element|.
+      1. Set |element| to the result of [=canonicalize a sanitizer element=] |element|.
+      1. If |elements| does not [=list/contain=] |element|, then [=list/append=] |element| to
+          |elements|.
+   1. Set |configuration|["{{SanitizerConfig/removeElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
+   1. Let |elements| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
-      1. Replace |element| with the result of [=canonicalize a sanitizer element=]
-          |element|.
+      1. Set |element| to the result of [=canonicalize a sanitizer element=] |element|.
+      1. If |elements| does not [=list/contain=] |element|, then [=list/append=] |element| to
+          |elements|.
+   1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+   1. Let |attributes| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
-      1. Replace |attribute| with the result of [=canonicalize a sanitizer attribute=]
-          |attribute|.
+      1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] |attribute|.
+      1. If |attributes| does not [=list/contain=] |attribute|, then [=list/append=] |attribute| to
+          |attributes|.
+   1. Set |configuration|["{{SanitizerConfig/attributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+   1. Let |attributes| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
-      1. Replace |attribute| with the result of [=canonicalize a sanitizer attribute=]
-          |attribute|.
+      1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] |attribute|.
+      1. If |attributes| does not [=list/contain=] |attribute|, then [=list/append=] |attribute| to
+          |attributes|.
+   1. Set |configuration|["{{SanitizerConfig/removeAttributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/comments}}"] does not [=map/exist=], then [=map/set=]
     |configuration|["{{SanitizerConfig/comments}}"] to |allowCommentsAndDataAttributes|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
@@ -1107,15 +1131,15 @@ entries:
 <div algorithm>
 A Sanitizer name |list| <dfn for="SanitizerConfig">contains</dfn> an |item|
 if there exists an |entry| of |list| that is an [=ordered map=], and where
-|item|["name"] [=equals=] |entry|["name"] and
-|item|["namespace"] [=equals=] |entry|["namespace"].
+|item|["name"] [=string/is|equals=] |entry|["name"] and
+|item|["namespace"] [=string/is|equals=] |entry|["namespace"].
 </div>
 
 <div algorithm>
 To <dfn for="SanitizerConfig">remove</dfn> an |item| from a |list| that is an
 [=ordered map=], [=list/remove=] all |entry| from |list|
-where |item|["name"] [=equals=] |entry|["name"] and
-|item|["namespace"] [=equals=] |entry|["namespace"].
+where |item|["name"] [=string/is|equals=] |entry|["name"] and
+|item|["namespace"] [=string/is|equals=] |entry|["namespace"].
 </div>
 
 <div algorithm>
@@ -1133,6 +1157,15 @@ regard to order:
 [=Ordered sets=] |A| and |B| are <dfn for=set>equal</dfn> if both |A| is a
 [=superset=] of |B| and |B| is a [=superset=] of |A|.
 </div>
+
+<div algorithm>
+An  [=ordered map=] is a sequence of [=map/key=] and [=map/value=] [=tuples=].
+Equality of [=ordered maps=] is equality of this sequence of tuples, when treated as an ordered
+set.
+[=Ordered maps=] |A| and |B| are <dfn for=map>equal</dfn> if the [=ordered set=] consisting
+of |A|'s [=map/entries=] and the [=ordered set=] of |B|'s [=map/entries=] are [=set/equal=].
+</div>
+
 
 <div algorithm>
 To determine <dfn for="boolean">not</dfn> of a [=boolean=] |bool|,
