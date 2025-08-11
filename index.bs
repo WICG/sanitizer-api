@@ -788,7 +788,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
 
 1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=] with
     |element|.
-1. [=SanitizerConfig/Remove=] |element| from
+1. Set |modified| to the result of [=SanitizerConfig/remove=] |element| from
     |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
     1. [=Comment=]: We need to make sure the per-element attributes do not overlap with global
@@ -832,7 +832,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
         |element|[{{SanitizerElementNamespace/name}}]
         and |item|[{{SanitizerElementNamespace/namespace}}] [=string/is|equals=]
         |element|[{{SanitizerElementNamespace/namespace}}].
-    1. If |element| [=map/equals=] |current element| then return false.
+    1. If |element| [=map/equals=] |current element| then return |modified|.
     1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"].
     1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"]
     1. Return true.
@@ -841,7 +841,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
       get ignored.
   1. If |configuration|["{{SanitizerConfig/removeElements}}"] does not [=map/contain=] |element|:
       1. [=Comment=]: This is the case with a global remove-list that does not contain |element|.
-      1. Return false.
+      1. Return |modified|.
   1. [=Comment=]: This is the case with a global remove-list that contains |element|.
   1. [=SanitizerConfig/Remove=] |element| from
       |configuration|["{{SanitizerConfig/removeElements}}"].
@@ -860,7 +860,9 @@ This method requires that we distinguish 4 cases:
 </div>
 
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
+1. Set |modified| to the result of
+    [=SanitizerConfig/remove=] |element| from
+    |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/contains=] |element|:
         1. [=Comment=]: We have a global allow list and it contains |element|.
@@ -868,11 +870,11 @@ This method requires that we distinguish 4 cases:
             |configuration|["{{SanitizerConfig/elements}}"].
         1. Return true.
     1. [=Comment=]: We have a global allow list and it does not contain |element|.
-    1. Return false.
+    1. Return |modified|.
 1. Otherwise:
     1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/contains=] |element|:
         1. [=Comment=]: We have a global remove list and it already contains |element|.
-        1. Return false.
+        1. Return |modified|.
     1. [=Comment=]: We have a global remove list and it does not contain |element|.
     1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/removeElements}}"].
     1. Return true.
