@@ -530,6 +530,11 @@ conditions hold:
     {{SanitizerAttributeNamespace}} items in |config| are canonical, meaning they have been run
     through [=canonicalize a sanitizer element=] or [=canonicalize a sanitizer attribute=],
     as appropriate.
+1. None of |config|[{{SanitizerConfig/elements}}], |config|[{{SanitizerConfig/removeElements}}],
+    |config|[{{SanitizerConfig/replaceWithChildrenElements}}],
+    |config|[{{SanitizerConfig/attributes}}], or
+    |config|[{{SanitizerConfig/removeAttributes}}], if they [=map/exist=],
+    [=SanitizerConfig/has dupes=].
 1. If both |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
     the [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
@@ -1076,37 +1081,30 @@ value to a {{SanitizerConfig}}.
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
    1. Let |elements| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
-      1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=]
-          |element|.
-      1. If |elements| does not [=list/contain=] |element|, then [=list/append=] |element| to
-          |elements|.
+      1. [=list/Append=] the result of [=canonicalize a sanitizer element with attributes=]
+          |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/elements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
    1. Let |elements| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
-      1. Set |element| to the result of [=canonicalize a sanitizer element=] |element|.
-      1. If |elements| does not [=list/contain=] |element|, then [=list/append=] |element| to
+      1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to
           |elements|.
    1. Set |configuration|["{{SanitizerConfig/removeElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
    1. Let |elements| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
-      1. Set |element| to the result of [=canonicalize a sanitizer element=] |element|.
-      1. If |elements| does not [=list/contain=] |element|, then [=list/append=] |element| to
-          |elements|.
+      1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
    1. Let |attributes| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
-      1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] |attribute|.
-      1. If |attributes| does not [=list/contain=] |attribute|, then [=list/append=] |attribute| to
+      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] |attribute| to
           |attributes|.
    1. Set |configuration|["{{SanitizerConfig/attributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
    1. Let |attributes| be &laquo; [] &raquo;
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
-      1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] |attribute|.
-      1. If |attributes| does not [=list/contain=] |attribute|, then [=list/append=] |attribute| to
+      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] |attribute| to
           |attributes|.
    1. Set |configuration|["{{SanitizerConfig/removeAttributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/comments}}"] does not [=map/exist=], then [=map/set=]
@@ -1206,6 +1204,13 @@ set.
 of |A|'s [=map/entries=] and the [=ordered set=] of |B|'s [=map/entries=] are [=set/equal=].
 </div>
 
+<div algorithm>
+A [=/list=] |list| <dfn for=SanitizerConfig>has dupes</dfn>,
+if [=list/iterate|for any=] |item| of |list|,
+there is more than one |entry| in |list| where
+|item|["name"] [=string/is|equals=] |entry|["name"] and
+|item|["namespace"] [=string/is|equals=] |entry|["namespace"].
+</div>
 
 <div algorithm>
 To determine <dfn for="boolean">not</dfn> of a [=boolean=] |bool|,
