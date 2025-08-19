@@ -547,9 +547,10 @@ conditions hold:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
             1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
-                |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] is
-                [=list/empty=].
-            1. |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] is a
+                |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
+                &laquo; [] &raquo; is [=list/empty=].
+            1. |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
+                [=with default=] &laquo; [] &raquo; is a
                 [=set/subset=] of |config|[{{SanitizerConfig/attributes}}].
             1. If {{SanitizerConfig/dataAttributes}} [=map/exists=] and
                 {{SanitizerConfig/dataAttributes}} is true:
@@ -561,11 +562,11 @@ conditions hold:
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
     1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
         1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
-            |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] is
-            [=list/empty=].
+            |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
+            &laquo; [] &raquo; is [=list/empty=].
         1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
-            |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
-            is [=list/empty=].
+            |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] [=with default=]
+            &laquo; [] &raquo; is [=list/empty=].
     1. |config|[{{SanitizerConfig/dataAttributes}}] does not [=map/exist=].
 
 </div>
