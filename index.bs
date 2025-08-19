@@ -537,16 +537,16 @@ conditions hold:
     [=SanitizerConfig/has dupes=].
 1. If both |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
-    the [=set/difference=] of |config|[{{SanitizerConfig/elements}}] and
+    the [=set/intersection=] of |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
 1. If both |config|[{{SanitizerConfig/removeElements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
-    the [=set/difference=] of |config|[{{SanitizerConfig/removeElements}}] and
+    the [=set/intersection=] of |config|[{{SanitizerConfig/removeElements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
 1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
-            1. The [=set/difference=] of |config|[{{SanitizerConfig/attributes}}] and
+            1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
                 &laquo; [] &raquo; is [=list/empty=].
             1. |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
@@ -561,10 +561,10 @@ conditions hold:
             a [=custom data attribute=].
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
     1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
-        1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
+        1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
             |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
             &laquo; [] &raquo; is [=list/empty=].
-        1. The [=set/difference=] of |config|[{{SanitizerConfig/removeAttributes}}] and
+        1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
             |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] [=with default=]
             &laquo; [] &raquo; is [=list/empty=].
     1. |config|[{{SanitizerConfig/dataAttributes}}] does not [=map/exist=].
