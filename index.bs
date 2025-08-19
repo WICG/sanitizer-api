@@ -673,12 +673,11 @@ beginning with |node|. It consistes of these steps:
         |elementName|:
       1. [=/Remove=] |child|.
       1. [=Continue=].
-    1. Otherwise:
-      1. [=Assert=]: |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=].
-      1. If |configuration|["{{SanitizerConfig/elements}}"] does not
+    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+        |configuration|["{{SanitizerConfig/elements}}"] does not
         [=SanitizerConfig/contain=] |elementName|:
-         1. [=/Remove=] |child|.
-         1. [=Continue=].
+      1. [=/Remove=] |child|.
+      1. [=Continue=].
     1. If |elementName| [=string/is|equals=] &laquo;[ "`name`" &rightarrow; "`template`",
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;,
           then call [=sanitize core=] on |child|'s [=template contents=] with
