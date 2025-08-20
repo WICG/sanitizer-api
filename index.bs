@@ -560,7 +560,8 @@ conditions hold:
         1. |config|[{{SanitizerConfig/attributes}}] does not contain
             a [=custom data attribute=].
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
-    1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
+    1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=],
+       then [=list/iterate|for any=] |element| in |config|[{{SanitizerConfig/elements}}]:
         1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
             |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
             &laquo; [] &raquo; is [=list/empty=].
@@ -925,8 +926,9 @@ up per-element allow- or remove-lists to maintain our validity criteria.
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
                [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
-                1. [=list/Remove=] |attribute| from
-                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+                1. [=Assert=]:
+                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+                    does not [=list/contain=] |attribute|.
     1. Return true.
 1. Otherwise:
     1. [=Comment=]: If we have a global remove-list, we need to remove |attribute|.
