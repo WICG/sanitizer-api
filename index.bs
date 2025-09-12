@@ -380,7 +380,7 @@ dictionary SanitizerConfig {
 
 ## Configuration Invariants ## {#invariants}
 
-Configurations can and should be modified by developers to suit their
+Configurations can and ought to be modified by developers to suit their
 purposes. Options are to write a new [[#config|configuration dictionary]] from
 scratch, to modify an existing {{Sanitizer}}'s configuration by using the
 modifier methods, or to {{Sanitizer/get()}} an existing {{Sanitizer}}'s
@@ -392,18 +392,18 @@ An empty configuration allows everything (when called with the "unsafe" methods 
 A configuration `"default"` contains a [=built-in safe default configuration=]. Note
 that "safe" and "unsafe" sanitizer methods have different defaults.
 
-Not all configuration dictionaries are valid. A valid configuration should avoid redundancy
-(like specifying the same element to be allowed twice) or contradictions (like specifying an
+Not all configuration dictionaries are valid. A valid configuration avoids redundancy
+(like specifying the same element to be allowed twice) and contradictions (like specifying an
 element to be both removed and allowed.)
 
 Several conditions need to hold for a configuration to be valid:
 
 - Mixing global allow- and remove-lists:
-  - {{SanitizerConfig/elements}} or {{SanitizerConfig/removeElements}} may exist,
+  - {{SanitizerConfig/elements}} or {{SanitizerConfig/removeElements}} can exist,
     but not both.
     If both are missing, this is equivalent to {{SanitizerConfig/removeElements}}
     [=map/set=] to &laquo; [] &raquo;.
-  - {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}} may exist,
+  - {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}} can exist,
     but not both.
     If both are missing, this is equivalent to {{SanitizerConfig/removeAttributes}}
     [=map/set=] to &laquo; [] &raquo;.
@@ -514,10 +514,6 @@ Putting these rules in words:
         there may be no duplicate entries between these lists.
     * {{SanitizerConfig/dataAttributes}} must be absent.
 
-
-Note that these rules put a somewhat higher burden on configuration authors, as it's on to provide
-a configuration that is valid.
-
 <div algorithm>
 A {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>valid</dfn> if all of the following
 conditions hold:
@@ -537,11 +533,11 @@ conditions hold:
     [=SanitizerConfig/has dupes=].
 1. If both |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
-    the [=set/intersection=] of |config|[{{SanitizerConfig/elements}}] and
+    the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
 1. If both |config|[{{SanitizerConfig/removeElements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
-    the [=set/intersection=] of |config|[{{SanitizerConfig/removeElements}}] and
+    the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/removeElements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
 1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
@@ -602,7 +598,7 @@ To <dfn>set and filter HTML</dfn>, given an {{Element}} or {{DocumentFragment}}
 
 <div algorithm>
 To <dfn for="SanitizerConfig">get a sanitizer instance from options</dfn> from
-a [=dictionary=] |options| with a [=boolean=] |safe|, do:
+a [=dictionary=] |options| with a [=boolean=] |safe|:
 
 Note: This algorithm works for both {{SetHTMLOptions}} and
     {{SetHTMLUnsafeOptions}}. They only differ in the defaults.
@@ -774,14 +770,24 @@ They will maintain the validity criteria.
 They return a boolean which informs the caller whether the configuration was modified or not.
 
 <div class=example>
-* `new Sanitizer({elements: ["div"]}).allowElement("p");` &mdash; Returns true. Allows "div" and "p".
-* `new Sanitizer({elements: ["div"]}).removeElement("p");` &mdash; Returns false. Allows "div".
+```js
+let s = new Sanitizer({elements: ["div"]});
+s.allowElement("p"); // Returns true.
+div.setHTML("<div><p>", {sanitizer: s});  // Allows `<div>` and `<p>`.
+```
+</div>
 
+<div class=example>
+```js
+let s = new Sanitizer({elements: ["div"]});
+s.removeElement("p");  // Return false, as <p> was not previously allowed.
+div.setHTML("<div><p>", {sanitizer: s});  // Allows `<div>`. `<p>` is removed.
+```
 </div>
 
 <div algorithm>
-To <dfn for="SanitizerConfig">allow an element</dfn> |element| with a
-{{SanitizerConfig}} |configuration|, do:
+To <dfn for="SanitizerConfig">allow an element</dfn>
+{{SanitizerElementWithAttributes}} |element| with a {{SanitizerConfig}} |configuration|:
 
 <div class=note><span class=marker>Note:</span>
 This algorithm is relatively involved, because the element allow list may specifiy per-element
@@ -807,7 +813,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
                 |configuration|["{{SanitizerConfig/attributes}}"].
             1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=] and
                 |configuration|["{{SanitizerConfig/dataAttributes}}"] is true:
-                1. [=list/remove=] all items |item| from
+                1. [=list/Remove=] all items |item| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
                     where |item| is a [=custom data attribute=].
         1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
@@ -856,7 +862,8 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">remove an element</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">remove an element</dfn> {{SanitizerElement}} |element|
+from a {{SanitizerConfig}} |configuration|:
 
 <div class=note><span class=marker>Note:</span>
 This method requires that we distinguish 4 cases:
@@ -888,7 +895,8 @@ This method requires that we distinguish 4 cases:
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">replace an element with its children</dfn> |element| from a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">replace an element with its children</dfn>
+{{SanitizerElement}} |element| from a {{SanitizerConfig}} |configuration|:
 
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
@@ -901,8 +909,8 @@ To <dfn for="Sanitizer">replace an element with its children</dfn> |element| fro
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">allow an attribute</dfn> |attribute| on a {{SanitizerConfig}}
-|configuration|, do:
+To <dfn for="Sanitizer">allow an attribute</dfn> {{SanitizerAttribute}}
+|attribute| on a {{SanitizerConfig}} |configuration|:
 
 Note: This method distinguishes two cases, namely whether we have a global allow- or a global
 remove-list. If add |attribute| to a global allow-list, we may need to do additional work to fix
@@ -924,11 +932,9 @@ up per-element allow- or remove-lists to maintain our validity criteria.
                [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
-            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
-                1. [=Assert=]:
-                    |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-                    does not [=list/contain=] |attribute|.
+            1. [=Assert=]: |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+               [=map/with default=] &laquo; [] &raquo;
+               does not [=list/contain=] |attribute|.
     1. Return true.
 1. Otherwise:
     1. [=Comment=]: If we have a global remove-list, we need to remove |attribute|.
@@ -942,7 +948,8 @@ up per-element allow- or remove-lists to maintain our validity criteria.
 
 
 <div algorithm>
-To <dfn for="Sanitizer">remove an attribute</dfn> |attribute| from a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">remove an attribute</dfn> SanitizerAttribute|attribute|
+from a {{SanitizerConfig}} |configuration|:
 
 Note: This method distinguishes two cases, namely whether we have a global allow- or a global
 remove-list. If we add |attribute| to the global remove-list, we may need to do additional work
@@ -984,8 +991,8 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">set comments</dfn> with |allow| on a {{SanitizerConfig}} |configuration|,
-do:
+To <dfn for="Sanitizer">set comments</dfn> with a [=boolean=] |allow| on a
+{{SanitizerConfig}} |configuration|:
 
 1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=] and
    |configuration|["{{SanitizerConfig/comments}}"] equals |allow|, then return false;
@@ -995,7 +1002,8 @@ do:
 </div>
 
 <div algorithm>
-To <dfn for="Sanitizer">set data attributes</dfn> with |allow| on a {{SanitizerConfig}} |configuration|, do:
+To <dfn for="Sanitizer">set data attributes</dfn> with a [=boolean=] |allow|
+on a {{SanitizerConfig}} |configuration|:
 
 1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=map/exist=], then return false.
 1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=] and
@@ -1119,7 +1127,7 @@ value to a {{SanitizerConfig}}.
 </div>
 
 <div algorithm>
-In order to <dfn>canonicalize a sanitizer element with attributes</dfn> a {{SanitizerElementWithAttributes}} |element|, do this:
+To <dfn>canonicalize a sanitizer element with attributes</dfn> a {{SanitizerElementWithAttributes}} |element|:
 
 1. Let |result| be the result of [=canonicalize a sanitizer element=] with |element|.
 1. If |element| is a [=dictionary=]:
@@ -1215,13 +1223,28 @@ there is more than one |entry| in |list| where
 </div>
 
 <div algorithm>
+The <dfn for=SanitizerConfig>intersection</dfn> of two [=/lists=] |A| and |B|
+containing {{SanitizerElement}} is the same as [=set/intersection|set intersection=],
+but with the [=/set=] entries previously [=canonicalize a sanitizer name|canonicalized=]:
+
+1. Let |set A| be &laquo; [] &raquo;
+1. Let |set B| be &laquo; [] &raquo;
+1. [=list/iterate|For each=] |entry| of |A|, [=set/append=] the result of
+    [=canonicalize a sanitizer name=] |entry| to |set A|.
+1. [=list/iterate|For each=] |entry| of |B|, [=set/append=] the result of
+    [=canonicalize a sanitizer name=] |entry| to |set B|.
+1. Retrun the [=set/intersection=] of |set A| and |set B|.
+
+</div>
+
+<div algorithm>
 To determine <dfn for="boolean">not</dfn> of a [=boolean=] |bool|,
 return false if |bool| is true, and return true otherwise.
 </div>
 
 <div>
-A <dfn>Comment</dfn> contains an explanatory text that applies to a particular point within an
-algorithm.
+A <dfn>Comment</dfn> contains an explanatory text that applies to a particular
+point within an algorithm.
 </div>
 
 ## Builtins ## {#sanitization-defaults}
