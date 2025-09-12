@@ -411,10 +411,10 @@ Several conditions need to hold for a configuration to be valid:
     {{SanitizerConfig/attributes}} allow-list. The {{SanitizerConfig/dataAttributes}}
     attribute is only allowed when a {{SanitizerConfig/attributes}} list is used.
 - Duplicate entries between different global lists:
-  - There are no duplicate entries (i.e. no same elements) between
+  - There are no duplicate entries (i.e., no same elements) between
     {{SanitizerConfig/elements}}, {{SanitizerConfig/removeElements}}, or
     {{SanitizerConfig/replaceWithChildrenElements}}.
-  - There are no duplicate entries (i.e. no same attributes) between
+  - There are no duplicate entries (i.e., no same attributes) between
     {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}}.
 - Duplicate entries on the same element:
   - There are no duplicate entries between {{SanitizerElementNamespaceWithAttributes/attributes}}
@@ -572,7 +572,7 @@ Note: [=set a configuration|Setting a configuration=] from a [=dictionary=] will
 normalization. In particular, if both allow- and remove-lists are missing, it will interpret this
 as an empty remove-list. So `{}` itself is not a [=SanitizerConfig/valid=] configuration, but it
 will be normalized to `{removeElements:[],removeAttributes:[]}`, which is. This normalization step
-was chosen in order to have a missing dictionary be consistent with an empty one, i.e. to have
+was chosen in order to have a missing dictionary be consistent with an empty one, i.e., to have
 `setHTMLUnsafe(txt)` be consistent with `setHTMLUnsafe(txt, {sanitizer: {}})`.
 
 # Algorithms # {#algorithms}
