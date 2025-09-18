@@ -530,7 +530,7 @@ conditions hold:
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}],
     |config|[{{SanitizerConfig/attributes}}], or
     |config|[{{SanitizerConfig/removeAttributes}}], if they [=map/exist=],
-    [=SanitizerConfig/has dupes=].
+    [=SanitizerConfig/has duplicates=].
 1. If both |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
     the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/elements}}] and
@@ -543,7 +543,7 @@ conditions hold:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
             1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] or
-               |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, has dupes.
+               |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
             1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
                 &laquo; [] &raquo; is [=list/empty=].
@@ -1221,7 +1221,7 @@ of |A|'s [=map/entries=] and the [=ordered set=] of |B|'s [=map/entries=] are [=
 </div>
 
 <div algorithm>
-A [=/list=] |list| <dfn for=SanitizerConfig>has dupes</dfn>,
+A [=/list=] |list| <dfn for=SanitizerConfig>has duplicates</dfn>,
 if [=list/iterate|for any=] |item| of |list|,
 there is more than one |entry| in |list| where
 |item|["name"] [=string/is|equals=] |entry|["name"] and
@@ -1229,7 +1229,7 @@ there is more than one |entry| in |list| where
 </div>
 
 <div algorithm>
-To <dfn for=SanitizerConfig>remove dupes</dfn> from a [=/list=] |list|,
+To <dfn for=SanitizerConfig>remove duplicates</dfn> from a [=/list=] |list|,
 
 1. Let |result| be &laquo; [] &raquo;
 1. [=list/iterate|For each=] |entry| of |list|, [=SanitizerConfig/add=] |entry| to |result|.
