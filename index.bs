@@ -530,7 +530,7 @@ conditions hold:
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}],
     |config|[{{SanitizerConfig/attributes}}], or
     |config|[{{SanitizerConfig/removeAttributes}}], if they [=map/exist=],
-    [=SanitizerConfig/has dupes=].
+    [=SanitizerConfig/has duplicates=].
 1. If both |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
     the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/elements}}] and
@@ -542,6 +542,8 @@ conditions hold:
 1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
+            1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] or
+               |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
             1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
                 &laquo; [] &raquo; is [=list/empty=].
@@ -807,6 +809,8 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
         attributes.
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
+               [=SanitizerConfig/remove dupes=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
             1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
@@ -823,6 +827,8 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
                 |configuration|["{{SanitizerConfig/removeAttributes}}"].
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
         [=map/exists=]:
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to
+               [=SanitizerConfig/remove dupes=] from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
             1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the
                 [=set/intersection=] of
@@ -1133,10 +1139,10 @@ To <dfn>canonicalize a sanitizer element with attributes</dfn> a {{SanitizerElem
 1. If |element| is a [=dictionary=]:
    1. [=list/iterate|For each=] |attribute| in
       |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]:
-      1. [=SanitizerConfig/Add=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |result|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |result|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
    1. [=list/iterate|For each=] |attribute| in
       |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]:
-      1. [=SanitizerConfig/Add=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |result|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |result|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
 1. Return |result|.
 
 </div>
@@ -1215,11 +1221,20 @@ of |A|'s [=map/entries=] and the [=ordered set=] of |B|'s [=map/entries=] are [=
 </div>
 
 <div algorithm>
-A [=/list=] |list| <dfn for=SanitizerConfig>has dupes</dfn>,
+A [=/list=] |list| <dfn for=SanitizerConfig>has duplicates</dfn>,
 if [=list/iterate|for any=] |item| of |list|,
 there is more than one |entry| in |list| where
-|item|["name"] [=string/is|equals=] |entry|["name"] and
-|item|["namespace"] [=string/is|equals=] |entry|["namespace"].
+|item|["name"] is |entry|["name"] and
+|item|["namespace"] is |entry|["namespace"].
+</div>
+
+<div algorithm>
+To <dfn for=SanitizerConfig>remove duplicates</dfn> from a [=/list=] |list|,
+
+1. Let |result| be &laquo; [] &raquo;
+1. [=list/iterate|For each=] |entry| of |list|, [=SanitizerConfig/add=] |entry| to |result|.
+1. Return |result|.
+
 </div>
 
 <div algorithm>
