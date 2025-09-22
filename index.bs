@@ -448,6 +448,16 @@ Several conditions need to hold for a configuration to be valid:
     {{SanitizerConfig/replaceWithChildrenElements}}.
   - There are no duplicate entries (i.e., no same attributes) between
     {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}}.
+- Mixing local allow- and remove-lists on the same element:
+  - When a {{SanitizerConfig/attributes}} list exists, both, either or none of the
+    {{SanitizerElementNamespaceWithAttributes/attributes}} and
+    {{SanitizerElementNamespaceWithAttributes/removeAttributes}}
+    lists are allowed  on the same element.
+  - When a {{SanitizerConfig/removeAttributes}} list exists, either or none of the
+    {{SanitizerElementNamespaceWithAttributes/attributes}} and
+    {{SanitizerElementNamespaceWithAttributes/removeAttributes}}
+    lists are allowed on the same element,
+    but not both.
 - Duplicate entries on the same element:
   - There are no duplicate entries between {{SanitizerElementNamespaceWithAttributes/attributes}}
     and {{SanitizerElementNamespaceWithAttributes/removeAttributes}} on the same element.
@@ -532,18 +542,20 @@ Putting these rules in words:
 
 * Duplicates and interactions between global and local lists:
   * If a global {{SanitizerConfig/attributes}} allow list exists, then all element's local lists:
-    * If a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow lists exists,
+    * If a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow list exists,
         there may be no duplicate entries between these lists.
-    * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove lists exists,
+    * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove list exists,
         then all its entries must also be listed in the global {{SanitizerConfig/attributes}}
         allow list.
     * If {{SanitizerConfig/dataAttributes}} is true, then no [=custom data attributes=] may be
         listed in any of the allow-lists.
   * If a global {{SanitizerConfig/removeAttributes}} remove list exists, then:
-    * If a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow lists exists,
+    * If a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow list exists,
         there may be no duplicate entries between these lists.
-    * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove lists exists,
+    * If a local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove list exists,
         there may be no duplicate entries between these lists.
+    * Not both a local {{SanitizerElementNamespaceWithAttributes/attributes}} allow list
+        and local {{SanitizerElementNamespaceWithAttributes/removeAttributes}} remove list exists.
     * {{SanitizerConfig/dataAttributes}} must be absent.
 
 <div algorithm>
@@ -592,6 +604,8 @@ conditions hold:
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=],
        then [=list/iterate|for each=] |element| of |config|[{{SanitizerConfig/elements}}]:
+        1. Not both |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] and
+            |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] [=map/exist=].
         1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] nor
            |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
         1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
@@ -841,37 +855,43 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
        |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
     1. [=Comment=]: We need to make sure the per-element attributes do not overlap with global
         attributes.
-    1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
+    1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+      1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
         1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
            [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
-        1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
+           [=set/difference=] of |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
+           |configuration|["{{SanitizerConfig/attributes}}"].
+        1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] is true:
+            1. [=list/Remove=] all items |item| from
+               |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] where |item| is a [=custom data attribute=].
+      1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+          [=map/exists=]:
+          1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to
+             [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+          1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the
+             [=set/intersection=] of |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] and
+             |configuration|["{{SanitizerConfig/attributes}}"].
+    1. Otherwise:
+      1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
+           [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
-                |configuration|["{{SanitizerConfig/attributes}}"].
-            1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] is true:
-                1. [=list/Remove=] all items |item| from
-                    |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-                    where |item| is a [=custom data attribute=].
-        1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
+                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+                [=map/with default=] &laquo; &raquo;.
+        1. [=map/Remove=] |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
                 |configuration|["{{SanitizerConfig/removeAttributes}}"].
-    1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-        [=map/exists=]:
+      1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exists=]:
         1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to
-               [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
-        1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the
-                [=set/intersection=] of
-                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] and
-                |configuration|["{{SanitizerConfig/attributes}}"].
-        1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the
-                [=set/difference=] of
-                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] and
-                |configuration|["{{SanitizerConfig/removeAttributes}}"].
+           [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the
+           [=set/difference=] of |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] and
+           |configuration|["{{SanitizerConfig/removeAttributes}}"].
     1. If |configuration|["{{SanitizerConfig/elements}}"] does not [=map/contain=] |element|:
         1. [=Comment=]: This is the case with a global allow-list that does not yet contain
             |element|.
