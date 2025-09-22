@@ -31,6 +31,7 @@ text: parse HTML from a string; type: dfn; url: https://html.spec.whatwg.org/#pa
 text: HTML fragment parsing algorithm; type: dfn; url: https://html.spec.whatwg.org/#html-fragment-parsing-algorithm
 text: global attribute; type: dfn; url: https://html.spec.whatwg.org/multipage/dom.html#global-attributes
 text: custom data attribute; type: dfn; url: https://html.spec.whatwg.org/multipage/dom.html#custom-data-attribute
+text: report a warning to the console; type: dfn; url: https://console.spec.whatwg.org/#report-a-warning-to-the-console
 </pre>
 <pre class="biblio">
 {
@@ -802,9 +803,9 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
 
 1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=] with
     |element|.
-1. Set |modified| to the result of [=SanitizerConfig/remove=] |element| from
-    |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+    1. Set |modified| to the result of [=SanitizerConfig/remove=] |element| from
+       |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
     1. [=Comment=]: We need to make sure the per-element attributes do not overlap with global
         attributes.
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
@@ -855,8 +856,11 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
     1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"]
     1. Return true.
 1. Otherwise:
-  1. [=Comment=]: If we have a global remove-list, the per-element attributes of |element|
-      get ignored.
+  1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] or |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exists=]:
+    1. The user agent may [=report a warning to the console=] that this operation is not supported.
+    1. Return false.
+  1. Set |modified| to the result of [=SanitizerConfig/remove=] |element| from
+     |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
   1. If |configuration|["{{SanitizerConfig/removeElements}}"] does not [=map/contain=] |element|:
       1. [=Comment=]: This is the case with a global remove-list that does not contain |element|.
       1. Return |modified|.
