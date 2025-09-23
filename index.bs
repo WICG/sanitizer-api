@@ -1138,12 +1138,20 @@ To <dfn>canonicalize a sanitizer element with attributes</dfn> a {{SanitizerElem
 
 1. Let |result| be the result of [=canonicalize a sanitizer element=] with |element|.
 1. If |element| is a [=dictionary=]:
-   1. [=list/iterate|For each=] |attribute| in
-      |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]:
-      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |result|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
-   1. [=list/iterate|For each=] |attribute| in
-      |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]:
-      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |result|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+  1. If neither |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] nor
+     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exist=]:
+    1. [=map/Set=] |result|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to &laquo; &raquo;.
+    2. [=Continue=].
+  1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
+    1. Let |attributes| be &laquo; &raquo;.
+    1. [=list/iterate|For each=] |attribute| of |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]:
+      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |attributes|.
+    1. [=map/Set=] |result|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to |attributes|.
+  1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exists=]:
+    1. Let |attributes| be &laquo; &raquo;.
+    1. [=list/iterate|For each=] |attribute| of |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]:
+      1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] with |attribute| to |attributes|.
+    1. [=map/Set=] |result|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to |attributes|.
 1. Return |result|.
 
 </div>
