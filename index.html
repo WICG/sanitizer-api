@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="abb6b30029631d24d0dadd0852d89c8cc2c11fd3" name="revision">
+  <meta content="09552821ab731ea0bee8d25ec1bdbaf05b9b3f05" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -752,7 +752,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <h1 class="p-name no-ref" id="title">HTML Sanitizer API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
-    <time class="dt-updated" datetime="2025-09-22">22 September 2025</time></p>
+    <time class="dt-updated" datetime="2025-09-23">23 September 2025</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1951,11 +1951,11 @@ To <dfn class="dfn-paneled" data-dfn-for="Sanitizer" data-dfn-type="dfn" data-no
         <p>Return false.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add①">Add</a> <var>element</var> to <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①②">replaceWithChildrenElements</a></code>"].</p>
-     <li data-md>
       <p><a data-link-type="dfn" href="#sanitizerconfig-remove" id="ref-for-sanitizerconfig-remove⑥">Remove</a> <var>element</var> from <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①③">removeElements</a></code>"].</p>
      <li data-md>
       <p><a data-link-type="dfn" href="#sanitizerconfig-remove" id="ref-for-sanitizerconfig-remove⑦">Remove</a> <var>element</var> from <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑤">elements</a></code>"] list.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add①">Add</a> <var>element</var> to <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①②">replaceWithChildrenElements</a></code>"].</p>
      <li data-md>
       <p>Return true.</p>
     </ol>
@@ -1985,8 +1985,6 @@ up per-element allow- or remove-lists to maintain our validity criteria.</p>
         <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②②">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">contains</a> <var>attribute</var>
   return false.</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append③">Append</a> <var>attribute</var> to <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②③">attributes</a></code>"]</p>
-       <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①②">Comment</a>: Fix-up per-element allow and remove lists.</p>
        <li data-md>
         <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑥">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③③">exists</a>:</p>
@@ -2008,6 +2006,8 @@ up per-element allow- or remove-lists to maintain our validity criteria.</p>
  does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②">contain</a> <var>attribute</var>.</p>
           </ol>
         </ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append③">Append</a> <var>attribute</var> to <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②③">attributes</a></code>"]</p>
        <li data-md>
         <p>Return true.</p>
       </ol>
@@ -2055,8 +2055,6 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
           <p>Return false.</p>
         </ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove③">Remove</a> <var>attribute</var> from <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②⑥">attributes</a></code>"].</p>
-       <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①⑤">Comment</a>: Fix-up per-element allow and remove lists.</p>
        <li data-md>
         <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑤">exists</a>:</p>
@@ -2069,11 +2067,13 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-with-default" id="ref-for-map-with-default⑧">with default</a> « [] » <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑤">contains</a> <var>attribute</var>:</p>
             <ol>
              <li data-md>
-              <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove④">Remove</a> <var>attribute</var> from
+              <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove③">Remove</a> <var>attribute</var> from
   <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⓪">removeAttributes</a></code>"].</p>
             </ol>
           </ol>
         </ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove④">Remove</a> <var>attribute</var> from <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②⑥">attributes</a></code>"].</p>
        <li data-md>
         <p>Return true.</p>
       </ol>
@@ -2085,8 +2085,6 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
        <li data-md>
         <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain⑥">contains</a> <var>attribute</var>
   return false.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append④">Append</a> <var>attribute</var> to <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①⑨">removeAttributes</a></code>"]</p>
        <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①⑦">Comment</a>: Fix-up per-element allow and remove lists.</p>
        <li data-md>
@@ -2113,6 +2111,8 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
             </ol>
           </ol>
         </ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append④">Append</a> <var>attribute</var> to <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①⑨">removeAttributes</a></code>"]</p>
        <li data-md>
         <p>Return true.</p>
       </ol>
@@ -2147,8 +2147,6 @@ on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" i
       <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑥">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑨">exists</a> and
  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑦">dataAttributes</a></code>"] equals <var>allow</var>, then return false.</p>
      <li data-md>
-      <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑧">dataAttributes</a></code>"] to <var>allow</var>.</p>
-     <li data-md>
       <p>If <var>allow</var> is true:</p>
       <ol>
        <li data-md>
@@ -2171,6 +2169,8 @@ on a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerconfig" i
           </ol>
         </ol>
       </ol>
+     <li data-md>
+      <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑧">dataAttributes</a></code>"] to <var>allow</var>.</p>
      <li data-md>
       <p>Return true.</p>
     </ol>
