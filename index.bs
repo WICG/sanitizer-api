@@ -811,7 +811,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
             1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
-               [=SanitizerConfig/remove dupes=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
+               [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
             1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
@@ -828,7 +828,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
         [=map/exists=]:
         1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to
-               [=SanitizerConfig/remove dupes=] from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
+               [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
             1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the
                 [=set/intersection=] of
