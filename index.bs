@@ -855,7 +855,9 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
     1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"]
     1. Return true.
 1. Otherwise:
-  1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] or |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exists=]:
+  1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=] or
+     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=with default=] &laquo; &raquo;
+     is not [=list/empty=]:
     1. The user agent may [=report a warning to the console=] that this operation is not supported.
     1. Return false.
   1. Set |modified| to the result of [=SanitizerConfig/remove=] |element| from
