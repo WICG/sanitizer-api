@@ -816,8 +816,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
                 |configuration|["{{SanitizerConfig/attributes}}"].
-            1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=] and
-                |configuration|["{{SanitizerConfig/dataAttributes}}"] is true:
+            1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] is true:
                 1. [=list/Remove=] all items |item| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
                     where |item| is a [=custom data attribute=].
@@ -1016,8 +1015,7 @@ To <dfn for="Sanitizer">set data attributes</dfn> with a [=boolean=] |allow|
 on a {{SanitizerConfig}} |configuration|:
 
 1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=map/exist=], then return false.
-1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=] and
-   |configuration|["{{SanitizerConfig/dataAttributes}}"] equals |allow|, then return false.
+1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] equals |allow|, then return false.
 1. If |allow| is true:
    1. [=list/Remove=] any items |attr| from |configuration|["{{SanitizerConfig/attributes}}"]
        where |attr| is a [=custom data attribute=].
