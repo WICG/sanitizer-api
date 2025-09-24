@@ -809,9 +809,9 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
     1. [=Comment=]: We need to make sure the per-element attributes do not overlap with global
         attributes.
     1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
+        1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
+           [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
         1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
-               [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
             1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the
                 [=set/difference=] of
                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] and
