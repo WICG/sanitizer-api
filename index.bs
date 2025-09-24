@@ -928,8 +928,7 @@ up per-element allow- or remove-lists to maintain our validity criteria.
 1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
     1. [=Comment=]: If we have a global allow-list, we need to add |attribute|.
-    1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=] and
-       |configuration|["{{SanitizerConfig/dataAttributes}}"] is true and |attribute| is a
+    1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] is true and |attribute| is a
        [=custom data attribute=], then return false.
     1. If |configuration|["{{SanitizerConfig/attributes}}"] [=list/contains=] |attribute|
         return false.
