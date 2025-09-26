@@ -1143,7 +1143,7 @@ To <dfn>canonicalize a sanitizer element with attributes</dfn> a {{SanitizerElem
   1. If neither |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] nor
      |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exist=]:
     1. [=map/Set=] |result|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to &laquo; &raquo;.
-    2. [=Continue=].
+    2. Return |result|.
   1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
     1. Let |attributes| be &laquo; &raquo;.
     1. [=list/iterate|For each=] |attribute| of |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]:
