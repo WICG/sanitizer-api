@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="2ee1de96ed2b01e3205ff483851f10f7f53cb648" name="revision">
+  <meta content="11209ba50bd7d546a88e3ecff741f525be9e81a4" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -2360,42 +2360,40 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a
       <p>If <var>element</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑦">dictionary</a>:</p>
       <ol>
        <li data-md>
-        <p>If neither <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes②⑧">attributes</a></code>"] nor
- <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑨">exist</a>:</p>
-        <ol>
-         <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑥">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②④">removeAttributes</a></code>"] to « ».</p>
-         <li data-md>
-          <p>Return <var>result</var>.</p>
-        </ol>
-       <li data-md>
-        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes②⑨">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⓪">exists</a>:</p>
+        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes②⑧">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑨">exists</a>:</p>
         <ol>
          <li data-md>
           <p>Let <var>attributes</var> be « ».</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑦">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⓪">attributes</a></code>"]:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑦">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes②⑨">attributes</a></code>"]:</p>
           <ol>
            <li data-md>
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①⓪">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute⑤">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>attributes</var>.</p>
           </ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑦">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③①">attributes</a></code>"] to <var>attributes</var>.</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑥">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⓪">attributes</a></code>"] to <var>attributes</var>.</p>
         </ol>
        <li data-md>
-        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑤">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤①">exists</a>:</p>
+        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⓪">exists</a>:</p>
         <ol>
          <li data-md>
           <p>Let <var>attributes</var> be « ».</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑧">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑥">removeAttributes</a></code>"]:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑧">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②④">removeAttributes</a></code>"]:</p>
           <ol>
            <li data-md>
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①①">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute⑥">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>attributes</var>.</p>
           </ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑧">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑦">removeAttributes</a></code>"] to <var>attributes</var>.</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑦">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑤">removeAttributes</a></code>"] to <var>attributes</var>.</p>
         </ol>
+      </ol>
+     <li data-md>
+      <p>If neither <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③①">attributes</a></code>"] nor
+ <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑥">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤①">exist</a>:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑧">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑦">removeAttributes</a></code>"] to « ».</p>
       </ol>
      <li data-md>
       <p>Return <var>result</var>.</p>
