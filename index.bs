@@ -1115,7 +1115,7 @@ value to a {{SanitizerConfig}}.
       1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-   1. Let |attributes| be &laquo; &raquo;
+   1. Let |attributes| be &laquo; &raquo;.
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] |attribute| to
           |attributes|.
