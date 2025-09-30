@@ -1104,7 +1104,7 @@ value to a {{SanitizerConfig}}.
           |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/elements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
-   1. Let |elements| be &laquo; &raquo;
+   1. Let |elements| be &laquo; &raquo;.
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to
           |elements|.
