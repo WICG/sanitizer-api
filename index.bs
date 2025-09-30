@@ -403,11 +403,11 @@ Several conditions need to hold for a configuration to be valid:
   - {{SanitizerConfig/elements}} or {{SanitizerConfig/removeElements}} can exist,
     but not both.
     If both are missing, this is equivalent to {{SanitizerConfig/removeElements}}
-    [=map/set=] to &laquo; [] &raquo;.
+    [=map/set=] to &laquo; &raquo;.
   - {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}} can exist,
     but not both.
     If both are missing, this is equivalent to {{SanitizerConfig/removeAttributes}}
-    [=map/set=] to &laquo; [] &raquo;.
+    [=map/set=] to &laquo; &raquo;.
   - {{SanitizerConfig/dataAttributes}} is conceptually an extension of the
     {{SanitizerConfig/attributes}} allow-list. The {{SanitizerConfig/dataAttributes}}
     attribute is only allowed when a {{SanitizerConfig/attributes}} list is used.
@@ -547,9 +547,9 @@ conditions hold:
                |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
             1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
-                &laquo; [] &raquo; is [=list/empty=].
+                &laquo; &raquo; is [=list/empty=].
             1. |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
-                [=with default=] &laquo; [] &raquo; is a
+                [=with default=] &laquo; &raquo; is a
                 [=set/subset=] of |config|[{{SanitizerConfig/attributes}}].
             1. If {{SanitizerConfig/dataAttributes}} [=map/exists=] and
                 {{SanitizerConfig/dataAttributes}} is true:
@@ -563,10 +563,10 @@ conditions hold:
        then [=list/iterate|for any=] |element| in |config|[{{SanitizerConfig/elements}}]:
         1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
             |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
-            &laquo; [] &raquo; is [=list/empty=].
+            &laquo; &raquo; is [=list/empty=].
         1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
             |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] [=with default=]
-            &laquo; [] &raquo; is [=list/empty=].
+            &laquo; &raquo; is [=list/empty=].
     1. |config|[{{SanitizerConfig/dataAttributes}}] does not [=map/exist=].
 
 </div>
@@ -696,13 +696,13 @@ beginning with |node|. It consistes of these steps:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
 
-      1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/with default=] &laquo; [] &raquo;
+      1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/with default=] &laquo; &raquo;
         [=SanitizerConfig/contains=] |attrName|:
           1. [=/remove an attribute|Remove=] |attribute|.
       1. Otherwise, if |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
           1. If |configuration|["{{SanitizerConfig/attributes}}"] does not
               [=SanitizerConfig/contain=] |attrName| and
-              |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/with default=] &laquo; [] &raquo;
+              |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/with default=] &laquo; &raquo;
               does not [=SanitizerConfig/contain=] |attrName|, and if
               "data-" is not a [=code unit prefix=] of |attribute|'s [=Attr/local name=] and
               [=Attr/namespace=] is not `null` or
@@ -938,11 +938,11 @@ up per-element allow- or remove-lists to maintain our validity criteria.
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
         1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+               [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
             1. [=Assert=]: |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-               [=map/with default=] &laquo; [] &raquo;
+               [=map/with default=] &laquo; &raquo;
                does not [=list/contain=] |attribute|.
     1. [=list/Append=] |attribute| to |configuration|["{{SanitizerConfig/attributes}}"]
     1. Return true.
@@ -975,7 +975,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
         1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+               [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
     1. [=list/Remove=] |attribute| from |configuration|["{{SanitizerConfig/attributes}}"].
@@ -988,11 +988,11 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
         1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+               [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
-               [=map/with default=] &laquo; [] &raquo; [=list/contains=] |attribute|:
+               [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
     1. [=list/Append=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"]
@@ -1093,35 +1093,35 @@ value to a {{SanitizerConfig}}.
 
 1. If neither |configuration|["{{SanitizerConfig/elements}}"] nor
     |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exist=], then [=map/set=]
-    |configuration|["{{SanitizerConfig/removeElements}}"] to &laquo; [] &raquo;.
+    |configuration|["{{SanitizerConfig/removeElements}}"] to &laquo; &raquo;.
 1. If neither |configuration|["{{SanitizerConfig/attributes}}"] nor
     |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=], then [=map/set=]
-    |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; [] &raquo;.
+    |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; &raquo;.
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-   1. Let |elements| be &laquo; [] &raquo;
+   1. Let |elements| be &laquo; &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer element with attributes=]
           |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/elements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
-   1. Let |elements| be &laquo; [] &raquo;
+   1. Let |elements| be &laquo; &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/removeElements}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to
           |elements|.
    1. Set |configuration|["{{SanitizerConfig/removeElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-   1. Let |elements| be &laquo; [] &raquo;
+   1. Let |elements| be &laquo; &raquo;
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-   1. Let |attributes| be &laquo; [] &raquo;
+   1. Let |attributes| be &laquo; &raquo;
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] |attribute| to
           |attributes|.
    1. Set |configuration|["{{SanitizerConfig/attributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
-   1. Let |attributes| be &laquo; [] &raquo;
+   1. Let |attributes| be &laquo; &raquo;
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] |attribute| to
           |attributes|.
@@ -1241,7 +1241,7 @@ there is more than one |entry| in |list| where
 <div algorithm>
 To <dfn for=SanitizerConfig>remove duplicates</dfn> from a [=/list=] |list|,
 
-1. Let |result| be &laquo; [] &raquo;
+1. Let |result| be &laquo; &raquo;
 1. [=list/iterate|For each=] |entry| of |list|, [=SanitizerConfig/add=] |entry| to |result|.
 1. Return |result|.
 
