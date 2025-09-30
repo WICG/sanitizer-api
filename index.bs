@@ -1241,7 +1241,7 @@ there is more than one |entry| in |list| where
 <div algorithm>
 To <dfn for=SanitizerConfig>remove duplicates</dfn> from a [=/list=] |list|,
 
-1. Let |result| be &laquo; &raquo;
+1. Let |result| be &laquo; &raquo;.
 1. [=list/iterate|For each=] |entry| of |list|, [=SanitizerConfig/add=] |entry| to |result|.
 1. Return |result|.
 
