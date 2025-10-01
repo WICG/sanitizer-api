@@ -543,7 +543,7 @@ conditions hold:
 1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
         1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
-            1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] or
+            1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] nor
                |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
             1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
