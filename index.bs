@@ -147,7 +147,7 @@ partial interface Element {
 </pre>
 
 <div algorithm>
-{{Element}}'s <dfn for="Element" export>setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+{{Element}}'s <dfn for="Element" method export>setHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Element setHTMLUnsafe", and "script".
@@ -158,7 +158,7 @@ partial interface Element {
 </div>
 
 <div algorithm>
-{{Element}}'s <dfn for="Element" export>setHTML</dfn>(|html|, |options|) method steps are:
+{{Element}}'s <dfn for="Element" method export>setHTML(|html|, |options|)</dfn> method steps are:
 
 1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
    {{HTMLTemplateElement|template}}; otherwise [=this=].
@@ -176,7 +176,7 @@ partial interface ShadowRoot {
 These methods are mirrored on the {{ShadowRoot}}:
 
 <div algorithm>
-{{ShadowRoot}}'s <dfn for="ShadowRoot" export>setHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+{{ShadowRoot}}'s <dfn for="ShadowRoot" method export>setHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "ShadowRoot setHTMLUnsafe", and "script".
@@ -187,7 +187,7 @@ These methods are mirrored on the {{ShadowRoot}}:
 </div>
 
 <div algorithm>
-{{ShadowRoot}}'s <dfn for="ShadowRoot" export>setHTML</dfn>(|html|, |options|) method steps are:
+{{ShadowRoot}}'s <dfn for="ShadowRoot" method export>setHTML(|html|, |options|)</dfn> method steps are:
 
 1. [=Set and filter HTML=] using [=this=] (as target), [=this=] (as context element),
    |html|, |options|, and true.
@@ -204,7 +204,7 @@ partial interface Document {
 </pre>
 
 <div algorithm>
-The <dfn for="Document" export>parseHTMLUnsafe</dfn>(|html|, |options|) method steps are:
+The <dfn for="Document" method export>parseHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Document parseHTMLUnsafe", and "script".
@@ -222,7 +222,7 @@ The <dfn for="Document" export>parseHTMLUnsafe</dfn>(|html|, |options|) method s
 
 
 <div algorithm>
-The <dfn for="Document" export>parseHTML</dfn>(|html|, |options|) method steps are:
+The <dfn for="Document" method export>parseHTML(|html|, |options|)</dfn> method steps are:
 
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
 
@@ -291,7 +291,7 @@ interface Sanitizer {
 A {{Sanitizer}} has an associated {{SanitizerConfig}} <dfn for="Sanitizer">configuration</dfn>.
 
 <div algorithm>
-The <dfn for="Sanitizer" export>constructor</dfn>(|configuration|)
+The <dfn for="Sanitizer" constructor export>constructor(|configuration|)</dfn>
 method steps are:
 
 1. If |configuration| is a {{SanitizerPresets}} [=string=], then:
@@ -304,41 +304,41 @@ method steps are:
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>get</dfn>() method steps are to return the value of [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>get()</dfn> method steps are to return the value of [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>allowElement</dfn>(|element|) method steps are to [=allow an element=] with |element| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>allowElement(|element|)</dfn> method steps are to [=allow an element=] with |element| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>removeElement</dfn>(|element|) method steps are
+The <dfn for="Sanitizer" method export>removeElement(|element|)</dfn> method steps are
 to [=remove an element=] with |element| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>replaceElementWithChildren</dfn>(|element|) method steps are to [=replace an element with its children=] with |element| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</dfn> method steps are to [=replace an element with its children=] with |element| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>allowAttribute</dfn>(|attribute|) method steps are to [=allow an attribute=] with |attribute| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>allowAttribute(|attribute|)</dfn> method steps are to [=allow an attribute=] with |attribute| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 
 <div algorithm>
-The <dfn for="Sanitizer" export>removeAttribute</dfn>(|attribute|) method steps are to [=Sanitizer/remove an attribute=] with |attribute| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>removeAttribute(|attribute|)</dfn> method steps are to [=Sanitizer/remove an attribute=] with |attribute| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>setComments</dfn>(|allow|) method steps to [=set comments=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>setComments(|allow|)</dfn> method steps to [=set comments=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>setDataAttributes</dfn>(|allow|) method steps are to [=set data attributes=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>setDataAttributes(|allow|)</dfn> method steps are to [=set data attributes=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" export>removeUnsafe</dfn>() method steps are to
+The <dfn for="Sanitizer" method export>removeUnsafe()</dfn> method steps are to
 update [=this=]'s [=Sanitizer/configuration=] with the result of calling [=remove unsafe=]
 on [=this=]'s [=Sanitizer/configuration=].
 </div>
