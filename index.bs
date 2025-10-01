@@ -1121,7 +1121,7 @@ value to a {{SanitizerConfig}}.
           |attributes|.
    1. Set |configuration|["{{SanitizerConfig/attributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
-   1. Let |attributes| be &laquo; &raquo;
+   1. Let |attributes| be &laquo; &raquo;.
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/removeAttributes}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer attribute=] |attribute| to
           |attributes|.
