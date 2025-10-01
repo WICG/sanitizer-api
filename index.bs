@@ -1110,7 +1110,7 @@ value to a {{SanitizerConfig}}.
           |elements|.
    1. Set |configuration|["{{SanitizerConfig/removeElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-   1. Let |elements| be &laquo; &raquo;
+   1. Let |elements| be &laquo; &raquo;.
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
