@@ -1200,10 +1200,11 @@ if there exists an |entry| of |list| that is an [=ordered map=], and where
 </div>
 
 <div algorithm>
-To <dfn for="SanitizerConfig">remove</dfn> an |item| from a |list| that is an
-[=ordered map=], [=list/remove=] all |entry| from |list|
+To <dfn for="SanitizerConfig">remove</dfn> an |item| from a
+[=list=] |list|, [=list/remove=] all |entry| from |list|
 where |item|["name"] [=string/is|equals=] |entry|["name"] and
 |item|["namespace"] [=string/is|equals=] |entry|["namespace"].
+Return true if any item was removed, and false otherwise,
 </div>
 
 <div algorithm>
