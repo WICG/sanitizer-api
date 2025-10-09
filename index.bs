@@ -542,7 +542,7 @@ conditions hold:
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
 1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
-        1. [=list/iterate|For any=] |element| in |config|[{{SanitizerConfig/elements}}]:
+        1. [=list/iterate|For each=] |element| of |config|[{{SanitizerConfig/elements}}]:
             1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] nor
                |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
             1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
@@ -560,7 +560,9 @@ conditions hold:
             a [=custom data attribute=].
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=],
-       then [=list/iterate|for any=] |element| in |config|[{{SanitizerConfig/elements}}]:
+       then [=list/iterate|for each=] |element| of |config|[{{SanitizerConfig/elements}}]:
+        1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] nor
+           |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
         1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
             |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
             &laquo; &raquo; is [=list/empty=].
