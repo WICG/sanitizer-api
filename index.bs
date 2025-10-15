@@ -304,38 +304,7 @@ method steps are:
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" method export>get()</dfn> method steps are:
-
-<div class=note><span class=marker>Note:</span>
-Outside of the get() method, the order of the Sanitizer's elements and attributes is unobservable.
-By explicitly sorting the result of this method, we give implementations the opportunity to optimize by, for example, using unordered sets internally.
-</div>
-
-1. Let |config| be [=this=]'s [=Sanitizer/configuration=].
-1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-    1. [=list/iterate|For any=] |element| of |config|["{{SanitizerConfig/elements}}"]:
-        1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to the result of [=list/sort in ascending order=]
-               |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"], with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
-        1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exists=]:
-            1. Set |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] to the result of [=list/sort in ascending order=]
-               |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"], with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
-    1. Set |config|["{{SanitizerConfig/elements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/elements}}"],
-       with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
-1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
-  1. Set |config|["{{SanitizerConfig/removeElements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeElements}}"],
-     with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
-1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-  1. Set |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/replaceWithChildrenElements}}"],
-     with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
-1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-  1. Set |config|["{{SanitizerConfig/attributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/attributes}}"],
-     with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
-1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
-  1. Set |config|["{{SanitizerConfig/removeAttributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeAttributes}}"],
-     with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
-1. Return |config|.
-
+The <dfn for="Sanitizer" method export>get()</dfn> method steps are to return the value of [=this=]'s [=Sanitizer/configuration=].
 </div>
 
 <div algorithm>
@@ -1244,18 +1213,6 @@ To <dfn for="SanitizerConfig">add</dfn> a |name| to a |list|, where |name| is
 
 1. If |list| [=SanitizerConfig/contains=] |name|, then return.
 1. [=list/Append=] |name| to |list|.
-
-</div>
-
-<div algorithm>
-An item |itemA| is <dfn for="SanitizerConfig">less than item</dfn> |itemB| if:
-
-1. If |itemA|["namespace"] is null:
-    1. If |itemB|["namespace"] is not null, return true.
-1. Otherwise:
-    1. If |itemB|["namespace"] is null, return false.
-    1. If |itemA|["namespace"] is [=/code unit less than=] |itemB|["namespace"], return true.
-1. Return |itemA|["name"] is [=/code unit less than=]|itemB|["name"].
 
 </div>
 
