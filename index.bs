@@ -1269,11 +1269,12 @@ To <dfn for="SanitizerConfig">add</dfn> a |name| to a |list|, where |name| is
 An item |itemA| is <dfn for="SanitizerConfig">less than item</dfn> |itemB| if:
 
 1. If |itemA|["namespace"] is null:
-    1. If |itemB|["namespace"] is not null, return true.
+    1. If |itemB|["namespace"] is not null, then return true.
 1. Otherwise:
-    1. If |itemB|["namespace"] is null, return false.
-    1. If |itemA|["namespace"] is [=/code unit less than=] |itemB|["namespace"], return true.
-1. Return |itemA|["name"] is [=/code unit less than=]|itemB|["name"].
+    1. If |itemB|["namespace"] is null, then return false.
+    1. If |itemA|["namespace"] is [=/code unit less than=] |itemB|["namespace"], then return true.
+    1. If |itemA|["namespace"] [=string/is=] not |itemB|["namespace"], then return false.
+1. Return |itemA|["name"] is [=/code unit less than=] |itemB|["name"].
 
 </div>
 
