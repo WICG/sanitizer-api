@@ -11,9 +11,6 @@ def dedupe(alist):
       result.append(item)
   return result
 
-def sort(alist):
-  return list(sorted(alist, key=lambda item: (item["namespace"], item["name"])))
-
 def remove_from(alist, reference):
   return [item for item in dedupe(alist) if not item in reference]
 
@@ -54,15 +51,15 @@ def main():
         result["elements"].append(elem)
         current = elem["attributes"]
 
-    # Sort and De-dupe the global element + attribute allow lists.
-    result["elements"] = sort(dedupe(result["elements"]))
-    result["attributes"] = sort(dedupe(result["attributes"]))
+    # De-dupe the global element + attribute allow lists.
+    result["elements"] = dedupe(result["elements"])
+    result["attributes"] = dedupe(result["attributes"])
 
-    # Sort and remove globally allowed attributes from per-element allow lists.
+    # Remove globally allowed attributes from per-element allow lists.
     for element in result["elements"]:
       if "attributes" in element:
-        element["attributes"] = sort(remove_from(element["attributes"],
-                                                 result["attributes"]))
+        element["attributes"] = remove_from(element["attributes"],
+                                            result["attributes"])
 
     try:
       json.dump(result, args.out, indent=2)
