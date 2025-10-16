@@ -207,7 +207,7 @@ partial interface Document {
 The <dfn for="Document" method export>parseHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
 1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
-   {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Document parseHTMLUnsafe", and "script".
+   {{TrustedHTML}}, the [=current global object=], |html|, "Document parseHTMLUnsafe", and "script".
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
 
    Note: Since |document| does not have a browsing context, scripting is disabled.
