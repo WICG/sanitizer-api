@@ -1550,6 +1550,6 @@ A more complete treatment of mXSS can be found in [[MXSS]].
 
 This work is informed and inspired by [[DOMPURIFY]] from cure53,
 Internet Explorer's {{window.toStaticHTML()}} as well as the original
-[[HTMLSanitizer]] from Ben Bucksch.
-Anne van Kesteren, Krzysztof Kotowicz, Tom Schuster, Luke Warlow,
-Guillaume Weghsteen, and Mike West for their valuable feedback.
+[[HTMLSanitizer]] from Ben Bucksch. Anne van Kesteren, Krzysztof Kotowicz,
+Andrew C. H. Mc Millan, Tom Schuster, Luke Warlow, Guillaume Weghsteen,
+and Mike West for their valuable feedback.
