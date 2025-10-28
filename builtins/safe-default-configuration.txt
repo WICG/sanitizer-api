@@ -60,13 +60,13 @@ div
 
 a
 - href
-- rel
 - hreflang
 - type
 // Purposely omitted:
 // - target
 // - download
 // - referrerpolicy
+// - rel
 // - ping
 em
 strong
