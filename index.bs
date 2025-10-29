@@ -503,7 +503,23 @@ The <dfn for="Sanitizer" method export>setComments(|allow|)</dfn> method steps a
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" method export>setDataAttributes(|allow|)</dfn> method steps are to [=set data attributes=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>setDataAttributes(|allow|)</dfn> method steps are:
+
+1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=map/exist=], then return false.
+1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] equals |allow|, then return false.
+1. If |allow| is true:
+   1. [=list/Remove=] any items |attr| from |configuration|["{{SanitizerConfig/attributes}}"]
+       where |attr| is a [=custom data attribute=].
+   1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+      1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+         1. If |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=map/exists=]:
+             1. [=list/Remove=] any items |attr| from
+                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
+                 where |attr| is a [=custom data attribute=].
+1. Set |configuration|["{{SanitizerConfig/dataAttributes}}"] to |allow|.
+1. Return true.
+
 </div>
 
 <div algorithm>
@@ -1046,26 +1062,6 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
                     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
     1. [=list/Append=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"]
     1. Return true.
-
-</div>
-
-<div algorithm>
-To <dfn for="Sanitizer">set data attributes</dfn> with a [=boolean=] |allow|
-on a {{SanitizerConfig}} |configuration|:
-
-1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=map/exist=], then return false.
-1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] equals |allow|, then return false.
-1. If |allow| is true:
-   1. [=list/Remove=] any items |attr| from |configuration|["{{SanitizerConfig/attributes}}"]
-       where |attr| is a [=custom data attribute=].
-   1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-      1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
-         1. If |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=map/exists=]:
-             1. [=list/Remove=] any items |attr| from
-                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
-                 where |attr| is a [=custom data attribute=].
-1. Set |configuration|["{{SanitizerConfig/dataAttributes}}"] to |allow|.
-1. Return true.
 
 </div>
 
