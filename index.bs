@@ -322,7 +322,8 @@ By explicitly sorting the result of this method, we give implementations the opp
                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"], with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
     1. Set |config|["{{SanitizerConfig/elements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/elements}}"],
        with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
-1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+1. Otherwise:
+  1. [=Assert=]: |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=].
   1. Set |config|["{{SanitizerConfig/removeElements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeElements}}"],
      with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
@@ -331,7 +332,8 @@ By explicitly sorting the result of this method, we give implementations the opp
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/attributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/attributes}}"],
      with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
-1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+1. Otherwise:
+  1. [=Assert=]: |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/removeAttributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeAttributes}}"],
      with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
 1. Return |config|.
@@ -376,6 +378,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
              [=set/intersection=] of |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] and
              |configuration|["{{SanitizerConfig/attributes}}"].
     1. Otherwise:
+      1. [=Assert=]: |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
       1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
         1. Set |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] to
            [=SanitizerConfig/remove duplicates=] from |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].
@@ -411,6 +414,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
     1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"]
     1. Return true.
 1. Otherwise:
+  1. [=Assert=]: |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=].
   1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=] or
      |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=with default=] &laquo; &raquo;
      is not [=list/empty=]:
@@ -478,6 +482,7 @@ up per-element allow- or remove-lists to maintain our validity criteria.
     1. Return true.
 1. Otherwise:
     1. [=Comment=]: If we have a global remove-list, we need to remove |attribute|.
+    1. [=Assert=]: |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
     1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] does not [=list/contain=]
         |attribute|:
         1. Return false.
@@ -870,16 +875,17 @@ beginning with |node|. It consistes of these steps:
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
       1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=] and
-        |configuration|["{{SanitizerConfig/removeElements}}"]  [=SanitizerConfig/contains=]
-        |elementName|:
-      1. [=/Remove=] |child|.
-      1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
-        |configuration|["{{SanitizerConfig/elements}}"] does not
-        [=SanitizerConfig/contain=] |elementName|:
-      1. [=/Remove=] |child|.
-      1. [=Continue=].
+    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+      1. If |configuration|["{{SanitizerConfig/removeElements}}"]  [=SanitizerConfig/contains=]
+         |elementName|:
+        1. [=/Remove=] |child|.
+        1. [=Continue=].
+    1. Otherwise:
+      1. [=Assert=]: |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=].
+      1. If |configuration|["{{SanitizerConfig/elements}}"] does not
+         [=SanitizerConfig/contain=] |elementName|:
+        1. [=/Remove=] |child|.
+        1. [=Continue=].
     1. If |elementName| [=string/is|equals=] &laquo;[ "`name`" &rightarrow; "`template`",
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;,
           then call [=sanitize core=] on |child|'s [=template contents=] with
@@ -910,6 +916,7 @@ beginning with |node|. It consistes of these steps:
               |configuration|["{{SanitizerConfig/dataAttributes}}"] is not true:
               1. [=/remove an attribute|Remove=] |attribute|.
       1. Otherwise:
+        1. [=Assert=]: |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
         1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
           [=map/exists=] and |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] does not [=SanitizerConfig/contain=] |attrName|:
           1. [=/remove an attribute|Remove=] |attribute|.
@@ -1013,6 +1020,7 @@ This method requires that we distinguish 4 cases:
     1. [=Comment=]: We have a global allow list and it does not contain |element|.
     1. Return |modified|.
 1. Otherwise:
+    1. [=Assert=]: |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=].
     1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/contains=] |element|:
         1. [=Comment=]: We have a global remove list and it already contains |element|.
         1. Return |modified|.
@@ -1047,6 +1055,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
     1. Return true.
 1. Otherwise:
     1. [=Comment=]: If we have a global remove-list, we need to add |attribute|.
+    1. [=Assert=]: |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
     1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=list/contains=] |attribute|
         return false.
     1. [=Comment=]: Fix-up per-element allow and remove lists.
