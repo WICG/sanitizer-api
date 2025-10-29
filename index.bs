@@ -492,7 +492,14 @@ The <dfn for="Sanitizer" method export>removeAttribute(|attribute|)</dfn> method
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" method export>setComments(|allow|)</dfn> method steps to [=set comments=] with |allow| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>setComments(|allow|)</dfn> method steps are:
+
+1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=] and
+   |configuration|["{{SanitizerConfig/comments}}"] equals |allow|, then return false;
+1. Set |configuration|["{{SanitizerConfig/comments}}"] to |allow|.
+1. Return true.
+
 </div>
 
 <div algorithm>
@@ -1039,17 +1046,6 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
                     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
     1. [=list/Append=] |attribute| to |configuration|["{{SanitizerConfig/removeAttributes}}"]
     1. Return true.
-
-</div>
-
-<div algorithm>
-To <dfn for="Sanitizer">set comments</dfn> with a [=boolean=] |allow| on a
-{{SanitizerConfig}} |configuration|:
-
-1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=] and
-   |configuration|["{{SanitizerConfig/comments}}"] equals |allow|, then return false;
-1. Set |configuration|["{{SanitizerConfig/comments}}"] to |allow|.
-1. Return true.
 
 </div>
 
