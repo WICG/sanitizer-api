@@ -434,7 +434,17 @@ to [=remove an element=] with |element| and [=this=]'s [=Sanitizer/configuration
 </div>
 
 <div algorithm>
-The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</dfn> method steps are to [=replace an element with its children=] with |element| and [=this=]'s [=Sanitizer/configuration=].
+The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</dfn> method steps are:
+
+1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
+1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
+    1. Return false.
+1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
+1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"] list.
+1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
+1. Return true.
+
 </div>
 
 <div algorithm>
@@ -986,20 +996,6 @@ This method requires that we distinguish 4 cases:
     1. [=Comment=]: We have a global remove list and it does not contain |element|.
     1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/removeElements}}"].
     1. Return true.
-
-</div>
-
-<div algorithm>
-To <dfn for="Sanitizer">replace an element with its children</dfn>
-{{SanitizerElement}} |element| from a {{SanitizerConfig}} |configuration|:
-
-1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
-1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
-    1. Return false.
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
-1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"] list.
-1. [=SanitizerConfig/Add=] |element| to |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"].
-1. Return true.
 
 </div>
 
