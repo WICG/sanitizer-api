@@ -1453,10 +1453,15 @@ URLs, is as follows:
 # Security Considerations # {#security-considerations}
 
 The Sanitizer API is intended to prevent DOM-based Cross-Site Scripting
-by traversing a supplied HTML content and removing elements and attributes
-according to a configuration. The specified API must not support
-the construction of a Sanitizer object that leaves script-capable markup in
-and doing so would be a bug in the threat model.
+by traversing supplied HTML content and removing elements and attributes
+according to a configuration. The Sanitizer API ships a strict baseline,
+such that scripting can never be allowed (cf. [[#never-allowed]]).
+In addition to this, a default safe list includes further restrictions that may help
+prevent a wide range of undesirable effects. These include, elements that can override
+site-specific settings (e.g., `<meta>`), embed third-party content or change the
+layout of the page (e.g., `<img>`, `<style>`).
+In addition, we disallow element and attribute configurations that lead to outgoing HTTP
+requests, and form controls. A detailed list is given in [[#default-disallowed-elements]].
 
 That being said, there are security issues which the correct usage of the
 Sanitizer API will not be able to protect against and the scenarios will be
@@ -1466,8 +1471,7 @@ laid out in the following sections.
 
 <em>This section is not normative.</em>
 
-The Sanitizer API operates solely in the DOM and adds a capability to traverse
-and filter an existing DocumentFragment. The Sanitizer does not address
+The Sanitizer API operates solely in the browser. The Sanitizer does not address
 server-side reflected or stored XSS.
 
 ## DOM clobbering ## {#dom-clobbering}
@@ -1479,8 +1483,8 @@ application by naming elements through `id` or `name` attributes such that
 properties like `children` of an HTML element in the DOM are overshadowed by
 the malicious content.
 
-The Sanitizer API does not protect DOM clobbering attacks in its
-default state, but can be configured to remove `id` and `name` attributes.
+The Sanitizer API disallows the `id` and `name` attributes by default, but
+can be configured to allow them if desired.
 
 ## XSS with Script gadgets ## {#script-gadgets}
 
@@ -1512,13 +1516,13 @@ into a different parent element. An example for carrying out such an attack
 is by relying on the change of parsing behavior for foreign content or
 mis-nested tags.
 
-The Sanitizer API offers only functions that turn a string into a node tree.
-The context is supplied implicitly by all sanitizer functions:
+The Sanitizer API offers functions that combine parsing, sanitization and insertion.
+As such, the parsing context is supplied implicitly by all sanitizer functions:
 `Element.setHTML()` uses the current element; `Document.parseHTML()` creates a
 new document. Therefore Sanitizer API is not directly affected by mutated XSS.
 
 If a developer were to retrieve a sanitized node tree as a string, e.g. via
-`.innerHTML`, and to then parse it again then mutated XSS may occur.
+`.innerHTML`, to only parse or insert it again, a mutated XSS may still occur.
 We discourage this practice. If processing or passing of HTML as a
 string should be necessary after all, then any string should be considered
 untrusted and should be sanitized (again) when inserting it into the DOM. In
@@ -1526,6 +1530,483 @@ other words, a sanitized and then serialized HTML tree can no
 longer be considered as sanitized.
 
 A more complete treatment of mXSS can be found in [[MXSS]].
+
+
+# Index
+
+<em>This section is not normative.</em>
+
+## Elements and attributes not included in the default config ##  {#default-disallowed-elements}
+
+While the Sanitizer aims to disallow Cross-Site Scripting attacks, the default
+settings are a bit stricter and do not include elements that may change page
+settings, layout or fetch resources from other origins. The following elements
+can be allowed with a configuration, but the individual reasoning for disallowing
+them by default is given below.
+
+Some elements are disallowed for multiple reasons, the list below does NOT aim to be
+exhaustive. The following list will only mention the most concerning capability as the
+reason for not allowing an element by default. It does not list all of them.
+
+See also: [[#security-considerations]].
+
+: `<meta>`
+:: This element is not allowed, because it can set or modify global document state.
+
+: `<link>`
+:: This element is not allowed, because it can set or modify global document state.
+
+: `<a target>`
+:: The `target` attribute is not allowed, because it may lead to unintended consequences (e.g., targeting existing frames).
+
+: `<a download>`
+:: The `download` attribute is not allowed, because it could target content not intended for downloading.
+
+: `<a referrerpolicy>`
+:: The `referrerpolicy` attribute is not allowed, because it can override site-specific settings.
+
+: `<a rel>`
+:: The `rel` attribute is not allowed, because it can claim ownership or relationship of the whole document.
+
+: `<a ping>`
+:: The `ping` attribute is not allowed, because it could notify an unintended third-party of the link being clicked.
+
+
+: `<audio>`, `<canvas>`, `<embed>`, `<iframe>`, `<img>`, `<picture>`, `<video>`
+:: These elements for embedding content are not allowed, because it leads to HTTP requests to arbitrary hosts.
+
+: `<math>` MathML math
+:: The reasoning for the inclusion of MathML is solely based on [[SafeMathML]].
+
+: `<svg>`
+:: This element is not allowed, because it leads to HTTP requests to arbitrary hosts.
+
+: `<form>`, `<label>`, `<input>`, `<fieldset>`, `<legend>`, `<textarea>`, `<button>`, `<select>`, `<option>`, `<output>`
+:: These form elements are disallowed, we do not expect them in user-controlled content.
+
+: `<dialog>`, `<details>`
+:: These interactive elements are disallowed, we do not expect them in user-controlled content.
+
+
+## Elements that are **never** allowed ## {#never-allowed}
+
+  <table>
+   <caption>List of unsafe and disallowed elements</caption>
+   <thead>
+    <tr>
+     <th> Element
+     <th> Namespace
+     <th> Description
+   <tbody>
+
+    <tr>
+     <td><code>embed</code></td>
+     <td>http://www.w3.org/1999/xhtml</td>
+     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+    </tr>
+
+    <tr>
+     <td><code>frame</code></td>
+     <td>http://www.w3.org/1999/xhtml</td>
+     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+    </tr>
+
+    <tr>
+     <td><code>iframe</code></td>
+     <td>http://www.w3.org/1999/xhtml</td>
+     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+    </tr>
+
+    <tr>
+     <td><code>object</code></td>
+     <td>http://www.w3.org/1999/xhtml</td>
+     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+    </tr>
+
+    <tr>
+     <td><code>script</code></td>
+     <td>http://www.w3.org/1999/xhtml</td>
+     <td>This element is disallowed because it executes scripts.</td>
+    </tr>
+
+    <tr>
+     <td><code>script</code></td>
+     <td>http://www.w3.org/2000/svg</td>
+     <td>This element is disallowed because it executes scripts.</td>
+    </tr>
+
+    <tr>
+     <td><code>use</code></td>
+     <td>http://www.w3.org/2000/svg</td>
+     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+    </tr>
+  </table>
+
+
+## Event Handler Content Attributes
+
+All known event handler content attributes are disallowed, as they execute script.
+
+ <table>
+   <caption>List of all known and therefore disallowed event handler content attributes attributes</caption>
+   <thead>
+    <tr>
+     <th> Attribute
+   <tbody>
+ <tr>
+     <td><code>onafterprint</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onauxclick</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onbeforeinput</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onbeforematch</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onbeforeprint</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onbeforeunload</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onbeforetoggle</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onblur</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncancel</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncanplay</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncanplaythrough</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onchange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onclick</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onclose</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncontextlost</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncontextmenu</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncontextrestored</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncopy</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncuechange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oncut</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondblclick</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondrag</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondragend</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondragenter</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondragleave</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondragover</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondragstart</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondrop</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ondurationchange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onemptied</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onended</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onerror</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onfocus</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onformdata</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onhashchange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oninput</code></td>
+    </tr>
+
+    <tr>
+     <td><code>oninvalid</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onkeydown</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onkeypress</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onkeyup</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onlanguagechange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onload</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onloadeddata</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onloadedmetadata</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onloadstart</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmessage</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmessageerror</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmousedown</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmouseenter</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmouseleave</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmousemove</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmouseout</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmouseover</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onmouseup</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onoffline</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ononline</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onpagehide</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onpagereveal</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onpageshow</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onpageswap</code></td>
+    </tr>
+
+
+    <tr>
+     <td><code>onpaste</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onpause</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onplay</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onplaying</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onpopstate</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onprogress</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onratechange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onreset</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onresize</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onrejectionhandled</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onscroll</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onscrollend</code></td>
+    </tr>
+
+
+    <tr>
+     <td><code>onsecuritypolicyviolation</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onseeked</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onseeking</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onselect</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onslotchange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onstalled</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onstorage</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onsubmit</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onsuspend</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ontimeupdate</code></td>
+    </tr>
+
+    <tr>
+     <td><code>ontoggle</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onunhandledrejection</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onunload</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onvolumechange</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onwaiting</code></td>
+    </tr>
+
+    <tr>
+     <td><code>onwheel</code></td>
+    </tr>
+  </table>
 
 # Acknowledgements # {#ack}
 
