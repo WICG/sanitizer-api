@@ -312,6 +312,7 @@ By explicitly sorting the result of this method, we give implementations the opp
 </div>
 
 1. Let |config| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |config| is [=SanitizerConfig/valid=].
 1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
     1. [=list/iterate|For any=] |element| of |config|["{{SanitizerConfig/elements}}"]:
         1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
@@ -351,6 +352,7 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
 </div>
 
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |element| to the result of [=canonicalize a sanitizer element with attributes=] with
     |element|.
 1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
@@ -437,6 +439,7 @@ to [=remove an element=] with |element| and [=this=]'s [=Sanitizer/configuration
 The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</dfn> method steps are:
 
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
     1. Return false.
@@ -457,6 +460,7 @@ up per-element allow- or remove-lists to maintain our validity criteria.
 </div>
 
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
     1. [=Comment=]: If we have a global allow-list, we need to add |attribute|.
@@ -495,6 +499,7 @@ The <dfn for="Sanitizer" method export>removeAttribute(|attribute|)</dfn> method
 The <dfn for="Sanitizer" method export>setComments(|allow|)</dfn> method steps are:
 
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. If |configuration|["{{SanitizerConfig/comments}}"] [=map/exists=] and
    |configuration|["{{SanitizerConfig/comments}}"] equals |allow|, then return false;
 1. Set |configuration|["{{SanitizerConfig/comments}}"] to |allow|.
@@ -506,6 +511,7 @@ The <dfn for="Sanitizer" method export>setComments(|allow|)</dfn> method steps a
 The <dfn for="Sanitizer" method export>setDataAttributes(|allow|)</dfn> method steps are:
 
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=map/exist=], then return false.
 1. If |configuration|["{{SanitizerConfig/dataAttributes}}"] equals |allow|, then return false.
 1. If |allow| is true:
@@ -835,6 +841,7 @@ For the main <dfn>sanitize</dfn> operation, using a {{ParentNode}} |node|, a
 {{Sanitizer}} |sanitizer|, and a [=boolean=] |safe|, run these steps:
 
 1. Let |configuration| be the value of |sanitizer|'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. If |safe| is true, then set |configuration| to the result of calling [=remove unsafe=] on |configuration|.
 1. Call [=sanitize core=] on |node|, |configuration|, and with [=handleJavascriptNavigationUrls=] set to |safe|.
 
@@ -1000,6 +1007,7 @@ This method requires that we distinguish 4 cases:
 
 </div>
 
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
 1. Set |modified| to the result of
     [=SanitizerConfig/remove=] |element| from
@@ -1031,6 +1039,7 @@ remove-list. If we add |attribute| to the global remove-list, we may need to do 
 to fix up per-element allow- or remove-lists to maintain our validity criteria. If we remove
 |attribute| from a global allow-list, we may also have to remove it from local remove-lists.
 
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
     1. [=Comment=]: If we have a global allow-list, we need to add |attribute|.
@@ -1078,6 +1087,7 @@ Note: While this algorithm is called [=remove unsafe=], we use
 1. [=Assert=]: The [=map/get the keys|key set=] of [=built-in safe baseline configuration=]
    [=set/equals=]
    &laquo;[ "{{SanitizerConfig/removeElements}}", "{{SanitizerConfig/removeAttributes}}" ] &raquo;.
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Let |result| be false.
 1. [=list/For each=] |element| in
    [=built-in safe baseline configuration=][{{SanitizerConfig/removeElements}}]:
