@@ -1656,34 +1656,34 @@ TODO FREDDY: Do we want to group all filter effect elements (fe...) in one entry
 : `<feTurbulence>`
 :: This element is disallowed because we do not allow SVG filters (see `<filter>` below).
 : `<filter>`
-:: :: This elements is not allowed, because it leads to HTTP requests to arbitrary hosts.
+:: :: This elements is not allowed because it leads to HTTP requests to arbitrary hosts.
 
 
 : `<image>`
-:: This elements is not allowed, because it leads to HTTP requests to arbitrary hosts.
+:: This elements is not allowed because it leads to HTTP requests to arbitrary hosts.
 
 : `<linearGradient>`
-:: This element is disallowed, because we do not allow SVG animations (see above).
+:: This element is disallowed because we do not allow SVG animations (see above).
 
 : `<mask>`
-:: This element is disallowed, because we do not allow WHY?
+:: This element is disallowed because we do not allow WHY?
 
 : `<mpath>`
-:: This element is disallowed, because we do not allow SVG animations (see above).
+:: This element is disallowed because we do not allow SVG animations (see above).
 
 : `<pattern>`
-:: This elements is not allowed, because it leads to HTTP requests to arbitrary hosts.
+:: This elements is not allowed because it leads to HTTP requests to arbitrary hosts.
 
 
 
 : `<radialGradient>`
-:: This element is disallowed, because we do not allow SVG animations (see above).
+:: This element is disallowed because we do not allow SVG animations (see above).
 
 : The `<svg>` element is allowed, but some attributes are disallowed by default. These are:
 :: The `src` attribute is not allowed because it leads to HTTP requests to arbitrary hosts.
 
 : `<set>`
-:: This element is disallowed, because we do not allow SVG animations (see above).
+:: This element is disallowed because we do not allow SVG animations (see above).
 
 : `<style>`
 :: This element is disallowed because it can change the layout of the page.
