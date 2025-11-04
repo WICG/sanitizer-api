@@ -323,7 +323,7 @@ By explicitly sorting the result of this method, we give implementations the opp
                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"], with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
     1. Set |config|["{{SanitizerConfig/elements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/elements}}"],
        with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
-1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=]:
+1. Otherwise:
   1. Set |config|["{{SanitizerConfig/removeElements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeElements}}"],
      with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
@@ -332,7 +332,7 @@ By explicitly sorting the result of this method, we give implementations the opp
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/attributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/attributes}}"],
      with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
-1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+1. Otherwise:
   1. Set |config|["{{SanitizerConfig/removeAttributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeAttributes}}"],
      with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
 1. Return |config|.
@@ -877,16 +877,16 @@ beginning with |node|. It consistes of these steps:
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
       1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exists=] and
-        |configuration|["{{SanitizerConfig/removeElements}}"]  [=SanitizerConfig/contains=]
-        |elementName|:
-      1. [=/Remove=] |child|.
-      1. [=Continue=].
-    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
-        |configuration|["{{SanitizerConfig/elements}}"] does not
-        [=SanitizerConfig/contain=] |elementName|:
-      1. [=/Remove=] |child|.
-      1. [=Continue=].
+    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+      1. If |configuration|["{{SanitizerConfig/elements}}"] does not
+         [=SanitizerConfig/contain=] |elementName|:
+        1. [=/Remove=] |child|.
+        1. [=Continue=].
+    1. Otherwise:
+      1. If |configuration|["{{SanitizerConfig/removeElements}}"]  [=SanitizerConfig/contains=]
+         |elementName|:
+        1. [=/Remove=] |child|.
+        1. [=Continue=].
     1. If |elementName| [=string/is|equals=] &laquo;[ "`name`" &rightarrow; "`template`",
        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;,
           then call [=sanitize core=] on |child|'s [=template contents=] with
