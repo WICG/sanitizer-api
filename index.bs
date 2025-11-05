@@ -1558,30 +1558,48 @@ See also: [[#security-considerations]].
 
 ### List of disallowed elements in the HTML namespace
 
-: `<meta>`
-:: This element is not allowed, because it can set or modify global document state.
-
-: `<link>`
-:: This element is not allowed, because it can set or modify global document state.
 
 : The `<a>` element is allowed, but some attributes are disallowed by default. These are:
-:: The `target` attribute is not allowed, because it may lead to unintended consequences (e.g., targeting existing frames).
-:: The `download` attribute is not allowed, because it could target content not intended for downloading.
-:: The `referrerpolicy` attribute is not allowed, because it can override site-specific settings.
-:: The `rel` attribute is not allowed, because it can claim ownership or relationship of the whole document.
-:: The `ping` attribute is not allowed, because it could notify an unintended third-party of the link being clicked.
+:: The `target` attribute is not allowed because it may lead to unintended consequences (e.g., targeting existing frames).
+:: The `download` attribute is not allowed because it could target content not intended for downloading.
+:: The `referrerpolicy` attribute is not allowed because it can override site-specific settings.
+:: The `rel` attribute is not allowed because it can claim ownership or relationship of the whole document.
+:: The `ping` attribute is not allowed because it could notify an unintended third-party of the link being clicked.
 
-: `<audio>`, `<canvas>`, `<embed>`, `<iframe>`, `<img>`, `<picture>`, `<video>`
-:: These elements for embedding content are not allowed, because it leads to HTTP requests to arbitrary hosts.
+: `<area>`
+:: This element is not allowed because it requires a `<map>`, which is also not allowed.
+: `<base>`
+:: This element is not supported because it overrides the default base URL for all links in the document.
 
-: `<form>`, `<label>`, `<input>`, `<fieldset>`, `<legend>`, `<textarea>`, `<button>`, `<select>`, `<option>`, `<output>`
+
+: `<link>`
+:: This element is not allowed because it can set or modify global document state.
+
+: `<map>`
+:: This element is not allowed because images are not allowed by default.
+
+: `<meta>`
+:: This element is not allowed because it can set or modify global document state.
+
+: `<noscript>`
+:: This element is not allowed because it
+
+: `<audio>`, `<canvas>`, `<embed>`, `<iframe>`, `<img>`, `<object>`, `<picture>`, `<source>, `<track>` `<video>`
+:: These elements for embedding content are not allowed because it leads to HTTP requests to arbitrary hosts.
+
+: `<datalist>`, `<form>`, `<label>`, `<input>`, `<fieldset>`, `<legend>`, `<textarea>`, `<button>`, `<select>`, `<option>`,  `<optgroup>`, `<output>`, `<progress>`, `<select>`, <selectedcontent>
 :: These form elements are disallowed, we do not expect them in user-controlled content.
 
-: `<dialog>`, `<details>`
+: `<dialog>`, `<details>`, `<summary>`
 :: These interactive elements are disallowed, we do not expect them in user-controlled content.
 
 : `<style>``
 :: This element is disallowed because it can change the layout of the page.
+
+: `<template>`, `<slot>`,
+
+TODO Freddy: Also add non-conforming when they are not supported? These would be https://html.spec.whatwg.org/#non-conforming-features
+
 
 ### List of disallowed elements in the MathML namespace
 
