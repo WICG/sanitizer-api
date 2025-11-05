@@ -1542,6 +1542,394 @@ A more complete treatment of mXSS can be found in [[MXSS]].
 
 <em>This section is not normative.</em>
 
+### Elements and attributes in the MathML namespace
+
+The `<math>` element and various additional elements are allowed.
+The list and their reasoning for the inclusion can be found in [[SafeMathML]].
+
+### Elements and attributes in the SVG namespace
+
+Features are either allowed, allowable (e.g., disallowed by default but can be included in a custom configuration) or completely disallowed.
+
+<table>
+   <caption>Global Attributes in the SVG Namespace</caption>
+   <thead>
+    <tr>
+     <th> Attribute
+     <th> Decision
+     <th> Reasoning (if disallowed)
+   <tbody>
+
+    <tr>
+     <td><code>cx</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>cy</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>height</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>width</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>x</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>y</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>d</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-1"><sup>1</sup></a></td>
+    </tr>
+
+    <tr>
+     <td><code>fill</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>transform</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>alignment-base</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>baseline-shift</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>clip-path</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>clip-rule</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>color</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+    <tr>
+     <td><code>color-interpolation</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>color-interpolation-filters</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-3"><sup>3</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>cursor</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>direction</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>display</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>dominant-baseline</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>fill-opacity</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>fill-rule</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>filter</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-2"><sup>2</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>flood-color</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-2"><sup>2</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>flood-opacity</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-2"><sup>2</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>font-family</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>font-size</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>font-size-adjust</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>font-stretch</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>font-style</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>font-variant</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>font-weight</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>glyph-orientation-horizontal</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-3"><sup>3</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>glyph-orientation-vertical</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-3"><sup>3</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>image-rendering</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-4"><sup>4</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>letter-spacing</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>lighting-color</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-3"><sup>3</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>marker-end</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>marker-mid</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>marker-start</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>mask</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-5"><sup>5</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>mask-type</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-5"><sup>5</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>opacity</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>overflow</code></td>
+     <td>Allowable</td>
+     <td><a href="#svg-attr-6"><sup>6</sup></a></td>
+    </tr>
+    <tr>
+     <td><code>paint-order</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>pointer-events</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>shape-rendering</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stop-color</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stop-opacity</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-dasharray</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-dashoffset</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-linecap</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-linejoin</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-miterlimit</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-opacity</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>stroke-width</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>text-anchor</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>text-decoration</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>text-overflow</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>text-rendering</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>transform-origin</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>unicode-bidi</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>vector-effect</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>visibility</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>white-space</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>word-spacing</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+    <tr>
+     <td><code>writing-mode</code></td>
+     <td>Allowed</td>
+     <td></td>
+    </tr>
+
+
+</tbody>
+</table>
+
+### Legend of exclusion criteria for SVG features.
+<ol>
+<li id="svg-attr-1">This attribute is disallowed as a global attribute, we only want to allow it on some elements.
+<li id="svg-attr-2">This attribute is disallowed because we do not allow the SVG `<filter>` element.
+<li id="svg-attr-3">This attribute is disallowed because it is deprecated
+<li id="svg-attr-4">This attribute is disallowed because we do not allow the `<image>` element.
+<li id="svg-attr-5">This attribute is disallowed because we do not allow the `<mask>` element.
+<li id="svg-attr-6">This attribute is disallowed because we do not allow the the element to impact the page layout.
+</ol>
+
+
 ## Elements and attributes not allowed in the default config ##  {#default-disallowed-elements}
 
 While the Sanitizer aims to disallow Cross-Site Scripting attacks [[XSS]], the default
@@ -1555,6 +1943,8 @@ See also: [[#security-considerations]].
 
 ## Elements that are **never** allowed ## {#never-allowed}
 
+TODO: Freddy will fold this into the individual HTML and SVG lists. To be written above.
+
   <table>
    <caption>List of unsafe and disallowed elements</caption>
    <thead>
@@ -1567,19 +1957,19 @@ See also: [[#security-considerations]].
     <tr>
      <td><code>embed</code></td>
      <td>http://www.w3.org/1999/xhtml</td>
-     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+     <td><a href="#html-el-1"><sup>1</sup></a></td>
     </tr>
 
     <tr>
      <td><code>frame</code></td>
      <td>http://www.w3.org/1999/xhtml</td>
-     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+     <td><a href="#html-el-1"><sup>1</sup></a></td>
     </tr>
 
     <tr>
      <td><code>iframe</code></td>
      <td>http://www.w3.org/1999/xhtml</td>
-     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+     <td><a href="#html-el-1"><sup>1</sup></a></td>
     </tr>
 
     <tr>
@@ -1591,21 +1981,29 @@ See also: [[#security-considerations]].
     <tr>
      <td><code>script</code></td>
      <td>http://www.w3.org/1999/xhtml</td>
-     <td>This element is disallowed because it executes scripts.</td>
+     <td><a href="#html-el-2"><sup>2</sup></a></td>
     </tr>
 
     <tr>
      <td><code>script</code></td>
      <td>http://www.w3.org/2000/svg</td>
-     <td>This element is disallowed because it executes scripts.</td>
+     <td><a href="#html-el-2"><sup>2</sup></a></td>
     </tr>
 
     <tr>
      <td><code>use</code></td>
      <td>http://www.w3.org/2000/svg</td>
-     <td>This element is disallowed because it can include other, untrusted documents and including scripts.</td>
+     <td><a href="#html-el-1"><sup>1</sup></a></td>
     </tr>
   </table>
+
+### Legend of exclusion criteria for HTML features.
+<ol>
+<li id="html-el-1">This element is always disallowed because it can include other, untrusted documents and including scripts.
+<li id="html-el-2">This element is always disallowed because it executes scripts.
+</ol>
+
+
 
 
 ## Event Handler Content Attributes
