@@ -1463,8 +1463,8 @@ according to a configuration. The Sanitizer API ships a strict baseline,
 such that scripting can never be allowed (cf. [[#never-allowed]]).
 In addition to this, a default safe list includes further restrictions that may help
 prevent a wide range of undesirable effects. These include, elements that can override
-site-specific settings (e.g., `<meta>`), embed third-party content or change the
-layout of the page (e.g., `<img>`, `<style>`, `aria-` attributes).
+site-specific settings (e.g., `<meta>`), embed third-party content, or change the
+layout/semantics of the page (e.g., `<img>`, `<style>`, `aria-` attributes).
 In addition, we disallow element and attribute configurations that lead to outgoing HTTP
 requests, and form controls. A detailed list is given in [[#default-disallowed-elements]].
 
