@@ -157,7 +157,7 @@ th
 //
 // Purposely omitted.
 
-// SVG: TBD
+// SVG: See below
 
 // HTML global attributes
 //
@@ -356,7 +356,24 @@ svg marker
 - markerHeight
 - orient
 
+
+// Scripting, https://svgwg.org/svg2-draft/interact.html
 // Purposely omitted: svg script
+
+// Linking, https://svgwg.org/svg2-draft/linking.html
+svg a
+- href
+- hreflang
+- type
+// Purposely omitted:
+// - xlink attributes
+// - target
+// - download
+// - ping
+// - referrerpolicy
+// - rel
+
+// Purposely omitted: svg view (because `id` attribute is not allowed)
 
 // Common attributes: https://svgwg.org/svg2-draft/struct.html#CommonAttributes
 [SVG Global]
