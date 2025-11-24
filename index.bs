@@ -149,7 +149,7 @@ partial interface Element {
 <div algorithm>
 {{Element}}'s <dfn for="Element" method export>setHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
-1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
+1. Let |compliantHTML| be the result of invoking the [=get Trusted Type compliant string=] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "Element setHTMLUnsafe", and "script".
 1. Let |target| be [=this=]'s [=template contents=] if [=this=] is a
    {{HTMLTemplateElement|template}} element; otherwise [=this=].
@@ -178,7 +178,7 @@ These methods are mirrored on the {{ShadowRoot}}:
 <div algorithm>
 {{ShadowRoot}}'s <dfn for="ShadowRoot" method export>setHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
-1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
+1. Let |compliantHTML| be the result of invoking the [=get Trusted Type compliant string=] algorithm with
    {{TrustedHTML}}, [=this=]'s [=relevant global object=], |html|, "ShadowRoot setHTMLUnsafe", and "script".
 1. [=Set and filter HTML=] using [=this=],
    [=this=]'s [=shadow host=] (as context element),
@@ -206,7 +206,7 @@ partial interface Document {
 <div algorithm>
 The <dfn for="Document" method export>parseHTMLUnsafe(|html|, |options|)</dfn> method steps are:
 
-1. Let |compliantHTML| be the result of invoking the [$Get Trusted Type compliant string$] algorithm with
+1. Let |compliantHTML| be the result of invoking the [=get Trusted Type compliant string=] algorithm with
    {{TrustedHTML}}, the [=current global object=], |html|, "Document parseHTMLUnsafe", and "script".
 1. Let |document| be a new {{Document}}, whose [=Document/content type=] is "text/html".
 
