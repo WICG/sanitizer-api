@@ -722,7 +722,9 @@ Putting these rules in words:
 To determine whether a {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>valid</dfn>:
 
 1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=] and
-    |config|{{SanitizerConfig/removeElements}} [=map/exists=], then return false.
+    |config|[{{SanitizerConfig/removeElements}}] [=map/exists=], then return false.
+1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=] and
+    |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=], then return false.
 1. [=Assert=]: All {{SanitizerElementNamespaceWithAttributes}}, {{SanitizerElementNamespace}}, and
     {{SanitizerAttributeNamespace}} items in |config| are canonical, meaning they have been run
     through [=canonicalize a sanitizer element=] or [=canonicalize a sanitizer attribute=],
@@ -764,13 +766,13 @@ To determine whether a {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>
                 [=with default=] &laquo; &raquo; is not a
                 [=set/subset=] of |config|[{{SanitizerConfig/attributes}}], then return false.
             1. If {{SanitizerConfig/dataAttributes}} [=map/exists=] and
-                {{SanitizerConfig/dataAttributes}} is true:
-                1. If |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
-                    contains a [=custom data attribute=], then return false.
+                {{SanitizerConfig/dataAttributes}} is true and
+                |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
+                contains a [=custom data attribute=], then return false.
     1. [=Assert=]: |config|[{{SanitizerConfig/dataAttributes}}] [=map/exists=].
-    1. If {{SanitizerConfig/dataAttributes}} is true:
-        1. If |config|[{{SanitizerConfig/attributes}}] contains a [=custom data attribute=], then
-            return false.
+    1. If {{SanitizerConfig/dataAttributes}} is true and
+        |config|[{{SanitizerConfig/attributes}}] contains a [=custom data attribute=], then
+        return false.
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
     1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=],
        then [=list/iterate|for each=] |element| of |config|[{{SanitizerConfig/elements}}]:
