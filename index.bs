@@ -739,13 +739,13 @@ To determine whether a {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>
     [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=] and
     [=SanitizerConfig/has duplicates=], then return false.
-1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=] and
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exists=] and
+1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=],
+    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exists=], and
     the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/elements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is not [=list/empty=], then return
     false.
-1. If |config|[{{SanitizerConfig/removeElements}}] [=map/exists=] and
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exists=]
+1. If |config|[{{SanitizerConfig/removeElements}}] [=map/exists=],
+    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exists=], and
     the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/removeElements}}] and
     |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is not [=list/empty=], then return
     false.
@@ -765,8 +765,8 @@ To determine whether a {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>
             1. If |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
                 [=with default=] &laquo; &raquo; is not a
                 [=set/subset=] of |config|[{{SanitizerConfig/attributes}}], then return false.
-            1. If {{SanitizerConfig/dataAttributes}} [=map/exists=] and
-                {{SanitizerConfig/dataAttributes}} is true and
+            1. If {{SanitizerConfig/dataAttributes}} [=map/exists=],
+                {{SanitizerConfig/dataAttributes}} is true, and
                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
                 contains a [=custom data attribute=], then return false.
     1. [=Assert=]: |config|[{{SanitizerConfig/dataAttributes}}] [=map/exists=].
