@@ -739,16 +739,20 @@ To determine whether a {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>
     [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=] and
     [=SanitizerConfig/has duplicates=], then return false.
-1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=],
-    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=], and
-    the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/elements}}"] and
-    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=], then return
-    false.
-1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=],
-    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=], and
-    the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/removeElements}}"] and
-    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=], then return
-    false.
+1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
+  1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+      the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/elements}}"] and
+      |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=], then return
+      false.
+  1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=], and
+      the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/removeElements}}"] and
+      |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=], then return
+      false.
+  1. [=list/iterate|For each=] |element| of |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]:
+    1. If |element|["{{SanitizerElementNamespace/name}}"] [=string/is|equals=] "html" and
+       |element|["{{SanitizerElementNamespace/namespace}}"] [=string/is|equals=] [=HTML Namespace=],
+       then return false.
+
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
     1. If |config|["{{SanitizerConfig/dataAttributes}}"] does not [=map/exist=], return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
