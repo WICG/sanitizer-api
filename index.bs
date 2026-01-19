@@ -722,6 +722,10 @@ Putting these rules in words:
 To determine whether a canonical {{SanitizerConfig}} |config| is
 <dfn for=SanitizerConfig>valid</dfn>:
 
+NOTE: It's expected that the configuration being passing in has previously been run through the
+    [=canonicalize the configuration=] steps. We will simply assert conditions that that algorithm
+    should have guaranteed to hold.
+
 1. [=Assert=]: |config|["{{SanitizerConfig/elements}}"] [=map/exists=] or
     |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=].
 1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=] and
