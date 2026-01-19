@@ -404,10 +404,10 @@ allow- or remove-lists for attributes. This requires that we distinguish 4 cases
         1. Return true.
     1. [=Comment=]: This is the case with a global allow-list that already contains |element|.
     1. Let |current element| be the |item| in |configuration|["{{SanitizerConfig/elements}}"]
-        where |item|[{{SanitizerElementNamespace/name}}] [=string/is|equals=]
-        |element|[{{SanitizerElementNamespace/name}}]
-        and |item|[{{SanitizerElementNamespace/namespace}}] [=string/is|equals=]
-        |element|[{{SanitizerElementNamespace/namespace}}].
+        where |item|["{{SanitizerElementNamespace/name}}"] [=string/is|equals=]
+        |element|["{{SanitizerElementNamespace/name}}"]
+        and |item|["{{SanitizerElementNamespace/namespace}}"] [=string/is|equals=]
+        |element|["{{SanitizerElementNamespace/namespace}}"].
     1. If |element| [=map/equals=] |current element| then return |modified|.
     1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"].
     1. [=list/Append=] |element| to |configuration|["{{SanitizerConfig/elements}}"]
@@ -519,9 +519,9 @@ The <dfn for="Sanitizer" method export>setDataAttributes(|allow|)</dfn> method s
        where |attr| is a [=custom data attribute=].
    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
       1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
-         1. If |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=map/exists=]:
+         1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]:
              1. [=list/Remove=] any items |attr| from
-                 |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}]
+                 |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
                  where |attr| is a [=custom data attribute=].
 1. Set |configuration|["{{SanitizerConfig/dataAttributes}}"] to |allow|.
 1. Return true.
@@ -719,63 +719,84 @@ Putting these rules in words:
     * {{SanitizerConfig/dataAttributes}} must be absent.
 
 <div algorithm>
-A {{SanitizerConfig}} |config| is <dfn for=SanitizerConfig>valid</dfn> if all of the following
-conditions hold:
+To determine whether a canonical {{SanitizerConfig}} |config| is
+<dfn for=SanitizerConfig>valid</dfn>:
 
-1. The |config| has either an {{SanitizerConfig/elements}} or a {{SanitizerConfig/removeElements}}
-    [=map/key=], but not both.
-1. The |config| has either an {{SanitizerConfig/attributes}} or a {{SanitizerConfig/removeAttributes}}
-    [=map/key=], but not both.
+1. [=Assert=]: |config|["{{SanitizerConfig/elements}}"] [=map/exists=] or
+    |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=].
+1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+    |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=], then return false.
+1. [=Assert=]: Either |config|["{{SanitizerConfig/attributes}}"] [=map/exists=] or
+    |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
+1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
+    |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=], then return false.
 1. [=Assert=]: All {{SanitizerElementNamespaceWithAttributes}}, {{SanitizerElementNamespace}}, and
     {{SanitizerAttributeNamespace}} items in |config| are canonical, meaning they have been run
     through [=canonicalize a sanitizer element=] or [=canonicalize a sanitizer attribute=],
     as appropriate.
-1. None of |config|[{{SanitizerConfig/elements}}], |config|[{{SanitizerConfig/removeElements}}],
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}],
-    |config|[{{SanitizerConfig/attributes}}], or
-    |config|[{{SanitizerConfig/removeAttributes}}], if they [=map/exist=],
-    [=SanitizerConfig/has duplicates=].
-1. If both |config|[{{SanitizerConfig/elements}}] and
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
-    the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/elements}}] and
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
-1. If both |config|[{{SanitizerConfig/removeElements}}] and
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] [=map/exist=], then
-    the [=SanitizerConfig/intersection=] of |config|[{{SanitizerConfig/removeElements}}] and
-    |config|[{{SanitizerConfig/replaceWithChildrenElements}}] is [=list/empty=].
-1. If |config|[{{SanitizerConfig/attributes}}] [=map/exists=]:
-    1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=]:
-        1. [=list/iterate|For each=] |element| of |config|[{{SanitizerConfig/elements}}]:
-            1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] nor
-               |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
-            1. The [=set/intersection=] of |config|[{{SanitizerConfig/attributes}}] and
-                |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
-                &laquo; &raquo; is [=list/empty=].
-            1. |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}]
-                [=with default=] &laquo; &raquo; is a
-                [=set/subset=] of |config|[{{SanitizerConfig/attributes}}].
-            1. If {{SanitizerConfig/dataAttributes}} [=map/exists=] and
-                {{SanitizerConfig/dataAttributes}} is true:
-                1. |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] does not
-                    contain a [=custom data attribute=].
-    1. [=Assert=]: |config|[{{SanitizerConfig/dataAttributes}}] [=map/exists=].
-    1. If {{SanitizerConfig/dataAttributes}} is true:
-        1. |config|[{{SanitizerConfig/attributes}}] does not contain
-            a [=custom data attribute=].
-1. If |config|[{{SanitizerConfig/removeAttributes}}] [=map/exists=]:
-    1. If |config|[{{SanitizerConfig/elements}}] [=map/exists=],
-       then [=list/iterate|for each=] |element| of |config|[{{SanitizerConfig/elements}}]:
-        1. Not both |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] and
-            |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] [=map/exist=].
-        1. Neither |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] nor
-           |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}], if they exist, [=SanitizerConfig/has duplicates=].
-        1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
-            |element|[{{SanitizerElementNamespaceWithAttributes/attributes}}] [=with default=]
-            &laquo; &raquo; is [=list/empty=].
-        1. The [=set/intersection=] of |config|[{{SanitizerConfig/removeAttributes}}] and
-            |element|[{{SanitizerElementNamespaceWithAttributes/removeAttributes}}] [=with default=]
-            &laquo; &raquo; is [=list/empty=].
-    1. |config|[{{SanitizerConfig/dataAttributes}}] does not [=map/exist=].
+1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+    [=SanitizerConfig/has duplicates=], then return false.
+1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=] and
+    [=SanitizerConfig/has duplicates=], then return false.
+1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=] and
+    [=SanitizerConfig/has duplicates=], then return false.
+1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
+    [=SanitizerConfig/has duplicates=], then return false.
+1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=] and
+    [=SanitizerConfig/has duplicates=], then return false.
+1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=],
+    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=], and
+    the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/elements}}"] and
+    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=], then return
+    false.
+1. If |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=],
+    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=], and
+    the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/removeElements}}"] and
+    |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=], then return
+    false.
+1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+    1. [=Assert=]: |config|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=].
+    1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
+        1. [=list/iterate|For each=] |element| of |config|["{{SanitizerConfig/elements}}"]:
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=]
+                and |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+                [=SanitizerConfig/has duplicates=], then return false.
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+                [=map/exists=] and
+                |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+                [=SanitizerConfig/has duplicates=], then return false.
+            1. If the [=set/intersection=] of |config|["{{SanitizerConfig/attributes}}"] and
+                |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=with default=]
+                &laquo; &raquo; is not [=list/empty=], then return false.
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+                [=with default=] &laquo; &raquo; is not a
+                [=set/subset=] of |config|["{{SanitizerConfig/attributes}}"], then return false.
+            1. If |config|["{{SanitizerConfig/dataAttributes}}"] is true and
+                |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+                contains a [=custom data attribute=], then return false.
+    1. If |config|["{{SanitizerConfig/dataAttributes}}"] is true and
+        |config|["{{SanitizerConfig/attributes}}"] contains a [=custom data attribute=], then
+        return false.
+1. If |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=]:
+    1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=],
+       then [=list/iterate|for each=] |element| of |config|["{{SanitizerConfig/elements}}"]:
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exists=] and
+            |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exists=],
+            then return false.
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/exist=]
+           and |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+           [=SanitizerConfig/has duplicates=], then return false.
+        1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/exist=]
+           and |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
+           [=SanitizerConfig/has duplicates=], then return false.
+        1. If the [=set/intersection=] of |config|["{{SanitizerConfig/removeAttributes}}"] and
+            |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=with default=]
+            &laquo; &raquo; is not [=list/empty=], then return false.
+        1. If the [=set/intersection=] of |config|["{{SanitizerConfig/removeAttributes}}"] and
+            |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=with default=]
+            &laquo; &raquo; is not [=list/empty=], then return false.
+    1. If |config|["{{SanitizerConfig/dataAttributes}}"] [=map/exists=], then return false.
+1. Return true.
 
 </div>
 
@@ -1091,11 +1112,11 @@ Note: While this algorithm is called [=remove unsafe=], we use
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Let |result| be false.
 1. [=list/For each=] |element| in
-   [=built-in safe baseline configuration=][{{SanitizerConfig/removeElements}}]:
+   [=built-in safe baseline configuration=]["{{SanitizerConfig/removeElements}}"]:
     1. Call [=Sanitizer/remove an element=] |element| from |configuration|.
     1. If the call returned true, set |result| to true.
 1. [=list/For each=] |attribute| in
-   [=built-in safe baseline configuration=][{{SanitizerConfig/removeAttributes}}]:
+   [=built-in safe baseline configuration=]["{{SanitizerConfig/removeAttributes}}"]:
     1. Call [=Sanitizer/remove an attribute=] |attribute| from |configuration|.
     1. If the call returned true, set |result| to true.
 1. [=list/For each=] |attribute| listed in [=event handler content attributes=]:
