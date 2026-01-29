@@ -1048,7 +1048,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
        |configuration|["{{SanitizerConfig/attributes}}"].
     1. [=Comment=]: Fix-up per-element allow and remove lists.
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
-        1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+        1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/elements}}"]:
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
                [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
                 1. Set |modified| to true.
