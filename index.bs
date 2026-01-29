@@ -1043,18 +1043,22 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |attribute| to the result of [=canonicalize a sanitizer attribute=] with |attribute|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-    1. [=Comment=]: If we have a global allow-list, we need to add |attribute|.
-    1. If |configuration|["{{SanitizerConfig/attributes}}"] does not [=list/contain=] |attribute|:
-        1. Return false.
+    1. [=Comment=]: If we have a global allow-list, we need to remove |attribute|.
+    1. Set |modified| to the result of [=SanitizerConfig/remove=] |attribute| from
+       |configuration|["{{SanitizerConfig/attributes}}"].
     1. [=Comment=]: Fix-up per-element allow and remove lists.
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
         1. [=list/iterate|For each=] |element| in |configuration|["{{SanitizerConfig/elements}}"]:
+            1. If |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+               [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
+                1. Set |modified| to true.
+                1. [=list/Remove=] |attribute| from
+                    |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].            
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
                [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
-    1. [=list/Remove=] |attribute| from |configuration|["{{SanitizerConfig/attributes}}"].
-    1. Return true.
+    1. Return |modified|.
 1. Otherwise:
     1. [=Comment=]: If we have a global remove-list, we need to add |attribute|.
     1. If |configuration|["{{SanitizerConfig/removeAttributes}}"] [=list/contains=] |attribute|
