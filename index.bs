@@ -1056,6 +1056,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
                     |element|["{{SanitizerElementNamespaceWithAttributes/attributes}}"].            
             1. If |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"]
                [=map/with default=] &laquo; &raquo; [=list/contains=] |attribute|:
+                1. [=Assert=]: |modified| is true.
                 1. [=list/Remove=] |attribute| from
                     |element|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"].
     1. Return |modified|.
