@@ -1474,11 +1474,6 @@ URLs, is as follows:
   ],
   <br>
   [
-    { "`name`" &rightarrow; "`animateMotion`", "`namespace`" &rightarrow; [=SVG namespace=] },
-    { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
-  ],
-  <br>
-  [
     { "`name`" &rightarrow; "`animateTransform`", "`namespace`" &rightarrow; [=SVG namespace=] },
     { "`name`" &rightarrow; "`attributeName`", "`namespace`" &rightarrow; `null` }
   ],
