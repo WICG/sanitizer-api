@@ -441,6 +441,9 @@ The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</df
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
+1. If |element|["{{SanitizerElementNamespace/name}}"] [=string/is|equals=] "`html`"
+    and |element|["{{SanitizerElementNamespace/namespace}}"] [=string/is|equals=] [=HTML namespace=]:
+    1. Return false.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
     1. Return false.
 1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
@@ -621,6 +624,8 @@ Several conditions need to hold for a configuration to be valid:
 - Duplicate entries on the same element:
   - There are no duplicate entries between {{SanitizerElementNamespaceWithAttributes/attributes}}
     and {{SanitizerElementNamespaceWithAttributes/removeAttributes}} on the same element.
+- The HTML `<html>` element must not appear in {{SanitizerConfig/replaceWithChildrenElements}},
+  since replacing it with its children could lead to an invalid state with multiple root nodes.
 
 The {{SanitizerConfig/elements}} element allow-list can also specify allowing or removing
 attributes for a given element. This is meant to mirror [[HTML]]'s structure, which knows
@@ -753,6 +758,9 @@ NOTE: It's expected that the configuration being passing in has previously been 
     1. If |config|["{{SanitizerConfig/removeAttributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
+    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+       [=SanitizerConfig/contains=] &laquo;[ "`name`" &rightarrow; "`html`",
+        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;, then return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
         1. If the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/elements}}"] and
             |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=],
@@ -902,6 +910,7 @@ beginning with |node|. It consistes of these steps:
     1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]
        and if |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
        [=SanitizerConfig/contains=] |elementName|:
+      1. [=Assert=]: |node| does not [=implement=] {{Document}}.
       1. Call [=sanitize core=] on |child| with |configuration| and
           |handleJavascriptNavigationUrls|.
       1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
