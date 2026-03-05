@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 3c53a5b02, updated Thu Nov 27 17:03:30 2025 +0000" name="generator">
+  <meta content="Bikeshed version 0ef803fdf, updated Tue Jan 6 11:59:39 2026 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="84c7debadd2b46b5f846245e2e85bc774c0a0666" name="revision">
+  <meta content="87ec0599b21309c03b683a401cbf6ee10121fcc3" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -752,7 +752,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <h1 class="no-ref p-name" id="title">HTML Sanitizer API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
-    <time class="dt-updated" datetime="2026-02-04">4 February 2026</time></p>
+    <time class="dt-updated" datetime="2026-03-05">5 March 2026</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1055,7 +1055,7 @@ It can also be modified directly.</p>
   // Query configuration:
   <a data-link-type="idl-name" href="#dictdef-sanitizerconfig" id="ref-for-dictdef-sanitizerconfig③"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-get" id="ref-for-dom-sanitizer-get"><c- g>get</c-></a>();
 
-  // Modify a Sanitizer’s lists and fields:
+  // Modify a Sanitizer's lists and fields:
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-allowelement" id="ref-for-dom-sanitizer-allowelement"><c- g>allowElement</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerelementwithattributes" id="ref-for-typedefdef-sanitizerelementwithattributes"><c- n>SanitizerElementWithAttributes</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer/allowElement(element)" data-dfn-type="argument" data-export id="dom-sanitizer-allowelement-element-element"><code><c- g>element</c-></code></dfn>);
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean①"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-removeelement" id="ref-for-dom-sanitizer-removeelement"><c- g>removeElement</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerelement" id="ref-for-typedefdef-sanitizerelement"><c- n>SanitizerElement</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer/removeElement(element)" data-dfn-type="argument" data-export id="dom-sanitizer-removeelement-element-element"><code><c- g>element</c-></code></dfn>);
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean" id="ref-for-idl-boolean②"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-replaceelementwithchildren" id="ref-for-dom-sanitizer-replaceelementwithchildren"><c- g>replaceElementWithChildren</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerelement" id="ref-for-typedefdef-sanitizerelement①"><c- n>SanitizerElement</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer/replaceElementWithChildren(element)" data-dfn-type="argument" data-export id="dom-sanitizer-replaceelementwithchildren-element-element"><code><c- g>element</c-></code></dfn>);
@@ -4344,17 +4344,12 @@ URLs, is as follows:</p>
   ],
   <br>
   [
-    { "<code>name</code>" → "<code>animateMotion</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> },
+    { "<code>name</code>" → "<code>animateTransform</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace④">SVG namespace</a> },
     { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code> }
   ],
   <br>
   [
-    { "<code>name</code>" → "<code>animateTransform</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑤">SVG namespace</a> },
-    { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code> }
-  ],
-  <br>
-  [
-    { "<code>name</code>" → "<code>set</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑥">SVG namespace</a> },
+    { "<code>name</code>" → "<code>set</code>", "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#svg-namespace" id="ref-for-svg-namespace⑤">SVG namespace</a> },
     { "<code>name</code>" → "<code>attributeName</code>", "<code>namespace</code>" → <code>null</code> }
   ],
   <br>
@@ -4723,7 +4718,7 @@ and Mike West for their valuable feedback.</p>
   // Query configuration:
   <a data-link-type="idl-name" href="#dictdef-sanitizerconfig"><c- n>SanitizerConfig</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-get"><c- g>get</c-></a>();
 
-  // Modify a Sanitizer’s lists and fields:
+  // Modify a Sanitizer's lists and fields:
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-allowelement"><c- g>allowElement</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerelementwithattributes"><c- n>SanitizerElementWithAttributes</c-></a> <a href="#dom-sanitizer-allowelement-element-element"><code><c- g>element</c-></code></a>);
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-removeelement"><c- g>removeElement</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerelement"><c- n>SanitizerElement</c-></a> <a href="#dom-sanitizer-removeelement-element-element"><code><c- g>element</c-></code></a>);
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean"><c- b>boolean</c-></a> <a class="idl-code" data-link-type="method" href="#dom-sanitizer-replaceelementwithchildren"><c- g>replaceElementWithChildren</c-></a>(<a data-link-type="idl-name" href="#typedefdef-sanitizerelement"><c- n>SanitizerElement</c-></a> <a href="#dom-sanitizer-replaceelementwithchildren-element-element"><code><c- g>element</c-></code></a>);
@@ -5019,7 +5014,7 @@ let dfnPanelData = {
 "83ca4a87": {"dfnID":"83ca4a87","dfnText":"local name (for Element)","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-local-name"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-concept-element-local-name\u2460"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-element-local-name"},
 "84b454ff": {"dfnID":"84b454ff","dfnText":"ordered map","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-map"},{"id":"ref-for-ordered-map\u2460"},{"id":"ref-for-ordered-map\u2461"},{"id":"ref-for-ordered-map\u2462"},{"id":"ref-for-ordered-map\u2463"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#ordered-map"},
 "85394472": {"dfnID":"85394472","dfnText":"Document","external":true,"refSections":[{"refs":[{"id":"ref-for-document"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-document\u2460"},{"id":"ref-for-document\u2461"},{"id":"ref-for-document\u2462"},{"id":"ref-for-document\u2463"},{"id":"ref-for-document\u2464"},{"id":"ref-for-document\u2465"},{"id":"ref-for-document\u2466"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#document"},
-"85a289c7": {"dfnID":"85a289c7","dfnText":"SVG namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-svg-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-svg-namespace\u2460"},{"id":"ref-for-svg-namespace\u2461"},{"id":"ref-for-svg-namespace\u2462"},{"id":"ref-for-svg-namespace\u2463"},{"id":"ref-for-svg-namespace\u2464"},{"id":"ref-for-svg-namespace\u2465"}],"title":"3.6. Builtins"}],"url":"https://infra.spec.whatwg.org/#svg-namespace"},
+"85a289c7": {"dfnID":"85a289c7","dfnText":"SVG namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-svg-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-svg-namespace\u2460"},{"id":"ref-for-svg-namespace\u2461"},{"id":"ref-for-svg-namespace\u2462"},{"id":"ref-for-svg-namespace\u2463"},{"id":"ref-for-svg-namespace\u2464"}],"title":"3.6. Builtins"}],"url":"https://infra.spec.whatwg.org/#svg-namespace"},
 "8855a9aa": {"dfnID":"8855a9aa","dfnText":"DOMString","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-DOMString"},{"id":"ref-for-idl-DOMString\u2460"},{"id":"ref-for-idl-DOMString\u2461"},{"id":"ref-for-idl-DOMString\u2462"},{"id":"ref-for-idl-DOMString\u2463"},{"id":"ref-for-idl-DOMString\u2464"},{"id":"ref-for-idl-DOMString\u2465"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-idl-DOMString\u2466"},{"id":"ref-for-idl-DOMString\u2467"},{"id":"ref-for-idl-DOMString\u2468"},{"id":"ref-for-idl-DOMString\u2460\u24ea"},{"id":"ref-for-idl-DOMString\u2460\u2460"},{"id":"ref-for-idl-DOMString\u2460\u2461"},{"id":"ref-for-idl-DOMString\u2460\u2462"}],"title":"2.3. The Configuration Dictionary"},{"refs":[{"id":"ref-for-idl-DOMString\u2460\u2463"},{"id":"ref-for-idl-DOMString\u2460\u2464"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
 "889e932f": {"dfnID":"889e932f","dfnText":"Exposed","external":true,"refSections":[{"refs":[{"id":"ref-for-Exposed"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"https://webidl.spec.whatwg.org/#Exposed"},
 "8958b003": {"dfnID":"8958b003","dfnText":"entry","external":true,"refSections":[{"refs":[{"id":"ref-for-map-entry"},{"id":"ref-for-map-entry\u2460"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#map-entry"},
