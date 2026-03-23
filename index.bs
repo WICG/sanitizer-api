@@ -758,7 +758,7 @@ NOTE: It's expected that the configuration being passing in has previously been 
     1. If |config|["{{SanitizerConfig/removeAttributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
        [=SanitizerConfig/contains=] &laquo;[ "`name`" &rightarrow; "`html`",
         "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;, then return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
