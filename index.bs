@@ -914,9 +914,16 @@ beginning with |node|. It consistes of these steps:
       1. [=Assert=]: |node| does not [=implement=] {{Document}}.
       1. Call [=sanitize core=] on |child| with |configuration| and
           |handleJavascriptNavigationUrls|.
-      1. Let |fragment| be the result of [=convert nodes into a node=]
-         given |child|'s [=tree/children=] and |node|'s [=node document=].
-      1. [=/Replace=] |child| with |fragment| within |child|'s [=tree/parent=].
+      1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=]
+          is |node|'s [=node document=].
+      1. [=list/iterate|For each=] |innerChild| of |child|'s [=tree/children=],
+          [=/append=] |innerChild| to |fragment|.
+      1. [=/Replace=] |child| with |fragment| within |node|.
+
+          NOTE: [=/Replace=] shouldn't throw here, since the structural
+              preconditions for successful execution of the algorithm should
+              be met.
+
       1. [=Continue=].
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
       1. If |configuration|["{{SanitizerConfig/elements}}"] does not
