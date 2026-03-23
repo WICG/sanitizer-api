@@ -444,7 +444,7 @@ The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</df
 1. If |element|["{{SanitizerElementNamespace/name}}"] [=string/is|equals=] "`html`"
     and |element|["{{SanitizerElementNamespace/namespace}}"] [=string/is|equals=] [=HTML namespace=]:
     1. Return false.
-1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/contains=] |element|:
+1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |element|:
     1. Return false.
 1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/removeElements}}"].
 1. [=SanitizerConfig/Remove=] |element| from |configuration|["{{SanitizerConfig/elements}}"] list.
@@ -758,7 +758,7 @@ NOTE: It's expected that the configuration being passing in has previously been 
     1. If |config|["{{SanitizerConfig/removeAttributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]
        [=SanitizerConfig/contains=] &laquo;[ "`name`" &rightarrow; "`html`",
         "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;, then return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
