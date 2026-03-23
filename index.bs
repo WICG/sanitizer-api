@@ -758,7 +758,7 @@ NOTE: It's expected that the configuration being passing in has previously been 
     1. If |config|["{{SanitizerConfig/removeAttributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]
        [=SanitizerConfig/contains=] &laquo;[ "`name`" &rightarrow; "`html`",
         "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;, then return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
@@ -946,14 +946,19 @@ beginning with |node|. It consistes of these steps:
         [=SanitizerConfig/contains=] |attrName|:
           1. [=/remove an attribute|Remove=] |attribute|.
       1. Otherwise, if |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-          1. If |configuration|["{{SanitizerConfig/attributes}}"] does not
-              [=SanitizerConfig/contain=] |attrName| and
+          1. Let the [=boolean=] |globallyAllowed| be whether
+              |configuration|["{{SanitizerConfig/attributes}}"]
+              [=SanitizerConfig/contains=] |attrName|.
+          1. Let the [=boolean=] |locallyAllowed| be whether
               |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/with default=] &laquo; &raquo;
-              does not [=SanitizerConfig/contain=] |attrName|, and if
-              "data-" is not a [=code unit prefix=] of |attribute|'s [=Attr/local name=] and
-              [=Attr/namespace=] is not `null` or
-              |configuration|["{{SanitizerConfig/dataAttributes}}"] is not true:
-              1. [=/remove an attribute|Remove=] |attribute|.
+              [=SanitizerConfig/contains=] |attrName|.
+          1. Let the [=boolean=] |isDataAttributeAllowed| be whether both,
+              "data-" is a [=code unit prefix=] of |attribute|'s
+              [=Attr/local name=] and [=Attr/namespace=] is `null`, and
+              |configuration|["{{SanitizerConfig/dataAttributes}}"] is true.
+          1. If neither |globallyAllowed| nor |locallyAllowed| nor
+              |isDataAttributeAllowed|,
+              [=/remove an attribute|remove=] |attribute|.
       1. Otherwise:
         1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
           [=map/exists=] and |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] does not [=SanitizerConfig/contain=] |attrName|:
