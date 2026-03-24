@@ -6,7 +6,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 0ef803fdf, updated Tue Jan 6 11:59:39 2026 -0800" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="32bfe71826cee524bf29f7a0f24bcdd98998782c" name="revision">
+  <meta content="c4e328037ab6cd9c753b12694f5dcfc14988dec5" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -752,7 +752,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <h1 class="no-ref p-name" id="title">HTML Sanitizer API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
-    <time class="dt-updated" datetime="2026-03-10">10 March 2026</time></p>
+    <time class="dt-updated" datetime="2026-03-24">24 March 2026</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1352,7 +1352,7 @@ The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="me
         <p>Return false.</p>
       </ol>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑤">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①④">contains</a> <var>element</var>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑤">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains">contains</a> <var>element</var>:</p>
       <ol>
        <li data-md>
         <p>Return false.</p>
@@ -1385,7 +1385,7 @@ up per-element allow- or remove-lists to maintain our validity criteria.
      <li data-md>
       <p>Set <var>attribute</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute">canonicalize a sanitizer attribute</a> with <var>attribute</var>.</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑥">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑤">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑥">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①④">exists</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment⑤">Comment</a>: If we have a global allow-list, we need to add <var>attribute</var>.</p>
@@ -1398,7 +1398,7 @@ up per-element allow- or remove-lists to maintain our validity criteria.
        <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment⑥">Comment</a>: Fix-up per-element allow and remove lists.</p>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①①">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑥">exists</a>:</p>
+        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①①">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑤">exists</a>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①">For each</a> <var>element</var> in <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①②">elements</a></code>"]:</p>
@@ -1455,7 +1455,7 @@ The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="me
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑥">Assert</a>: <var>configuration</var> is <a data-link-type="dfn" href="#sanitizerconfig-valid" id="ref-for-sanitizerconfig-valid④">valid</a>.</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments">comments</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑦">exists</a> and
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments">comments</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑥">exists</a> and
  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments①">comments</a></code>"] equals <var>allow</var>, then return false;</p>
      <li data-md>
       <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments②">comments</a></code>"] to <var>allow</var>.</p>
@@ -1474,7 +1474,7 @@ The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="me
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑦">Assert</a>: <var>configuration</var> is <a data-link-type="dfn" href="#sanitizerconfig-valid" id="ref-for-sanitizerconfig-valid⑤">valid</a>.</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑨">attributes</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑧">exist</a>, then return false.</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes⑨">attributes</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑦">exist</a>, then return false.</p>
      <li data-md>
       <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes②">dataAttributes</a></code>"] equals <var>allow</var>, then return false.</p>
      <li data-md>
@@ -1484,13 +1484,13 @@ The <dfn class="dfn-paneled idl-code" data-dfn-for="Sanitizer" data-dfn-type="me
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove③">Remove</a> any items <var>attr</var> from <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes①⓪">attributes</a></code>"]
    where <var>attr</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/dom.html#custom-data-attribute" id="ref-for-custom-data-attribute②">custom data attribute</a>.</p>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①③">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑨">exists</a>:</p>
+        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①③">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑧">exists</a>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>element</var> in <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①④">elements</a></code>"]:</p>
           <ol>
            <li data-md>
-            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes①⑨">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⓪">exists</a>:</p>
+            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes①⑨">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①⑨">exists</a>:</p>
             <ol>
              <li data-md>
               <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove④">Remove</a> any items <var>attr</var> from
@@ -1727,24 +1727,24 @@ To determine whether a canonical <code class="idl"><a data-link-type="idl" href=
     should have guaranteed to hold.</p>
     <ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑧">Assert</a>: <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②①">exists</a> or
-  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑧">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②②">exists</a>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑧">Assert</a>: <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⓪">exists</a> or
+  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑧">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②①">exists</a>.</p>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①⑨">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②③">exists</a> and
-  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑨">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②④">exists</a>, then return false.</p>
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements①⑨">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②②">exists</a> and
+  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements⑨">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②③">exists</a>, then return false.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑨">Assert</a>: Either <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②①">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑤">exists</a> or
-  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑥">exists</a>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑨">Assert</a>: Either <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②①">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②④">exists</a> or
+  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑤">exists</a>.</p>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②②">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑦">exists</a> and
-  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①④">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑧">exists</a>, then return false.</p>
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②②">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑥">exists</a> and
+  <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①④">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑦">exists</a>, then return false.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①⓪">Assert</a>: All <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespacewithattributes" id="ref-for-dictdef-sanitizerelementnamespacewithattributes①">SanitizerElementNamespaceWithAttributes</a></code>, <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespace" id="ref-for-dictdef-sanitizerelementnamespace②">SanitizerElementNamespace</a></code>, and
   <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerattributenamespace" id="ref-for-dictdef-sanitizerattributenamespace①">SanitizerAttributeNamespace</a></code> items in <var>config</var> are canonical, meaning they have been run
   through <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element" id="ref-for-canonicalize-a-sanitizer-element①">canonicalize a sanitizer element</a> or <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute①">canonicalize a sanitizer attribute</a>,
   as appropriate.</p>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⓪">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑨">exists</a>:</p>
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⓪">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑧">exists</a>:</p>
       <ol>
        <li data-md>
         <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②①">elements</a></code>"]
@@ -1758,10 +1758,10 @@ To determine whether a canonical <code class="idl"><a data-link-type="idl" href=
   <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates①">has duplicates</a>, then return false.</p>
       </ol>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑨">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⓪">exists</a> and
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements⑨">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②⑨">exists</a> and
   <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates②">has duplicates</a>, then return false.</p>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②③">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③①">exists</a>:</p>
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②③">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⓪">exists</a>:</p>
       <ol>
        <li data-md>
         <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②④">attributes</a></code>"]
@@ -1775,14 +1775,14 @@ To determine whether a canonical <code class="idl"><a data-link-type="idl" href=
   <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates④">has duplicates</a>, then return false.</p>
       </ol>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⓪">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③②">exists</a>:</p>
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⓪">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③①">exists</a>:</p>
       <ol>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①①">replaceWithChildrenElements</a></code>"]
- <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains">contains</a> «[ "<code>name</code>" → "<code>html</code>",
+        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①①">replaceWithChildrenElements</a></code>"]
+ <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①">contains</a> «[ "<code>name</code>" → "<code>html</code>",
   "<code>namespace</code>" → <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#html-namespace" id="ref-for-html-namespace①">HTML namespace</a> ]», then return false.</p>
        <li data-md>
-        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②②">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③③">exists</a>:</p>
+        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②②">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③②">exists</a>:</p>
         <ol>
          <li data-md>
           <p>If the <a data-link-type="dfn" href="#sanitizerconfig-intersection" id="ref-for-sanitizerconfig-intersection">intersection</a> of <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②③">elements</a></code>"] and
@@ -1799,23 +1799,23 @@ To determine whether a canonical <code class="idl"><a data-link-type="idl" href=
         </ol>
       </ol>
      <li data-md>
-      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②⑤">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③④">exists</a>:</p>
+      <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②⑤">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③③">exists</a>:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①①">Assert</a>: <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①①">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑤">exists</a>.</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①①">Assert</a>: <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①①">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③④">exists</a>.</p>
        <li data-md>
-        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②④">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑥">exists</a>:</p>
+        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②④">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑤">exists</a>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>element</var> of <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑤">elements</a></code>"]:</p>
           <ol>
            <li data-md>
-            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⓪">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑦">exists</a>
+            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⓪">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑥">exists</a>
   and <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③①">attributes</a></code>"]
   <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates⑤">has duplicates</a>, then return false.</p>
            <li data-md>
             <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑥">removeAttributes</a></code>"]
-  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑧">exists</a> and
+  <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑦">exists</a> and
   <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑦">removeAttributes</a></code>"]
   <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates⑥">has duplicates</a>, then return false.</p>
            <li data-md>
@@ -1841,21 +1841,21 @@ To determine whether a canonical <code class="idl"><a data-link-type="idl" href=
       <p>Otherwise:</p>
       <ol>
        <li data-md>
-        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑥">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑨">exists</a>:</p>
+        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑥">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑧">exists</a>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> <var>element</var> of <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑦">elements</a></code>"]:</p>
           <ol>
            <li data-md>
-            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③④">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⓪">exists</a> and
-  <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑨">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④①">exists</a>,
+            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③④">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③⑨">exists</a> and
+  <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes②⑨">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⓪">exists</a>,
   then return false.</p>
            <li data-md>
-            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⑤">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④②">exist</a>
+            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⑤">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④①">exist</a>
  and <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⑥">attributes</a></code>"]
  <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates⑦">has duplicates</a>, then return false.</p>
            <li data-md>
-            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③⓪">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④③">exist</a>
+            <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③⓪">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④②">exist</a>
  and <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③①">removeAttributes</a></code>"]
  <a data-link-type="dfn" href="#sanitizerconfig-has-duplicates" id="ref-for-sanitizerconfig-has-duplicates⑧">has duplicates</a>, then return false.</p>
            <li data-md>
@@ -1869,7 +1869,7 @@ To determine whether a canonical <code class="idl"><a data-link-type="idl" href=
           </ol>
         </ol>
        <li data-md>
-        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①④">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④④">exists</a>, then return false.</p>
+        <p>If <var>config</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①④">dataAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④③">exists</a>, then return false.</p>
       </ol>
      <li data-md>
       <p>Return true.</p>
@@ -1922,7 +1922,7 @@ a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" 
      <li data-md>
       <p>Let <var>sanitizerSpec</var> be "<code class="idl"><a data-link-type="idl" href="#dom-sanitizerpresets-default" id="ref-for-dom-sanitizerpresets-default①">default</a></code>".</p>
      <li data-md>
-      <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-sethtmloptions-sanitizer" id="ref-for-dom-sethtmloptions-sanitizer">sanitizer</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑤">exists</a>, then:</p>
+      <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-sethtmloptions-sanitizer" id="ref-for-dom-sethtmloptions-sanitizer">sanitizer</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④④">exists</a>, then:</p>
       <ol>
        <li data-md>
         <p>Set <var>sanitizerSpec</var> to <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-sethtmloptions-sanitizer" id="ref-for-dom-sethtmloptions-sanitizer①">sanitizer</a></code>"]</p>
@@ -2016,9 +2016,9 @@ beginning with <var>node</var>. It consistes of these steps:
           <p>Let <var>elementName</var> be a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerelementnamespace" id="ref-for-dictdef-sanitizerelementnamespace③">SanitizerElementNamespace</a></code> with <var>child</var>’s
  <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-local-name" id="ref-for-concept-element-local-name①">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-namespace" id="ref-for-concept-element-namespace①">namespace</a>.</p>
          <li data-md>
-          <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①④">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑥">exists</a>
+          <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①④">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑤">exists</a>
  and if <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑤">replaceWithChildrenElements</a></code>"]
- <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①">contains</a> <var>elementName</var>:</p>
+ <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains②">contains</a> <var>elementName</var>:</p>
           <ol>
            <li data-md>
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①⑧">Assert</a>: <var>node</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements④">implement</a> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document⑧">Document</a></code>.</p>
@@ -2031,11 +2031,11 @@ beginning with <var>node</var>. It consistes of these steps:
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue②">Continue</a>.</p>
           </ol>
          <li data-md>
-          <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑦">exists</a>:</p>
+          <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑥">exists</a>:</p>
           <ol>
            <li data-md>
             <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements②⑨">elements</a></code>"] does not
- <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains②">contain</a> <var>elementName</var>:</p>
+ <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains③">contain</a> <var>elementName</var>:</p>
             <ol>
              <li data-md>
               <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-remove" id="ref-for-concept-node-remove①">Remove</a> <var>child</var>.</p>
@@ -2047,7 +2047,7 @@ beginning with <var>node</var>. It consistes of these steps:
           <p>Otherwise:</p>
           <ol>
            <li data-md>
-            <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①②">removeElements</a></code>"]  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains③">contains</a>
+            <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①②">removeElements</a></code>"]  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains④">contains</a>
  <var>elementName</var>:</p>
             <ol>
              <li data-md>
@@ -2068,8 +2068,8 @@ beginning with <var>node</var>. It consistes of these steps:
          <li data-md>
           <p>Let <var>elementWithLocalAttributes</var> be « [] ».</p>
          <li data-md>
-          <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⓪">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑧">exists</a> and
-  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③①">elements</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains④">contains</a>
+          <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⓪">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑦">exists</a> and
+  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③①">elements</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑤">contains</a>
   <var>elementName</var>:</p>
           <ol>
            <li data-md>
@@ -2084,19 +2084,19 @@ beginning with <var>node</var>. It consistes of these steps:
  <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name">local name</a> and <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace">namespace</a>.</p>
            <li data-md>
             <p>If <var>elementWithLocalAttributes</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-with-default" id="ref-for-map-with-default⑧">with default</a> « »
-<a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑤">contains</a> <var>attrName</var>:</p>
+<a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑥">contains</a> <var>attrName</var>:</p>
             <ol>
              <li data-md>
               <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove">Remove</a> <var>attribute</var>.</p>
             </ol>
            <li data-md>
-            <p>Otherwise, if <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②⑨">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑨">exists</a>:</p>
+            <p>Otherwise, if <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes②⑨">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑧">exists</a>:</p>
             <ol>
              <li data-md>
               <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③⓪">attributes</a></code>"] does not
-  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑥">contain</a> <var>attrName</var> and
+  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑦">contain</a> <var>attrName</var> and
   <var>elementWithLocalAttributes</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⑧">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-with-default" id="ref-for-map-with-default⑨">with default</a> « »
-  does not <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑦">contain</a> <var>attrName</var>, and if
+  does not <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑧">contain</a> <var>attrName</var>, and if
   "data-" is not a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#code-unit-prefix" id="ref-for-code-unit-prefix">code unit prefix</a> of <var>attribute</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-local-name" id="ref-for-concept-attribute-local-name①">local name</a> and
   <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-attribute-namespace" id="ref-for-concept-attribute-namespace①">namespace</a> is not <code>null</code> or
   <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑤">dataAttributes</a></code>"] is not true:</p>
@@ -2110,13 +2110,13 @@ beginning with <var>node</var>. It consistes of these steps:
             <ol>
              <li data-md>
               <p>If <var>elementWithLocalAttributes</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes③⑨">attributes</a></code>"]
-<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⓪">exists</a> and <var>elementWithLocalAttributes</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⓪">attributes</a></code>"] does not <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑧">contain</a> <var>attrName</var>:</p>
+<a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④⑨">exists</a> and <var>elementWithLocalAttributes</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⓪">attributes</a></code>"] does not <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑨">contain</a> <var>attrName</var>:</p>
               <ol>
                <li data-md>
                 <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove②">Remove</a> <var>attribute</var>.</p>
               </ol>
              <li data-md>
-              <p>Otherwise, if <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains⑨">contains</a> <var>attrName</var>:</p>
+              <p>Otherwise, if <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes①⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①⓪">contains</a> <var>attrName</var>:</p>
               <ol>
                <li data-md>
                 <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove③">Remove</a> <var>attribute</var>.</p>
@@ -2137,7 +2137,7 @@ beginning with <var>node</var>. It consistes of these steps:
   then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove⑤">remove</a> <var>attribute</var>.</p>
              <li data-md>
               <p>If the <a data-link-type="dfn" href="#built-in-animating-url-attributes-list" id="ref-for-built-in-animating-url-attributes-list">built-in animating URL attributes list</a>
-  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①⓪">contains</a>
+  <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①①">contains</a>
   «[<var>elementName</var>, <var>attrName</var>]» and <var>attr</var>’s
   <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-get-value" id="ref-for-concept-element-attributes-get-value">value</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is⑨">is</a> "<code>href</code>" or
   "<code>xlink:href</code>", then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attributes-remove" id="ref-for-concept-element-attributes-remove⑥">remove</a> <var>attribute</var>.</p>
@@ -2234,10 +2234,10 @@ This method requires that we distinguish 4 cases:
   <a data-link-type="dfn" href="#sanitizerconfig-remove" id="ref-for-sanitizerconfig-remove⑥">remove</a> <var>element</var> from
   <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑥">replaceWithChildrenElements</a></code>"].</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③③">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤①">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③③">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⓪">exists</a>:</p>
       <ol>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③④">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤②">contains</a> <var>element</var>:</p>
+        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③④">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤①">contains</a> <var>element</var>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①⓪">Comment</a>: We have a global allow list and it contains <var>element</var>.</p>
@@ -2256,7 +2256,7 @@ This method requires that we distinguish 4 cases:
       <p>Otherwise:</p>
       <ol>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①③">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤③">contains</a> <var>element</var>:</p>
+        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①③">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤②">contains</a> <var>element</var>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①②">Comment</a>: We have a global remove list and it already contains <var>element</var>.</p>
@@ -2288,7 +2288,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
      <li data-md>
       <p>Set <var>attribute</var> to the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute②">canonicalize a sanitizer attribute</a> with <var>attribute</var>.</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③①">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤④">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③①">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤③">exists</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①④">Comment</a>: If we have a global allow-list, we need to remove <var>attribute</var>.</p>
@@ -2298,7 +2298,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
        <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①⑤">Comment</a>: Fix-up per-element allow and remove lists.</p>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑥">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑤">exists</a>:</p>
+        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑥">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤④">exists</a>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑦">elements</a></code>"]:</p>
@@ -2339,7 +2339,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
        <li data-md>
         <p><a data-link-type="dfn" href="#comment" id="ref-for-comment①⑦">Comment</a>: Fix-up per-element allow and remove lists.</p>
        <li data-md>
-        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑥">exists</a>:</p>
+        <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑤">exists</a>:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>element</var> in <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑨">elements</a></code>"]:</p>
@@ -2455,14 +2455,14 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
     <ol>
      <li data-md>
       <p>If neither <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements④①">elements</a></code>"] nor
-  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⑦">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑦">exist</a>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set②">set</a>
+  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⑦">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑥">exist</a>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set②">set</a>
   <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⑧">removeElements</a></code>"] to « ».</p>
      <li data-md>
       <p>If neither <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③③">attributes</a></code>"] nor
-  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑧">exist</a>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set③">set</a>
+  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②③">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑦">exist</a>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set③">set</a>
   <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②④">removeAttributes</a></code>"] to « ».</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements④②">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑨">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements④②">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑧">exists</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>elements</var> be « ».</p>
@@ -2477,7 +2477,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
         <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements④④">elements</a></code>"] to <var>elements</var>.</p>
       </ol>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⑨">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⓪">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⑨">removeElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤⑨">exists</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>elements</var> be « ».</p>
@@ -2492,7 +2492,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
         <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements②①">removeElements</a></code>"] to <var>elements</var>.</p>
       </ol>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑦">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥①">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑦">replaceWithChildrenElements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⓪">exists</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>elements</var> be « ».</p>
@@ -2506,7 +2506,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
         <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑨">replaceWithChildrenElements</a></code>"] to <var>elements</var>.</p>
       </ol>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③④">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥②">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③④">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥①">exists</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>attributes</var> be « ».</p>
@@ -2521,7 +2521,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
         <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③⑥">attributes</a></code>"] to <var>attributes</var>.</p>
       </ol>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②⑤">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥③">exists</a>:</p>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②⑤">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥②">exists</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>attributes</var> be « ».</p>
@@ -2536,11 +2536,11 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
         <p>Set <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②⑦">removeAttributes</a></code>"] to <var>attributes</var>.</p>
       </ol>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments④">comments</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥④">exist</a>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set④">set</a>
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments④">comments</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥③">exist</a>, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set④">set</a>
   <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-comments" id="ref-for-dom-sanitizerconfig-comments⑤">comments</a></code>"] to <var>allowCommentsAndDataAttributes</var>.</p>
      <li data-md>
-      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③⑦">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑤">exists</a> and
-  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑥">dataAttributes</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑥">exist</a>, then
+      <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③⑦">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥④">exists</a> and
+  <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑥">dataAttributes</a></code>"] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑤">exist</a>, then
   <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑤">set</a> <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-dataattributes" id="ref-for-dom-sanitizerconfig-dataattributes①⑦">dataAttributes</a></code>"] to
   <var>allowCommentsAndDataAttributes</var>.</p>
     </ol>
@@ -2557,7 +2557,7 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a
       <p>If <var>element</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑦">dictionary</a>:</p>
       <ol>
        <li data-md>
-        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⑤">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑦">exists</a>:</p>
+        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⑤">attributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑥">exists</a>:</p>
         <ol>
          <li data-md>
           <p>Let <var>attributes</var> be « ».</p>
@@ -2571,7 +2571,7 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑥">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⑦">attributes</a></code>"] to <var>attributes</var>.</p>
         </ol>
        <li data-md>
-        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑧">exists</a>:</p>
+        <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③⑧">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑦">exists</a>:</p>
         <ol>
          <li data-md>
           <p>Let <var>attributes</var> be « ».</p>
@@ -2587,7 +2587,7 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a
       </ol>
      <li data-md>
       <p>If neither <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⑧">attributes</a></code>"] nor
- <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes④①">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑨">exist</a>:</p>
+ <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes④①">removeAttributes</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑧">exist</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set⑧">Set</a> <var>result</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes④②">removeAttributes</a></code>"] to « ».</p>
@@ -2618,7 +2618,7 @@ namespace <var>defaultNamespace</var>, run the following steps:
      <li data-md>
       <p>If <var>name</var> is a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString①⑤">DOMString</a></code>, then return «[ "<code>name</code>" → <var>name</var>, "<code>namespace</code>" → <var>defaultNamespace</var>]».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert②⑤">Assert</a>: <var>name</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑨">dictionary</a> and both <var>name</var>["name"] and <var>name</var>["namespace"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑦⓪">exist</a>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert②⑤">Assert</a>: <var>name</var> is a <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-dictionary" id="ref-for-dfn-dictionary⑨">dictionary</a> and both <var>name</var>["name"] and <var>name</var>["namespace"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥⑨">exist</a>.</p>
      <li data-md>
       <p>If <var>name</var>["namespace"] is the empty string, then set it to null.</p>
      <li data-md>
@@ -2673,7 +2673,7 @@ To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" d
 
     <ol>
      <li data-md>
-      <p>If <var>list</var> <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①①">contains</a> <var>name</var>, then return.</p>
+      <p>If <var>list</var> <a data-link-type="dfn" href="#sanitizerconfig-contains" id="ref-for-sanitizerconfig-contains①②">contains</a> <var>name</var>, then return.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①②">Append</a> <var>name</var> to <var>list</var>.</p>
     </ol>
@@ -4985,7 +4985,7 @@ let dfnPanelData = {
 "0e0b900e": {"dfnID":"0e0b900e","dfnText":"remove","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-remove"},{"id":"ref-for-concept-node-remove\u2460"},{"id":"ref-for-concept-node-remove\u2461"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-node-remove"},
 "0e6b2056": {"dfnID":"0e6b2056","dfnText":"set (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-set"},{"id":"ref-for-map-set\u2460"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-set\u2461"},{"id":"ref-for-map-set\u2462"},{"id":"ref-for-map-set\u2463"},{"id":"ref-for-map-set\u2464"},{"id":"ref-for-map-set\u2465"},{"id":"ref-for-map-set\u2466"},{"id":"ref-for-map-set\u2467"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-set"},
 "0e8de730": {"dfnID":"0e8de730","dfnText":"tuple","external":true,"refSections":[{"refs":[{"id":"ref-for-tuple"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#tuple"},
-"1243a891": {"dfnID":"1243a891","dfnText":"exist","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"},{"id":"ref-for-map-exists\u2464"},{"id":"ref-for-map-exists\u2465"},{"id":"ref-for-map-exists\u2466"},{"id":"ref-for-map-exists\u2467"},{"id":"ref-for-map-exists\u2468"},{"id":"ref-for-map-exists\u2460\u24ea"},{"id":"ref-for-map-exists\u2460\u2460"},{"id":"ref-for-map-exists\u2460\u2461"},{"id":"ref-for-map-exists\u2460\u2462"},{"id":"ref-for-map-exists\u2460\u2463"},{"id":"ref-for-map-exists\u2460\u2464"},{"id":"ref-for-map-exists\u2460\u2465"},{"id":"ref-for-map-exists\u2460\u2466"},{"id":"ref-for-map-exists\u2460\u2467"},{"id":"ref-for-map-exists\u2460\u2468"},{"id":"ref-for-map-exists\u2461\u24ea"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-map-exists\u2461\u2460"},{"id":"ref-for-map-exists\u2461\u2461"},{"id":"ref-for-map-exists\u2461\u2462"},{"id":"ref-for-map-exists\u2461\u2463"},{"id":"ref-for-map-exists\u2461\u2464"},{"id":"ref-for-map-exists\u2461\u2465"},{"id":"ref-for-map-exists\u2461\u2466"},{"id":"ref-for-map-exists\u2461\u2467"},{"id":"ref-for-map-exists\u2461\u2468"},{"id":"ref-for-map-exists\u2462\u24ea"},{"id":"ref-for-map-exists\u2462\u2460"},{"id":"ref-for-map-exists\u2462\u2461"},{"id":"ref-for-map-exists\u2462\u2462"},{"id":"ref-for-map-exists\u2462\u2463"},{"id":"ref-for-map-exists\u2462\u2464"},{"id":"ref-for-map-exists\u2462\u2465"},{"id":"ref-for-map-exists\u2462\u2466"},{"id":"ref-for-map-exists\u2462\u2467"},{"id":"ref-for-map-exists\u2462\u2468"},{"id":"ref-for-map-exists\u2463\u24ea"},{"id":"ref-for-map-exists\u2463\u2460"},{"id":"ref-for-map-exists\u2463\u2461"},{"id":"ref-for-map-exists\u2463\u2462"},{"id":"ref-for-map-exists\u2463\u2463"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-exists\u2463\u2464"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2463\u2465"},{"id":"ref-for-map-exists\u2463\u2466"},{"id":"ref-for-map-exists\u2463\u2467"},{"id":"ref-for-map-exists\u2463\u2468"},{"id":"ref-for-map-exists\u2464\u24ea"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-map-exists\u2464\u2460"},{"id":"ref-for-map-exists\u2464\u2461"},{"id":"ref-for-map-exists\u2464\u2462"},{"id":"ref-for-map-exists\u2464\u2463"},{"id":"ref-for-map-exists\u2464\u2464"},{"id":"ref-for-map-exists\u2464\u2465"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-map-exists\u2464\u2466"},{"id":"ref-for-map-exists\u2464\u2467"},{"id":"ref-for-map-exists\u2464\u2468"},{"id":"ref-for-map-exists\u2465\u24ea"},{"id":"ref-for-map-exists\u2465\u2460"},{"id":"ref-for-map-exists\u2465\u2461"},{"id":"ref-for-map-exists\u2465\u2462"},{"id":"ref-for-map-exists\u2465\u2463"},{"id":"ref-for-map-exists\u2465\u2464"},{"id":"ref-for-map-exists\u2465\u2465"},{"id":"ref-for-map-exists\u2465\u2466"},{"id":"ref-for-map-exists\u2465\u2467"},{"id":"ref-for-map-exists\u2465\u2468"},{"id":"ref-for-map-exists\u2466\u24ea"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
+"1243a891": {"dfnID":"1243a891","dfnText":"exist","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"},{"id":"ref-for-map-exists\u2464"},{"id":"ref-for-map-exists\u2465"},{"id":"ref-for-map-exists\u2466"},{"id":"ref-for-map-exists\u2467"},{"id":"ref-for-map-exists\u2468"},{"id":"ref-for-map-exists\u2460\u24ea"},{"id":"ref-for-map-exists\u2460\u2460"},{"id":"ref-for-map-exists\u2460\u2461"},{"id":"ref-for-map-exists\u2460\u2462"},{"id":"ref-for-map-exists\u2460\u2463"},{"id":"ref-for-map-exists\u2460\u2464"},{"id":"ref-for-map-exists\u2460\u2465"},{"id":"ref-for-map-exists\u2460\u2466"},{"id":"ref-for-map-exists\u2460\u2467"},{"id":"ref-for-map-exists\u2460\u2468"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-map-exists\u2461\u24ea"},{"id":"ref-for-map-exists\u2461\u2460"},{"id":"ref-for-map-exists\u2461\u2461"},{"id":"ref-for-map-exists\u2461\u2462"},{"id":"ref-for-map-exists\u2461\u2463"},{"id":"ref-for-map-exists\u2461\u2464"},{"id":"ref-for-map-exists\u2461\u2465"},{"id":"ref-for-map-exists\u2461\u2466"},{"id":"ref-for-map-exists\u2461\u2467"},{"id":"ref-for-map-exists\u2461\u2468"},{"id":"ref-for-map-exists\u2462\u24ea"},{"id":"ref-for-map-exists\u2462\u2460"},{"id":"ref-for-map-exists\u2462\u2461"},{"id":"ref-for-map-exists\u2462\u2462"},{"id":"ref-for-map-exists\u2462\u2463"},{"id":"ref-for-map-exists\u2462\u2464"},{"id":"ref-for-map-exists\u2462\u2465"},{"id":"ref-for-map-exists\u2462\u2466"},{"id":"ref-for-map-exists\u2462\u2467"},{"id":"ref-for-map-exists\u2462\u2468"},{"id":"ref-for-map-exists\u2463\u24ea"},{"id":"ref-for-map-exists\u2463\u2460"},{"id":"ref-for-map-exists\u2463\u2461"},{"id":"ref-for-map-exists\u2463\u2462"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-exists\u2463\u2463"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2463\u2464"},{"id":"ref-for-map-exists\u2463\u2465"},{"id":"ref-for-map-exists\u2463\u2466"},{"id":"ref-for-map-exists\u2463\u2467"},{"id":"ref-for-map-exists\u2463\u2468"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-map-exists\u2464\u24ea"},{"id":"ref-for-map-exists\u2464\u2460"},{"id":"ref-for-map-exists\u2464\u2461"},{"id":"ref-for-map-exists\u2464\u2462"},{"id":"ref-for-map-exists\u2464\u2463"},{"id":"ref-for-map-exists\u2464\u2464"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-map-exists\u2464\u2465"},{"id":"ref-for-map-exists\u2464\u2466"},{"id":"ref-for-map-exists\u2464\u2467"},{"id":"ref-for-map-exists\u2464\u2468"},{"id":"ref-for-map-exists\u2465\u24ea"},{"id":"ref-for-map-exists\u2465\u2460"},{"id":"ref-for-map-exists\u2465\u2461"},{"id":"ref-for-map-exists\u2465\u2462"},{"id":"ref-for-map-exists\u2465\u2463"},{"id":"ref-for-map-exists\u2465\u2464"},{"id":"ref-for-map-exists\u2465\u2465"},{"id":"ref-for-map-exists\u2465\u2466"},{"id":"ref-for-map-exists\u2465\u2467"},{"id":"ref-for-map-exists\u2465\u2468"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
 "15e48c39": {"dfnID":"15e48c39","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"},{"id":"ref-for-ordered-set\u2460"},{"id":"ref-for-ordered-set\u2461"},{"id":"ref-for-ordered-set\u2462"},{"id":"ref-for-ordered-set\u2463"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
 "1674281a": {"dfnID":"1674281a","dfnText":"get trusted type compliant string","external":true,"refSections":[{"refs":[{"id":"ref-for-get-trusted-type-compliant-string"},{"id":"ref-for-get-trusted-type-compliant-string\u2460"},{"id":"ref-for-get-trusted-type-compliant-string\u2461"}],"title":"2.1. Sanitizer API"}],"url":"https://w3c.github.io/trusted-types/dist/spec/#get-trusted-type-compliant-string"},
 "16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-list-iterate\u2464"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2462"},{"id":"ref-for-list-iterate\u2460\u2463"},{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"},{"id":"ref-for-list-iterate\u2460\u2466"},{"id":"ref-for-list-iterate\u2460\u2467"},{"id":"ref-for-list-iterate\u2460\u2468"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2461\u24ea"},{"id":"ref-for-list-iterate\u2461\u2460"},{"id":"ref-for-list-iterate\u2461\u2461"},{"id":"ref-for-list-iterate\u2461\u2462"},{"id":"ref-for-list-iterate\u2461\u2463"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
@@ -5043,7 +5043,7 @@ let dfnPanelData = {
 "9ed8b710": {"dfnID":"9ed8b710","dfnText":"basic URL parser","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-basic-url-parser"}],"title":"3.1. Sanitize"}],"url":"https://url.spec.whatwg.org/#concept-basic-url-parser"},
 "a0647283": {"dfnID":"a0647283","dfnText":"Comment","external":true,"refSections":[{"refs":[{"id":"ref-for-comment\u2467"},{"id":"ref-for-comment\u2468"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#comment"},
 "a1797ffb": {"dfnID":"a1797ffb","dfnText":"difference","external":true,"refSections":[{"refs":[{"id":"ref-for-set-difference"},{"id":"ref-for-set-difference\u2460"},{"id":"ref-for-set-difference\u2461"},{"id":"ref-for-set-difference\u2462"}],"title":"2.2. SetHTML options and the configuration object."}],"url":"https://infra.spec.whatwg.org/#set-difference"},
-"a326add7": {"dfnID":"a326add7","dfnText":"contain (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"},{"id":"ref-for-map-exists\u2464"},{"id":"ref-for-map-exists\u2465"},{"id":"ref-for-map-exists\u2466"},{"id":"ref-for-map-exists\u2467"},{"id":"ref-for-map-exists\u2468"},{"id":"ref-for-map-exists\u2460\u24ea"},{"id":"ref-for-map-exists\u2460\u2460"},{"id":"ref-for-map-exists\u2460\u2461"},{"id":"ref-for-map-exists\u2460\u2462"},{"id":"ref-for-map-exists\u2460\u2463"},{"id":"ref-for-map-exists\u2460\u2464"},{"id":"ref-for-map-exists\u2460\u2465"},{"id":"ref-for-map-exists\u2460\u2466"},{"id":"ref-for-map-exists\u2460\u2467"},{"id":"ref-for-map-exists\u2460\u2468"},{"id":"ref-for-map-exists\u2461\u24ea"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-map-exists\u2461\u2460"},{"id":"ref-for-map-exists\u2461\u2461"},{"id":"ref-for-map-exists\u2461\u2462"},{"id":"ref-for-map-exists\u2461\u2463"},{"id":"ref-for-map-exists\u2461\u2464"},{"id":"ref-for-map-exists\u2461\u2465"},{"id":"ref-for-map-exists\u2461\u2466"},{"id":"ref-for-map-exists\u2461\u2467"},{"id":"ref-for-map-exists\u2461\u2468"},{"id":"ref-for-map-exists\u2462\u24ea"},{"id":"ref-for-map-exists\u2462\u2460"},{"id":"ref-for-map-exists\u2462\u2461"},{"id":"ref-for-map-exists\u2462\u2462"},{"id":"ref-for-map-exists\u2462\u2463"},{"id":"ref-for-map-exists\u2462\u2464"},{"id":"ref-for-map-exists\u2462\u2465"},{"id":"ref-for-map-exists\u2462\u2466"},{"id":"ref-for-map-exists\u2462\u2467"},{"id":"ref-for-map-exists\u2462\u2468"},{"id":"ref-for-map-exists\u2463\u24ea"},{"id":"ref-for-map-exists\u2463\u2460"},{"id":"ref-for-map-exists\u2463\u2461"},{"id":"ref-for-map-exists\u2463\u2462"},{"id":"ref-for-map-exists\u2463\u2463"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-exists\u2463\u2464"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2463\u2465"},{"id":"ref-for-map-exists\u2463\u2466"},{"id":"ref-for-map-exists\u2463\u2467"},{"id":"ref-for-map-exists\u2463\u2468"},{"id":"ref-for-map-exists\u2464\u24ea"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-map-exists\u2464\u2460"},{"id":"ref-for-map-exists\u2464\u2461"},{"id":"ref-for-map-exists\u2464\u2462"},{"id":"ref-for-map-exists\u2464\u2463"},{"id":"ref-for-map-exists\u2464\u2464"},{"id":"ref-for-map-exists\u2464\u2465"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-map-exists\u2464\u2466"},{"id":"ref-for-map-exists\u2464\u2467"},{"id":"ref-for-map-exists\u2464\u2468"},{"id":"ref-for-map-exists\u2465\u24ea"},{"id":"ref-for-map-exists\u2465\u2460"},{"id":"ref-for-map-exists\u2465\u2461"},{"id":"ref-for-map-exists\u2465\u2462"},{"id":"ref-for-map-exists\u2465\u2463"},{"id":"ref-for-map-exists\u2465\u2464"},{"id":"ref-for-map-exists\u2465\u2465"},{"id":"ref-for-map-exists\u2465\u2466"},{"id":"ref-for-map-exists\u2465\u2467"},{"id":"ref-for-map-exists\u2465\u2468"},{"id":"ref-for-map-exists\u2466\u24ea"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
+"a326add7": {"dfnID":"a326add7","dfnText":"contain (for map)","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"},{"id":"ref-for-map-exists\u2464"},{"id":"ref-for-map-exists\u2465"},{"id":"ref-for-map-exists\u2466"},{"id":"ref-for-map-exists\u2467"},{"id":"ref-for-map-exists\u2468"},{"id":"ref-for-map-exists\u2460\u24ea"},{"id":"ref-for-map-exists\u2460\u2460"},{"id":"ref-for-map-exists\u2460\u2461"},{"id":"ref-for-map-exists\u2460\u2462"},{"id":"ref-for-map-exists\u2460\u2463"},{"id":"ref-for-map-exists\u2460\u2464"},{"id":"ref-for-map-exists\u2460\u2465"},{"id":"ref-for-map-exists\u2460\u2466"},{"id":"ref-for-map-exists\u2460\u2467"},{"id":"ref-for-map-exists\u2460\u2468"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-map-exists\u2461\u24ea"},{"id":"ref-for-map-exists\u2461\u2460"},{"id":"ref-for-map-exists\u2461\u2461"},{"id":"ref-for-map-exists\u2461\u2462"},{"id":"ref-for-map-exists\u2461\u2463"},{"id":"ref-for-map-exists\u2461\u2464"},{"id":"ref-for-map-exists\u2461\u2465"},{"id":"ref-for-map-exists\u2461\u2466"},{"id":"ref-for-map-exists\u2461\u2467"},{"id":"ref-for-map-exists\u2461\u2468"},{"id":"ref-for-map-exists\u2462\u24ea"},{"id":"ref-for-map-exists\u2462\u2460"},{"id":"ref-for-map-exists\u2462\u2461"},{"id":"ref-for-map-exists\u2462\u2462"},{"id":"ref-for-map-exists\u2462\u2463"},{"id":"ref-for-map-exists\u2462\u2464"},{"id":"ref-for-map-exists\u2462\u2465"},{"id":"ref-for-map-exists\u2462\u2466"},{"id":"ref-for-map-exists\u2462\u2467"},{"id":"ref-for-map-exists\u2462\u2468"},{"id":"ref-for-map-exists\u2463\u24ea"},{"id":"ref-for-map-exists\u2463\u2460"},{"id":"ref-for-map-exists\u2463\u2461"},{"id":"ref-for-map-exists\u2463\u2462"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-exists\u2463\u2463"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2463\u2464"},{"id":"ref-for-map-exists\u2463\u2465"},{"id":"ref-for-map-exists\u2463\u2466"},{"id":"ref-for-map-exists\u2463\u2467"},{"id":"ref-for-map-exists\u2463\u2468"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-map-exists\u2464\u24ea"},{"id":"ref-for-map-exists\u2464\u2460"},{"id":"ref-for-map-exists\u2464\u2461"},{"id":"ref-for-map-exists\u2464\u2462"},{"id":"ref-for-map-exists\u2464\u2463"},{"id":"ref-for-map-exists\u2464\u2464"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-map-exists\u2464\u2465"},{"id":"ref-for-map-exists\u2464\u2466"},{"id":"ref-for-map-exists\u2464\u2467"},{"id":"ref-for-map-exists\u2464\u2468"},{"id":"ref-for-map-exists\u2465\u24ea"},{"id":"ref-for-map-exists\u2465\u2460"},{"id":"ref-for-map-exists\u2465\u2461"},{"id":"ref-for-map-exists\u2465\u2462"},{"id":"ref-for-map-exists\u2465\u2463"},{"id":"ref-for-map-exists\u2465\u2464"},{"id":"ref-for-map-exists\u2465\u2465"},{"id":"ref-for-map-exists\u2465\u2466"},{"id":"ref-for-map-exists\u2465\u2467"},{"id":"ref-for-map-exists\u2465\u2468"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
 "a32c65d4": {"dfnID":"a32c65d4","dfnText":"implements","external":true,"refSections":[{"refs":[{"id":"ref-for-implements"},{"id":"ref-for-implements\u2460"},{"id":"ref-for-implements\u2461"},{"id":"ref-for-implements\u2462"},{"id":"ref-for-implements\u2463"}],"title":"3.1. Sanitize"}],"url":"https://webidl.spec.whatwg.org/#implements"},
 "a3b18719": {"dfnID":"a3b18719","dfnText":"append (for set)","external":true,"refSections":[{"refs":[{"id":"ref-for-set-append"},{"id":"ref-for-set-append\u2460"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#set-append"},
 "ae8def21": {"dfnID":"ae8def21","dfnText":"contain (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-contain"},{"id":"ref-for-list-contain\u2460"},{"id":"ref-for-list-contain\u2461"},{"id":"ref-for-list-contain\u2462"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-contain\u2463"},{"id":"ref-for-list-contain\u2464"},{"id":"ref-for-list-contain\u2465"},{"id":"ref-for-list-contain\u2466"},{"id":"ref-for-list-contain\u2467"}],"title":"3.2. Modify the Configuration"}],"url":"https://infra.spec.whatwg.org/#list-contain"},
@@ -5154,7 +5154,7 @@ let dfnPanelData = {
 "sanitizer-remove-an-element": {"dfnID":"sanitizer-remove-an-element","dfnText":"remove an element","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-remove-an-element"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-remove-an-element\u2460"}],"title":"3.2. Modify the Configuration"}],"url":"#sanitizer-remove-an-element"},
 "sanitizer-set-a-configuration": {"dfnID":"sanitizer-set-a-configuration","dfnText":"set a configuration","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizer-set-a-configuration"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizer-set-a-configuration\u2460"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-sanitizer-set-a-configuration\u2461"}],"title":"3. Algorithms"}],"url":"#sanitizer-set-a-configuration"},
 "sanitizerconfig-add": {"dfnID":"sanitizerconfig-add","dfnText":"add","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-add"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizerconfig-add\u2460"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-sanitizerconfig-add\u2461"}],"title":"3.5. Supporting Algorithms"}],"url":"#sanitizerconfig-add"},
-"sanitizerconfig-contains": {"dfnID":"sanitizerconfig-contains","dfnText":"contains","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-contains"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-sanitizerconfig-contains\u2460"},{"id":"ref-for-sanitizerconfig-contains\u2461"},{"id":"ref-for-sanitizerconfig-contains\u2462"},{"id":"ref-for-sanitizerconfig-contains\u2463"},{"id":"ref-for-sanitizerconfig-contains\u2464"},{"id":"ref-for-sanitizerconfig-contains\u2465"},{"id":"ref-for-sanitizerconfig-contains\u2466"},{"id":"ref-for-sanitizerconfig-contains\u2467"},{"id":"ref-for-sanitizerconfig-contains\u2468"},{"id":"ref-for-sanitizerconfig-contains\u2460\u24ea"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-sanitizerconfig-contains\u2460\u2460"}],"title":"3.5. Supporting Algorithms"}],"url":"#sanitizerconfig-contains"},
+"sanitizerconfig-contains": {"dfnID":"sanitizerconfig-contains","dfnText":"contains","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-contains"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-sanitizerconfig-contains\u2460"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-sanitizerconfig-contains\u2461"},{"id":"ref-for-sanitizerconfig-contains\u2462"},{"id":"ref-for-sanitizerconfig-contains\u2463"},{"id":"ref-for-sanitizerconfig-contains\u2464"},{"id":"ref-for-sanitizerconfig-contains\u2465"},{"id":"ref-for-sanitizerconfig-contains\u2466"},{"id":"ref-for-sanitizerconfig-contains\u2467"},{"id":"ref-for-sanitizerconfig-contains\u2468"},{"id":"ref-for-sanitizerconfig-contains\u2460\u24ea"},{"id":"ref-for-sanitizerconfig-contains\u2460\u2460"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-sanitizerconfig-contains\u2460\u2461"}],"title":"3.5. Supporting Algorithms"}],"url":"#sanitizerconfig-contains"},
 "sanitizerconfig-get-a-sanitizer-instance-from-options": {"dfnID":"sanitizerconfig-get-a-sanitizer-instance-from-options","dfnText":"get a sanitizer instance from options","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options"},{"id":"ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options\u2460"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-sanitizerconfig-get-a-sanitizer-instance-from-options\u2461"}],"title":"3. Algorithms"}],"url":"#sanitizerconfig-get-a-sanitizer-instance-from-options"},
 "sanitizerconfig-has-duplicates": {"dfnID":"sanitizerconfig-has-duplicates","dfnText":"has duplicates","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-has-duplicates"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2460"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2461"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2462"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2463"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2464"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2465"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2466"},{"id":"ref-for-sanitizerconfig-has-duplicates\u2467"}],"title":"2.4. Configuration Invariants"}],"url":"#sanitizerconfig-has-duplicates"},
 "sanitizerconfig-intersection": {"dfnID":"sanitizerconfig-intersection","dfnText":"intersection","external":false,"refSections":[{"refs":[{"id":"ref-for-sanitizerconfig-intersection"},{"id":"ref-for-sanitizerconfig-intersection\u2460"}],"title":"2.4. Configuration Invariants"}],"url":"#sanitizerconfig-intersection"},
