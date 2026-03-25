@@ -32,6 +32,7 @@ text: HTML fragment parsing algorithm; type: dfn; url: https://html.spec.whatwg.
 text: global attribute; type: dfn; url: https://html.spec.whatwg.org/multipage/dom.html#global-attributes
 text: custom data attribute; type: dfn; url: https://html.spec.whatwg.org/multipage/dom.html#custom-data-attribute
 text: report a warning to the console; type: dfn; url: https://console.spec.whatwg.org/#report-a-warning-to-the-console
+text: convert nodes into a node; type: dfn; url: https://dom.spec.whatwg.org/#convert-nodes-into-a-node
 </pre>
 <pre class="biblio">
 {
@@ -913,7 +914,16 @@ beginning with |node|. It consistes of these steps:
       1. [=Assert=]: |node| does not [=implement=] {{Document}}.
       1. Call [=sanitize core=] on |child| with |configuration| and
           |handleJavascriptNavigationUrls|.
-      1. Call [=replace all=] with |child|'s [=tree/children=] within |child|.
+      1. Let |fragment| be a new {{DocumentFragment}} whose [=node document=]
+          is |node|'s [=node document=].
+      1. [=list/iterate|For each=] |innerChild| of |child|'s [=tree/children=],
+          [=/append=] |innerChild| to |fragment|.
+      1. [=/Replace=] |child| with |fragment| within |node|.
+
+          NOTE: [=/Replace=] shouldn't throw here, since the structural
+              preconditions for successful execution of the algorithm should
+              be met.
+
       1. [=Continue=].
     1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=]:
       1. If |configuration|["{{SanitizerConfig/elements}}"] does not
