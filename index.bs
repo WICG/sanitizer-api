@@ -758,7 +758,7 @@ NOTE: It's expected that the configuration being passing in has previously been 
     1. If |config|["{{SanitizerConfig/removeAttributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-    1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"]
+    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]
        [=SanitizerConfig/contains=] &laquo;[ "`name`" &rightarrow; "`html`",
         "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;, then return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
@@ -932,41 +932,10 @@ beginning with |node|. It consistes of these steps:
     1. If |child| is a [=shadow host=],
        then call [=sanitize core=] on |child|'s [=Element/shadow root=] with
        |configuration| and |handleJavascriptNavigationUrls|.
-    1. Let |elementWithLocalAttributes| be &laquo; [] &raquo;.
-    1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
-        |configuration|["{{SanitizerConfig/elements}}"] [=SanitizerConfig/contains=]
-        |elementName|:
-       1. Set |elementWithLocalAttributes| to
-           |configuration|["{{SanitizerConfig/elements}}"][|elementName|].
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
-      1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
-         [=Attr/local name=] and [=Attr/namespace=].
-
-      1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/with default=] &laquo; &raquo;
-        [=SanitizerConfig/contains=] |attrName|:
-          1. [=/remove an attribute|Remove=] |attribute|.
-      1. Otherwise, if |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
-          1. Let the [=boolean=] |globallyAllowed| be whether
-              |configuration|["{{SanitizerConfig/attributes}}"]
-              [=SanitizerConfig/contains=] |attrName|.
-          1. Let the [=boolean=] |locallyAllowed| be whether
-              |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/with default=] &laquo; &raquo;
-              [=SanitizerConfig/contains=] |attrName|.
-          1. Let the [=boolean=] |isDataAttributeAllowed| be whether both,
-              "data-" is a [=code unit prefix=] of |attribute|'s
-              [=Attr/local name=] and [=Attr/namespace=] is `null`, and
-              |configuration|["{{SanitizerConfig/dataAttributes}}"] is true.
-          1. If neither |globallyAllowed| nor |locallyAllowed| nor
-              |isDataAttributeAllowed|,
-              [=/remove an attribute|remove=] |attribute|.
-      1. Otherwise:
-        1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
-          [=map/exists=] and |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] does not [=SanitizerConfig/contain=] |attrName|:
-          1. [=/remove an attribute|Remove=] |attribute|.
-
-        1. Otherwise, if |configuration|["{{SanitizerConfig/removeAttributes}}"] [=SanitizerConfig/contains=] |attrName|:
-              1. [=/remove an attribute|Remove=] |attribute|.
-
+        1. If [=is attribute allowed=] for |attribute| given |configuration|
+            and |child| is `remove`,
+            then [=/remove an attribute|remove=] |attribute|.
       1. If |handleJavascriptNavigationUrls|:
          1. If &laquo;[|elementName|, |attrName|]&raquo; matches an entry in
             the [=built-in navigating URL attributes list=], and if |attribute|
@@ -984,6 +953,48 @@ beginning with |node|. It consistes of these steps:
     1. Call [=sanitize core=] on |child| with |configuration| and |handleJavascriptNavigationUrls|.
 
 </div>
+
+<div algorithm>
+To determine <dfn>is attribute allowed</dfn> for an |attribute|,
+given a {{SanitizerConfig}} |configuration| and an {{Element}} |current element|:
+
+1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
+    [=Attr/local name=] and [=Attr/namespace=].
+1. Let |elementName| be a {{SanitizerElementNamespace}} with |current element|'s
+    [=Element/local name=] and [=Element/namespace=].
+1. Let |elementWithLocalAttributes| be &laquo; [] &raquo;.
+1. If |configuration|["{{SanitizerConfig/elements}}"] [=map/exists=] and
+    |configuration|["{{SanitizerConfig/elements}}"] [=SanitizerConfig/contains=]
+    |elementName|:
+   1. Set |elementWithLocalAttributes| to
+       |configuration|["{{SanitizerConfig/elements}}"][|elementName|].
+1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/removeAttributes}}"] [=map/with default=] &laquo; &raquo;
+    [=SanitizerConfig/contains=] |attrName|:
+    1. Return `remove`.
+1. Otherwise, if |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
+    1. Let the [=boolean=] |globallyAllowed| be whether
+        |configuration|["{{SanitizerConfig/attributes}}"]
+        [=SanitizerConfig/contains=] |attrName|.
+    1. Let the [=boolean=] |locallyAllowed| be whether
+        |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] [=map/with default=] &laquo; &raquo;
+        [=SanitizerConfig/contains=] |attrName|.
+    1. Let the [=boolean=] |isDataAttributeAllowed| be whether both,
+        "data-" is a [=code unit prefix=] of |attribute|'s
+        [=Attr/local name=] and [=Attr/namespace=] is `null`, and
+        |configuration|["{{SanitizerConfig/dataAttributes}}"] is true.
+    1. If neither |globallyAllowed| nor |locallyAllowed| nor
+        |isDataAttributeAllowed|, return `remove`.
+1. Otherwise:
+    1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
+        [=map/exists=] and |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] does not [=SanitizerConfig/contain=] |attrName|:
+        1. Return `remove`.
+
+    1. Otherwise, if |configuration|["{{SanitizerConfig/removeAttributes}}"] [=SanitizerConfig/contains=] |attrName|:
+        1. Return `remove`.
+1. Return `keep`.
+
+</div>
+
 
 <div class=note>
 <span class=marker>Note:</span> Current browsers support `javascript:` URLs
