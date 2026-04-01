@@ -333,10 +333,10 @@ By explicitly sorting the result of this method, we give implementations the opp
      with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
 1. If |config|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/processingInstructions}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/processingInstructions}}"],
-     with |piA|["target"] being [=/code unit less than=] |piB|["target"].
+     with |piA|["{{SanitizerProcessingInstruction/target}}"] being [=/code unit less than=] |piB|["{{SanitizerProcessingInstruction/target}}"].
 1. Otherwise:
   1. Set |config|["{{SanitizerConfig/removeProcessingInstructions}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeProcessingInstructions}}"],
-     with |piA|["target"] being [=/code unit less than=] |piB|["target"].
+     with |piA|["{{SanitizerProcessingInstruction/target}}"] being [=/code unit less than=] |piB|["{{SanitizerProcessingInstruction/target}}"].
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/attributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/attributes}}"],
      with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
@@ -469,12 +469,16 @@ The <dfn for="Sanitizer" method export>allowProcessingInstruction(|pi|)</dfn> me
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |pi| to the result of [=canonicalize a sanitizer processing instruction=] with |pi|.
 1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
-    1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/contains=] |pi|:
+    1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
         1. Return false.
-    1. [=SanitizerConfig/Add=] |pi| to |configuration|["{{SanitizerConfig/processingInstructions}}"].
+    1. [=list/Append=] |pi| to |configuration|["{{SanitizerConfig/processingInstructions}}"].
     1. Return true.
 1. Otherwise:
-    1. Return [=SanitizerConfig/remove=] |pi| from |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"].
+    1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
+        1. [=list/Remove=] the item from |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] 
+          whose "{{SanitizerProcessingInstruction/target}}" [=string/is=] |pi|["{{SanitizerProcessingInstruction/target}}"].
+        1. Return true.
+    1. Return false.
 
 </div>
 
@@ -485,11 +489,15 @@ The <dfn for="Sanitizer" method export>removeProcessingInstruction(|pi|)</dfn> m
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |pi| to the result of [=canonicalize a sanitizer processing instruction=] with |pi|.
 1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
-    1. Return [=SanitizerConfig/remove=] |pi| from |configuration|["{{SanitizerConfig/processingInstructions}}"].
+    1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
+        1. [=list/Remove=] the item from |configuration|["{{SanitizerConfig/processingInstructions}}"]
+          whose "{{SanitizerProcessingInstruction/target}}" [=string/is=] |pi|["{{SanitizerProcessingInstruction/target}}"].
+        1. Return true.
+    1. Return false.
 1. Otherwise:
-    1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/contains=] |pi|:
+    1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
         1. Return false.
-    1. [=SanitizerConfig/Add=] |pi| to |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"].
+    1. [=list/Append=] |pi| to |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"].
     1. Return true.
 
 </div>
@@ -973,14 +981,13 @@ beginning with |node|. It consistes of these steps:
     1. If |configuration|["{{SanitizerConfig/comments}}"] is not true,
        then [=/remove=] |child|.
   1. If |child| [=implements=] {{ProcessingInstruction}}:
-    1. Let |pi| be a {{SanitizerProcessingInstruction}} with |child|'s
-         [=ProcessingInstruction/target=].
+    1. Let |piTarget| be |child|'s [=ProcessingInstruction/target=].
     1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
       1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] does not
-         [=SanitizerConfig/contain=] |pi|:
+         [=SanitizerConfig/contains a target|contain=] |piTarget|:
         1. [=/Remove=] |child|.
     1. Otherwise:
-      1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains=] |pi|:
+      1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |piTarget|:
         1. [=/Remove=] |child|.
   1. Otherwise:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
@@ -1387,6 +1394,12 @@ A Sanitizer name |list| <dfn for="SanitizerConfig">contains</dfn> an |item|
 if there exists an |entry| of |list| that is an [=ordered map=], and where
 |item|["name"] [=string/is|equals=] |entry|["name"] and
 |item|["namespace"] [=string/is|equals=] |entry|["namespace"].
+</div>
+
+<div algorithm>
+A Sanitizer target |list| <dfn for="SanitizerConfig">contains a target</dfn> |target|
+if there exists an |entry| of |list| that is an [=ordered map=], and where
+|target| [=string/is|equals=] |entry|["target"].
 </div>
 
 <div algorithm>
