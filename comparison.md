@@ -49,7 +49,7 @@ List of DOMPurify options: (options collected [here][dompurify-options-1] and
    * `SAFE_FOR_JQUERY`
 * Profile options, that enable several options at once:
    * `USE_PROFILES  // predefined sets of ALLOWED_TAGS`
-* Miscellaneous::
+* Miscellaneous:
    * `WHOLE_DOCUMENT`
    * `SANITIZE_DOM`
    * `FORCE_BODY`
