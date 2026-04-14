@@ -1,4 +1,4 @@
-# A Feature Comparison of Existing Sanitzer APIs
+# A Feature Comparison of Existing Sanitizer APIs
 
 This document lists the features of similarly spirited sanitizers.
 
@@ -15,7 +15,7 @@ General API notes:
   depending on the options set. Here, we instead have different methods for
   different return types.
 
-* DOMPurify has a lot more options then the current Sanitzer API proposal.
+* DOMPurify has a lot more options then the current Sanitizer API proposal.
 
 * There is presently no equivalent to [hooks][dompurify-hooks].
 
@@ -49,7 +49,7 @@ List of DOMPurify options: (options collected [here][dompurify-options-1] and
    * `SAFE_FOR_JQUERY`
 * Profile options, that enable several options at once:
    * `USE_PROFILES  // predefined sets of ALLOWED_TAGS`
-* Miscellaneous::
+* Miscellaneous:
    * `WHOLE_DOCUMENT`
    * `SANITIZE_DOM`
    * `FORCE_BODY`
