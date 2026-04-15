@@ -657,10 +657,6 @@ Several conditions need to hold for a configuration to be valid:
     but not both.
     If both are missing, this is equivalent to {{SanitizerConfig/removeElements}}
     [=map/set=] to &laquo; &raquo;.
-  - {{SanitizerConfig/processingInstructions}} or {{SanitizerConfig/removeProcessingInstructions}} can exist,
-    but not both.
-    If both are missing, this is equivalent to {{SanitizerConfig/removeProcessingInstructions}}
-    [=map/set=] to &laquo; &raquo;.
   - {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}} can exist,
     but not both.
     If both are missing, this is equivalent to {{SanitizerConfig/removeAttributes}}
@@ -672,8 +668,6 @@ Several conditions need to hold for a configuration to be valid:
   - There are no duplicate entries (i.e., no same elements) between
     {{SanitizerConfig/elements}}, {{SanitizerConfig/removeElements}}, or
     {{SanitizerConfig/replaceWithChildrenElements}}.
-  - There are no duplicate entries (i.e., no same processing instructions) between
-    {{SanitizerConfig/processingInstructions}} or {{SanitizerConfig/removeProcessingInstructions}}.
   - There are no duplicate entries (i.e., no same attributes) between
     {{SanitizerConfig/attributes}} or {{SanitizerConfig/removeAttributes}}.
 - Mixing local allow- and remove-lists on the same element:
