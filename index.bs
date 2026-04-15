@@ -1292,7 +1292,7 @@ value to a {{SanitizerConfig}}.
    1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
 1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
    1. Let |processingInstructions| be &laquo; &raquo;.
-   1. [=list/iterate|For each=] |pi| of |configuration|["{{SanitizerConfig/processingInstructions}}"] do:
+   1. [=list/iterate|For each=] |pi| of |configuration|["{{SanitizerConfig/processingInstructions}}"]:
       1. [=list/Append=] the result of [=canonicalize a sanitizer processing instruction=]
           |pi| to |processingInstructions|.
    1. Set |configuration|["{{SanitizerConfig/processingInstructions}}"] to |processingInstructions|.
