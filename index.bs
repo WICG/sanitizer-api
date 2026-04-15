@@ -821,12 +821,11 @@ NOTE: It's expected that the configuration being passing in has previously been 
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=] and
     [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
-    <!-- TODO: has duplicates needs a namspace ... -->
     1. If |config|["{{SanitizerConfig/processingInstructions}}"]
-        [=SanitizerConfig/has duplicates=], then return false.
+        [=SanitizerConfig/has duplicate targets=], then return false.
 1. Otherwise:
     1. If |config|["{{SanitizerConfig/removeProcessingInstructions}}"]
-        [=SanitizerConfig/has duplicates=], then return false.
+        [=SanitizerConfig/has duplicate targets=], then return false.
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
     1. If |config|["{{SanitizerConfig/attributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
@@ -1460,6 +1459,13 @@ if [=list/iterate|for any=] |item| of |list|,
 there is more than one |entry| in |list| where
 |item|["name"] is |entry|["name"] and
 |item|["namespace"] is |entry|["namespace"].
+</div>
+
+<div algorithm>
+A [=/list=] |list| <dfn for=SanitizerConfig>has duplicate targets</dfn>,
+if [=list/iterate|for any=] |item| of |list|,
+there is more than one |entry| in |list| where
+|item|["target"] is |entry|["target"].
 </div>
 
 <div algorithm>
