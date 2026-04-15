@@ -1237,10 +1237,10 @@ Note: While this algorithm is called [=remove unsafe=], we use
 
 <div algorithm>
 To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration|,
-a [=boolean=] |allowCommentsAndDataAttributes|, and a {{Sanitizer}} |sanitizer|:
+a [=boolean=] |allowCommentsPIsAndDataAttributes|, and a {{Sanitizer}} |sanitizer|:
 
 1. [=Canonicalize the configuration|Canonicalize=] |configuration| with
-    |allowCommentsAndDataAttributes|.
+    |allowCommentsPIsAndDataAttributes|.
 1. If |configuration| is not [=SanitizerConfig/valid=], then return false.
 1. Set |sanitizer|'s [=Sanitizer/configuration=] to |configuration|.
 1. Return true.
@@ -1258,7 +1258,7 @@ a number of processing steps easier.
 
 <div algorithm>
 To <dfn for=Sanitizer>canonicalize the configuration</dfn> {{SanitizerConfig}} |configuration|
-with a [=boolean=] |allowCommentsAndDataAttributes|:
+with a [=boolean=] |allowCommentsPIsAndDataAttributes|:
 
 Note: We assume that |configuration| is the result of [[WebIDL]] converting a JavaScript
 value to a {{SanitizerConfig}}.
@@ -1267,8 +1267,9 @@ value to a {{SanitizerConfig}}.
     |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exist=], then [=map/set=]
     |configuration|["{{SanitizerConfig/removeElements}}"] to &laquo; &raquo;.
 1. If neither |configuration|["{{SanitizerConfig/processingInstructions}}"] nor
-    |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exist=], then [=map/set=]
-    |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] to &laquo; &raquo;.
+    |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exist=]:
+    1. If |allowCommentsPIsAndDataAttributes| is true, then [=map/set=] |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] to &laquo; &raquo;.
+    1. Otherwise, [=map/set=] |configuration|["{{SanitizerConfig/processingInstructions}}"] to &laquo; &raquo;.
 1. If neither |configuration|["{{SanitizerConfig/attributes}}"] nor
     |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=], then [=map/set=]
     |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; &raquo;.
@@ -1314,11 +1315,11 @@ value to a {{SanitizerConfig}}.
           |attributes|.
    1. Set |configuration|["{{SanitizerConfig/removeAttributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/comments}}"] does not [=map/exist=], then [=map/set=]
-    |configuration|["{{SanitizerConfig/comments}}"] to |allowCommentsAndDataAttributes|.
+    |configuration|["{{SanitizerConfig/comments}}"] to |allowCommentsPIsAndDataAttributes|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
     |configuration|["{{SanitizerConfig/dataAttributes}}"] does not [=map/exist=], then
     [=map/set=] |configuration|["{{SanitizerConfig/dataAttributes}}"] to
-    |allowCommentsAndDataAttributes|.
+    |allowCommentsPIsAndDataAttributes|.
 
 </div>
 
