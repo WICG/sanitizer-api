@@ -441,8 +441,7 @@ The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</df
 1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Set |element| to the result of [=canonicalize a sanitizer element=] with |element|.
-1. If |element|["{{SanitizerElementNamespace/name}}"] [=string/is|equals=] "`html`"
-    and |element|["{{SanitizerElementNamespace/namespace}}"] [=string/is|equals=] [=HTML namespace=]:
+1. If the [=built-in non-replaceable elements list=] [=SanitizerConfig/contains=] |element|:
     1. Return false.
 1. If |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=SanitizerConfig/contains=] |element|:
     1. Return false.
@@ -624,8 +623,9 @@ Several conditions need to hold for a configuration to be valid:
 - Duplicate entries on the same element:
   - There are no duplicate entries between {{SanitizerElementNamespaceWithAttributes/attributes}}
     and {{SanitizerElementNamespaceWithAttributes/removeAttributes}} on the same element.
-- The HTML `<html>` element must not appear in {{SanitizerConfig/replaceWithChildrenElements}},
-  since replacing it with its children could lead to an invalid state with multiple root nodes.
+- No element from the [=built-in non-replaceable elements list=] appears in {{SanitizerConfig/replaceWithChildrenElements}},
+  since replacing these elements with their children could lead to re-parsing issues
+  or invalid node trees.
 
 The {{SanitizerConfig/elements}} element allow-list can also specify allowing or removing
 attributes for a given element. This is meant to mirror [[HTML]]'s structure, which knows
@@ -758,9 +758,9 @@ NOTE: It's expected that the configuration being passing in has previously been 
     1. If |config|["{{SanitizerConfig/removeAttributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
-    1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]
-       [=SanitizerConfig/contains=] &laquo;[ "`name`" &rightarrow; "`html`",
-        "`namespace`" &rightarrow; [=HTML namespace=] ]&raquo;, then return false.
+    1. [=list/iterate|For each=] |element| of |config|["{{SanitizerConfig/replaceWithChildrenElements}}"]:
+        1. If the [=built-in non-replaceable elements list=] [=SanitizerConfig/contains=] |element|,
+           then return false.
     1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
         1. If the [=SanitizerConfig/intersection=] of |config|["{{SanitizerConfig/elements}}"] and
             |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] is not [=list/empty=],
@@ -1380,12 +1380,13 @@ point within an algorithm.
 
 ## Builtins ## {#sanitization-defaults}
 
-There are four builtins:
+There are five builtins:
 
 * The [=built-in safe default configuration=],
-* the [=built-in safe baseline configuration=], and
-* the [=built-in navigating URL attributes list=], and
-* the [=built-in animating URL attributes list=].
+* the [=built-in safe baseline configuration=],
+* the [=built-in navigating URL attributes list=],
+* the [=built-in animating URL attributes list=], and
+* the [=built-in non-replaceable elements list=].
 
 The <dfn>built-in safe default configuration</dfn> is as follows:
 
@@ -1493,6 +1494,47 @@ URLs, is as follows:
   ],
   <br>
 ]&raquo;
+
+The <dfn>built-in non-replaceable elements list</dfn> contains elements that must not be
+replaced with their children, as doing so can lead to re-parsing issues or an invalid node tree.
+
+&laquo;[
+  <br>
+  { "`name`" &rightarrow; "`html`", "`namespace`" &rightarrow; [=HTML namespace=] },
+  <br>
+  { "`name`" &rightarrow; "`svg`", "`namespace`" &rightarrow; [=SVG namespace=] },
+  <br>
+  { "`name`" &rightarrow; "`math`", "`namespace`" &rightarrow; [=MathML Namespace=] },
+  <br>
+]&raquo;
+
+<div class=note><span class=marker>Note:</span>
+
+These restrictions are not enough to prevent all kinds of reparsing attacks, such as for example:
+
+<div class=example>
+```js
+// BAD EXAMPLE
+let sanitizer = { replaceWithChildrenElements: ["tr"] };
+div.setHTML("<table><tbody><tr><td><div>", { sanitizer });
+
+div.innerHTML = div.innerHTML;
+// div.innerHTML is now `<div></div><table><tbody><tr></tr></tbody></table>`
+```
+</div>
+
+It does prevent the `<iframe>` in this example from being re-parsed and becoming active as a normal HTML iframe however:
+<div class=example>
+```js
+let sanitizer = { replaceWithChildrenElements: [
+    { name: "svg", namespace: "http://www.w3.org/2000/svg"}
+  ]
+};
+div.setHTML(`<svg><iframe src="https://example.com"></iframe></svg>`, { sanitizer }); // throws
+```
+</div>
+
+</div>
 
 # Security Considerations # {#security-considerations}
 
