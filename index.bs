@@ -1298,7 +1298,7 @@ value to a {{SanitizerConfig}}.
    1. Set |configuration|["{{SanitizerConfig/processingInstructions}}"] to |processingInstructions|.
 1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exists=]:
    1. Let |processingInstructions| be &laquo; &raquo;.
-   1. [=list/iterate|For each=] |pi| of |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] do:
+   1. [=list/iterate|For each=] |pi| of |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"]:
       1. [=list/Append=] the result of [=canonicalize a sanitizer processing instruction=] |pi| to
           |processingInstructions|.
    1. Set |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] to |processingInstructions|.
