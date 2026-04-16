@@ -1476,8 +1476,8 @@ The <dfn for=SanitizerConfig>intersection</dfn> of two [=/lists=] |A| and |B|
 containing {{SanitizerElement}} is the same as [=set/intersection|set intersection=],
 but with the [=/set=] entries previously [=canonicalize a sanitizer name|canonicalized=]:
 
-1. Let |set A| be « [] »
-1. Let |set B| be « [] »
+1. Let |set A| be « [] ».
+1. Let |set B| be « [] ».
 1. [=list/iterate|For each=] |entry| of |A|, [=set/append=] the result of
     [=canonicalize a sanitizer name=] |entry| to |set A|.
 1. [=list/iterate|For each=] |entry| of |B|, [=set/append=] the result of
