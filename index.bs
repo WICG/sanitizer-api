@@ -1207,7 +1207,7 @@ Note: While this algorithm is called [=remove unsafe=], we use
 
 1. [=Assert=]: The [=map/get the keys|key set=] of [=built-in safe baseline configuration=]
    [=set/equals=]
-   «[ "{{SanitizerConfig/removeElements}}", "{{SanitizerConfig/removeAttributes}}" ] ».
+   « [ "{{SanitizerConfig/removeElements}}", "{{SanitizerConfig/removeAttributes}}" ] ».
 1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
 1. Let |result| be false.
 1. [=list/For each=] |element| in
