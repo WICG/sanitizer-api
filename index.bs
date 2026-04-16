@@ -1016,6 +1016,13 @@ beginning with |node|. It consistes of these steps:
         |elementName|:
        1. Set |elementWithLocalAttributes| to
            |configuration|["{{SanitizerConfig/elements}}"][|elementName|].
+    1. If |child|'s [=is value=] is not `null`:
+        1. Set |isAttribute| to  &laquo;[ "`name`" &rightarrow; "`is`", "`namespace`" &rightarrow; null ]&raquo;.
+        1. If [=is attribute allowed=] for |isAttribute| given |configuration|,
+            |child| is [=/blocked=]:
+            1. Set |child|'s [=custom element state=] to "undefined".
+            1. Set |child|'s [=custom element definition=] to `null`.
+            1. Set |child|'s [=is value=] to `null`.
     1. [=list/iterate|For each=] |attribute| in |child|'s [=Element/attribute list=]:
       1. Let |attrName| be a {{SanitizerAttributeNamespace}} with |attribute|'s
          [=Attr/local name=] and [=Attr/namespace=].
