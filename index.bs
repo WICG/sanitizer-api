@@ -802,9 +802,9 @@ NOTE: It's expected that the configuration being passing in has previously been 
     |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
     |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=], then return false.
-1. [=Assert=]: All {{SanitizerElementNamespaceWithAttributes}}, {{SanitizerElementNamespace}}, {{SanitizerProcessingInstruction}} and
+1. [=Assert=]: All {{SanitizerElementNamespaceWithAttributes}}, {{SanitizerElementNamespace}}, {{SanitizerProcessingInstruction}}, and
     {{SanitizerAttributeNamespace}} items in |config| are canonical, meaning they have been run
-    through [=canonicalize a sanitizer element=], [=canonicalize a sanitizer processing instruction=] or [=canonicalize a sanitizer attribute=],
+    through [=canonicalize a sanitizer element=], [=canonicalize a sanitizer processing instruction=], or [=canonicalize a sanitizer attribute=],
     as appropriate.
 1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
     1. If |config|["{{SanitizerConfig/elements}}"]
