@@ -278,6 +278,8 @@ interface Sanitizer {
   boolean allowElement(SanitizerElementWithAttributes element);
   boolean removeElement(SanitizerElement element);
   boolean replaceElementWithChildren(SanitizerElement element);
+  boolean allowProcessingInstruction(SanitizerPI pi);
+  boolean removeProcessingInstruction(SanitizerPI pi);
   boolean allowAttribute(SanitizerAttribute attribute);
   boolean removeAttribute(SanitizerAttribute attribute);
   boolean setComments(boolean allow);
@@ -329,6 +331,12 @@ By explicitly sorting the result of this method, we give implementations the opp
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/replaceWithChildrenElements}}"],
      with |elementA| being [=SanitizerConfig/less than item=] |elementB|.
+1. If |config|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
+  1. Set |config|["{{SanitizerConfig/processingInstructions}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/processingInstructions}}"],
+     with |piA|["{{SanitizerProcessingInstruction/target}}"] being [=/code unit less than=] |piB|["{{SanitizerProcessingInstruction/target}}"].
+1. Otherwise:
+  1. Set |config|["{{SanitizerConfig/removeProcessingInstructions}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/removeProcessingInstructions}}"],
+     with |piA|["{{SanitizerProcessingInstruction/target}}"] being [=/code unit less than=] |piB|["{{SanitizerProcessingInstruction/target}}"].
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
   1. Set |config|["{{SanitizerConfig/attributes}}"] to the result of [=list/sort in ascending order=] |config|["{{SanitizerConfig/attributes}}"],
      with |attrA| being [=SanitizerConfig/less than item=] |attrB|.
@@ -452,6 +460,48 @@ The <dfn for="Sanitizer" method export>replaceElementWithChildren(|element|)</df
 
 </div>
 
+
+<div algorithm>
+The <dfn for="Sanitizer" method export>allowProcessingInstruction(|pi|)</dfn> method steps are:
+
+1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
+1. Set |pi| to the result of [=canonicalize a sanitizer processing instruction=] with |pi|.
+1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
+    1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
+        1. Return false.
+    1. [=list/Append=] |pi| to |configuration|["{{SanitizerConfig/processingInstructions}}"].
+    1. Return true.
+1. Otherwise:
+    1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
+        1. [=list/Remove=] the item from |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] 
+          whose "{{SanitizerProcessingInstruction/target}}" [=string/is=] |pi|["{{SanitizerProcessingInstruction/target}}"].
+        1. Return true.
+    1. Return false.
+
+</div>
+
+<div algorithm>
+The <dfn for="Sanitizer" method export>removeProcessingInstruction(|pi|)</dfn> method steps are:
+
+1. Let |configuration| be [=this=]'s [=Sanitizer/configuration=].
+1. [=Assert=]: |configuration| is [=SanitizerConfig/valid=].
+1. Set |pi| to the result of [=canonicalize a sanitizer processing instruction=] with |pi|.
+1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
+    1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
+        1. [=list/Remove=] the item from |configuration|["{{SanitizerConfig/processingInstructions}}"]
+          whose "{{SanitizerProcessingInstruction/target}}" [=string/is=] |pi|["{{SanitizerProcessingInstruction/target}}"].
+        1. Return true.
+    1. Return false.
+1. Otherwise:
+    1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |pi|:
+        1. Return false.
+    1. [=list/Append=] |pi| to |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"].
+    1. Return true.
+
+</div>
+
+
 <div algorithm>
 The <dfn for="Sanitizer" method export>allowAttribute(|attribute|)</dfn> method steps are:
 
@@ -553,6 +603,12 @@ dictionary SanitizerElementNamespaceWithAttributes : SanitizerElementNamespace {
 typedef (DOMString or SanitizerElementNamespace) SanitizerElement;
 typedef (DOMString or SanitizerElementNamespaceWithAttributes) SanitizerElementWithAttributes;
 
+dictionary SanitizerProcessingInstruction {
+  required DOMString target;
+};
+
+typedef (DOMString or SanitizerProcessingInstruction) SanitizerPI;
+
 dictionary SanitizerAttributeNamespace {
   required DOMString name;
   DOMString? _namespace = null;
@@ -563,6 +619,9 @@ dictionary SanitizerConfig {
   sequence&lt;SanitizerElementWithAttributes> elements;
   sequence&lt;SanitizerElement> removeElements;
   sequence&lt;SanitizerElement> replaceWithChildrenElements;
+
+  sequence&lt;SanitizerPI> processingInstructions;
+  sequence&lt;SanitizerPI> removeProcessingInstructions;
 
   sequence&lt;SanitizerAttribute> attributes;
   sequence&lt;SanitizerAttribute> removeAttributes;
@@ -735,13 +794,17 @@ NOTE: It's expected that the configuration being passing in has previously been 
     |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=].
 1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=] and
     |config|["{{SanitizerConfig/removeElements}}"] [=map/exists=], then return false.
+1. [=Assert=]: Either |config|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=] or
+    |config|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exists=].
+1. If |config|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=] and
+    |config|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exists=], then return false.
 1. [=Assert=]: Either |config|["{{SanitizerConfig/attributes}}"] [=map/exists=] or
     |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=].
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
     |config|["{{SanitizerConfig/removeAttributes}}"] [=map/exists=], then return false.
-1. [=Assert=]: All {{SanitizerElementNamespaceWithAttributes}}, {{SanitizerElementNamespace}}, and
+1. [=Assert=]: All {{SanitizerElementNamespaceWithAttributes}}, {{SanitizerElementNamespace}}, {{SanitizerProcessingInstruction}}, and
     {{SanitizerAttributeNamespace}} items in |config| are canonical, meaning they have been run
-    through [=canonicalize a sanitizer element=] or [=canonicalize a sanitizer attribute=],
+    through [=canonicalize a sanitizer element=], [=canonicalize a sanitizer processing instruction=], or [=canonicalize a sanitizer attribute=],
     as appropriate.
 1. If |config|["{{SanitizerConfig/elements}}"] [=map/exists=]:
     1. If |config|["{{SanitizerConfig/elements}}"]
@@ -751,6 +814,12 @@ NOTE: It's expected that the configuration being passing in has previously been 
         [=SanitizerConfig/has duplicates=], then return false.
 1. If |config|["{{SanitizerConfig/replaceWithChildrenElements}}"] [=map/exists=] and
     [=SanitizerConfig/has duplicates=], then return false.
+1. If |config|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
+    1. If |config|["{{SanitizerConfig/processingInstructions}}"]
+        [=SanitizerConfig/has duplicate targets=], then return false.
+1. Otherwise:
+    1. If |config|["{{SanitizerConfig/removeProcessingInstructions}}"]
+        [=SanitizerConfig/has duplicate targets=], then return false.
 1. If |config|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
     1. If |config|["{{SanitizerConfig/attributes}}"]
         [=SanitizerConfig/has duplicates=], then return false.
@@ -892,7 +961,7 @@ beginning with |node|. It consistes of these steps:
 
 1. [=list/iterate|For each=] |child| of |node|'s [=tree/children=]:
   1. [=Assert=]: |child| [=implements=] {{Text}}, {{Comment}}, {{Element}},
-      or {{DocumentType}}.
+     {{ProcessingInstruction}} or {{DocumentType}}.
 
      Note: Currently, this algorithm is only called on output of the HTML
            parser for which this assertion should hold. {{DocumentType}} should
@@ -904,6 +973,15 @@ beginning with |node|. It consistes of these steps:
   1. If |child| [=implements=] {{Comment}}:
     1. If |configuration|["{{SanitizerConfig/comments}}"] is not true,
        then [=/remove=] |child|.
+  1. If |child| [=implements=] {{ProcessingInstruction}}:
+    1. Let |piTarget| be |child|'s [=ProcessingInstruction/target=].
+    1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
+      1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] does not
+         [=SanitizerConfig/contains a target|contain=] |piTarget|:
+        1. [=/Remove=] |child|.
+    1. Otherwise:
+      1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=SanitizerConfig/contains a target|contains=] |piTarget|:
+        1. [=/Remove=] |child|.
   1. Otherwise:
     1. Let |elementName| be a {{SanitizerElementNamespace}} with |child|'s
        [=Element/local name=] and [=Element/namespace=].
@@ -1152,10 +1230,10 @@ Note: While this algorithm is called [=remove unsafe=], we use
 
 <div algorithm>
 To <dfn for="Sanitizer">set a configuration</dfn>, given a [=dictionary=] |configuration|,
-a [=boolean=] |allowCommentsAndDataAttributes|, and a {{Sanitizer}} |sanitizer|:
+a [=boolean=] |allowCommentsPIsAndDataAttributes|, and a {{Sanitizer}} |sanitizer|:
 
 1. [=Canonicalize the configuration|Canonicalize=] |configuration| with
-    |allowCommentsAndDataAttributes|.
+    |allowCommentsPIsAndDataAttributes|.
 1. If |configuration| is not [=SanitizerConfig/valid=], then return false.
 1. Set |sanitizer|'s [=Sanitizer/configuration=] to |configuration|.
 1. Return true.
@@ -1173,7 +1251,7 @@ a number of processing steps easier.
 
 <div algorithm>
 To <dfn for=Sanitizer>canonicalize the configuration</dfn> {{SanitizerConfig}} |configuration|
-with a [=boolean=] |allowCommentsAndDataAttributes|:
+with a [=boolean=] |allowCommentsPIsAndDataAttributes|:
 
 Note: We assume that |configuration| is the result of [[WebIDL]] converting a JavaScript
 value to a {{SanitizerConfig}}.
@@ -1181,6 +1259,10 @@ value to a {{SanitizerConfig}}.
 1. If neither |configuration|["{{SanitizerConfig/elements}}"] nor
     |configuration|["{{SanitizerConfig/removeElements}}"] [=map/exist=], then [=map/set=]
     |configuration|["{{SanitizerConfig/removeElements}}"] to &laquo; &raquo;.
+1. If neither |configuration|["{{SanitizerConfig/processingInstructions}}"] nor
+    |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exist=]:
+    1. If |allowCommentsPIsAndDataAttributes| is true, then [=map/set=] |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] to &laquo; &raquo;.
+    1. Otherwise, [=map/set=] |configuration|["{{SanitizerConfig/processingInstructions}}"] to &laquo; &raquo;.
 1. If neither |configuration|["{{SanitizerConfig/attributes}}"] nor
     |configuration|["{{SanitizerConfig/removeAttributes}}"] [=map/exist=], then [=map/set=]
     |configuration|["{{SanitizerConfig/removeAttributes}}"] to &laquo; &raquo;.
@@ -1201,6 +1283,18 @@ value to a {{SanitizerConfig}}.
    1. [=list/iterate|For each=] |element| of |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] do:
       1. [=list/Append=] the result of [=canonicalize a sanitizer element=] |element| to |elements|.
    1. Set |configuration|["{{SanitizerConfig/replaceWithChildrenElements}}"] to |elements|.
+1. If |configuration|["{{SanitizerConfig/processingInstructions}}"] [=map/exists=]:
+   1. Let |processingInstructions| be &laquo; &raquo;.
+   1. [=list/iterate|For each=] |pi| of |configuration|["{{SanitizerConfig/processingInstructions}}"]:
+      1. [=list/Append=] the result of [=canonicalize a sanitizer processing instruction=]
+          |pi| to |processingInstructions|.
+   1. Set |configuration|["{{SanitizerConfig/processingInstructions}}"] to |processingInstructions|.
+1. If |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] [=map/exists=]:
+   1. Let |processingInstructions| be &laquo; &raquo;.
+   1. [=list/iterate|For each=] |pi| of |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"]:
+      1. [=list/Append=] the result of [=canonicalize a sanitizer processing instruction=] |pi| to
+          |processingInstructions|.
+   1. Set |configuration|["{{SanitizerConfig/removeProcessingInstructions}}"] to |processingInstructions|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=]:
    1. Let |attributes| be &laquo; &raquo;.
    1. [=list/iterate|For each=] |attribute| of |configuration|["{{SanitizerConfig/attributes}}"] do:
@@ -1214,11 +1308,11 @@ value to a {{SanitizerConfig}}.
           |attributes|.
    1. Set |configuration|["{{SanitizerConfig/removeAttributes}}"] to |attributes|.
 1. If |configuration|["{{SanitizerConfig/comments}}"] does not [=map/exist=], then [=map/set=]
-    |configuration|["{{SanitizerConfig/comments}}"] to |allowCommentsAndDataAttributes|.
+    |configuration|["{{SanitizerConfig/comments}}"] to |allowCommentsPIsAndDataAttributes|.
 1. If |configuration|["{{SanitizerConfig/attributes}}"] [=map/exists=] and
     |configuration|["{{SanitizerConfig/dataAttributes}}"] does not [=map/exist=], then
     [=map/set=] |configuration|["{{SanitizerConfig/dataAttributes}}"] to
-    |allowCommentsAndDataAttributes|.
+    |allowCommentsPIsAndDataAttributes|.
 
 </div>
 
@@ -1249,6 +1343,17 @@ In order to <dfn>canonicalize a sanitizer element</dfn> a
 {{SanitizerElement}} |element|,
 return the result of [=canonicalize a sanitizer name=] with |element| and the [=HTML namespace=] as the default namespace.
 </div>
+
+<div algorithm>
+In order to <dfn>canonicalize a sanitizer processing instruction</dfn> |pi|, run the following steps:
+
+1. [=Assert=]: |pi| is either a {{DOMString}} or a [=dictionary=].
+1. If |pi| is a {{DOMString}}, then return &laquo;[ "`target`" &rightarrow; |pi| ]&raquo;.
+1. [=Assert=]: |pi| is a [=dictionary=] and |pi|["target"] [=map/exists=].
+1. Return &laquo;[ "`target`" &rightarrow; |pi|["target"] ]&raquo;.
+
+</div>
+
 
 <div algorithm>
 In order to <dfn>canonicalize a sanitizer attribute</dfn> a
@@ -1283,6 +1388,12 @@ A Sanitizer name |list| <dfn for="SanitizerConfig">contains</dfn> an |item|
 if there exists an |entry| of |list| that is an [=ordered map=], and where
 |item|["name"] [=string/is|equals=] |entry|["name"] and
 |item|["namespace"] [=string/is|equals=] |entry|["namespace"].
+</div>
+
+<div algorithm>
+A Sanitizer target |list| <dfn for="SanitizerConfig">contains a target</dfn> |target|
+if there exists an |entry| of |list| that is an [=ordered map=], and where
+|target| [=string/is|equals=] |entry|["target"].
 </div>
 
 <div algorithm>
@@ -1342,6 +1453,13 @@ if [=list/iterate|for any=] |item| of |list|,
 there is more than one |entry| in |list| where
 |item|["name"] is |entry|["name"] and
 |item|["namespace"] is |entry|["namespace"].
+</div>
+
+<div algorithm>
+A [=/list=] |list| <dfn for=SanitizerConfig>has duplicate targets</dfn>,
+if [=list/iterate|for any=] |item| of |list|,
+there is more than one |entry| in |list| where
+|item|["target"] is |entry|["target"].
 </div>
 
 <div algorithm>
