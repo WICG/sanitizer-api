@@ -4,9 +4,9 @@
   <title>HTML Sanitizer API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 5d4d5b9a8, updated Fri Apr 17 13:49:40 2026 -0700" name="generator">
+  <meta content="Bikeshed version 0a3d88311, updated Mon May 4 18:07:03 2026 +0000" name="generator">
   <link href="https://wicg.github.io/sanitizer-api/" rel="canonical">
-  <meta content="ffdd3ae352311b7f9922ee8c62dc7204b0adbad9" name="revision">
+  <meta content="8b4bdb09194c654abd6744e5259afa3bf992d6b3" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -783,7 +783,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   <div class="head">
    <h1 class="no-ref p-name" id="title">HTML Sanitizer API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#CG-DRAFT">Draft Community Group Report</a>,
-    <time class="dt-updated" datetime="2026-04-29">29 April 2026</time></p>
+    <time class="dt-updated" datetime="2026-05-12">12 May 2026</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2227,7 +2227,16 @@ beginning with <var>node</var>. It consistes of these steps:
             <p>Call <a data-link-type="dfn" href="#sanitize-core" id="ref-for-sanitize-core①">sanitize core</a> on <var>child</var> with <var>configuration</var> and
   <var>handleJavascriptNavigationUrls</var>.</p>
            <li data-md>
-            <p>Call <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace-all" id="ref-for-concept-node-replace-all①">replace all</a> with <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child①">children</a> within <var>child</var>.</p>
+            <p>Let <var>fragment</var> be a new <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#documentfragment" id="ref-for-documentfragment②">DocumentFragment</a></code> whose <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document②">node document</a>
+  is <var>node</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document③">node document</a>.</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <var>innerChild</var> of <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-tree-child" id="ref-for-concept-tree-child①">children</a>,
+  <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-append" id="ref-for-concept-node-append">append</a> <var>innerChild</var> to <var>fragment</var>.</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace" id="ref-for-concept-node-replace">Replace</a> <var>child</var> with <var>fragment</var> within <var>node</var>.</p>
+            <p class="note" role="note"><span class="marker">NOTE:</span> <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-replace" id="ref-for-concept-node-replace①">Replace</a> shouldn’t throw here, since the structural
+      preconditions for successful execution of the algorithm should
+      be met.</p>
            <li data-md>
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue②">Continue</a>.</p>
           </ol>
@@ -2278,7 +2287,7 @@ beginning with <var>node</var>. It consistes of these steps:
    <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③②">elements</a></code>"][<var>elementName</var>].</p>
           </ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <var>attribute</var> in <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attribute" id="ref-for-concept-element-attribute">attribute list</a>:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>attribute</var> in <var>child</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-element-attribute" id="ref-for-concept-element-attribute">attribute list</a>:</p>
           <ol>
            <li data-md>
             <p>Let <var>attrName</var> be a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizerattributenamespace" id="ref-for-dictdef-sanitizerattributenamespace②">SanitizerAttributeNamespace</a></code> with <var>attribute</var>’s
@@ -2502,7 +2511,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
         <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑥">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥③">exists</a>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑦">elements</a></code>"]:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⓪">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑦">elements</a></code>"]:</p>
           <ol>
            <li data-md>
             <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④①">attributes</a></code>"]
@@ -2543,7 +2552,7 @@ to fix up per-element allow- or remove-lists to maintain our validity criteria. 
         <p>If <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑧">elements</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥④">exists</a>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⓪">For each</a> <var>element</var> in <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑨">elements</a></code>"]:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>element</var> in <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements③⑨">elements</a></code>"]:</p>
           <ol>
            <li data-md>
             <p>If <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④③">attributes</a></code>"]
@@ -2591,7 +2600,7 @@ do this:
      <li data-md>
       <p>Let <var>result</var> be false.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>element</var> in
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>element</var> in
  <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration①">built-in safe baseline configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements①⑥">removeElements</a></code>"]:</p>
       <ol>
        <li data-md>
@@ -2600,7 +2609,7 @@ do this:
         <p>If the call returned true, set <var>result</var> to true.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>attribute</var> in
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①③">For each</a> <var>attribute</var> in
  <a data-link-type="dfn" href="#built-in-safe-baseline-configuration" id="ref-for-built-in-safe-baseline-configuration②">built-in safe baseline configuration</a>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②②">removeAttributes</a></code>"]:</p>
       <ol>
        <li data-md>
@@ -2609,7 +2618,7 @@ do this:
         <p>If the call returned true, set <var>result</var> to true.</p>
       </ol>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①③">For each</a> <var>attribute</var> listed in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①④">For each</a> <var>attribute</var> listed in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>:</p>
       <ol>
        <li data-md>
         <p>Call <a data-link-type="dfn" href="#sanitizer-remove-an-attribute" id="ref-for-sanitizer-remove-an-attribute②">remove an attribute</a> <var>attribute</var> from <var>configuration</var>.</p>
@@ -2677,7 +2686,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>elements</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①④">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements④③">elements</a></code>"] do:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑤">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-elements" id="ref-for-dom-sanitizerconfig-elements④③">elements</a></code>"] do:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑦">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element-with-attributes" id="ref-for-canonicalize-a-sanitizer-element-with-attributes①">canonicalize a sanitizer element with attributes</a>
@@ -2692,7 +2701,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>elements</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑤">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements②⓪">removeElements</a></code>"] do:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑥">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeelements" id="ref-for-dom-sanitizerconfig-removeelements②⓪">removeElements</a></code>"] do:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑧">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element" id="ref-for-canonicalize-a-sanitizer-element③">canonicalize a sanitizer element</a> <var>element</var> to
@@ -2707,7 +2716,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>elements</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑥">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑧">replaceWithChildrenElements</a></code>"] do:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑦">For each</a> <var>element</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-replacewithchildrenelements" id="ref-for-dom-sanitizerconfig-replacewithchildrenelements①⑧">replaceWithChildrenElements</a></code>"] do:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑨">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-element" id="ref-for-canonicalize-a-sanitizer-element④">canonicalize a sanitizer element</a> <var>element</var> to <var>elements</var>.</p>
@@ -2721,7 +2730,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>processingInstructions</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑦">For each</a> <var>pi</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-processinginstructions" id="ref-for-dom-sanitizerconfig-processinginstructions①⑧">processingInstructions</a></code>"]:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑧">For each</a> <var>pi</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-processinginstructions" id="ref-for-dom-sanitizerconfig-processinginstructions①⑧">processingInstructions</a></code>"]:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①⓪">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-processing-instruction" id="ref-for-canonicalize-a-sanitizer-processing-instruction③">canonicalize a sanitizer processing instruction</a>
@@ -2736,7 +2745,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>processingInstructions</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑧">For each</a> <var>pi</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeprocessinginstructions" id="ref-for-dom-sanitizerconfig-removeprocessinginstructions①③">removeProcessingInstructions</a></code>"]:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑨">For each</a> <var>pi</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeprocessinginstructions" id="ref-for-dom-sanitizerconfig-removeprocessinginstructions①③">removeProcessingInstructions</a></code>"]:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①①">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-processing-instruction" id="ref-for-canonicalize-a-sanitizer-processing-instruction④">canonicalize a sanitizer processing instruction</a> <var>pi</var> to
@@ -2751,7 +2760,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>attributes</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑨">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③⑤">attributes</a></code>"] do:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⓪">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-attributes" id="ref-for-dom-sanitizerconfig-attributes③⑤">attributes</a></code>"] do:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①②">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute③">canonicalize a sanitizer attribute</a> <var>attribute</var> to
@@ -2766,7 +2775,7 @@ value to a <code class="idl"><a data-link-type="idl" href="#dictdef-sanitizercon
        <li data-md>
         <p>Let <var>attributes</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⓪">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②⑥">removeAttributes</a></code>"] do:</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②①">For each</a> <var>attribute</var> of <var>configuration</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerconfig-removeattributes" id="ref-for-dom-sanitizerconfig-removeattributes②⑥">removeAttributes</a></code>"] do:</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①③">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute④">canonicalize a sanitizer attribute</a> <var>attribute</var> to
@@ -2802,7 +2811,7 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a
          <li data-md>
           <p>Let <var>attributes</var> be « ».</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②①">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⑥">attributes</a></code>"]:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②②">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-attributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-attributes④⑥">attributes</a></code>"]:</p>
           <ol>
            <li data-md>
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①④">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute⑤">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>attributes</var>.</p>
@@ -2816,7 +2825,7 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="canonicalize-a
          <li data-md>
           <p>Let <var>attributes</var> be « ».</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②②">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③⑨">removeAttributes</a></code>"]:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②③">For each</a> <var>attribute</var> of <var>element</var>["<code class="idl"><a data-link-type="idl" href="#dom-sanitizerelementnamespacewithattributes-removeattributes" id="ref-for-dom-sanitizerelementnamespacewithattributes-removeattributes③⑨">removeAttributes</a></code>"]:</p>
           <ol>
            <li data-md>
             <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①⑤">Append</a> the result of <a data-link-type="dfn" href="#canonicalize-a-sanitizer-attribute" id="ref-for-canonicalize-a-sanitizer-attribute⑥">canonicalize a sanitizer attribute</a> with <var>attribute</var> to <var>attributes</var>.</p>
@@ -2910,7 +2919,7 @@ To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" d
      <li data-md>
       <p>Set <var>removed</var> to false.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②③">For each</a> <var>entry</var> of <var>list</var>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②④">For each</a> <var>entry</var> of <var>list</var>:</p>
       <ol>
        <li data-md>
         <p>If <var>item</var>["name"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is①④">equals</a> <var>entry</var>["name"] and
@@ -2980,14 +2989,14 @@ of <var>A</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/
 </div>
    <div class="algorithm" data-algorithm="has duplicates" data-algorithm-for="SanitizerConfig">
 A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①">list</a> <var>list</var> <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-has-duplicates">has duplicates</dfn>,
-if <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②④">for any</a> <var>item</var> of <var>list</var>,
+if <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑤">for any</a> <var>item</var> of <var>list</var>,
 there is more than one <var>entry</var> in <var>list</var> where
 <var>item</var>["name"] is <var>entry</var>["name"] and
 <var>item</var>["namespace"] is <var>entry</var>["namespace"].
 </div>
    <div class="algorithm" data-algorithm="has duplicate targets" data-algorithm-for="SanitizerConfig">
 A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list②">list</a> <var>list</var> <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" data-noexport id="sanitizerconfig-has-duplicate-targets">has duplicate targets</dfn>,
-if <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑤">for any</a> <var>item</var> of <var>list</var>,
+if <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑥">for any</a> <var>item</var> of <var>list</var>,
 there is more than one <var>entry</var> in <var>list</var> where
 <var>item</var>["target"] is <var>entry</var>["target"].
 </div>
@@ -3000,7 +3009,7 @@ To <dfn class="dfn-paneled" data-dfn-for="SanitizerConfig" data-dfn-type="dfn" d
      <li data-md>
       <p>Let <var>result</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑥">For each</a> <var>entry</var> of <var>list</var>, <a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add②">add</a> <var>entry</var> to <var>result</var>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑦">For each</a> <var>entry</var> of <var>list</var>, <a data-link-type="dfn" href="#sanitizerconfig-add" id="ref-for-sanitizerconfig-add②">add</a> <var>entry</var> to <var>result</var>.</p>
      <li data-md>
       <p>Return <var>result</var>.</p>
     </ol>
@@ -3018,10 +3027,10 @@ but with the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordere
      <li data-md>
       <p>Let <var>set B</var> be « [] ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑦">For each</a> <var>entry</var> of <var>A</var>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">append</a> the result of
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑧">For each</a> <var>entry</var> of <var>A</var>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">append</a> the result of
   <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name⑤">canonicalize a sanitizer name</a> <var>entry</var> to <var>set A</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑧">For each</a> <var>entry</var> of <var>B</var>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append①">append</a> the result of
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②⑨">For each</a> <var>entry</var> of <var>B</var>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append①">append</a> the result of
   <a data-link-type="dfn" href="#canonicalize-a-sanitizer-name" id="ref-for-canonicalize-a-sanitizer-name⑥">canonicalize a sanitizer name</a> <var>entry</var> to <var>set B</var>.</p>
      <li data-md>
       <p>Retrun the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-intersection" id="ref-for-set-intersection⑤">intersection</a> of <var>set A</var> and <var>set B</var>.</p>
@@ -4910,6 +4919,7 @@ and Mike West for their valuable feedback.</p>
      <li><span class="dfn-paneled" id="1cd7ff31">ShadowRoot</span>
      <li><span class="dfn-paneled" id="597088f0">Text</span>
      <li><span class="dfn-paneled" id="5c8f824f">allow declarative shadow roots</span>
+     <li><span class="dfn-paneled" id="543878fa">append</span>
      <li><span class="dfn-paneled" id="db0a062f">attribute</span>
      <li><span class="dfn-paneled" id="77211728">attribute list</span>
      <li><span class="dfn-paneled" id="92b2d7da">children</span>
@@ -4922,6 +4932,7 @@ and Mike West for their valuable feedback.</p>
      <li><span class="dfn-paneled" id="5216e1a0">node document</span>
      <li><span class="dfn-paneled" id="0e0b900e">remove</span>
      <li><span class="dfn-paneled" id="414d5b08">remove an attribute</span>
+     <li><span class="dfn-paneled" id="51561373">replace</span>
      <li><span class="dfn-paneled" id="4fd7ca14">replace all</span>
      <li><span class="dfn-paneled" id="58a8f724">shadow host</span>
      <li><span class="dfn-paneled" id="ce720392">shadow root</span>
@@ -5334,7 +5345,7 @@ let dfnPanelData = {
 "1243a891": {"dfnID":"1243a891","dfnText":"exist","external":true,"refSections":[{"refs":[{"id":"ref-for-map-exists"},{"id":"ref-for-map-exists\u2460"},{"id":"ref-for-map-exists\u2461"},{"id":"ref-for-map-exists\u2462"},{"id":"ref-for-map-exists\u2463"},{"id":"ref-for-map-exists\u2464"},{"id":"ref-for-map-exists\u2465"},{"id":"ref-for-map-exists\u2466"},{"id":"ref-for-map-exists\u2467"},{"id":"ref-for-map-exists\u2468"},{"id":"ref-for-map-exists\u2460\u24ea"},{"id":"ref-for-map-exists\u2460\u2460"},{"id":"ref-for-map-exists\u2460\u2461"},{"id":"ref-for-map-exists\u2460\u2462"},{"id":"ref-for-map-exists\u2460\u2463"},{"id":"ref-for-map-exists\u2460\u2464"},{"id":"ref-for-map-exists\u2460\u2465"},{"id":"ref-for-map-exists\u2460\u2466"},{"id":"ref-for-map-exists\u2460\u2467"},{"id":"ref-for-map-exists\u2460\u2468"},{"id":"ref-for-map-exists\u2461\u24ea"},{"id":"ref-for-map-exists\u2461\u2460"},{"id":"ref-for-map-exists\u2461\u2461"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-map-exists\u2461\u2462"},{"id":"ref-for-map-exists\u2461\u2463"},{"id":"ref-for-map-exists\u2461\u2464"},{"id":"ref-for-map-exists\u2461\u2465"},{"id":"ref-for-map-exists\u2461\u2466"},{"id":"ref-for-map-exists\u2461\u2467"},{"id":"ref-for-map-exists\u2461\u2468"},{"id":"ref-for-map-exists\u2462\u24ea"},{"id":"ref-for-map-exists\u2462\u2460"},{"id":"ref-for-map-exists\u2462\u2461"},{"id":"ref-for-map-exists\u2462\u2462"},{"id":"ref-for-map-exists\u2462\u2463"},{"id":"ref-for-map-exists\u2462\u2464"},{"id":"ref-for-map-exists\u2462\u2465"},{"id":"ref-for-map-exists\u2462\u2466"},{"id":"ref-for-map-exists\u2462\u2467"},{"id":"ref-for-map-exists\u2462\u2468"},{"id":"ref-for-map-exists\u2463\u24ea"},{"id":"ref-for-map-exists\u2463\u2460"},{"id":"ref-for-map-exists\u2463\u2461"},{"id":"ref-for-map-exists\u2463\u2462"},{"id":"ref-for-map-exists\u2463\u2463"},{"id":"ref-for-map-exists\u2463\u2464"},{"id":"ref-for-map-exists\u2463\u2465"},{"id":"ref-for-map-exists\u2463\u2466"},{"id":"ref-for-map-exists\u2463\u2467"},{"id":"ref-for-map-exists\u2463\u2468"},{"id":"ref-for-map-exists\u2464\u24ea"},{"id":"ref-for-map-exists\u2464\u2460"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-exists\u2464\u2461"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-map-exists\u2464\u2462"},{"id":"ref-for-map-exists\u2464\u2463"},{"id":"ref-for-map-exists\u2464\u2464"},{"id":"ref-for-map-exists\u2464\u2465"},{"id":"ref-for-map-exists\u2464\u2466"},{"id":"ref-for-map-exists\u2464\u2467"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-map-exists\u2464\u2468"},{"id":"ref-for-map-exists\u2465\u24ea"},{"id":"ref-for-map-exists\u2465\u2460"},{"id":"ref-for-map-exists\u2465\u2461"},{"id":"ref-for-map-exists\u2465\u2462"},{"id":"ref-for-map-exists\u2465\u2463"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-map-exists\u2465\u2464"},{"id":"ref-for-map-exists\u2465\u2465"},{"id":"ref-for-map-exists\u2465\u2466"},{"id":"ref-for-map-exists\u2465\u2467"},{"id":"ref-for-map-exists\u2465\u2468"},{"id":"ref-for-map-exists\u2466\u24ea"},{"id":"ref-for-map-exists\u2466\u2460"},{"id":"ref-for-map-exists\u2466\u2461"},{"id":"ref-for-map-exists\u2466\u2462"},{"id":"ref-for-map-exists\u2466\u2463"},{"id":"ref-for-map-exists\u2466\u2464"},{"id":"ref-for-map-exists\u2466\u2465"},{"id":"ref-for-map-exists\u2466\u2466"},{"id":"ref-for-map-exists\u2466\u2467"},{"id":"ref-for-map-exists\u2466\u2468"},{"id":"ref-for-map-exists\u2467\u24ea"},{"id":"ref-for-map-exists\u2467\u2460"},{"id":"ref-for-map-exists\u2467\u2461"}],"title":"3.4. Canonicalize the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-exists"},
 "15e48c39": {"dfnID":"15e48c39","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"},{"id":"ref-for-ordered-set\u2460"},{"id":"ref-for-ordered-set\u2461"},{"id":"ref-for-ordered-set\u2462"},{"id":"ref-for-ordered-set\u2463"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
 "1674281a": {"dfnID":"1674281a","dfnText":"get trusted type compliant string","external":true,"refSections":[{"refs":[{"id":"ref-for-get-trusted-type-compliant-string"},{"id":"ref-for-get-trusted-type-compliant-string\u2460"},{"id":"ref-for-get-trusted-type-compliant-string\u2461"}],"title":"2.1. Sanitizer API"}],"url":"https://w3c.github.io/trusted-types/dist/spec/#get-trusted-type-compliant-string"},
-"16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-list-iterate\u2465"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"},{"id":"ref-for-list-iterate\u2460\u2462"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2463"},{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"},{"id":"ref-for-list-iterate\u2460\u2466"},{"id":"ref-for-list-iterate\u2460\u2467"},{"id":"ref-for-list-iterate\u2460\u2468"},{"id":"ref-for-list-iterate\u2461\u24ea"},{"id":"ref-for-list-iterate\u2461\u2460"},{"id":"ref-for-list-iterate\u2461\u2461"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2461\u2462"},{"id":"ref-for-list-iterate\u2461\u2463"},{"id":"ref-for-list-iterate\u2461\u2464"},{"id":"ref-for-list-iterate\u2461\u2465"},{"id":"ref-for-list-iterate\u2461\u2466"},{"id":"ref-for-list-iterate\u2461\u2467"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"16d07e10": {"dfnID":"16d07e10","dfnText":"for each","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-list-iterate\u2465"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"},{"id":"ref-for-list-iterate\u2460\u2462"},{"id":"ref-for-list-iterate\u2460\u2463"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"},{"id":"ref-for-list-iterate\u2460\u2466"},{"id":"ref-for-list-iterate\u2460\u2467"},{"id":"ref-for-list-iterate\u2460\u2468"},{"id":"ref-for-list-iterate\u2461\u24ea"},{"id":"ref-for-list-iterate\u2461\u2460"},{"id":"ref-for-list-iterate\u2461\u2461"},{"id":"ref-for-list-iterate\u2461\u2462"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2461\u2463"},{"id":"ref-for-list-iterate\u2461\u2464"},{"id":"ref-for-list-iterate\u2461\u2465"},{"id":"ref-for-list-iterate\u2461\u2466"},{"id":"ref-for-list-iterate\u2461\u2467"},{"id":"ref-for-list-iterate\u2461\u2468"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "1cd7ff31": {"dfnID":"1cd7ff31","dfnText":"ShadowRoot","external":true,"refSections":[{"refs":[{"id":"ref-for-shadowroot"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-shadowroot\u2460"},{"id":"ref-for-shadowroot\u2461"},{"id":"ref-for-shadowroot\u2462"},{"id":"ref-for-shadowroot\u2463"},{"id":"ref-for-shadowroot\u2464"}],"title":"2.1. Sanitizer API"}],"url":"https://dom.spec.whatwg.org/#shadowroot"},
 "296f3551": {"dfnID":"296f3551","dfnText":"Element","external":true,"refSections":[{"refs":[{"id":"ref-for-element"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-element\u2460"}],"title":"1.2. API Summary"},{"refs":[{"id":"ref-for-element\u2461"},{"id":"ref-for-element\u2462"},{"id":"ref-for-element\u2463"},{"id":"ref-for-element\u2464"},{"id":"ref-for-element\u2465"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-element\u2466"},{"id":"ref-for-element\u2467"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-element\u2468"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#element"},
 "35feaa5b": {"dfnID":"35feaa5b","dfnText":"superset","external":true,"refSections":[{"refs":[{"id":"ref-for-set-superset"},{"id":"ref-for-set-superset\u2460"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#set-superset"},
@@ -5350,12 +5361,14 @@ let dfnPanelData = {
 "4135591f": {"dfnID":"4135591f","dfnText":"code unit less than","external":true,"refSections":[{"refs":[{"id":"ref-for-code-unit-less-than"},{"id":"ref-for-code-unit-less-than\u2460"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-code-unit-less-than\u2461"},{"id":"ref-for-code-unit-less-than\u2462"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#code-unit-less-than"},
 "414d5b08": {"dfnID":"414d5b08","dfnText":"remove an attribute","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-element-attributes-remove"},{"id":"ref-for-concept-element-attributes-remove\u2460"},{"id":"ref-for-concept-element-attributes-remove\u2461"},{"id":"ref-for-concept-element-attributes-remove\u2462"},{"id":"ref-for-concept-element-attributes-remove\u2463"},{"id":"ref-for-concept-element-attributes-remove\u2464"},{"id":"ref-for-concept-element-attributes-remove\u2465"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-element-attributes-remove"},
 "4943545e": {"dfnID":"4943545e","dfnText":"code unit prefix","external":true,"refSections":[{"refs":[{"id":"ref-for-code-unit-prefix"}],"title":"3.1. Sanitize"}],"url":"https://infra.spec.whatwg.org/#code-unit-prefix"},
-"49a2843d": {"dfnID":"49a2843d","dfnText":"DocumentFragment","external":true,"refSections":[{"refs":[{"id":"ref-for-documentfragment"},{"id":"ref-for-documentfragment\u2460"}],"title":"3. Algorithms"}],"url":"https://dom.spec.whatwg.org/#documentfragment"},
+"49a2843d": {"dfnID":"49a2843d","dfnText":"DocumentFragment","external":true,"refSections":[{"refs":[{"id":"ref-for-documentfragment"},{"id":"ref-for-documentfragment\u2460"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-documentfragment\u2461"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#documentfragment"},
 "4e92bc80": {"dfnID":"4e92bc80","dfnText":"get the keys","external":true,"refSections":[{"refs":[{"id":"ref-for-map-getting-the-keys"}],"title":"3.2. Modify the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-getting-the-keys"},
-"4fd7ca14": {"dfnID":"4fd7ca14","dfnText":"replace all","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-replace-all"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-concept-node-replace-all\u2460"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-node-replace-all"},
-"5216e1a0": {"dfnID":"5216e1a0","dfnText":"node document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-document"},{"id":"ref-for-concept-node-document\u2460"}],"title":"3. Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-node-document"},
+"4fd7ca14": {"dfnID":"4fd7ca14","dfnText":"replace all","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-replace-all"}],"title":"3. Algorithms"}],"url":"https://dom.spec.whatwg.org/#concept-node-replace-all"},
+"51561373": {"dfnID":"51561373","dfnText":"replace","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-replace"},{"id":"ref-for-concept-node-replace\u2460"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-node-replace"},
+"5216e1a0": {"dfnID":"5216e1a0","dfnText":"node document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-document"},{"id":"ref-for-concept-node-document\u2460"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-concept-node-document\u2461"},{"id":"ref-for-concept-node-document\u2462"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-node-document"},
 "53275e46": {"dfnID":"53275e46","dfnText":"append (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-append"},{"id":"ref-for-list-append\u2460"},{"id":"ref-for-list-append\u2461"},{"id":"ref-for-list-append\u2462"},{"id":"ref-for-list-append\u2463"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-append\u2464"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-append\u2465"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-list-append\u2466"},{"id":"ref-for-list-append\u2467"},{"id":"ref-for-list-append\u2468"},{"id":"ref-for-list-append\u2460\u24ea"},{"id":"ref-for-list-append\u2460\u2460"},{"id":"ref-for-list-append\u2460\u2461"},{"id":"ref-for-list-append\u2460\u2462"},{"id":"ref-for-list-append\u2460\u2463"},{"id":"ref-for-list-append\u2460\u2464"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-list-append\u2460\u2465"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-append"},
 "5372cca8": {"dfnID":"5372cca8","dfnText":"boolean","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-boolean"},{"id":"ref-for-idl-boolean\u2460"},{"id":"ref-for-idl-boolean\u2461"},{"id":"ref-for-idl-boolean\u2462"},{"id":"ref-for-idl-boolean\u2463"},{"id":"ref-for-idl-boolean\u2464"},{"id":"ref-for-idl-boolean\u2465"},{"id":"ref-for-idl-boolean\u2466"},{"id":"ref-for-idl-boolean\u2467"},{"id":"ref-for-idl-boolean\u2468"},{"id":"ref-for-idl-boolean\u2460\u24ea"},{"id":"ref-for-idl-boolean\u2460\u2460"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-idl-boolean\u2460\u2461"},{"id":"ref-for-idl-boolean\u2460\u2462"}],"title":"2.3. The Configuration Dictionary"}],"url":"https://webidl.spec.whatwg.org/#idl-boolean"},
+"543878fa": {"dfnID":"543878fa","dfnText":"append","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-node-append"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#concept-node-append"},
 "58a8f724": {"dfnID":"58a8f724","dfnText":"shadow host","external":true,"refSections":[{"refs":[{"id":"ref-for-element-shadow-host"}],"title":"2.1. Sanitizer API"},{"refs":[{"id":"ref-for-element-shadow-host\u2460"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#element-shadow-host"},
 "597088f0": {"dfnID":"597088f0","dfnText":"Text","external":true,"refSections":[{"refs":[{"id":"ref-for-text"},{"id":"ref-for-text\u2460"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#text"},
 "5c7fa56b": {"dfnID":"5c7fa56b","dfnText":"subset","external":true,"refSections":[{"refs":[{"id":"ref-for-set-subset"}],"title":"2.4. Configuration Invariants"}],"url":"https://infra.spec.whatwg.org/#set-subset"},
@@ -5494,7 +5507,7 @@ let dfnPanelData = {
 "ece46d2b": {"dfnID":"ece46d2b","dfnText":"ParentNode","external":true,"refSections":[{"refs":[{"id":"ref-for-parentnode"},{"id":"ref-for-parentnode\u2460"}],"title":"3.1. Sanitize"}],"url":"https://dom.spec.whatwg.org/#parentnode"},
 "ee469dff": {"dfnID":"ee469dff","dfnText":"with default","external":true,"refSections":[{"refs":[{"id":"ref-for-map-with-default"},{"id":"ref-for-map-with-default\u2460"},{"id":"ref-for-map-with-default\u2461"},{"id":"ref-for-map-with-default\u2462"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-map-with-default\u2463"},{"id":"ref-for-map-with-default\u2464"},{"id":"ref-for-map-with-default\u2465"},{"id":"ref-for-map-with-default\u2466"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-map-with-default\u2467"},{"id":"ref-for-map-with-default\u2468"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-map-with-default\u2460\u24ea"},{"id":"ref-for-map-with-default\u2460\u2460"},{"id":"ref-for-map-with-default\u2460\u2461"},{"id":"ref-for-map-with-default\u2460\u2462"}],"title":"3.2. Modify the Configuration"}],"url":"https://infra.spec.whatwg.org/#map-with-default"},
 "enumdef-sanitizerpresets": {"dfnID":"enumdef-sanitizerpresets","dfnText":"SanitizerPresets","external":false,"refSections":[{"refs":[{"id":"ref-for-enumdef-sanitizerpresets"},{"id":"ref-for-enumdef-sanitizerpresets\u2460"},{"id":"ref-for-enumdef-sanitizerpresets\u2461"},{"id":"ref-for-enumdef-sanitizerpresets\u2462"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-enumdef-sanitizerpresets\u2463"}],"title":"3. Algorithms"}],"url":"#enumdef-sanitizerpresets"},
-"f02cd417": {"dfnID":"f02cd417","dfnText":"iterate","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-list-iterate\u2465"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"},{"id":"ref-for-list-iterate\u2460\u2462"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2463"},{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"},{"id":"ref-for-list-iterate\u2460\u2466"},{"id":"ref-for-list-iterate\u2460\u2467"},{"id":"ref-for-list-iterate\u2460\u2468"},{"id":"ref-for-list-iterate\u2461\u24ea"},{"id":"ref-for-list-iterate\u2461\u2460"},{"id":"ref-for-list-iterate\u2461\u2461"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2461\u2462"},{"id":"ref-for-list-iterate\u2461\u2463"},{"id":"ref-for-list-iterate\u2461\u2464"},{"id":"ref-for-list-iterate\u2461\u2465"},{"id":"ref-for-list-iterate\u2461\u2466"},{"id":"ref-for-list-iterate\u2461\u2467"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"f02cd417": {"dfnID":"f02cd417","dfnText":"iterate","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"}],"title":"2.2. SetHTML options and the configuration object."},{"refs":[{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"}],"title":"2.4. Configuration Invariants"},{"refs":[{"id":"ref-for-list-iterate\u2465"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"},{"id":"ref-for-list-iterate\u2460\u2461"},{"id":"ref-for-list-iterate\u2460\u2462"},{"id":"ref-for-list-iterate\u2460\u2463"}],"title":"3.2. Modify the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"},{"id":"ref-for-list-iterate\u2460\u2466"},{"id":"ref-for-list-iterate\u2460\u2467"},{"id":"ref-for-list-iterate\u2460\u2468"},{"id":"ref-for-list-iterate\u2461\u24ea"},{"id":"ref-for-list-iterate\u2461\u2460"},{"id":"ref-for-list-iterate\u2461\u2461"},{"id":"ref-for-list-iterate\u2461\u2462"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-list-iterate\u2461\u2463"},{"id":"ref-for-list-iterate\u2461\u2464"},{"id":"ref-for-list-iterate\u2461\u2465"},{"id":"ref-for-list-iterate\u2461\u2466"},{"id":"ref-for-list-iterate\u2461\u2467"},{"id":"ref-for-list-iterate\u2461\u2468"}],"title":"3.5. Supporting Algorithms"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "f052b1ea": {"dfnID":"f052b1ea","dfnText":"HTML namespace","external":true,"refSections":[{"refs":[{"id":"ref-for-html-namespace"}],"title":"3. Algorithms"},{"refs":[{"id":"ref-for-html-namespace\u2460"}],"title":"3.1. Sanitize"},{"refs":[{"id":"ref-for-html-namespace\u2461"}],"title":"3.4. Canonicalize the Configuration"},{"refs":[{"id":"ref-for-html-namespace\u2462"},{"id":"ref-for-html-namespace\u2463"},{"id":"ref-for-html-namespace\u2464"},{"id":"ref-for-html-namespace\u2465"},{"id":"ref-for-html-namespace\u2466"},{"id":"ref-for-html-namespace\u2467"},{"id":"ref-for-html-namespace\u2468"}],"title":"3.6. Builtins"}],"url":"https://infra.spec.whatwg.org/#html-namespace"},
 "f099a38d": {"dfnID":"f099a38d","dfnText":"HTMLTemplateElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmltemplateelement"},{"id":"ref-for-htmltemplateelement\u2460"}],"title":"2.1. Sanitizer API"}],"url":"https://html.spec.whatwg.org/multipage/scripting.html#htmltemplateelement"},
 "f7cccb8c": {"dfnID":"f7cccb8c","dfnText":"HTML fragment parsing algorithm","external":true,"refSections":[{"refs":[{"id":"ref-for-html-fragment-parsing-algorithm"}],"title":"3. Algorithms"}],"url":"https://html.spec.whatwg.org/#html-fragment-parsing-algorithm"},
@@ -6012,8 +6025,10 @@ let refsData = {
 "https://dom.spec.whatwg.org/#concept-element-local-name": {"displayText":"local name","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"local name","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-local-name"},
 "https://dom.spec.whatwg.org/#concept-element-namespace": {"displayText":"namespace","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"namespace","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-namespace"},
 "https://dom.spec.whatwg.org/#concept-element-shadow-root": {"displayText":"shadow root","export":true,"for_":["Element"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"shadow root","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-element-shadow-root"},
+"https://dom.spec.whatwg.org/#concept-node-append": {"displayText":"append","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"append","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-append"},
 "https://dom.spec.whatwg.org/#concept-node-document": {"displayText":"node document","export":true,"for_":["Node"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"node document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-document"},
 "https://dom.spec.whatwg.org/#concept-node-remove": {"displayText":"remove","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"remove","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-remove"},
+"https://dom.spec.whatwg.org/#concept-node-replace": {"displayText":"replace","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"replace","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-replace"},
 "https://dom.spec.whatwg.org/#concept-node-replace-all": {"displayText":"replace all","export":true,"for_":["Node"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"replace all","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-node-replace-all"},
 "https://dom.spec.whatwg.org/#concept-pi-target": {"displayText":"target","export":true,"for_":["ProcessingInstruction"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"target","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-pi-target"},
 "https://dom.spec.whatwg.org/#concept-tree-child": {"displayText":"children","export":true,"for_":["tree"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"children","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-tree-child"},
