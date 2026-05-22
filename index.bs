@@ -1094,7 +1094,7 @@ and an {{SanitizerElementNamespace}} |elementName|:
     1. If |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"]
         [=map/exists=] and |elementWithLocalAttributes|["{{SanitizerElementNamespaceWithAttributes/attributes}}"] does not [=SanitizerConfig/contain=] |attrName|:
         1. Return [=/blocked=].
-    1. Otherwise, if |configuration|["{{SanitizerConfig/removeAttributes}}"]
+    1. If |configuration|["{{SanitizerConfig/removeAttributes}}"]
        [=SanitizerConfig/contains=] |attrName|:
         1. Return [=/blocked=].
 1. Return [=/allowed=].
