@@ -36,30 +36,6 @@ text: custom data attribute; type: dfn; url: https://html.spec.whatwg.org/multip
 text: report a warning to the console; type: dfn; url: https://console.spec.whatwg.org/#report-a-warning-to-the-console
 text: convert nodes into a node; type: dfn; url: https://dom.spec.whatwg.org/#convert-nodes-into-a-node
 </pre>
-<pre class="biblio">
-{
-  "DOMPURIFY": {
-    "href": "https://github.com/cure53/DOMPurify",
-    "title": "DOMPurify",
-    "publisher": "Cure53"
-  },
-  "MXSS": {
-    "href": "https://cure53.de/fp170.pdf",
-    "title": "mXSS Attacks: Attacking well-secured Web-Applications by using innerHTML Mutations",
-    "publisher": "Ruhr-Universität Bochum"
-  },
-  "SafeMathML": {
-    "href": "https://w3c.github.io/mathml-docs/mathml-safe-list",
-    "title": "MathML Safe List",
-    "publisher": "W3C Math Working Group"
-  },
-  "HTMLSanitizer": {
-  "href": "https://www.bucksch.org/1/projects/mozilla/108153/",
-  "title": "HTML Sanitizer",
-  "publisher": "Ben Bucksch"
-  }
-}
-</pre>
 <style>
 /* Boxes around algorithms. */
 [data-algorithm]:not(.heading) {
@@ -79,12 +55,10 @@ a[href="#comment"] { text-transform: uppercase; }
 
 # Note # {#note}
 
- <pThe Sanitizer API has been moved to <a href="https://html.spec.whatwg.org/#html-sanitization">WHATWG HTML</a>.</p>
+ <p>The Sanitizer API has been moved to <a href="https://html.spec.whatwg.org/#html-sanitization">WHATWG HTML</a>.
 
-## Issue Reporting ##
+## Issue Reporting ## {#issues}
 <ul>
 <li><a href="https://github.com/whatwg/html/issues">File specification issues in the WHATWG HTML issue tracker</a>.</li>
 <li>Please report bugs in implementations to the corresponding browser vendor. We encourage you to look into their security reporting policies.</li>
 </ul>
-</div>
-
