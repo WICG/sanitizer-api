@@ -11,13 +11,11 @@ Editor: Mario Heiderich, Cure53, mario@cure53.de, https://cure53.de
 Editor: Daniel Vogelheim, Google LLC, vogelheim@google.com, https://www.google.com
 Editor: Tom Schuster, Mozilla, tschuster@mozilla.com, https://mozilla.com
 Abstract:
-  This document specifies a set of APIs which allow developers to take
-  untrusted HTML input and sanitize it for safe insertion into a document's
-  DOM. The draft should be no longer consulted for implementations.
+  The draft should be no longer consulted for implementations.
   All content has been merged into the HTML WHATWG repository.
 
 Indent: 2
-Work Status: abandoned
+Work Status: exploring
 Boilerplate: omit conformance
 Markup Shorthands: css off, markdown on
 </pre>
